@@ -1,0 +1,27 @@
+extends ../layout
+
+
+block content
+    .content
+        h2
+            | Session Feed
+        p
+            | #{session.id}
+
+    .feed-container
+
+        if session.visualizations.length
+
+            for viz in session.visualizations.reverse()
+                include ./viz-data
+
+        else
+            p.empty
+                | data will show up here when they are created
+
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="/socket.io/socket.io.js")
+    script(src='#{STATIC_URL}js/feed.js')
