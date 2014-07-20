@@ -1,0 +1,115 @@
+
+.mobile {
+    .team-container {
+        @include team-container();
+
+
+        &:hover {
+            background-color: $light-gray;
+            color: $dark-gray;
+        }
+
+        &.selected {
+            background-color: $red;
+            color: $white;
+        }
+        .team {
+            margin-left: 0; 
+            text-align: center;
+        }
+    }
+
+    .team-content {
+        display: none;
+
+
+        .viz-image  {
+            width: 100%;
+            float: left;
+        }
+
+
+        .details-container {
+            width: 100%;
+            float: left;
+
+            .fact {
+                margin: 10px;
+                font-style: italic;
+            }
+
+            .details {
+                margin: 10px;
+
+                .header {
+                    text-align: right;
+                }
+
+                table {
+                    width: 100%;
+                    tr:last-child {
+                        border-bottom: solid 1px $dark-gray;
+                    }
+                    tr:first-child {
+                        border-top: solid 1px $dark-gray;
+                    }
+
+                    .val {
+                        padding: 5px 0;
+
+                        text-align: right;
+                        font-weight: bold;
+
+                        &.love {
+                            color: $green;
+                        }
+
+                        &.hate {
+                            color: $red;
+                        }
+
+                    }
+                }    
+            }
+            
+        }
+
+
+        .share-container {
+
+            float: right;
+
+            padding-top: 25px;
+            margin-right: 20px;
+            padding-bottom: 20px;
+            .share {
+
+                margin: 0 10px;
+                cursor: pointer;
+                padding: 3px 4px 2px 4px;
+
+                border-radius: 5px;
+                font-weight: 600;
+
+                width: 80px;
+                // height: 10px;
+                float: left;
+
+                color: $white;
+                background-color: blue;
+
+                &.twitter {
+                    width: 28px;
+                    height: 28px;
+                    background-color: #10a0f7;
+                }
+
+                &.facebook {
+                    width: 28px;
+                    height: 28px;
+                    background-color: #556AC2;
+                }
+            }
+        }
+    }
+}

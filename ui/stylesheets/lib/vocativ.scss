@@ -1,0 +1,21 @@
+
+$black: #222;
+$dark-gray: #404040;
+$light-gray: #A7A9AC;
+$red: #FD2626;
+$green: #4A8643;
+$white: #fff;
+$blue: #0072bc;
+
+$vocativ-header: 'ITC-franklin-gothic',arial,sans-serif;
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $vocativ-header;
+    font-weight: bold;
+}

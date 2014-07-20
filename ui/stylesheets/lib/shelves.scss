@@ -1,0 +1,161 @@
+/*
+SHELVES
+-------
+
+The only responsive, fluid CSS grid with infinitely nestable columns.
+
+Copyright (c) 2012, Pete Browne
+*/
+@media screen and (max-width: 400px) { @-ms-viewport { width: 320px; } }
+img { max-width: 100%; height: auto; }
+@media \0screen { img { width: auto; } }
+
+.row { *zoom: 1; margin-right: auto; margin-left: auto; max-width: 1060px; padding-left: 20px; padding-right: 20px; }
+.row:before, .row:after { display: table; content: " "; }
+.row:after { clear: both; }
+.row .row { margin-right: 0; margin-left: 0; max-width: none; padding-right: 0; padding-left: 0; }
+
+.mobile-column-1, .mobile-column-2, .mobile-column-3 { display: block; float: left; min-height: 1px; position: relative; *margin-right: -1px; margin-left: 4.48113%; }
+
+.row .mobile-column-1:first-child, .row .mobile-column-2:first-child, .row .mobile-column-3:first-child, .first-mobile-column { margin-left: 0; }
+
+.mobile-column-1 { width: 21.63915%; }
+
+.mobile-column-2 { width: 47.75943%; }
+
+.mobile-column-3 { width: 73.87972%; }
+
+@media screen and (min-width: 480px) { .tablet-column-1, .tablet-column-2, .tablet-column-3, .tablet-column-4, .tablet-column-5 { display: block; float: left; min-height: 1px; position: relative; *margin-right: -1px; margin-left: 2.83019%; }
+  .row .tablet-column-1:first-child, .row .tablet-column-2:first-child, .row .tablet-column-3:first-child, .row .tablet-column-4:first-child, .row .tablet-column-5:first-child, .first-tablet-column { margin-left: 0; }
+  .tablet-column-1 { width: 14.30818%; }
+  .tablet-column-2 { width: 31.44654%; }
+  .tablet-column-3 { width: 48.58491%; }
+  .tablet-column-4 { width: 65.72327%; }
+  .tablet-column-5 { width: 82.86164%; } }
+@media screen and (min-width: 760px) { .column-1, .column-2, .column-3, .column-4, .column-5, .column-6, .column-7, .column-8, .column-9, .column-10, .column-11 { display: block; float: left; min-height: 1px; position: relative; *margin-right: -1px; margin-left: 1.88679%; }
+  .row .column-1:first-child, .row .column-2:first-child, .row .column-3:first-child, .row .column-4:first-child, .row .column-5:first-child, .row .column-6:first-child, .row .column-7:first-child, .row .column-8:first-child, .row .column-9:first-child, .row .column-10:first-child, .row .column-11:first-child, .first-column { margin-left: 0; }
+  .column-1 { width: 6.60377%; }
+  .column-2 { width: 15.09434%; }
+  .column-3 { width: 23.58491%; }
+  .column-4 { width: 32.07547%; }
+  .column-5 { width: 40.56604%; }
+  .column-6 { width: 49.0566%; }
+  .column-7 { width: 57.54717%; }
+  .column-8 { width: 66.03774%; }
+  .column-9 { width: 74.5283%; }
+  .column-10 { width: 83.01887%; }
+  .column-11 { width: 91.50943%; }
+  .prefix-1 { padding-left: 8.49057%; }
+  .prefix-2 { padding-left: 16.98113%; }
+  .prefix-3 { padding-left: 25.4717%; }
+  .prefix-4 { padding-left: 33.96226%; }
+  .prefix-5 { padding-left: 42.45283%; }
+  .prefix-6 { padding-left: 50.9434%; }
+  .prefix-7 { padding-left: 59.43396%; }
+  .prefix-8 { padding-left: 67.92453%; }
+  .prefix-9 { padding-left: 76.41509%; }
+  .prefix-10 { padding-left: 84.90566%; }
+  .prefix-11 { padding-left: 93.39623%; }
+  .suffix-1 { padding-right: 8.49057%; }
+  .suffix-2 { padding-right: 16.98113%; }
+  .suffix-3 { padding-right: 25.4717%; }
+  .suffix-4 { padding-right: 33.96226%; }
+  .suffix-5 { padding-right: 42.45283%; }
+  .suffix-6 { padding-right: 50.9434%; }
+  .suffix-7 { padding-right: 59.43396%; }
+  .suffix-8 { padding-right: 67.92453%; }
+  .suffix-9 { padding-right: 76.41509%; }
+  .suffix-10 { padding-right: 84.90566%; }
+  .suffix-11 { padding-right: 93.39623%; }
+  .push-1 { left: 8.49057%; }
+  .push-2 { left: 16.98113%; }
+  .push-3 { left: 25.4717%; }
+  .push-4 { left: 33.96226%; }
+  .push-5 { left: 42.45283%; }
+  .push-6 { left: 50.9434%; }
+  .push-7 { left: 59.43396%; }
+  .push-8 { left: 67.92453%; }
+  .push-9 { left: 76.41509%; }
+  .push-10 { left: 84.90566%; }
+  .push-11 { left: 93.39623%; }
+  .pull-1 { right: 8.49057%; }
+  .pull-2 { right: 16.98113%; }
+  .pull-3 { right: 25.4717%; }
+  .pull-4 { right: 33.96226%; }
+  .pull-5 { right: 42.45283%; }
+  .pull-6 { right: 50.9434%; }
+  .pull-7 { right: 59.43396%; }
+  .pull-8 { right: 67.92453%; }
+  .pull-9 { right: 76.41509%; }
+  .pull-10 { right: 84.90566%; }
+  .pull-11 { right: 93.39623%; }
+  .column-11 .column-1, .column-11 .column-2, .column-11 .column-3, .column-11 .column-4, .column-11 .column-5, .column-11 .column-6, .column-11 .column-7, .column-11 .column-8, .column-11 .column-9, .column-11 .column-10 { margin-left: 2.06186%; }
+  .column-11 .column-1 { width: 7.21649%; }
+  .column-11 .column-2 { width: 16.49485%; }
+  .column-11 .column-3 { width: 25.7732%; }
+  .column-11 .column-4 { width: 35.05155%; }
+  .column-11 .column-5 { width: 44.3299%; }
+  .column-11 .column-6 { width: 53.60825%; }
+  .column-11 .column-7 { width: 62.8866%; }
+  .column-11 .column-8 { width: 72.16495%; }
+  .column-11 .column-9 { width: 81.4433%; }
+  .column-11 .column-10 { width: 90.72165%; }
+  .column-10 .column-1, .column-10 .column-2, .column-10 .column-3, .column-10 .column-4, .column-10 .column-5, .column-10 .column-6, .column-10 .column-7, .column-10 .column-8, .column-10 .column-9 { margin-left: 2.27273%; }
+  .column-10 .column-1 { width: 7.95455%; }
+  .column-10 .column-2 { width: 18.18182%; }
+  .column-10 .column-3 { width: 28.40909%; }
+  .column-10 .column-4 { width: 38.63636%; }
+  .column-10 .column-5 { width: 48.86364%; }
+  .column-10 .column-6 { width: 59.09091%; }
+  .column-10 .column-7 { width: 69.31818%; }
+  .column-10 .column-8 { width: 79.54545%; }
+  .column-10 .column-9 { width: 89.77273%; }
+  .column-9 .column-1, .column-9 .column-2, .column-9 .column-3, .column-9 .column-4, .column-9 .column-5, .column-9 .column-6, .column-9 .column-7, .column-9 .column-8 { margin-left: 2.53165%; }
+  .column-9 .column-1 { width: 8.86076%; }
+  .column-9 .column-2 { width: 20.25316%; }
+  .column-9 .column-3 { width: 31.64557%; }
+  .column-9 .column-4 { width: 43.03797%; }
+  .column-9 .column-5 { width: 54.43038%; }
+  .column-9 .column-6 { width: 65.82278%; }
+  .column-9 .column-7 { width: 77.21519%; }
+  .column-9 .column-8 { width: 88.60759%; }
+  .column-8 .column-1, .column-8 .column-2, .column-8 .column-3, .column-8 .column-4, .column-8 .column-5, .column-8 .column-6, .column-8 .column-7 { margin-left: 2.85714%; }
+  .column-8 .column-1 { width: 10%; }
+  .column-8 .column-2 { width: 22.85714%; }
+  .column-8 .column-3 { width: 35.71429%; }
+  .column-8 .column-4 { width: 48.57143%; }
+  .column-8 .column-5 { width: 61.42857%; }
+  .column-8 .column-6 { width: 74.28571%; }
+  .column-8 .column-7 { width: 87.14286%; }
+  .column-7 .column-1, .column-7 .column-2, .column-7 .column-3, .column-7 .column-4, .column-7 .column-5, .column-7 .column-6 { margin-left: 3.27869%; }
+  .column-7 .column-1 { width: 11.47541%; }
+  .column-7 .column-2 { width: 26.22951%; }
+  .column-7 .column-3 { width: 40.98361%; }
+  .column-7 .column-4 { width: 55.7377%; }
+  .column-7 .column-5 { width: 70.4918%; }
+  .column-7 .column-6 { width: 85.2459%; }
+  .column-6 .column-1, .column-6 .column-2, .column-6 .column-3, .column-6 .column-4, .column-6 .column-5 { margin-left: 3.84615%; }
+  .column-6 .column-1 { width: 13.46154%; }
+  .column-6 .column-2 { width: 30.76923%; }
+  .column-6 .column-3 { width: 48.07692%; }
+  .column-6 .column-4 { width: 65.38462%; }
+  .column-6 .column-5 { width: 82.69231%; }
+  .column-5 .column-1, .column-5 .column-2, .column-5 .column-3, .column-5 .column-4 { margin-left: 4.65116%; }
+  .column-5 .column-1 { width: 16.27907%; }
+  .column-5 .column-2 { width: 37.2093%; }
+  .column-5 .column-3 { width: 58.13953%; }
+  .column-5 .column-4 { width: 79.06977%; }
+  .column-4 .column-1, .column-4 .column-2, .column-4 .column-3 { margin-left: 5.88235%; }
+  .column-4 .column-1 { width: 20.58824%; }
+  .column-4 .column-2 { width: 47.05882%; }
+  .column-4 .column-3 { width: 73.52941%; }
+  .column-3 .column-1, .column-3 .column-2 { margin-left: 8%; }
+  .column-3 .column-1 { width: 28%; }
+  .column-3 .column-2 { width: 64%; }
+  .column-2 .column-1 { margin-left: 12.5%; }
+  .column-2 .column-1 { width: 43.75%; } }
+.row .center-column { float: none; margin-left: auto !important; margin-right: auto; }
+
+@media screen and (max-width: 479px) { .hidden-mobile, .visible-tablet, .visible-desktop { display: none !important; } }
+@media screen and (min-width: 480px) and (max-width: 799px) { .visible-mobile, .hidden-tablet, .visible-desktop { display: none !important; } }
+@media screen and (min-width: 800px) { .visible-mobile, .visible-tablet, .hidden-desktop { display: none !important; } }

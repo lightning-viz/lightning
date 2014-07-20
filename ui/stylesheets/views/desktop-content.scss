@@ -1,0 +1,162 @@
+
+
+.desktop-content-container {
+
+    $header-padding: 30px;
+    max-height: 100%;
+
+    .country-header {
+        padding-top: $header-padding;
+    }
+
+    .country-details,
+    .country-fact {
+        padding-top: $header-padding / 2;
+    }
+
+    .country-fact {
+        // font-style: italic;
+    }
+
+    .country-details {
+        table {
+            width: 100%;
+
+            .val {
+                text-align: right;
+                font-weight: bold;
+                padding: 5px 0;
+
+                &.love {
+                    color: $green;
+                }
+
+                &.hate {
+                    color: $red;
+                }
+
+                span {
+                    cursor: pointer;    
+                }
+                
+            }
+
+            tr {
+                border-bottom: solid 1px $dark-gray;
+            }
+            tr:first-child {
+                border-top: solid 1px $dark-gray;
+            }
+
+            .like-count {
+                text-align: right;
+            }
+
+            .county-name {
+                width: 45%;
+            }
+        }
+    }
+
+    .placeholder {
+        height: 160px;
+    }
+
+    .match-details {
+
+        table {
+            margin-top: 30px;
+            width: 100%;
+
+            .val {
+                text-align: right;
+                font-weight: bold;
+                padding: 5px 0;
+
+                &.love {
+                    color: $green;
+                }
+
+                &.hate {
+                    color: $red;
+                }
+
+                span {
+                    cursor: pointer;    
+                }
+                
+            }
+
+            // tr {
+            //     border-bottom: solid 1px $dark-gray;
+            // }
+            tr:first-child {
+                border-bottom: solid 1px $dark-gray;
+            }
+
+            .like-count {
+                text-align: right;
+            }
+
+            .county-name {
+                width: 45%;
+                font-weight: bold;
+            }
+
+            .icon {
+                text-align: right;
+            }
+
+            .tooltip {
+                cursor: pointer;
+
+                span {
+                    text-align: left;
+
+                    b {
+                        font-weight: bold;
+                        line-height: 25px;
+                    }
+
+                }
+            }
+        }
+    }
+
+    .viz-container {
+        padding-top: $header-padding;
+
+    }
+
+    .share-container {
+
+        padding-top: 50px;
+
+        .share {
+
+            margin: 0 10px;
+            cursor: pointer;
+            padding: 3px 4px 11px 4px;
+
+            border-radius: 5px;
+            font-weight: 600;
+
+            width: 60px;
+            height: 20px;
+            float: left;
+
+            color: $white;
+            background-color: blue;
+
+            &.twitter {
+                width: 28px;
+                background-color: #10a0f7;
+            }
+
+            &.facebook {
+                width: 28px;
+                background-color: #556AC2;
+            }
+        }
+    }
+}
