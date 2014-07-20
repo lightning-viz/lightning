@@ -13,6 +13,7 @@ var methodOverride = require('method-override');
 var csrf = require('csurf');
 var swig = require('swig');
 var serveStatic = require('serve-static');
+var slashes = require('connect-slashes');
 
 var mongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
@@ -55,6 +56,9 @@ module.exports = function (app, passport, io) {
     // Logging middleware
     if (env !== 'test') app.use(morgan(log));
 
+    app.use(slashes());
+
+
     // Swig templating engine settings
     if (env === 'development' || env === 'test') {
         swig.setDefaults({
@@ -77,6 +81,7 @@ module.exports = function (app, passport, io) {
     app.use(function (req, res, next) {
         res.locals.pkg = pkg;
         res.locals.env = env;
+        res.locals._ = require('lodash');
         res.locals.STATIC_URL = '/';
         next();
     });
@@ -116,12 +121,12 @@ module.exports = function (app, passport, io) {
 
     // adds CSRF support
     if (process.env.NODE_ENV !== 'test') {
-        app.use(csrf());
+        // app.use(csrf());
 
-        // This could be moved to view-helpers :-)
-        app.use(function(req, res, next){
-            res.locals.csrf_token = req.csrfToken();
-            next();
-        });
+        // // This could be moved to view-helpers :-)
+        // app.use(function(req, res, next){
+        //     res.locals.csrf_token = req.csrfToken();
+        //     next();
+        // });
     }
 };

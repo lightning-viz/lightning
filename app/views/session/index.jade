@@ -1,0 +1,22 @@
+extends ../layout
+
+
+block content
+    .content
+        h2
+            | Saved Sessions
+
+    .session-container
+
+        ul
+            for session in sessions
+                li
+                    a(href="/sessions/#{session.id}/feed")
+                        | #{session.id}
+                    | (#{session.visualizations.length} visualizations)
+
+
+        form(action="/sessions", method="post")
+            input(type="submit", value="Create New Session")
+
+

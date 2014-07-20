@@ -6,5 +6,6 @@ extends layout
 
 
 block content
-    #content
-        | :)
+    .content
+        form(action="/sessions", method="post")
+            input(type="submit", value="Create New Session")

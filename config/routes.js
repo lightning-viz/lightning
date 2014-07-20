@@ -5,6 +5,7 @@
 
 var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
+var session = require('../app/controllers/session');
 
 /**
  * Expose
@@ -13,25 +14,11 @@ var home = require('../app/controllers/home');
 module.exports = function (app, passport) {
 
     app.get('/', home.index);
+    app.get('/sessions', session.index);
+    app.get('/sessions/:sid/feed', session.feed);
+    app.post('/sessions', session.create);
+    app.post('/sessions/:sid/data', session.addData);
 
-    
-
-
-    app.get('/results/:uid', home.results);
-
-    // app.get('/auth/facebook',
-    //   passport.authenticate('facebook', { scope: 'read_stream' }));
-
-    // app.get('/auth/facebook/callback',
-    //   passport.authenticate('facebook', { failureRedirect: '/login' }),
-    //   function(req, res) {
-    //     // Successful authentication, redirect home.
-    //     res.redirect('/results/' + req.user._id);
-    //   });
-
-    /**
-     * Error handling
-     */
 
     app.use(function (err, req, res, next) {
         // treat as 404

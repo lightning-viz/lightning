@@ -13,6 +13,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+io.on('connection', function(){
+  console.log('a user connected');
+});
+
 var port = process.env.PORT || 3000;
 
 // Connect to mongodb
