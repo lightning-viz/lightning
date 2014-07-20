@@ -1,0 +1,32 @@
+@mixin team-container() {
+    background-color: $light-gray;
+    border-bottom: solid 1px $dark-gray;
+
+    &:hover {
+        background-color: $dark-gray;
+        color: $white;
+    }
+
+    &.selected {
+        background-color: $red;
+        color: $white;
+
+        &:hover {
+            background-color: darken($red, 10%);
+        }
+    }
+
+    .team {
+
+        $vertical-padding: 15px;
+
+        font-family: $vocativ-header;
+        margin-left: 20px;
+        padding-top: $vertical-padding;
+        padding-bottom: $vertical-padding;
+        font-weight: bold;
+        cursor: pointer;
+
+
+    }
+}

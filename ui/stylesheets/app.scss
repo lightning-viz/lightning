@@ -1,0 +1,90 @@
+@import "mixins";
+@import "fonts";
+@import "lib/base";
+@import "lib/vocativ";
+@import "lib/shelves";
+@import "lib/swipebox";
+
+.centered {
+  text-align: center;
+}
+
+$header-height: 90px;
+.header-container {
+
+    
+    width: 100%;
+    background-color: $dark-gray;
+
+    position: fixed;
+    height: $header-height;
+
+    h3 {
+        color: #fff;
+        margin: 0;
+        padding-top: $header-height / 4;
+    }
+
+    z-index: 1000;
+}
+
+.content {
+    padding-top: $header-height;
+}
+
+
+// .mobile {
+//     display: none;
+// }
+
+
+.shift-left {
+    position: relative;
+    left: -40px;
+}
+
+.dek {
+    color: $white;
+    font-weight: bold;
+    font-family: $vocativ-header;
+    padding-top: 4px;
+}
+
+.explainer {
+    margin-top: 78px;
+}
+
+a.tooltip {outline:none; }
+a.tooltip strong {line-height:30px;}
+a.tooltip:hover {text-decoration:none;} 
+a.tooltip span {
+    z-index:10;display:none; padding:14px 20px;
+    margin-top:-30px; margin-left:28px;
+    width:240px; line-height:16px;
+}
+a.tooltip:hover span{
+    display:inline; position:absolute; color:#111;
+    border:2px solid $dark-gray; background:$white;}
+.callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
+    
+/*CSS3 extras*/
+a.tooltip span
+{
+    border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+        
+    -moz-box-shadow: 3px 3px 6px $light-gray;
+    -webkit-box-shadow: 3px 3px 6px $light-gray;
+    box-shadow: 3px 3px 6px $light-gray;
+}
+
+a .button {}
+
+table {
+    width: 100%;
+}
+
+@import "viz/chord";
+// @import "mobile";
+

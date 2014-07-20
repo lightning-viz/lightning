@@ -1,0 +1,15 @@
+
+
+.sidebar {
+    // max-height: 800;
+    overflow-y: auto;
+    position: fixed;
+    overflow-x: hidden;
+    width: 15%;
+    min-width: 183px;
+
+    .team-container {
+        @include team-container()        
+    }
+}
+
