@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
+var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
 
 /**
@@ -20,6 +21,7 @@ var VisualizationSchema = new Schema({
 
 // SessionSchema.plugin(userPlugin, {});
 VisualizationSchema.plugin(findOrCreate);
+VisualizationSchema.plugin(timestamps);
 
 /**
  * Add your
