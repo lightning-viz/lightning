@@ -26,6 +26,7 @@
     "express-session": "^1.6.5",
     "fbgraph": "~0.2.10",
     "forever": "^0.11.1",
+    "jade": "^1.4.2",
     "lodash": "~2.4.1",
     "method-override": "^2.1.1",
     "mongoose": "^3.8.13",
