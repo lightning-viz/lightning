@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
+var timestamps = require('mongoose-timestamp');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var Schema = mongoose.Schema;
@@ -24,6 +25,7 @@ var NotebookSchema = new Schema({
 
 // SessionSchema.plugin(userPlugin, {});
 NotebookSchema.plugin(findOrCreate);
+NotebookSchema.plugin(timestamps);
 
 /**
  * Add your
