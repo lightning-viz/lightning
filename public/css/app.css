@@ -2,16 +2,19 @@
   fill: rgba(250, 250, 255, 0.6); }
 .line-plot .grid .tick {
   stroke: lightgrey;
-  opacity: 0.7; }
+  opacity: 0.6; }
 .line-plot .grid path {
   stroke-width: 0; }
 .line-plot .axis path, .line-plot .axis line {
   fill: none;
-  stroke: #000;
+  stroke: none;
   shape-rendering: crispEdges; }
-.line-plot .x.axis path {
+.line-plot .axis path {
   display: none; }
 .line-plot .line {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px; }
+.line-plot text {
+  fill: grey;
+  font-family: monospace; }

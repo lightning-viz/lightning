@@ -5,22 +5,28 @@
     }
     .grid .tick {
         stroke: lightgrey;
-        opacity: 0.7;
+        opacity: 0.6;
     }
     .grid path {
         stroke-width: 0;
     }
     .axis path, .axis line {
         fill: none;
-        stroke: #000;
+        stroke: none;
         shape-rendering: crispEdges;
     }
-    .x.axis path {
+    .axis path {
         display: none;
     }
     .line {
         fill: none;
         stroke: steelblue;
         stroke-width: 1.5px;
+    }
+
+    text {
+        fill: grey;
+        font-family: monospace;
+
     }
 }
