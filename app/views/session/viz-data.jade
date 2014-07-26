@@ -1,4 +1,7 @@
 
-.feed-item
-    pre
-        | #{JSON.stringify(viz.data)}
+.feed-item(data-type="#{viz.type}", data-data="#{JSON.stringify(viz.data)}", id="viz-#{viz.id}")
+.permalink
+    a(href="/sessions/#{session.id}/visualizations/#{viz.id}")
+        | permalink
+
+hr

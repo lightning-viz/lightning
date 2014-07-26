@@ -131,7 +131,9 @@ gulp.task('templates', ['static'], function() {
 
 gulp.task('express', function() {
     if(appServer) {
-        appServer.close();
+        try {
+            appServer.close();
+        } catch(e) {}
     }
     delete require.cache[require.resolve('./server')];
     appServer = require('./server');
