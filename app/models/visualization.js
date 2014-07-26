@@ -12,7 +12,8 @@ var Schema = mongoose.Schema;
  */
 
 var VisualizationSchema = new Schema({
-    data: Schema.Types.Mixed
+    data: Schema.Types.Mixed,
+    type: String
 });
 
 /**
