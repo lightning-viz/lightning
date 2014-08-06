@@ -33,8 +33,7 @@ var ImageViz = function(selector, data, images, opts) {
 
     var self = this;
     this.$el.find('input.image-slider')[0].oninput = _.throttle(function() {
-        self.$el.find('.image-viz img').attr('src', self.images[$(this).val()]);
-        self.$el.find('.image-viz a').attr('href', self.images[$(this).val()]);
+        self.setImage($(this).val());
     }, 0);
 
     
@@ -47,9 +46,16 @@ module.exports = ImageViz;
 ImageViz.prototype.addImage = function(image) {
     this.images.push(image);
     this.$el.find('input.image-slider').attr('max', this.images.length - 1);
+    this.setImage(this.images.length - 1);
+
 };
 
 
+ImageViz.prototype.setImage = function(index) {
+    this.$el.find('input.image-slider').val(index);
+    this.$el.find('.image-viz img').attr('src', this.images[index]);
+    this.$el.find('.image-viz a').attr('href', this.images[index]);
+};
 
 
 
