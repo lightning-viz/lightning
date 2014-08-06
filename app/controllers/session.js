@@ -120,6 +120,8 @@ exports.addData = function (req, res, next) {
             var headers = {
               'x-amz-acl': 'public-read',
             };
+
+            // console.log()
             var form = new multiparty.Form();
             var batch = new Batch();
             
@@ -174,7 +176,7 @@ exports.addData = function (req, res, next) {
                     var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath;
 
                     console.log('about to save');
-                    session.visualizations.push({images: [imgURL], type: 'image'});
+                    session.visualizations.push({images: [imgURL, imgURL, imgURL], type: 'image'});
                     var viz = session.visualizations[session.visualizations.length - 1];
                     console.log('saved');
 
@@ -220,13 +222,78 @@ exports.addImage = function (req, res, next) {
             return v.id === vizId;
         });
 
-        console.log(req.files);
-        return res.json(200);
+        if(!viz) {
+            next(404);
+        }
 
+        var headers = {
+          'x-amz-acl': 'public-read',
+        };
 
-        // res.render('session/visualization', {
-        //     session: session,
-        //     viz: viz
-        // });
+        var form = new multiparty.Form();
+        var batch = new Batch();
+
+        batch.push(function(done) {
+            form.on('part', function(part) {
+                if (!part.filename) {
+                    return;
+                }
+                done(null, part);
+            });
+        });
+
+        batch.end(function(err, results) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
+            form.removeListener('close', onEnd);
+            var part = results[0];
+            var destPath = '/sessions/' + sessionId + '/' + randomstring.generate();
+
+            headers['Content-Length'] = part.byteCount;
+
+            var filetype = path.extname(part.filename).toLowerCase();
+
+            if( filetype === '.jpg' || filetype === '.jpeg' ) {
+                headers['Content-Type'] = 'image/jpeg';
+            } else if (filetype === '.png') {
+                headers['Content-Type'] = 'image/png';
+            }
+
+            s3Client.putStream(part, destPath, headers, function(err, s3Response) {
+            
+                if (err) {
+                    return next(err);
+                }
+
+                var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath;
+
+                viz.images.push(imgURL);
+
+                req.io.of('/sessions/' + sessionId)
+                    .emit('viz', viz);
+
+                session.save(function(err) {
+                    if(err) {
+                        return next(err);
+                    }
+
+                    res.statusCode = s3Response.statusCode;
+                    s3Response.pipe(res);
+                });
+
+                console.log('https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath);
+            });
+        });
+
+        var onEnd = function() {
+            throw new Error('no uploaded file');
+        };
+
+        form.on('close', onEnd);
+        form.parse(req);
+
     });
 };
