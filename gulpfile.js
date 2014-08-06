@@ -148,7 +148,6 @@ gulp.task('watch', function () {
     gulp.watch(srcDir + 'stylesheets/**/*.{scss,css}',['css', 'jade']);
     gulp.watch(srcDir + 'js/**/*.js',['js']);
     gulp.watch(srcDir + 'templates/**/*.jade',['jade', 'js']);
-    gulp.watch('./{app, config}/**', ['express']);
   });
 });
 
@@ -165,5 +164,5 @@ gulp.task('gzip', ['build'], function() {
 
 gulp.task('js', ['browserify','js-lib']);
 gulp.task('static', ['js', 'css', 'fonts', 'images']);
-gulp.task('default', ['templates','express','watch']);
+gulp.task('default', ['templates','watch']);
 gulp.task('build', ['templates']);

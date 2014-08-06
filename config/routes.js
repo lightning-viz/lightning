@@ -22,6 +22,10 @@ module.exports = function (app, passport) {
     app.get('/sessions/:sid/visualizations/:vid', session.read);
 
 
+    app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
+
+
+
     app.use(function (err, req, res, next) {
         // treat as 404
         if (err.message
