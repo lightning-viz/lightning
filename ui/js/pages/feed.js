@@ -3,6 +3,7 @@ var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sess
 require('../viz/line');
 require('../viz/pca');
 require('../viz/scatter');
+require('../viz/image');
 
 var socket = io.connect('/sessions/' + sid);
 
@@ -16,7 +17,7 @@ socket.on('viz', function (viz) {
     var Viz = require('../viz/' + viz.type);
 
     $('.feed-container').prepend('<div class="feed-item"></div><div class="permalink"><a href="/sessions/' + sid + '/visualizations/' + viz._id + '">permalink</a></div><hr>');
-    new Viz('.feed-container .feed-item', viz.data);
+    new Viz('.feed-container .feed-item', viz.data, viz.images);
 });
 
 
@@ -24,7 +25,8 @@ $('.feed-item').each(function() {
 
     var type = $(this).data('type');
     var data = $(this).data('data');
+    var images = $(this).data('images');
 
     var Viz = require('../viz/' + type);
-    new Viz('#' + $(this).attr('id'), data);
+    new Viz('#' + $(this).attr('id'), data, images);
 });

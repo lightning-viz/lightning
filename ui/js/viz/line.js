@@ -11,7 +11,7 @@ var width = 600 - margin.left - margin.right;
 var height = 300 - margin.top - margin.bottom;
 
 
-var LineGraph = function(selector, data, opts) {
+var LineGraph = function(selector, data, images, opts) {
 
 
     console.log('line graph');
