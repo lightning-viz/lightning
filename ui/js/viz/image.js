@@ -20,7 +20,7 @@ var ImageViz = function(selector, data, images, opts) {
     console.log(selector);
     console.log(images);
 
-    this.$el = $(selector);
+    this.$el = $(selector).first();
 
     
     this.currentImage = 0;
@@ -32,10 +32,10 @@ var ImageViz = function(selector, data, images, opts) {
     }));
 
     var self = this;
-    this.$el.find('input.image-slider').change(_.throttle(function() {
+    this.$el.find('input.image-slider')[0].oninput = _.throttle(function() {
         self.$el.find('.image-viz img').attr('src', self.images[$(this).val()]);
         self.$el.find('.image-viz a').attr('href', self.images[$(this).val()]);
-    }, 0));
+    }, 0);
 
     
 };
@@ -53,7 +53,7 @@ ImageViz.prototype.addImage = function(image) {
 
 
 
-ImageViz.prototype.updateData = function(data) {
-    // todo append image to current image stack
-
+ImageViz.prototype.updateData = function(image) {
+    // in this case data should just be an image
+    this.addImage(image);
 };
