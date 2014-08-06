@@ -176,7 +176,7 @@ exports.addData = function (req, res, next) {
                     var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath;
 
                     console.log('about to save');
-                    session.visualizations.push({images: [imgURL, imgURL, imgURL], type: 'image'});
+                    session.visualizations.push({images: [imgURL], type: 'image'});
                     var viz = session.visualizations[session.visualizations.length - 1];
                     console.log('saved');
 
@@ -212,6 +212,8 @@ exports.addImage = function (req, res, next) {
 
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
+
+    console.log(req.io);
 
     Session.findById(sessionId, function(err, session) {
         if(err) {
@@ -272,8 +274,12 @@ exports.addImage = function (req, res, next) {
 
                 viz.images.push(imgURL);
 
+                console.log('/sessions/' + sessionId);
                 req.io.of('/sessions/' + sessionId)
-                    .emit('viz', viz);
+                    .emit('update', {
+                        vizId: viz._id, 
+                        data: imgURL
+                    });
 
                 session.save(function(err) {
                     if(err) {
