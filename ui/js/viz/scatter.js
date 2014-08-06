@@ -12,7 +12,7 @@ var width = 600 - margin.left - margin.right;
 var height = 300 - margin.top - margin.bottom;
 
 
-var ScatterPlot = function(selector, data, opts) {
+var ScatterPlot = function(selector, data, images, opts) {
 
     var self = this;
 

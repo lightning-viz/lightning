@@ -1,5 +1,6 @@
 var d3 = require('d3');
 var _ = require('lodash');
+var templateHTML = require('../../templates/viz/image.jade');
 
 var margin = {
     top: 20,
@@ -21,11 +22,22 @@ var ImageViz = function(selector, data, images, opts) {
 
     this.$el = $(selector);
 
-    var self = this;
+    
+    this.currentImage = 0;
+    this.images = images || [];
 
-    _.each(images, function(image) {
-        self.addImage(image);
-    })
+    this.$el.append(templateHTML({
+        image: this.images[0],
+        imageCount: this.images.length
+    }));
+
+    var self = this;
+    this.$el.find('input.image-slider').change(_.throttle(function() {
+        self.$el.find('.image-viz img').attr('src', self.images[$(this).val()]);
+        self.$el.find('.image-viz a').attr('href', self.images[$(this).val()]);
+    }, 0));
+
+    
 };
 
 
@@ -33,10 +45,11 @@ module.exports = ImageViz;
 
 
 ImageViz.prototype.addImage = function(image) {
-    var $img = $('<img>');
-    $img.attr('src', image);
-    this.$el.append($img);
+    this.images.push(image);
+    this.$el.find('input.image-slider').attr('max', this.images.length - 1);
 };
+
+
 
 
 

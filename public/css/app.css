@@ -304,3 +304,7 @@
 .line-plot text {
   fill: grey;
   font-family: monospace; }
+
+.image-viz img {
+  max-height: 400px;
+  max-width: 33%; }
