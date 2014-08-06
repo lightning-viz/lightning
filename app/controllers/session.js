@@ -213,8 +213,6 @@ exports.addImage = function (req, res, next) {
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
 
-    console.log(req.io);
-
     Session.findById(sessionId, function(err, session) {
         if(err) {
             return next(err);
@@ -274,7 +272,6 @@ exports.addImage = function (req, res, next) {
 
                 viz.images.push(imgURL);
 
-                console.log('/sessions/' + sessionId);
                 req.io.of('/sessions/' + sessionId)
                     .emit('update', {
                         vizId: viz._id, 
