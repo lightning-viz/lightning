@@ -7,6 +7,9 @@ require('../viz/pca');
 require('../viz/scatter');
 require('../viz/image');
 
+require('../lib/bigSlide');
+$('.menu-link').bigSlide();
+
 
 console.log('connecting to ' + '/sessions/' + sid);
 var socket = io.connect('/sessions/' + sid);

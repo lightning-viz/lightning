@@ -5,11 +5,35 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE")
         meta(charset="UTF-8")
         block meta
+        link(href='http://fonts.googleapis.com/css?family=Oswald', rel='stylesheet', type='text/css')
+        link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,700', rel='stylesheet', type='text/css')
         link(rel='stylesheet', href='#{STATIC_URL}css/app.css')
 
 body
     block header
-    block content
+    block sidebar    
+        nav(role="navigation")#menu.panel
+
+            .button-container
+                ul
+                    li
+                        a(href="/")
+                            | Home
+                    li
+                        a(href="#")
+                            | New Session
+                    li
+                        a(href="/sessions")
+                            | All Sessions
+                    li
+                        a(href="https://github.com/mathisonian/lightning")
+                            | Github
+
+            .side-color.menu-link
+                .logo
+                    img(src="/images/lightning.svg")
+    .container.content.wrap.push
+        block content
 
     block scripts
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')

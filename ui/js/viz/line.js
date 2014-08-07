@@ -13,12 +13,6 @@ var height = 300 - margin.top - margin.bottom;
 
 var LineGraph = function(selector, data, images, opts) {
 
-
-    console.log('line graph');
-    console.log(selector);
-    console.log(data);
-
-
     var self = this;
     
     var yDomain = d3.extent(data, function(d) {
@@ -123,7 +117,6 @@ var LineGraph = function(selector, data, images, opts) {
         .attr('d', this.line);
 
     function zoomed() {
-        console.log('zoomed');
         self.svg.select('.x.axis').call(self.xAxis);
         self.svg.select('.y.axis').call(self.yAxis);
         self.svg.select('.x.grid')

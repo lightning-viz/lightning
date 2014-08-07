@@ -2,24 +2,27 @@ extends ../layout
 
 
 block content
-    .content
-        h2
-            | Session Feed
-        p
-            | #{session.id}
-        p
-            | Created At: #{session.createdAt}
 
-    .feed-container
+    .row
+        .one-third.column
+            h2
+                | Session Feed
+            p
+                | #{session.id}
+            p
+                | Created At: #{session.createdAt}
 
-        if session.visualizations.length
+    .row
+        .two-thirds.column
+            .feed-container
+                if session.visualizations.length
 
-            for viz in session.visualizations.reverse()
-                include ./viz-data
+                    for viz in session.visualizations.reverse()
+                        include ./viz-data
 
-        else
-            p.empty
-                | data will show up here when they are created
+                else
+                    p.empty
+                        | data will show up here when they are created
 
 
 
