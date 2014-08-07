@@ -1,10 +1,12 @@
 'use strict';
 
-var Snap = require('./lib/snap');
+// var Snap = require('./lib/snap');
+require('./lib/bigSlide');
+$('.menu-link').bigSlide();
 
-var snapper = new Snap({
-  element: document.getElementById('content')
-});
+// var snapper = new Snap({
+//   element: document.getElementById('content')
+// });
 
 // var countries = require('./data/countries');
 // var Sidebar = require('./views/sidebar');

@@ -299,7 +299,7 @@
   display: none; }
 .line-plot .line {
   fill: none;
-  stroke: lightgrey;
+  stroke: steelblue;
   stroke-width: 2px; }
 .line-plot text {
   fill: grey;
@@ -308,3 +308,74 @@
 .image-viz img {
   max-height: 400px;
   max-width: 33%; }
+
+.panel {
+  position: fixed;
+  left: -12.625em;
+  /*left or right and the width of your navigation panel*/
+  width: 16.625em;
+  /*should match the above value*/
+  background-color: #626c7c; }
+  .panel .button-container {
+    width: 12.625em;
+    float: left; }
+    .panel .button-container a {
+      font-family: 'Open Sans', sans-serif;
+      display: block;
+      padding: 1em;
+      color: white;
+      text-decoration: none; }
+      .panel .button-container a:hover {
+        color: black;
+        background-color: #cfd8e0; }
+  .panel .side-color {
+    position: relative;
+    height: 100%;
+    /* width: 33%; */
+    background: #424b58;
+    width: 4em;
+    float: right;
+    text-align: center;
+    cursor: pointer; }
+  .panel .logo {
+    padding-top: 10px; }
+    .panel .logo img {
+      width: 100%; }
+
+.wrap {
+  position: relative; }
+
+.button {
+  border-radius: 2px;
+  background-image: -o-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+  background-image: -moz-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+  background-image: -ms-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+  background-image: linear-gradient(-155deg, #58ACD9 0%, #7BA8FF 100%);
+  background-image: -o-linear-gradient(-89deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: -moz-linear-gradient(-89deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: -ms-linear-gradient(-89deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: linear-gradient(-179deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  border: 1px solid #719BEC;
+  font-size: 15px;
+  color: #FFFFFF;
+  line-height: 20px;
+  width: 100px; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif; }
+
+li {
+  list-style: none; }
+
+ul, li {
+  margin: 0;
+  padding: 0; }
+
+.lightning-header {
+  padding-top: 33%;
+  text-align: center; }
+  .lightning-header h1, .lightning-header h2, .lightning-header h3 {
+    font-family: 'Oswald', sans-serif; }
+
+.session-details {
+  color: gray; }

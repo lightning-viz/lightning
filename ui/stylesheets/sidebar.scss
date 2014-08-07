@@ -1,0 +1,56 @@
+
+.panel {
+    position: fixed;
+    left: -12.625em; /*left or right and the width of your navigation panel*/
+    width: 16.625em; /*should match the above value*/
+    background-color: #626c7c;
+
+    .button-container {
+
+        width: 12.625em;
+        float: left;
+
+        a {    
+          font-family: 'Open Sans', sans-serif;
+
+          display: block;
+          // border-bottom: 2px solid #34495D;
+          padding: 1em;
+          // background-color: #68a1e5;
+          color: white;
+          text-decoration: none;
+
+          &:hover {
+            color: black;
+            background-color: #cfd8e0;
+          }
+        }
+
+    }
+
+    .side-color {
+        position: relative;
+        height: 100%;
+        /* width: 33%; */
+        background: #424b58;
+        width: 4.0em;
+        float: right;
+        text-align: center;
+
+        cursor: pointer;
+    }
+
+    .logo {
+        img {
+            width: 100%;
+        }
+
+        padding-top: 10px;
+    }
+
+}
+.wrap { 
+    position: relative; 
+    // left: 3.0em;
+
+}

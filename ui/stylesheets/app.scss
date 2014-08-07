@@ -1,3 +1,57 @@
 @import "lib/skeleton";
 @import "viz/line";
 @import "viz/image";
+@import "sidebar";
+
+
+
+.button {
+    border-radius: 2px;
+    background-image: -o-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+    background-image: -moz-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+    background-image: -ms-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
+    background-image: linear-gradient(-155deg, #58ACD9 0%, #7BA8FF 100%);
+    background-image: -o-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
+    background-image: -moz-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
+    background-image: -ms-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
+    background-image: linear-gradient(-179deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
+    border: 1px solid #719BEC;
+
+    font-size: 15px;
+    color: #FFFFFF;
+    line-height: 20px;
+
+    width: 100px;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+li {
+    list-style: none;
+}
+ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+
+.lightning-header {
+    padding-top: 33%;
+    text-align: center;
+    h1, h2, h3 {
+        font-family: 'Oswald', sans-serif;
+    }
+}
+
+.session-details {
+    color: gray;
+}

@@ -2,21 +2,28 @@ extends ../layout
 
 
 block content
-    .content
-        h2
-            | Saved Sessions
+    .row
+        .one-third.column
+            h2
+                | Saved Sessions
 
-    .session-container
+    .row
+        .two-thirds.column
+            ul
+                for session in sessions
+                    li
+                        a(href="/sessions/#{session.id}/feed")
+                            | #{session.id}
 
-        ul
-            for session in sessions
-                li
-                    a(href="/sessions/#{session.id}/feed")
-                        | #{session.id}
-                    | (#{session.visualizations.length} visualizations)
+                        small
+                            span.session-details
+                                |  #{session.visualizations.length} visualizations 
+                            | |
+                            span.session-details
+                                |  Created May 25
 
 
-        form(action="/sessions", method="post")
-            input(type="submit", value="Create New Session")
+            form(action="/sessions", method="post")
+                input(type="submit", value="Create New Session")
 
 

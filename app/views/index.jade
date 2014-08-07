@@ -4,8 +4,17 @@ extends layout
 //- block header
     include includes/header
 
-
 block content
-    .content
-        form(action="/sessions", method="post")
-            input(type="submit", value="Create New Session")
+    .row
+        .sixteen.columns
+            .lightning-header
+                h2 
+                    | WELCOME TO LIGHTNING
+
+
+                //- .button
+                    | Create New Session
+
+
+                form(action="/sessions", method="post")
+                    input(type="submit", value="Create New Session")
