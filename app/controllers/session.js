@@ -24,7 +24,7 @@ var s3Client = knox.createClient({
 
 exports.index = function (req, res) {
 
-    Session.find(function(err, sessions) {
+    Session.find({}, null, {sort: {date: -1}}, function(err, sessions) {
 
         res.render('session/index', {
             sessions: sessions
@@ -72,6 +72,22 @@ exports.read = function (req, res, next) {
 
 
 exports.create = function(req, res, next) {
+
+    console.log('creating session');
+    var session = new Session();
+    session.save(function(err) {
+        if(err) {
+            return next(err);
+        }
+        return res.redirect('/sessions/' + session.id + '/feed/');
+    });
+};
+
+
+
+exports.getNew = function(req, res, next) {
+
+    console.log('creating session');
     var session = new Session();
     session.save(function(err) {
         if(err) {

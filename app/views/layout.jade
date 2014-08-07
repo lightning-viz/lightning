@@ -5,7 +5,6 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE")
         meta(charset="UTF-8")
         block meta
-        link(href='http://fonts.googleapis.com/css?family=Oswald', rel='stylesheet', type='text/css')
         link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,700', rel='stylesheet', type='text/css')
         link(rel='stylesheet', href='#{STATIC_URL}css/app.css')
 
@@ -20,13 +19,13 @@ body
                         a(href="/")
                             | Home
                     li
-                        a(href="#")
+                        a(href="/sessions/create")
                             | New Session
                     li
                         a(href="/sessions")
                             | All Sessions
                     li
-                        a(href="https://github.com/mathisonian/lightning")
+                        a(href="https://github.com/mathisonian/lightning", target="_blank")
                             | Github
 
             .side-color.menu-link

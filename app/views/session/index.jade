@@ -15,15 +15,14 @@ block content
                         a(href="/sessions/#{session.id}/feed")
                             | #{session.id}
 
-                        small
-                            span.session-details
+                        small.session-details
                                 |  #{session.visualizations.length} visualizations 
-                            | |
-                            span.session-details
-                                |  Created May 25
+                                | |
+                                |  Created #{moment(session.createdAt).fromNow()}
 
-
-            form(action="/sessions", method="post")
-                input(type="submit", value="Create New Session")
-
+    .row
+        .four.columns
+            a(href="/sessions/create")
+                .button
+                    | Create New Session
 

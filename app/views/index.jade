@@ -12,9 +12,12 @@ block content
                     | WELCOME TO LIGHTNING
 
 
-                //- .button
+    .row
+        .four.columns.offset-by-six
+            a(href="/sessions/create")
+                .button
                     | Create New Session
 
 
-                form(action="/sessions", method="post")
-                    input(type="submit", value="Create New Session")
+            //- form(action="/sessions", method="post")
+                input(type="submit", value="Create New Session")
