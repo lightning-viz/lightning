@@ -24,6 +24,7 @@ html, body {
 
     &:hover {
         background-color: darken(white, 5%);
+        color: darken($blue, 15%);
     }
 }
 
