@@ -21,6 +21,7 @@ var winston = require('winston');
 var helpers = require('view-helpers');
 var config = require('./config');
 var pkg = require('../package.json');
+var moment = require('moment');
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -81,6 +82,7 @@ module.exports = function (app, passport, io) {
     app.use(function (req, res, next) {
         res.locals.pkg = pkg;
         res.locals.env = env;
+        res.locals.moment = moment;
         res.locals._ = require('lodash');
         res.locals.STATIC_URL = '/';
         next();

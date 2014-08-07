@@ -15,8 +15,12 @@ module.exports = function (app, passport) {
 
     app.get('/', home.index);
     app.get('/sessions', session.index);
+    app.get('/sessions/create/', session.create);
     app.get('/sessions/:sid', session.feed);
     app.get('/sessions/:sid/feed', session.feed);
+    
+
+
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/data', session.addData);
     app.get('/sessions/:sid/visualizations/:vid', session.read);

@@ -120,11 +120,10 @@ var ScatterPlot = function(selector, data, images, opts) {
         .data(data)
         .enter().append('circle')
         .attr('class', 'dot')
-        .attr('r', 3.5)
+        .attr('r', 6)
         .attr('transform', function(d) {
             return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
         })
-        .style('fill', 'red')
         .on('mouseover', function(d) {
             self.emit('hover', d);
         })
@@ -149,8 +148,7 @@ var ScatterPlot = function(selector, data, images, opts) {
         svg.selectAll('circle')
             .attr('transform', function(d) {
                 return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
-            })
-            .style('fill', 'red');
+            });
     }
 };
 

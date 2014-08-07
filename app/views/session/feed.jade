@@ -4,13 +4,16 @@ extends ../layout
 block content
 
     .row
-        .one-third.column
+        .six.columns
             h2
                 | Session Feed
-            p
-                | #{session.id}
-            p
-                | Created At: #{session.createdAt}
+            .subheader
+                p
+                    | Created #{moment(session.createdAt).fromNow()}
+        .five.columns.offset-by-five
+            .session-id.subheader
+                p
+                    | #{session.id}
 
     .row
         .two-thirds.column
@@ -19,10 +22,14 @@ block content
 
                     for viz in session.visualizations.reverse()
                         include ./viz-data
+                        hr
 
                 else
                     p.empty
-                        | data will show up here when they are created
+                        | No data found. Post data to  
+                        span.code
+                            | /sessions/#{session.id}/data
+
 
 
 

@@ -3,25 +3,28 @@
 @import "viz/image";
 @import "sidebar";
 
+$purple: #9175f0;
+$blue: #68a1e5;
+
+html, body {
+    font-family: 'Open Sans', sans-serif;
+}
 
 
 .button {
     border-radius: 2px;
-    background-image: -o-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
-    background-image: -moz-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
-    background-image: -ms-linear-gradient(-65deg, #58ACD9 0%, #7BA8FF 100%);
-    background-image: linear-gradient(-155deg, #58ACD9 0%, #7BA8FF 100%);
-    background-image: -o-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
-    background-image: -moz-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
-    background-image: -ms-linear-gradient(-89deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
-    background-image: linear-gradient(-179deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.00) 100%);
     border: 1px solid #719BEC;
 
     font-size: 15px;
-    color: #FFFFFF;
+    color: $blue;
     line-height: 20px;
+    cursor: pointer;
+    text-align: center;
+    padding: 5px 0;
 
-    width: 100px;
+    &:hover {
+        background-color: darken(white, 5%);
+    }
 }
 
 
@@ -32,8 +35,28 @@ h4,
 h5,
 h6 {
     font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+    color: #545E6B;
 }
 
+p {
+    color: #545E6B;
+}
+
+a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #8F7BD9;
+    line-height: 19px;
+
+    &:hover {
+        color: #A997EB;
+    }
+
+    &:active {
+        color: #59A2E6;
+    }
+}
 
 li {
     list-style: none;
@@ -42,16 +65,37 @@ ul, li {
     margin: 0;
     padding: 0;
 }
+.subheader { color: #75808F; }
+
+.code {
+    background-color: #E4E4E4;
+    font-family: monospace;
+    padding: 5px;
+    border-radius: 4px;
+}
 
 
 .lightning-header {
     padding-top: 33%;
     text-align: center;
     h1, h2, h3 {
-        font-family: 'Oswald', sans-serif;
+        // font-family: 'Oswald', sans-serif;
+        font-weight: normal;
     }
 }
 
 .session-details {
     color: gray;
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 10px;
+}
+
+.session-id {
+    text-align: right;
+}
+
+.feed-item {
+    &:not(:first-child) {
+        // padding-top: 60px;
+    }
 }
