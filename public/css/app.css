@@ -361,7 +361,8 @@ html, body {
   text-align: center;
   padding: 5px 0; }
   .button:hover {
-    background-color: #f2f2f2; }
+    background-color: #f2f2f2;
+    color: #277ada; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
