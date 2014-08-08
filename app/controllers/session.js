@@ -140,7 +140,8 @@ exports.addData = function (req, res, next) {
                 _.each(files, function(f) {
                     thumbnailAndUpload(f, sessionId, function(err, data) {
 
-                        var imgData = data;
+                        var imgData = data.imgData;
+                        var s3Response = data.response;
 
                         console.log(imgData);
                         session.visualizations.push({images: [imgData], type: 'image'});
@@ -153,7 +154,8 @@ exports.addData = function (req, res, next) {
                             if(err) {
                                 return next(err);
                             }
-                            return res.json(200);
+                            res.statusCode = s3Response.statusCode;
+                            s3Response.pipe(res);
                         });
                     });
                 });
@@ -193,7 +195,8 @@ exports.addImage = function (req, res, next) {
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
-                    var imgData = data;
+                    var imgData = data.imgData;
+                    var s3Response = data.response;
 
 
                     viz.images.push(imgData);
@@ -208,7 +211,8 @@ exports.addImage = function (req, res, next) {
                         if(err) {
                             return next(err);
                         }
-                        return res.json(200);
+                        res.statusCode = s3Response.statusCode;
+                        s3Response.pipe(res);
                     });
                 });
             });
@@ -277,15 +281,6 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 height: thumbHeight
             });
         }).then(function() {
-            var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
-            var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
-
-            var imgData = {
-                original: imgURL,
-                thumbnail: thumbURL
-            };
-
-            callback(null, imgData);
             async.parallel([
                 function(callback) {
                     console.log(imgPath + ':' + originalS3Path);
@@ -295,7 +290,23 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     console.log(thumbnailPath + ':' + thumbnailS3Path);
                     s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                 }
-            ]);
+            ], function(err, results) {
+                var s3Response = results[0];
+
+                var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
+                var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+
+                var imgData = {
+                    original: imgURL,
+                    thumbnail: thumbURL
+                };
+
+                callback(null, {
+                    response: s3Response,
+                    imgData: imgData
+                });
+                
+            });
         }, function(err) {
             console.log(err);
             callback(err);
