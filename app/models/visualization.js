@@ -13,7 +13,10 @@ var Schema = mongoose.Schema;
 
 var VisualizationSchema = new Schema({
     data: Schema.Types.Mixed,
-    images: [String],
+    images: [{
+        original: String,
+        thumbnail: String
+    }],
     type: String
 });
 
