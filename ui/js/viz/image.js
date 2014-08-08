@@ -32,9 +32,9 @@ var ImageViz = function(selector, data, images, opts) {
     }));
 
     var self = this;
-    this.$el.find('input.image-slider')[0].oninput = _.throttle(function() {
+    this.$el.find('input.image-slider')[0].oninput = function() {
         self.setImage($(this).val());
-    }, 0);
+    };
 
     
 };
