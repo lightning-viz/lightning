@@ -6,12 +6,12 @@
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var Session = mongoose.model('Notebook');
-var Visualization = mongoose.model('Visualization');
 var multiparty = require('multiparty');
 var knox = require('knox');
-var Batch = require('batch');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 var path = require('path');
+var easyimage = require('easyimage');
+var async = require('async');
 
 
 var s3Client = knox.createClient({
@@ -133,96 +133,42 @@ exports.addData = function (req, res, next) {
             });
 
         } else {
-            var headers = {
-              'x-amz-acl': 'public-read',
-            };
-
             // console.log()
             var form = new multiparty.Form();
-            var batch = new Batch();
-            
-            // batch.push(function(cb) {
-            //     form.on('field', function(name, value) {
-            //         console.log('field');
-            //         if (name === 'path') {
-            //             var destPath = value;
-            //             if (destPath[0] !== '/') {
-            //                 destPath = '/' + destPath;
-            //             }
-            //             cb(null, destPath);
-            //         }
-            //     });
-            // });
+            form.parse(req, function(err, fields, files) {
 
-            batch.push(function(done) {
-                form.on('part', function(part) {
-                    if (!part.filename) {
-                        return;
-                    }
-                    done(null, part);
-                });
-            });
+                _.each(files, function(f) {
+                    thumbnailAndUpload(f, sessionId, function(err, data) {
 
-            batch.end(function(err, results) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
+                        var imgData = data.imgData;
+                        var s3Response = data.response;
 
-                form.removeListener('close', onEnd);
-                var part = results[0];
-                var destPath = '/sessions/' + sessionId + '/' + randomstring.generate();
+                        console.log(imgData);
+                        session.visualizations.push({images: [imgData], type: 'image'});
+                        viz = session.visualizations[session.visualizations.length - 1];
 
-                headers['Content-Length'] = part.byteCount;
+                        req.io.of('/sessions/' + sessionId)
+                            .emit('viz', viz);
 
-                var filetype = path.extname(part.filename).toLowerCase();
-
-                if( filetype === '.jpg' || filetype === '.jpeg' ) {
-                    headers['Content-Type'] = 'image/jpeg';
-                } else if (filetype === '.png') {
-                    headers['Content-Type'] = 'image/png';
-                }
-
-                s3Client.putStream(part, destPath, headers, function(err, s3Response) {
-                
-                    if (err) {
-                        return next(err);
-                    }
-
-                    var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath;
-
-                    console.log('about to save');
-                    session.visualizations.push({images: [imgURL], type: 'image'});
-                    var viz = session.visualizations[session.visualizations.length - 1];
-                    console.log('saved');
-
-                    req.io.of('/sessions/' + sessionId)
-                        .emit('viz', viz);
-
-                    session.save(function(err) {
-                        if(err) {
-                            return next(err);
-                        }
-
-                        res.statusCode = s3Response.statusCode;
-                        s3Response.pipe(res);
+                        session.save(function(err) {
+                            if(err) {
+                                return next(err);
+                            }
+                            res.statusCode = s3Response.statusCode;
+                            s3Response.pipe(res);
+                        });
                     });
-
-                    console.log('https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath);
                 });
+
             });
-
-            var onEnd = function() {
-                throw new Error('no uploaded file');
-            };
-
-            form.on('close', onEnd);
-            form.parse(req);
 
         }
     });
 
 };
+
+
+
 
 exports.addImage = function (req, res, next) {
 
@@ -242,77 +188,118 @@ exports.addImage = function (req, res, next) {
             next(404);
         }
 
-        var headers = {
-          'x-amz-acl': 'public-read',
-        };
-
         var form = new multiparty.Form();
-        var batch = new Batch();
 
-        batch.push(function(done) {
-            form.on('part', function(part) {
-                if (!part.filename) {
-                    return;
-                }
-                done(null, part);
-            });
-        });
 
-        batch.end(function(err, results) {
-            if (err) {
-                console.log(err);
-                return next(err);
-            }
+        form.parse(req, function(err, fields, files) {
+            _.each(files, function(f) {
+                thumbnailAndUpload(f, sessionId, function(err, data) {
 
-            form.removeListener('close', onEnd);
-            var part = results[0];
-            var destPath = '/sessions/' + sessionId + '/' + randomstring.generate();
+                    var imgData = data.imgData;
+                    var s3Response = data.response;
 
-            headers['Content-Length'] = part.byteCount;
 
-            var filetype = path.extname(part.filename).toLowerCase();
+                    viz.images.push(imgData);
 
-            if( filetype === '.jpg' || filetype === '.jpeg' ) {
-                headers['Content-Type'] = 'image/jpeg';
-            } else if (filetype === '.png') {
-                headers['Content-Type'] = 'image/png';
-            }
+                    req.io.of('/sessions/' + sessionId)
+                        .emit('update', {
+                            vizId: viz._id, 
+                            data: imgData
+                        });
 
-            s3Client.putStream(part, destPath, headers, function(err, s3Response) {
-            
-                if (err) {
-                    return next(err);
-                }
-
-                var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath;
-
-                viz.images.push(imgURL);
-
-                req.io.of('/sessions/' + sessionId)
-                    .emit('update', {
-                        vizId: viz._id, 
-                        data: imgURL
+                    session.save(function(err) {
+                        if(err) {
+                            return next(err);
+                        }
+                        res.statusCode = s3Response.statusCode;
+                        s3Response.pipe(res);
                     });
-
-                session.save(function(err) {
-                    if(err) {
-                        return next(err);
-                    }
-
-                    res.statusCode = s3Response.statusCode;
-                    s3Response.pipe(res);
                 });
-
-                console.log('https://s3.amazonaws.com/' + process.env.S3_BUCKET + destPath);
             });
         });
-
-        var onEnd = function() {
-            throw new Error('no uploaded file');
-        };
-
-        form.on('close', onEnd);
-        form.parse(req);
-
     });
+};
+
+
+var thumbnailAndUpload = function(f, sessionId, callback) {
+
+    var maxWidth = 500;
+    var maxHeight = 500;
+
+    // Image file info
+    var imgPath = f[0].path;
+    var extension = path.extname(imgPath).toLowerCase();
+    var filenameWithoutExtension = path.basename(imgPath, extension);
+    var thumbnailPath = path.dirname(imgPath) + filenameWithoutExtension + '_thumbnail' + extension;
+    
+
+    // Upload paths for s3
+    var uploadName = randomstring.generate();
+    var destPath = '/sessions/' + sessionId + '/';
+    var originalS3Path = destPath + uploadName;
+    var thumbnailS3Path = destPath + uploadName + '_small';
+
+
+    // s3 headers
+    var headers = {
+      'x-amz-acl': 'public-read',
+    };
+    if( extension === '.jpg' || extension === '.jpeg' ) {
+        headers['Content-Type'] = 'image/jpeg';
+    } else if (extension === '.png') {
+        headers['Content-Type'] = 'image/png';
+    }
+
+    easyimage
+        .info(imgPath)
+        .then(function(file) {
+            var thumbWidth;
+            var thumbHeight;
+
+            console.log('outputing to: ' + thumbnailPath);
+
+            if(file.width > file.height) {
+                thumbWidth = Math.min(maxWidth, file.width);
+                thumbHeight = file.height * (thumbWidth / file.width);
+            } else {
+                thumbHeight = Math.min(maxHeight, file.height);
+                thumbWidth = file.width * (thumbHeight / file.height);
+            }
+
+            return easyimage.resize({
+                src: imgPath,
+                dst: thumbnailPath,
+                width: thumbWidth,
+                height: thumbHeight
+            });
+        }).then(function() {
+            async.parallel([
+                function(callback) {
+                    console.log(imgPath + ':' + originalS3Path);
+                    s3Client.putFile(imgPath, originalS3Path, headers, callback);
+                },
+                function(callback) {
+                    console.log(thumbnailPath + ':' + thumbnailS3Path);
+                    s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
+                }
+            ], function(err, results) {
+                var s3Response = results[0];
+
+                var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
+                var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+
+                var imgData = {
+                    original: imgURL,
+                    thumbnail: thumbURL
+                };
+
+                callback(null, {
+                    response: s3Response,
+                    imgData: imgData
+                });
+                
+            });
+        }, function(err) {
+            callback(err);
+        });
 };
