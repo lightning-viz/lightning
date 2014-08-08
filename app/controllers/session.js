@@ -300,6 +300,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 
             });
         }, function(err) {
+            console.log(err);
             callback(err);
         });
 };
