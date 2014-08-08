@@ -230,7 +230,15 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
     var imgPath = f[0].path;
     var extension = path.extname(imgPath).toLowerCase();
     var filenameWithoutExtension = path.basename(imgPath, extension);
-    var thumbnailPath = path.dirname(imgPath) + filenameWithoutExtension + '_thumbnail' + extension;
+
+
+    var thumbnailPath;
+
+    if(process.env.NODE_ENV === 'production') {
+        thumbnailPath = path.resolve(__dirname + '/../../'  + './tmp/' + filenameWithoutExtension + '_thumbnail' + extension);
+    } else {
+        thumbnailPath = path.dirname(imgPath) + filenameWithoutExtension + '_thumbnail' + extension;
+    }
     
 
     // Upload paths for s3
