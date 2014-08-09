@@ -2,6 +2,7 @@
 
 A notebook for storing and sharing custom visualizations
 
+http://lightning.mathisonian.com
 
 ## mockups
 
