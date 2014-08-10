@@ -129,7 +129,7 @@ exports.addData = function (req, res, next) {
                     return next(err);
                 }
 
-                return res.json(200);
+                return res.json(viz);
             });
 
         } else {
@@ -141,7 +141,6 @@ exports.addData = function (req, res, next) {
                     thumbnailAndUpload(f, sessionId, function(err, data) {
 
                         var imgData = data.imgData;
-                        var s3Response = data.response;
 
                         console.log(imgData);
                         session.visualizations.push({images: [imgData], type: 'image'});
@@ -154,8 +153,8 @@ exports.addData = function (req, res, next) {
                             if(err) {
                                 return next(err);
                             }
-                            res.statusCode = s3Response.statusCode;
-                            s3Response.pipe(res);
+
+                            return res.json(viz);
                         });
                     });
                 });
@@ -169,11 +168,11 @@ exports.addData = function (req, res, next) {
 
 
 
-
-exports.addImage = function (req, res, next) {
+exports.getData = function (req, res, next) {
 
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
+    var fieldName = req.params.field;
 
     Session.findById(sessionId, function(err, session) {
         if(err) {
@@ -185,38 +184,119 @@ exports.addImage = function (req, res, next) {
         });
 
         if(!viz) {
-            next(404);
+            return next(404);
         }
 
-        var form = new multiparty.Form();
+        return res.json(viz.data[fieldName]);
+    });
+};
 
 
-        form.parse(req, function(err, fields, files) {
-            _.each(files, function(f) {
-                thumbnailAndUpload(f, sessionId, function(err, data) {
+exports.getDataAtIndex = function (req, res, next) {
 
-                    var imgData = data.imgData;
-                    var s3Response = data.response;
+    var sessionId = req.params.sid;
+    var vizId = req.params.vid;
+    var fieldName = req.params.field;
+    var index = req.params.index;
+
+    Session.findById(sessionId, function(err, session) {
+        if(err) {
+            return next(err);
+        }
+
+        var viz = _.find(session.visualizations, function (v) {
+            return v.id === vizId;
+        });
+
+        if(!viz) {
+            return next(404);
+        }
+
+        var d = viz.data[fieldName];
+        if(d.length <= index) {
+            return res.json();
+        }
+
+        return res.json(d[index]);
+    });
+};
 
 
-                    viz.images.push(imgData);
+exports.appendData = function (req, res, next) {
 
-                    req.io.of('/sessions/' + sessionId)
-                        .emit('update', {
-                            vizId: viz._id, 
-                            data: imgData
+    var sessionId = req.params.sid;
+    var vizId = req.params.vid;
+    var fieldName = req.params.field;
+
+    Session.findById(sessionId, function(err, session) {
+        if(err) {
+            return next(err);
+        }
+
+        var viz = _.find(session.visualizations, function (v) {
+            return v.id === vizId;
+        });
+
+        if(!viz) {
+            return next(404);
+        }
+
+        if(req.is('json')) {
+
+            console.log('finding session');
+            if(err) {
+                return next(err);
+            }
+
+            if(_.isArray(viz.data[fieldName])) {
+                viz.data[fieldName].push(req.body.data);
+            } else if(_.isUndefined) {
+                viz.data[fieldName] = [req.body.data];
+            }
+
+
+            session.save(function(err) {
+                if(err) {
+                    return next(err);
+                }
+
+                return res.json(viz);
+            });
+
+        } else if(fieldName === 'images') {
+
+            var form = new multiparty.Form();
+
+
+            form.parse(req, function(err, fields, files) {
+                _.each(files, function(f) {
+                    thumbnailAndUpload(f, sessionId, function(err, data) {
+
+                        var imgData = data.imgData;
+                        var s3Response = data.response;
+
+
+                        viz.images.push(imgData);
+
+                        req.io.of('/sessions/' + sessionId)
+                            .emit('update', {
+                                vizId: viz._id, 
+                                data: imgData
+                            });
+
+                        session.save(function(err) {
+                            if(err) {
+                                return next(err);
+                            }
+                            res.statusCode = s3Response.statusCode;
+                            s3Response.pipe(res);
                         });
-
-                    session.save(function(err) {
-                        if(err) {
-                            return next(err);
-                        }
-                        res.statusCode = s3Response.statusCode;
-                        s3Response.pipe(res);
                     });
                 });
             });
-        });
+        } else {
+            return next(500);
+        }
     });
 };
 
