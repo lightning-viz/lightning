@@ -27,6 +27,10 @@
     .dot {
         stroke: #68a1e5;
         fill: #deebfa;
+
+        &:hover {
+            fill: darken(#deebfa, 20%);
+        }
     }
 
     text {

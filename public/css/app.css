@@ -304,6 +304,8 @@
 .line-plot .dot {
   stroke: #68a1e5;
   fill: #deebfa; }
+  .line-plot .dot:hover {
+    fill: #85b6ed; }
 .line-plot text {
   fill: #BEC9CE;
   font-family: monospace; }
