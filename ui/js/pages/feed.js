@@ -6,6 +6,7 @@ require('../viz/line');
 require('../viz/pca');
 require('../viz/scatter');
 require('../viz/image');
+require('../viz/roi');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();

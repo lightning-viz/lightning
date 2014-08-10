@@ -84,6 +84,7 @@
     "q": "~1.0.1",
     "request": "~2.36.0",
     "should": "*",
+    "superagent": "^0.18.2",
     "supertest": "*",
     "tiny-lr": "0.0.5"
   }

@@ -105,6 +105,7 @@ exports.addData = function (req, res, next) {
     // var form = new multiparty.Form({
     //     autoFiles
     // });
+    console.log('trying to add data');
 
     Session.findById(sessionId, function(err, session) {
         if(err) {
@@ -167,9 +168,31 @@ exports.addData = function (req, res, next) {
 };
 
 
-
 exports.getData = function (req, res, next) {
 
+    console.log('getting all data');
+    var sessionId = req.params.sid;
+    var vizId = req.params.vid;
+
+    Session.findById(sessionId, function(err, session) {
+        if(err) {
+            return next(err);
+        }
+
+        var viz = _.find(session.visualizations, function (v) {
+            return v.id === vizId;
+        });
+
+        if(!viz) {
+            return next(404);
+        }
+
+        return res.json({data: viz.data});
+    });
+};
+
+exports.getDataField = function (req, res, next) {
+    console.log('getting field data');
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
@@ -187,17 +210,19 @@ exports.getData = function (req, res, next) {
             return next(404);
         }
 
-        return res.json(viz.data[fieldName]);
+        return res.json({data: viz.data[fieldName]});
     });
 };
 
 
 exports.getDataAtIndex = function (req, res, next) {
-
+    console.log('getting field data at index');
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
     var index = req.params.index;
+
+    console.log(fieldName);
 
     Session.findById(sessionId, function(err, session) {
         if(err) {
@@ -214,10 +239,10 @@ exports.getDataAtIndex = function (req, res, next) {
 
         var d = viz.data[fieldName];
         if(d.length <= index) {
-            return res.json();
+            return res.json({data: []});
         }
 
-        return res.json(d[index]);
+        return res.json({data: d[index]});
     });
 };
 
@@ -242,17 +267,27 @@ exports.appendData = function (req, res, next) {
         }
 
         if(req.is('json')) {
-
-            console.log('finding session');
             if(err) {
                 return next(err);
             }
 
             if(_.isArray(viz.data[fieldName])) {
                 viz.data[fieldName].push(req.body.data);
-            } else if(_.isUndefined) {
+            } else if(_.isUndefined(viz.data[fieldName])) {
+                console.log(fieldName);
                 viz.data[fieldName] = [req.body.data];
+            } else {
+                console.log('wtf field');
             }
+
+            viz.markModified('data');
+            // viz.save(function(err) {
+            //      if(err) {
+            //         return next(err);
+            //     }
+
+            //     return res.json(viz);
+            // });
 
 
             session.save(function(err) {
