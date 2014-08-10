@@ -27,7 +27,10 @@ module.exports = function (app, passport) {
 
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
 
-    app.get('/sessions/:sid/visualizations/:vid/data/:field', session.getData);
+    
+    
+    app.get('/sessions/:sid/visualizations/:vid/data', session.getData);
+    app.get('/sessions/:sid/visualizations/:vid/data/:field', session.getDataField);
     app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
