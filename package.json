@@ -53,7 +53,7 @@
     "winston": "^0.7.3",
     "sequelize": "~2.0.0-beta.8",
     "pg": "~3.4.1",
-    "sequelize-cli": "~0.2.4"
+    "validator": "~3.17.0"
   },
   "devDependencies": {
     "browserify": "~4.1.8",
