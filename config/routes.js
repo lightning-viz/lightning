@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 
@@ -11,7 +11,7 @@ var session = require('../app/controllers/session');
  * Expose
  */
 
-module.exports = function (app, passport) {
+module.exports = function (app) {
 
     app.get('/', home.index);
     app.get('/sessions', session.index);

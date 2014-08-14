@@ -29,7 +29,7 @@ var env = process.env.NODE_ENV || 'development';
  * Expose
  */
 
-module.exports = function (app, passport, io) {
+module.exports = function (app, io) {
 
     // Compression middleware (should be placed before express.static)
     app.use(compression({
@@ -118,8 +118,8 @@ module.exports = function (app, passport, io) {
     }));
 
     // use passport session
-    app.use(passport.initialize());
-    app.use(passport.session());
+    // app.use(passport.initialize());
+    // app.use(passport.session());
 
     // connect flash for flash messages - should be declared after sessions
     app.use(flash());
