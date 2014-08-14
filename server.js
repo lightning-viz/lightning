@@ -8,6 +8,7 @@ var express = require('express');
 // var mongoose = require('mongoose');
 // var passport = require('passport');
 var config = require('./config/config');
+var _ = require('lodash');
 
 var app = express();
 var server = require('http').Server(app);
@@ -21,16 +22,30 @@ var port = process.env.PORT || 3000;
 
 
 var models = require('./app/models');
-models.sequelize.sync(function() {
-    models.Visualization.create({
-        data: JSON.stringify({
-            key: 'value',
-            timeseries: [1, 23, 5, 6, 7, 8, 9, 10]
-        }),
-        name: 'test'
-    });
+// models.sequelize.sync(function() {
+//     // models.Visualization.create({
+//     //     data: {
+//     //         key: 'value',
+//     //         timeseries: [1, 23, 5, 6, 7, 8, 9, 10]
+//     //     },
+//     //     name: 'test'
+//     // });
+    
+// });
 
-});
+models.Visualization
+    .findAll()
+    .then(function(visualizations) {
+        // console.log(visualizations);
+        // console.log(visualizations.data);
+        _.each(visualizations, function(v) {
+            console.log(v.data);
+            console.log(typeof v.data);
+            v.getNamedObjectAtIndex('timeseries', 2).then(function(data) {
+                console.log(data);
+            });
+        });
+    });
 
 
 // Connect to mongodb
