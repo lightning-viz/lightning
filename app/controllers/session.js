@@ -4,14 +4,13 @@
  */
 
 var _ = require('lodash');
-// var mongoose = require('mongoose');
-// var Session = mongoose.model('Notebook');
 var multiparty = require('multiparty');
 var knox = require('knox');
 var randomstring = require('randomstring');
 var path = require('path');
 var easyimage = require('easyimage');
 var async = require('async');
+var models = require('../models');
 
 
 var s3Client = knox.createClient({
@@ -22,14 +21,15 @@ var s3Client = knox.createClient({
 });
 
 
-exports.index = function (req, res) {
+exports.index = function (req, res, next) {
 
-    Session.find({}, null, {sort: {createdAt: -1}}, function(err, sessions) {
-
+    models.Session.findAll({
+        order: '"createdAt" DESC'
+    }).then(function(sessions) {
         res.render('session/index', {
             sessions: sessions
         });
-    });
+    }).error(next);
 };
 
 
@@ -37,64 +37,50 @@ exports.feed = function (req, res, next) {
 
     var sessionId = req.params.sid;
 
-
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
-
-        res.render('session/feed', {
-            session: session
-        });
-    });
+    models.Session
+        .find({
+            where: {
+                id: sessionId
+            },
+            include: [models.Visualization]
+        }).then(function(session) {
+            res.render('session/feed', {
+                session: session
+            });
+        }).error(next);
 };
 
 exports.read = function (req, res, next) {
 
-    var sessionId = req.params.sid;
     var vizId = req.params.vid;
+    var Visualization = models.Visualization;
 
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
-
-        var viz = _.find(session.visualizations, function (v) {
-            return v.id === vizId;
-        });
-
-        res.render('session/visualization', {
-            session: session,
-            viz: viz
-        });
-    });
+    Visualization
+        .find(vizId)
+        .then(function(viz) {
+            res.render('session/visualization', {
+                viz: viz
+            });
+        }).error(next);
 };
 
 
 exports.create = function(req, res, next) {
-
-    console.log('creating session');
-    var session = new Session();
-    session.save(function(err) {
-        if(err) {
-            return next(err);
-        }
-        return res.redirect('/sessions/' + session.id + '/feed/');
-    });
+    models.Session
+        .create()
+        .then(function(session) {
+            return res.redirect('/sessions/' + session.id + '/feed/');    
+        }).error(next);
 };
 
 
 
 exports.getNew = function(req, res, next) {
-
-    console.log('creating session');
-    var session = new Session();
-    session.save(function(err) {
-        if(err) {
-            return next(err);
-        }
-        return res.redirect('/sessions/' + session.id + '/feed/');
-    });
+    models.Session
+        .create()
+        .then(function(session) {
+            return res.redirect('/sessions/' + session.id + '/feed/');    
+        }).error(next);
 };
 
 
@@ -102,148 +88,90 @@ exports.getNew = function(req, res, next) {
 exports.addData = function (req, res, next) {
     var sessionId = req.params.sid;
 
-    // var form = new multiparty.Form({
-    //     autoFiles
-    // });
     console.log('trying to add data');
 
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
+    var Visualization = models.Visualization;
 
-        if(req.is('json')) {
-
-            console.log('finding session');
-            if(err) {
-                return next(err);
-            }
-
-            session.visualizations.push({data: req.body.data, type: req.body.type});
-            var viz = session.visualizations[session.visualizations.length - 1];
-
-            req.io.of('/sessions/' + sessionId)
-                .emit('viz', viz);
-
-            session.save(function(err) {
-                if(err) {
-                    return next(err);
-                }
-
+    if(req.is('json')) {
+        console.log('is json');
+        Visualization
+            .create({
+                data: req.body.data,
+                type: req.body.type,
+                SessionId: sessionId
+            }).then(function(viz) {
+                req.io.of('/sessions/' + sessionId)
+                    .emit('viz', viz);  
                 return res.json(viz);
-            });
+            }).error(next);
+    } else {
+        var form = new multiparty.Form();
+        form.parse(req, function(err, fields, files) {
+            _.each(files, function(f) {
+                thumbnailAndUpload(f, sessionId, function(err, data) {
 
-        } else {
-            // console.log()
-            var form = new multiparty.Form();
-            form.parse(req, function(err, fields, files) {
+                    var imgData = data.imgData;
 
-                _.each(files, function(f) {
-                    thumbnailAndUpload(f, sessionId, function(err, data) {
-
-                        var imgData = data.imgData;
-
-                        console.log(imgData);
-                        session.visualizations.push({images: [imgData], type: 'image'});
-                        viz = session.visualizations[session.visualizations.length - 1];
-
-                        req.io.of('/sessions/' + sessionId)
-                            .emit('viz', viz);
-
-                        session.save(function(err) {
-                            if(err) {
-                                return next(err);
-                            }
+                    Visualization
+                        .create({
+                            type: 'image',
+                            images: [imgData],
+                            SessionId: sessionId
+                        }).then(function(viz) {
+                            req.io.of('/sessions/' + sessionId)
+                                .emit('viz', viz);
 
                             return res.json(viz);
-                        });
-                    });
+                        }).error(next);
                 });
-
             });
-
-        }
-    });
-
+        });
+    }
 };
 
 
 exports.getData = function (req, res, next) {
-
-    console.log('getting all data');
-    var sessionId = req.params.sid;
     var vizId = req.params.vid;
 
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
+    var Visualization = models.Visualization;
 
-        var viz = _.find(session.visualizations, function (v) {
-            return v.id === vizId;
-        });
-
-        if(!viz) {
-            return next(404);
-        }
-
-        return res.json({data: viz.data});
-    });
+    Visualization
+        .find(vizId)
+        .then(function(viz) {
+            return res.json({
+                data: viz.data
+            });
+        }).error(next);
 };
 
 exports.getDataField = function (req, res, next) {
-    console.log('getting field data');
-    var sessionId = req.params.sid;
+
     var vizId = req.params.vid;
     var fieldName = req.params.field;
 
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
-
-        var viz = _.find(session.visualizations, function (v) {
-            return v.id === vizId;
-        });
-
-        if(!viz) {
-            return next(404);
-        }
-
-        return res.json({data: viz.data[fieldName]});
-    });
+    models.Visualization
+        .getNamedObjectForVisualization(vizId, fieldName)
+        .then(function(data) {
+            return res.json({
+                data: data
+            });
+        }).error(next);
 };
 
 
 exports.getDataAtIndex = function (req, res, next) {
-    console.log('getting field data at index');
-    var sessionId = req.params.sid;
+
     var vizId = req.params.vid;
     var fieldName = req.params.field;
     var index = req.params.index;
 
-    console.log(fieldName);
-
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
-
-        var viz = _.find(session.visualizations, function (v) {
-            return v.id === vizId;
-        });
-
-        if(!viz) {
-            return next(404);
-        }
-
-        var d = viz.data[fieldName];
-        if(d.length <= index) {
-            return res.json({data: []});
-        }
-
-        return res.json({data: d[index]});
-    });
+    models.Visualization
+        .getNamedObjectAtIndexForVisualization(vizId, fieldName, index)
+        .then(function(data) {
+            return res.json({
+                data: data
+            });
+        }).error(next);
 };
 
 
@@ -253,86 +181,62 @@ exports.appendData = function (req, res, next) {
     var vizId = req.params.vid;
     var fieldName = req.params.field;
 
-    Session.findById(sessionId, function(err, session) {
-        if(err) {
-            return next(err);
-        }
 
-        var viz = _.find(session.visualizations, function (v) {
-            return v.id === vizId;
-        });
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            if(req.is('json')) {
 
-        if(!viz) {
-            return next(404);
-        }
-
-        if(req.is('json')) {
-            if(err) {
-                return next(err);
-            }
-
-            if(_.isArray(viz.data[fieldName])) {
-                viz.data[fieldName].push(req.body.data);
-            } else if(_.isUndefined(viz.data[fieldName])) {
-                console.log(fieldName);
-                viz.data[fieldName] = [req.body.data];
-            } else {
-                console.log('wtf field');
-            }
-
-            viz.markModified('data');
-            // viz.save(function(err) {
-            //      if(err) {
-            //         return next(err);
-            //     }
-
-            //     return res.json(viz);
-            // });
-
-
-            session.save(function(err) {
-                if(err) {
-                    return next(err);
+                if(_.isArray(viz.data[fieldName])) {
+                    viz.data[fieldName].push(req.body.data);
+                } else if(_.isUndefined(viz.data[fieldName])) {
+                    console.log(fieldName);
+                    viz.data[fieldName] = [req.body.data];
+                } else {
+                    console.log('wtf field');
                 }
 
-                return res.json(viz);
-            });
+                viz
+                    .save()
+                    .then(function() {
+                        return res.json(viz);
+                    }).error(next);
+            
+            } else if(fieldName === 'images') {
 
-        } else if(fieldName === 'images') {
+                var form = new multiparty.Form();
 
-            var form = new multiparty.Form();
+                form.parse(req, function(err, fields, files) {
+                    _.each(files, function(f) {
+                        thumbnailAndUpload(f, sessionId, function(err, data) {
 
+                            var imgData = data.imgData;
+                            var s3Response = data.response;
 
-            form.parse(req, function(err, fields, files) {
-                _.each(files, function(f) {
-                    thumbnailAndUpload(f, sessionId, function(err, data) {
+                            viz.images.push(imgData);
+                            viz
+                                .save()
+                                .then(function() {
+                                    res.statusCode = s3Response.statusCode;
+                                    s3Response.pipe(res);
+                                });
 
-                        var imgData = data.imgData;
-                        var s3Response = data.response;
+                            req.io.of('/sessions/' + sessionId)
+                                .emit('update', {
+                                    vizId: viz.id, 
+                                    data: imgData
+                                });
 
-
-                        viz.images.push(imgData);
-
-                        req.io.of('/sessions/' + sessionId)
-                            .emit('update', {
-                                vizId: viz._id, 
-                                data: imgData
-                            });
-
-                        session.save(function(err) {
-                            if(err) {
-                                return next(err);
-                            }
-                            res.statusCode = s3Response.statusCode;
-                            s3Response.pipe(res);
                         });
                     });
                 });
-            });
-        } else {
-            return next(500);
-        }
-    });
+            } else {
+                return next(500);
+            }
+
+
+        }).error(next);
+
 };
 
 
