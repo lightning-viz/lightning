@@ -4,8 +4,8 @@
  */
 
 var _ = require('lodash');
-var mongoose = require('mongoose');
-var Session = mongoose.model('Notebook');
+// var mongoose = require('mongoose');
+// var Session = mongoose.model('Notebook');
 var multiparty = require('multiparty');
 var knox = require('knox');
 var randomstring = require('randomstring');

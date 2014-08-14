@@ -1,8 +1,11 @@
 module.exports = function(sequelize, DataTypes) {
-  var Visualization = sequelize.define('Visualization', {
-    data: 'JSON',
-    name: DataTypes.STRING,
-    images: DataTypes.ARRAY(DataTypes.STRING)
+
+  console.log(sequelize.JSON);
+  console.log(sequelize);
+
+
+  var Session = sequelize.define('Session', {
+    name: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
@@ -11,5 +14,5 @@ module.exports = function(sequelize, DataTypes) {
     }
   })
 
-  return Visualization;
+  return Session
 }
