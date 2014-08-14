@@ -12,11 +12,12 @@ module.exports = function(sequelize, DataTypes) {
                  // associations can be defined here
                  Visualization.belongsTo(models.Session);
             },
-
             getNamedObjectForVisualization: function(vid, name) {
                 name = validator.escape(name);
+                console.log('name');
+                console.log('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
                 return sequelize
-                    .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + this.id);
+                    .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
             },
 
             getNamedObjectAtIndexForVisualization: function(vid, name, index) {
