@@ -149,6 +149,8 @@ exports.getDataField = function (req, res, next) {
     var vizId = req.params.vid;
     var fieldName = req.params.field;
 
+    console.log('getting data field ' + fieldName);
+
     models.Visualization
         .getNamedObjectForVisualization(vizId, fieldName)
         .then(function(data) {
