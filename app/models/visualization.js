@@ -14,8 +14,6 @@ module.exports = function(sequelize, DataTypes) {
             },
             getNamedObjectForVisualization: function(vid, name) {
                 name = validator.escape(name);
-                console.log('name');
-                console.log('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
                 return sequelize
                     .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
             },
@@ -28,6 +26,10 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 return sequelize
                     .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+            },
+
+            getDataForVisualization: function(vid) {
+                return sequelize.query('SELECT * from "Visualizations" WHERE id=' + vid);
             }
         },
 
@@ -37,12 +39,21 @@ module.exports = function(sequelize, DataTypes) {
             }, 
             getNamedObject: function(name) {
                 return Visualization.getNamedObjectForVisualization(this.id, name);
+            },
+            getData: function() {
+                return Visualization.getDataForVisualization(this.id);
+            },
+            getInitialData: function(type) {
+                if(type.initialDataField) {
+                    return this.data[type.initialDataField];
+                } 
+
+                return this.data;
             }
         },
 
         hooks: {
             beforeValidate: function(visualization, next) {
-                console.log('before validate');
                 visualization.data = JSON.stringify(visualization.data);
                 next();
             }
