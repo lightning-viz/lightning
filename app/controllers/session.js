@@ -11,6 +11,7 @@ var path = require('path');
 var easyimage = require('easyimage');
 var async = require('async');
 var models = require('../models');
+var Q = require('q');
 
 
 var s3Client = knox.createClient({
@@ -36,32 +37,47 @@ exports.index = function (req, res, next) {
 exports.feed = function (req, res, next) {
 
     var sessionId = req.params.sid;
+    var Session = models.Session;
+    var VisualizationType = models.VisualizationType;
 
-    models.Session
-        .find({
-            where: {
-                id: sessionId
-            },
-            include: [models.Visualization]
-        }).then(function(session) {
-            res.render('session/feed', {
-                session: session
-            });
-        }).error(next);
+    Q.all([
+        Session
+            .find({
+                where: {
+                    id: sessionId
+                },
+                include: [models.Visualization]
+            }),
+        VisualizationType.findAll()
+    ]).spread(function(session, vizTypes) {
+
+        console.log(vizTypes);
+        res.render('session/feed', {
+            session: session,
+            vizTypes: _.object(_.map(vizTypes, function(item) {
+                return [item.name, item];
+            }))
+        });
+    }).fail(next);
 };
 
 exports.read = function (req, res, next) {
 
     var vizId = req.params.vid;
     var Visualization = models.Visualization;
+    var VisualizationType = models.VisualizationType;
 
-    Visualization
-        .find(vizId)
-        .then(function(viz) {
+    Q.all([
+        Visualization.find(vizId),
+        VisualizationType.findAll()
+    ]).spread(function(viz, vizTypes) {
             res.render('session/visualization', {
-                viz: viz
+                viz: viz,
+                vizTypes: _.object(_.map(vizTypes, function(item) {
+                    return [item.name, item];
+                }))
             });
-        }).error(next);
+    }).fail(next);
 };
 
 
@@ -93,7 +109,6 @@ exports.addData = function (req, res, next) {
     var Visualization = models.Visualization;
 
     if(req.is('json')) {
-        console.log('is json');
         Visualization
             .create({
                 data: req.body.data,

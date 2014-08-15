@@ -2,8 +2,6 @@ var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sess
 sid = sid.slice(0, sid.indexOf('/'));
 
 
-var request = require('superagent');
-
 require('../viz/line');
 require('../viz/pca');
 require('../viz/scatter');
@@ -46,18 +44,12 @@ socket.on('update', function(message) {
 
 
 $('.feed-item').each(function() {
-
     var type = $(this).data('type');
+    var data = $(this).data('data');
     var images = $(this).data('images');
 
     var Viz = require('../viz/' + type);
 
     var vid = $(this).attr('id');
-
-
-    request.get('/sessions/' + sid + '/visualizations/' + vid.slice(vid.indexOf('-') + 1) + '/data/', function(res) {
-        console.log(res.body.data);
-        vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + vid, res.body.data, images);
-    });
-
+    vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
 });
