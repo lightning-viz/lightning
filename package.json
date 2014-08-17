@@ -40,10 +40,6 @@
     "lodash": "~2.4.1",
     "method-override": "^2.1.1",
     "moment": "^2.8.1",
-    "mongoose": "^3.8.13",
-    "mongoose-findorcreate": "~0.1.2",
-    "mongoose-timestamp": "^0.2.1",
-    "mongoose-user": "0.0.1",
     "morgan": "^1.2.0",
     "multiparty": "^3.3.1",
     "passport": "^0.2.0",
@@ -54,7 +50,11 @@
     "socket.io": "~1.0.6",
     "swig": "^1.4.1",
     "view-helpers": "^0.1.5",
-    "winston": "^0.7.3"
+    "winston": "^0.7.3",
+    "sequelize": "~2.0.0-beta.8",
+    "pg": "~3.4.1",
+    "validator": "~3.17.0",
+    "q": "~1.0.1"
   },
   "devDependencies": {
     "browserify": "~4.1.8",
