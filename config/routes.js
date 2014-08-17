@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 
@@ -11,7 +11,7 @@ var session = require('../app/controllers/session');
  * Expose
  */
 
-module.exports = function (app, passport) {
+module.exports = function (app) {
 
     app.get('/', home.index);
     app.get('/sessions', session.index);
@@ -22,16 +22,19 @@ module.exports = function (app, passport) {
 
 
     app.post('/sessions', session.create);
-    app.post('/sessions/:sid/data', session.addData);
-    app.get('/sessions/:sid/visualizations/:vid', session.read);
+    app.post('/sessions/:sid/visualizations', session.addData);
+    app.get('/visualizations/:vid', session.read);
 
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
 
     
     
     app.get('/sessions/:sid/visualizations/:vid/data', session.getData);
+    app.get('/visualizations/:vid/data', session.getData);
     app.get('/sessions/:sid/visualizations/:vid/data/:field', session.getDataField);
+    app.get('/visualizations/:vid/data/:field', session.getDataField);
     app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
+    app.get('/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 

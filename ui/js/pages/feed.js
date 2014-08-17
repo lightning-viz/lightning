@@ -44,7 +44,6 @@ socket.on('update', function(message) {
 
 
 $('.feed-item').each(function() {
-
     var type = $(this).data('type');
     var data = $(this).data('data');
     var images = $(this).data('images');

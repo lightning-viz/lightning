@@ -18,9 +18,9 @@ block content
     .row
         .two-thirds.column
             .feed-container
-                if session.visualizations.length
+                if visualizations.length
 
-                    for viz in session.visualizations.reverse()
+                    for viz in visualizations.reverse()
                         include ./viz-data
                         hr
 
@@ -28,7 +28,7 @@ block content
                     p.empty
                         | No data found. Post data to  
                         span.code
-                            | /sessions/#{session.id}/data
+                            | /sessions/#{session.id}/visualizations
 
 
 
