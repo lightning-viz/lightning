@@ -18,9 +18,9 @@ block content
     .row
         .two-thirds.column
             .feed-container
-                if session.visualizations.length
+                if visualizations.length
 
-                    for viz in session.visualizations.reverse()
+                    for viz in visualizations.reverse()
                         include ./viz-data
                         hr
 

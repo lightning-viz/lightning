@@ -1,12 +1,13 @@
 {
   "development": {
-    "username": "mpconlen",
+    "username": null,
     "password": null,
     "database": "janelia-lightning",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "port": 5432,
-    "sync": {"force": true}
+    "sync": {"force": true},
+    "logging": false
   },
   "test": {
     "username": "root",
