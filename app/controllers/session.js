@@ -39,21 +39,32 @@ exports.feed = function (req, res, next) {
     var sessionId = req.params.sid;
     var Session = models.Session;
     var VisualizationType = models.VisualizationType;
+    var Visualization = models.Visualization;
 
     Q.all([
         Session
             .find({
                 where: {
                     id: sessionId
-                },
-                include: [models.Visualization]
+                }
+            }),
+        Visualization
+            .findAll({
+                where: {
+                    SessionId: sessionId
+                }
             }),
         VisualizationType.findAll()
-    ]).spread(function(session, vizTypes) {
+    ]).spread(function(session, visualizations, vizTypes) {
 
-        console.log(vizTypes);
+        _.each(visualizations, function(viz) {
+            console.log(viz.images);
+        });
+        // console.log(session.visualizations);
+
         res.render('session/feed', {
             session: session,
+            visualizations: visualizations,
             vizTypes: _.object(_.map(vizTypes, function(item) {
                 return [item.name, item];
             }))
@@ -104,8 +115,6 @@ exports.getNew = function(req, res, next) {
 exports.addData = function (req, res, next) {
     var sessionId = req.params.sid;
 
-    console.log('trying to add data');
-
     var Visualization = models.Visualization;
 
     if(req.is('json')) {
@@ -126,6 +135,8 @@ exports.addData = function (req, res, next) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
                     var imgData = data.imgData;
+
+                    console.log(imgData);
 
                     Visualization
                         .create({
@@ -186,7 +197,7 @@ exports.getDataAtIndex = function (req, res, next) {
         .getNamedObjectAtIndexForVisualization(vizId, fieldName, index)
         .then(function(data) {
             return res.json({
-                data: data
+                data: data[0][fieldName]
             });
         }).error(next);
 };
@@ -208,7 +219,7 @@ exports.appendData = function (req, res, next) {
                     viz.data[fieldName].push(req.body.data);
                 } else if(_.isUndefined(viz.data[fieldName])) {
                     console.log(fieldName);
-                    viz.data[fieldName] = [req.body.data];
+                    viz.data[fieldName] = req.body.data;
                 } else {
                     console.log('wtf field');
                 }
@@ -330,12 +341,13 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 var s3Response = results[0];
 
                 var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
-                var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+                // var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
 
-                var imgData = {
-                    original: imgURL,
-                    thumbnail: thumbURL
-                };
+                var imgData = imgURL;
+                // {
+                //     original: imgURL,
+                //     thumbnail: thumbURL
+                // };
 
                 callback(null, {
                     response: s3Response,

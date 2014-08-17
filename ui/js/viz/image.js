@@ -52,8 +52,8 @@ ImageViz.prototype.addImage = function(imageData) {
 
 ImageViz.prototype.setImage = function(index) {
     this.$el.find('input.image-slider').val(index);
-    this.$el.find('.image-viz img').attr('src', this.images[index].thumbnail);
-    this.$el.find('.image-viz a').attr('href', this.images[index].original);
+    this.$el.find('.image-viz img').attr('src', this.images[index] + '_small');
+    this.$el.find('.image-viz a').attr('href', this.images[index]);
 };
 
 

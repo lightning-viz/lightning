@@ -15,7 +15,6 @@ var swig = require('swig');
 var serveStatic = require('serve-static');
 var slashes = require('connect-slashes');
 
-var mongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
 var winston = require('winston');
 var helpers = require('view-helpers');
@@ -92,9 +91,8 @@ module.exports = function (app, io) {
     app.use(cookieParser());
 
     // bodyParser should be above methodOverride
-    
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit: '50mb'}));    
+    app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 
     app.use(methodOverride(function (req, res) {
@@ -109,10 +107,10 @@ module.exports = function (app, io) {
     // express/mongo session storage
     app.use(session({
         secret: pkg.name,
-        store: new mongoStore({
-            url: config.db,
-            collection : 'sessions'
-        }),
+        // store: new mongoStore({
+        //     url: config.db,
+        //     collection : 'sessions'
+        // }),
         saveUninitialized: true,
         resave: true
     }));

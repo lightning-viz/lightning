@@ -11,12 +11,12 @@ var ROIViz = function(selector, data) {
 
     console.log(data);
 
-    var LineChart = require('../viz/line');
-    var line = new LineChart($el.find('#line-chart').selector, data.timeseries[0] || []);
-
 
     var ScatterPlot = require('../viz/scatter');
-    var scatter = new ScatterPlot($el.find('#scatter-plot').selector, data.points);
+    var scatter = new ScatterPlot($el.find('#scatter-plot').selector, data);
+    var LineChart = require('../viz/line');
+    var line = new LineChart($el.find('#line-chart').selector, Array.apply(null, new Array(1000)).map(Number.prototype.valueOf,0));
+
 
 
     var r;
@@ -34,7 +34,10 @@ var ROIViz = function(selector, data) {
 
         r = request.get(url + '/data/timeseries/' + d.i, function(res) {
             if((res.body.data || []).length) {
-                line.updateData(res.body.data);    
+
+                console.log('updating with');
+                console.log(res.body.data);
+                line.updateData(res.body.data);
             }
         });
     });
