@@ -9,7 +9,9 @@ var ROIViz = function(selector, data) {
     var $el = $(selector).first();
     $el.append(templateHTML());
 
-    console.log(data);
+    if(data.points) {
+        data = data.points;
+    }
 
 
     var ScatterPlot = require('../viz/scatter');
@@ -26,7 +28,6 @@ var ROIViz = function(selector, data) {
         // TODO: make this more robust, this is hacky
 
         var url = $el.next('.permalink').find('a').attr('href');
-        console.log(url + '/data/timeseries/' + d.i);
 
         if(r) {
             r.abort();
@@ -34,9 +35,6 @@ var ROIViz = function(selector, data) {
 
         r = request.get(url + '/data/timeseries/' + d.i, function(res) {
             if((res.body.data || []).length) {
-
-                console.log('updating with');
-                console.log(res.body.data);
                 line.updateData(res.body.data);
             }
         });
