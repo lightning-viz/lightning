@@ -13,9 +13,9 @@ var ROIViz = function(selector, data) {
 
 
     var ScatterPlot = require('../viz/scatter');
-    var scatter = new ScatterPlot($el.find('#scatter-plot').selector, data);
+    var scatter = new ScatterPlot(selector + ' #scatter-plot', data);
     var LineChart = require('../viz/line');
-    var line = new LineChart($el.find('#line-chart').selector, Array.apply(null, new Array(1000)).map(Number.prototype.valueOf,0));
+    var line = new LineChart(selector + ' #line-chart', Array.apply(null, new Array(1000)).map(Number.prototype.valueOf,0));
 
 
 
