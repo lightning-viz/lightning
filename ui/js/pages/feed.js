@@ -1,12 +1,15 @@
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
+var feedItemHTML = require('../../templates/feed-item.jade');
 
 
 require('../viz/line');
 require('../viz/pca');
 require('../viz/scatter');
+require('../viz/volume');
 require('../viz/image');
 require('../viz/roi');
+require('../viz/gallery');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
@@ -23,8 +26,11 @@ socket.on('viz', function (viz) {
 
     var Viz = require('../viz/' + viz.type);
 
-    $('.feed-container').prepend('<div class="feed-item"></div><div class="permalink"><a href="/sessions/' + sid + '/visualizations/' + viz.id + '">permalink</a></div><hr>');
-    vizs[viz._id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
+    $('.feed-container').prepend(feedItemHTML({
+        sid: sid,
+        vid: viz.id
+    }));
+    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
 });
 
 

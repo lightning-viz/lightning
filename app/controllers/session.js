@@ -130,7 +130,11 @@ exports.addData = function (req, res, next) {
             }).error(next);
     } else {
         var form = new multiparty.Form();
+
         form.parse(req, function(err, fields, files) {
+
+
+            console.log(fields.type[0]);
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
@@ -138,9 +142,18 @@ exports.addData = function (req, res, next) {
 
                     console.log(imgData);
 
+                    var type = 'image';
+                    if(fields.type) {
+                        if(_.isArray(fields.type) || _.isObject(fields.type)) {
+                            type = fields.type[0];    
+                        } else {
+                            type = fields.type;
+                        }                        
+                    }
+
                     Visualization
                         .create({
-                            type: 'image',
+                            type:  type,
                             images: [imgData],
                             SessionId: sessionId
                         }).then(function(viz) {
