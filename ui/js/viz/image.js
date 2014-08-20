@@ -46,7 +46,6 @@ var ImageViz = function(selector, data, images, opts) {
         self.setImage($(this).val());
     };
 
-    
 };
 
 
