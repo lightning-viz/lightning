@@ -21,12 +21,9 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-
-    console.log(viz);
-
     var Viz = require('../viz/' + viz.type);
 
-    $('.feed-container').prepend('<div class="feed-item"></div><div class="permalink"><a href="/sessions/' + sid + '/visualizations/' + viz._id + '">permalink</a></div><hr>');
+    $('.feed-container').prepend('<div class="feed-item"></div><div class="permalink"><a href="/sessions/' + sid + '/visualizations/' + viz.id + '">permalink</a></div><hr>');
     vizs[viz._id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
 });
 
