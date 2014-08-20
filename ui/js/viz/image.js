@@ -12,13 +12,23 @@ var margin = {
 var width = 600 - margin.left - margin.right;
 var height = 300 - margin.top - margin.bottom;
 
+var preloadImages = function(urls) {
+
+    _.each(urls, function(url) {
+        preloadImage(url);
+    });
+};
+
+
+var preloadImage = function(url) {
+    var img=new Image();
+    img.src=url;
+};
+
 
 var ImageViz = function(selector, data, images, opts) {
 
-
-    console.log('images');
-    console.log(selector);
-    console.log(images);
+    preloadImages(images);
 
     this.$el = $(selector).first();
 

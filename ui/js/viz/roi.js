@@ -23,10 +23,6 @@ var ROIViz = function(selector, data) {
 
     var r;
     scatter.on('hover', function(d) {
-
-        // get the url to fetch more data from
-        // TODO: make this more robust, this is hacky
-
         var url = $el.next('.permalink').find('a').attr('href');
 
         if(r) {
