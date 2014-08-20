@@ -1,0 +1,11 @@
+.gallery-viz
+    .row
+        for image in images
+            .two.columns
+                .gallery-thumbnail
+                    img(src="#{image}_small")
+
+    .row
+        .gallery-full
+            a(href="#{images[currentImage]}", target="_blank")
+                img(src="#{images[currentImage]}")
