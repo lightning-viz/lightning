@@ -1,0 +1,11 @@
+
+
+#roi {
+    .dot {
+        opacity: 0.4;
+
+        &:hover {
+            opacity: 1.0;
+        }
+    }
+}
