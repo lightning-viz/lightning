@@ -9,6 +9,7 @@ require('../viz/scatter');
 require('../viz/volume');
 require('../viz/image');
 require('../viz/roi');
+require('../viz/roi-image');
 require('../viz/gallery');
 
 require('../lib/bigSlide');

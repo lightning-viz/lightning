@@ -315,9 +315,14 @@
   max-width: 100%; }
 
 .gallery-viz img {
-  max-width: 100%; }
+  width: 100%; }
 .gallery-viz .gallery-thumbnail {
   cursor: pointer; }
+
+#roi .dot {
+  opacity: 0.4; }
+  #roi .dot:hover {
+    opacity: 1; }
 
 .panel {
   position: fixed;

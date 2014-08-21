@@ -254,7 +254,11 @@ exports.appendData = function (req, res, next) {
                             var imgData = data.imgData;
                             var s3Response = data.response;
 
-                            viz.images.push(imgData);
+                            if(viz.images) {
+                                viz.images.push(imgData);
+                            } else {
+                                viz.images = [imgData];
+                            }
                             viz
                                 .save()
                                 .then(function() {
