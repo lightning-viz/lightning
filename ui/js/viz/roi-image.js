@@ -124,12 +124,9 @@ ROIPlot.prototype.setImage = function(index) {
     this.svg.select('image')
             .attr('xlink:href', utils.getThumbnail(this.images[index]));
 
-    this.svg.selectAll('.dot').filter(function(d) {
+    this.svg.selectAll('.dot').classed('hidden', function(d) {
         return (d.z-1) !== parseInt(index);
-    }).classed('hidden', true);
-    this.svg.selectAll('.dot').filter(function(d) {
-        return (d.z-1) === parseInt(index);
-    }).classed('hidden', false);
+    });
 
 };
 
