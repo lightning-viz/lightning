@@ -62,9 +62,11 @@ $('.feed-item').each(function() {
 
 
 $('[data-editable]').each(function() {
-    // append a hidden input after
-    var $input = $('<input type="text" class="editable" />');
+    
     var $this = $(this);
+
+    // append a hidden input after
+    var $input = $('<input type="text" class="editable ' + $this.prop('tagName').toLowerCase() + '" />');
     $this.after($input);
 
     // allow editable

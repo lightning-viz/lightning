@@ -105,8 +105,19 @@ ul, li {
 
 
 input {
+    color: #545E6B;
+
     &.editable {
         display: none;
         width: 100%;
+
+        &.h1 {
+
+        }
+
+        &.h2 {
+            font-size: 1.5em;
+            -webkit-margin-before: 0.83em;
+        }
     }
 }

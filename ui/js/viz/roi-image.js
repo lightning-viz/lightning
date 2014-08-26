@@ -2,13 +2,32 @@ var d3 = require('d3');
 var inherits = require('inherits');
 var templateHTML = require('../../templates/viz/roi-image.jade');
 var request = require('superagent');
+var _ = require('lodash');
+var utils = require('../utils');
 
 
 var ROIPlot = function(selector, data, images, opts) {
 
     var self = this;
     var $el = $(selector).first();
-    $el.append(templateHTML());
+    this.$el = $el;
+
+    this.images = images || [];
+
+    var imageCount = this.images.length;
+
+    utils.preloadImages(_.map(images, utils.getThumbnail));
+
+
+    $el.append(templateHTML({
+        imageCount: imageCount
+    }));
+
+    if(imageCount > 1) {
+        this.$el.find('input.image-slider')[0].oninput = function() {
+            self.setImage($(this).val());
+        };
+    }
 
     var width = $(selector).width();
     var height = 400;
@@ -25,6 +44,12 @@ var ROIPlot = function(selector, data, images, opts) {
         .domain([0, 1250])
         .range([height, 0]);
 
+    // var maxI = _.max(_.pluck(data, 'i'));
+    // var maxZ = _.max(_.pluck(data, 'z'));
+
+    // console.log('max i: ' + maxI);
+    // console.log('max z: ' + maxZ);
+    // var colors = randomColors(maxI);
 
 
     var svg = d3.select(selector + ' #roi')
@@ -42,11 +67,14 @@ var ROIPlot = function(selector, data, images, opts) {
 
 
     // draw dots
-    svg.selectAll('.dot')
+    var points = svg.selectAll('.dot')
         .data(data)
         .enter().append('circle')
         .attr('class', 'dot')
         .attr('r', 6)
+        // .style('fill', function(d) {
+        //     return colors[d.i];
+        // })
         .attr('transform', function(d) {
             return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
         })
@@ -54,7 +82,6 @@ var ROIPlot = function(selector, data, images, opts) {
             self.emit('hover', d);
         })
         .on('mouseout', function(d, i) {
-            console.log('out: ' + i);
         });
 
 
@@ -77,9 +104,34 @@ var ROIPlot = function(selector, data, images, opts) {
         });
     });
 
+    this.svg = svg;
+    this.points = points;
+
+    this.setImage(0);
 
 };
 
 inherits(ROIPlot, require('events').EventEmitter);
 
 module.exports = ROIPlot;
+
+
+
+ROIPlot.prototype.setImage = function(index) {
+
+
+    this.$el.find('input.image-slider').val(index);
+    this.svg.select('image')
+            .attr('xlink:href', utils.getThumbnail(this.images[index]));
+
+    this.svg.selectAll('.dot').filter(function(d) {
+        return (d.z-1) !== parseInt(index);
+    }).classed('hidden', true);
+    this.svg.selectAll('.dot').filter(function(d) {
+        return (d.z-1) === parseInt(index);
+    }).classed('hidden', false);
+
+};
+
+
+

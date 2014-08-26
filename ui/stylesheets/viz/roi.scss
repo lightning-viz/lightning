@@ -7,5 +7,9 @@
         &:hover {
             opacity: 1.0;
         }
+
+        &.hidden {
+            display: none;
+        }
     }
 }

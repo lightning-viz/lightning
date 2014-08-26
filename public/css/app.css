@@ -323,6 +323,8 @@
   opacity: 0.4; }
   #roi .dot:hover {
     opacity: 1; }
+  #roi .dot.hidden {
+    display: none; }
 
 .panel {
   position: fixed;
@@ -424,6 +426,11 @@ ul, li {
 .session-id {
   text-align: right; }
 
-input.editable {
-  display: none;
-  width: 100%; }
+input {
+  color: #545E6B; }
+  input.editable {
+    display: none;
+    width: 100%; }
+    input.editable.h2 {
+      font-size: 1.5em;
+      -webkit-margin-before: 0.83em; }
