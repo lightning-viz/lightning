@@ -424,3 +424,6 @@ ul, li {
 .session-id {
   text-align: right; }
 
+input.editable {
+  display: none;
+  width: 100%; }

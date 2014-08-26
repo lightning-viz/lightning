@@ -40,6 +40,8 @@ var LineGraph = function(selector, data, images, opts) {
         .y(this.y)
         .on('zoom', zoomed);
 
+
+
     var svg = d3.select(selector)
         .append('svg:svg')
         .attr('class', 'line-plot')
