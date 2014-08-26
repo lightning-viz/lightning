@@ -72,7 +72,7 @@ $('[data-editable]').each(function() {
         var text = $this.text();
         $this.hide();
         $input.val(text);
-        $input.show();
+        $input.show().focus();
 
         $input.unbind('blur').blur(function() {
             var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
