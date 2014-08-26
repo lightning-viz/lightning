@@ -2,6 +2,8 @@ var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sess
 sid = sid.slice(0, sid.indexOf('/'));
 var feedItemHTML = require('../../templates/feed-item.jade');
 
+var request = require('superagent');
+
 
 require('../viz/line');
 require('../viz/pca');
@@ -57,3 +59,38 @@ $('.feed-item').each(function() {
     var vid = $(this).attr('id');
     vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
 });
+
+
+$('[data-editable]').each(function() {
+    // append a hidden input after
+    var $input = $('<input type="text" class="editable" />');
+    var $this = $(this);
+    $this.after($input);
+
+    // allow editable
+    $this.click(function() {
+        var text = $this.text();
+        $this.hide();
+        $input.val(text);
+        $input.show();
+
+        $input.unbind('blur').blur(function() {
+            var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
+            var params = {};
+            params[$this.data('key')] = $input.val();
+
+            $this.text($input.val());
+            $this.show();
+            $input.hide();
+
+            request.put(url, params, function(error, res){
+                if(error) {
+                    return console.log(error);
+                } else {
+                    return console.log('success');
+                }
+            });
+        });
+    });
+});
+

@@ -5,15 +5,11 @@ block content
 
     .row
         .six.columns
-            h2
-                | Session Feed
+            h2(data-editable, data-model="session", data-model-id="#{session.id}", data-key="name")
+                | #{session.getDisplayName()}
             .subheader
                 p
                     | Created #{moment(session.createdAt).fromNow()}
-        .five.columns.offset-by-five
-            .session-id.subheader
-                p
-                    | #{session.id}
 
     .row
         .two-thirds.column

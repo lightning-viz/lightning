@@ -19,13 +19,14 @@ module.exports = function (app) {
     app.get('/sessions/:sid', session.feed);
     app.get('/sessions/:sid/feed', session.feed);
     
-
+    app.put('/sessions/:sid', session.update);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
     app.get('/visualizations/:vid', session.read);
 
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
+
 
     
     

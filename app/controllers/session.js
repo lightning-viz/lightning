@@ -57,10 +57,13 @@ exports.feed = function (req, res, next) {
         VisualizationType.findAll()
     ]).spread(function(session, visualizations, vizTypes) {
 
+        if(!session) {
+            return res.status(404).send('Session not found');
+        }
+
         _.each(visualizations, function(viz) {
             console.log(viz.images);
         });
-        // console.log(session.visualizations);
 
         res.render('session/feed', {
             session: session,
@@ -70,6 +73,21 @@ exports.feed = function (req, res, next) {
             }))
         });
     }).fail(next);
+};
+
+exports.update = function (req, res, next) {
+
+    var sessionId = req.params.sid;
+    var Session = models.Session;
+
+
+    Session
+        .update(req.body, {
+            id: sessionId
+        }).success(function(sessions) {
+            return res.json(sessions);
+        }).error(next);
+
 };
 
 exports.read = function (req, res, next) {

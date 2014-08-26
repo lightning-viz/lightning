@@ -102,3 +102,11 @@ ul, li {
         // padding-top: 60px;
     }
 }
+
+
+input {
+    &.editable {
+        display: none;
+        width: 100%;
+    }
+}
