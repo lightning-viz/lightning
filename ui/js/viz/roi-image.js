@@ -61,7 +61,6 @@ var ROIPlot = function(selector, data, images, opts) {
 
 
     svg.append('svg:image')
-        .attr('xlink:href', images[0] + '_small')
         .attr('width', width)
         .attr('height', height);
 
