@@ -15,7 +15,7 @@ module.exports = function (app) {
 
     app.get('/', home.index);
     app.get('/sessions', session.index);
-    app.get('/sessions/create/', session.create);
+    app.get('/sessions/create/', session.getNew);
     app.get('/sessions/:sid', session.feed);
     app.get('/sessions/:sid/feed', session.feed);
     

@@ -111,10 +111,11 @@ exports.read = function (req, res, next) {
 
 
 exports.create = function(req, res, next) {
+
     models.Session
-        .create()
+        .create(_.pick(req.body, 'name'))
         .then(function(session) {
-            return res.redirect('/sessions/' + session.id + '/feed/');    
+            return res.json(session);
         }).error(next);
 };
 
