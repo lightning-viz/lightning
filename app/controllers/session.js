@@ -235,6 +235,28 @@ exports.getDataAtIndex = function (req, res, next) {
 };
 
 
+exports.updateData = function (req, res, next) {
+
+    var vizId = req.params.vid;
+    var fieldName = req.params.field;
+
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            
+            if(fieldName) {
+                viz.data[fieldName] = req.body.data;
+            } else {
+                viz.data = req.body.data;
+            }
+
+            viz.save()
+                .then(function() {
+                    return res.json(viz);
+                }).error(next);
+        }).error(next);
+};
+
 exports.appendData = function (req, res, next) {
 
     var sessionId = req.params.sid;
@@ -247,13 +269,24 @@ exports.appendData = function (req, res, next) {
         .then(function(viz) {
             if(req.is('json')) {
 
-                if(_.isArray(viz.data[fieldName])) {
-                    viz.data[fieldName].push(req.body.data);
-                } else if(_.isUndefined(viz.data[fieldName])) {
-                    console.log(fieldName);
-                    viz.data[fieldName] = req.body.data;
+                if(fieldName) {
+
+                    if(_.isArray(viz.data[fieldName])) {
+                        viz.data[fieldName].push(req.body.data);
+                    } else if(_.isUndefined(viz.data[fieldName])) {
+                        console.log(fieldName);
+                        viz.data[fieldName] = req.body.data;
+                    } else {
+                        console.log('unknown field');
+                    }
                 } else {
-                    console.log('wtf field');
+                    if(_.isArray(viz.data)) {
+                        viz.data.push(req.body.data);
+                    } else if(_.isUndefined(viz.data)) {
+                        viz.data = req.body.data;
+                    } else {
+                        console.log('unknown field');
+                    }
                 }
 
                 viz
