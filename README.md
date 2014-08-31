@@ -28,14 +28,16 @@ http://lightning.mathisonian.com
 dependencies
 
 * [node.js](http://nodejs.org/)
-* [mongodb](http://www.mongodb.org/)
+* postgres
 
 
-install by running `npm install`. Make sure mongo is running then launch the app by running
+install by running `npm install`. 
 
-```
-gulp
-```
+Compile client side libraries by running `gulp`. This can just keep running forever.
+
+Run server with `npm start`.
+
+
 
 ## chart types
 
