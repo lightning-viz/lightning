@@ -13,6 +13,7 @@ exports.index = function (req, res, next) {
 
 
 exports.create = function (req, res, next) {
+    
     models.VisualizationType
         .create(_.pick(req.body, 'name', 'initialDataField'))
         .then(function(type) {
@@ -20,4 +21,5 @@ exports.create = function (req, res, next) {
         }).error(function() {
             return res.status(500).send();
         });
+        
 };

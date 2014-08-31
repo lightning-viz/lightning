@@ -46,10 +46,11 @@ gulp.task('gzip', ['build'], function() {
 });
 
 gulp.task('browserify', function() {
-    // Single entry point to browserify
+
     gulp.src(srcDir + 'js/pages/*.js')
         .pipe(browserify({
-            debug : !PRODUCTION_MODE
+            debug: !PRODUCTION_MODE,
+            external: ['scatter', 'roi']
         }))
         .on('error', gutil.log)
         .on('error', gutil.beep)
@@ -164,3 +165,6 @@ gulp.task('js', ['browserify','js-lib']);
 gulp.task('static', ['js', 'css', 'fonts', 'images']);
 gulp.task('default', ['templates','watch']);
 gulp.task('build', ['templates']);
+gulp.task('heroku:production', ['templates']);
+
+

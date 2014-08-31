@@ -5,14 +5,14 @@ var feedItemHTML = require('../../templates/feed-item.jade');
 var request = require('superagent');
 
 
-require('../viz/line');
-require('../viz/pca');
-require('../viz/scatter');
-require('../viz/volume');
-require('../viz/image');
-require('../viz/roi');
-require('../viz/roi-image');
-require('../viz/gallery');
+// require('../viz/line');
+// require('../viz/pca');
+// require('scatter');
+// require('../viz/volume');
+// require('../viz/image');
+// require('roi');
+// require('../viz/roi-image');
+// require('../viz/gallery');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
@@ -27,7 +27,8 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-    var Viz = require('../viz/' + viz.type);
+    // var Viz = require('../viz/' + viz.type);
+    var Viz = require(viz.type);
 
     $('.feed-container').prepend(feedItemHTML({
         sid: sid,
@@ -54,7 +55,8 @@ $('.feed-item').each(function() {
     var data = $(this).data('data');
     var images = $(this).data('images');
 
-    var Viz = require('../viz/' + type);
+    // var Viz = require('../viz/' + type);
+    var Viz = require(type);
 
     var vid = $(this).attr('id');
     vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
