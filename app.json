@@ -9,14 +9,14 @@
   "repository": "https://github.com/mathisonian/lightning",
   "env": {
     "S3_BUCKET": {
-      "description": "The name of the s3 bucket to use for hosting images.",
+      "description": "The name of the s3 bucket to use for hosting images."
     },
     "S3_KEY": {
-      "description": "The s3 key.",
+      "description": "The s3 key."
     },
     "S3_SECRECT": {
-      "description": "The s3 secret.",
-    },
+      "description": "The s3 secret."
+    }
   },
   "addons": [
     "heroku-postgresql:dev"
