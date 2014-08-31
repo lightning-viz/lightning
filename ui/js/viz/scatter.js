@@ -15,6 +15,7 @@ var height = 300 - margin.top - margin.bottom;
 var ScatterPlot = function(selector, data, images, opts) {
 
     var self = this;
+    data = data.points || data;
 
     var xDomain = d3.extent(data, function(d) {
             return d.x;
