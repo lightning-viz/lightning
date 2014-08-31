@@ -6,6 +6,7 @@
 // var mongoose = require('mongoose');
 var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
+var visualizationTypes = require('../app/controllers/visualizationTypes');
 
 /**
  * Expose
@@ -13,6 +14,10 @@ var session = require('../app/controllers/session');
 
 module.exports = function (app) {
 
+    // visualizatinos
+    app.post('/visualizations/types', visualizationTypes.create);
+    app.get('/visualizations/types', visualizationTypes.index);
+    
     app.get('/', home.index);
     app.get('/sessions', session.index);
     app.get('/sessions/create/', session.getCreate);
@@ -47,6 +52,8 @@ module.exports = function (app) {
     app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
     app.get('/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
+
+
 
 
 

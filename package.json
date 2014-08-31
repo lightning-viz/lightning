@@ -55,7 +55,8 @@
     "swig": "^1.4.1",
     "validator": "~3.17.0",
     "view-helpers": "^0.1.5",
-    "winston": "^0.7.3"
+    "winston": "^0.7.3",
+    "request": "~2.40.0"
   },
   "devDependencies": {
     "browserify": "~4.1.8",

@@ -25,6 +25,9 @@ var models = require('./app/models');
 models.sequelize.sync(function() {
 });
 
+// make sure all viz types are available.
+require('./scripts/create_visualization_types');
+
 // models.Visualization
 //     .findAll()
 //     .then(function(visualizations) {
