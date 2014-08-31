@@ -21,9 +21,9 @@ var visualizationTypes = [
     }, {
         name: 'image'
     }, {
-        name: 'gallery'   
+        name: 'gallery'
     }, {
-        name: 'volume'   
+        name: 'volume'
     }
 ];
 
