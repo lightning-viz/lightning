@@ -15,7 +15,7 @@ module.exports = function (app) {
 
     app.get('/', home.index);
     app.get('/sessions', session.index);
-    app.get('/sessions/create/', session.getCrete);
+    app.get('/sessions/create/', session.getCreate);
 
     app.get('/sessions/:sid/delete/', session.getDelete);
     app.delete('/sessions/:sid/', session.delete);
