@@ -2,7 +2,9 @@
 var request = require('request');
 var _ = require('lodash');
 
-var host = 'http://localhost:3000';
+
+var port = process.env.PORT || '3000';
+var host = 'http://localhost' + ':' + port;
 
 
 var visualizationTypes = [
