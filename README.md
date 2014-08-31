@@ -4,6 +4,8 @@ A notebook for storing and sharing custom visualizations
 
 http://lightning.mathisonian.com
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ## mockups
 
 ### Stream of output for current interactive session
