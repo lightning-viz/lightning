@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
   var VisualizationType = sequelize.define('VisualizationType', {
-    name: DataTypes.STRING,
+    name: {type: DataTypes.STRING, unique: true},
     initialDataField: DataTypes.STRING
   }, {
     classMethods: {
@@ -10,5 +10,5 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-  return VisualizationType
-}
+  return VisualizationType;
+};
