@@ -121,11 +121,38 @@ exports.create = function(req, res, next) {
 
 
 
-exports.getNew = function(req, res, next) {
+exports.getCreate = function(req, res, next) {
     models.Session
         .create()
         .then(function(session) {
             return res.redirect('/sessions/' + session.id + '/feed/');    
+        }).error(next);
+};
+
+exports.delete = function(req, res, next) {
+    var sessionId = req.params.sid;
+
+    models.Session
+        .find(sessionId)
+        .then(function(session) {
+            session.destroy().success(function() {
+                return res.json(session);                
+            }).error(next);
+        }).error(next);
+};
+
+
+
+exports.getDelete = function(req, res, next) {
+    
+    var sessionId = req.params.sid;
+
+    models.Session
+        .find(sessionId)
+        .then(function(session) {
+            session.destroy().success(function() {
+                return res.redirect('/sessions/');
+            }).error(next);
         }).error(next);
 };
 
