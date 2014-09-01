@@ -1,5 +1,5 @@
 var d3 = require('d3');
-var _ = require('_');
+var _ = require('lodash');
 
 d3.ForceEdgeBundling = function(){
         var data_nodes = {},        // {'nodeid':{'x':,'y':},..}
