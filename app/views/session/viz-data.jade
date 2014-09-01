@@ -4,7 +4,8 @@ if viz.getInitialData(vizTypes[viz.type])
 
         .description-container
             .description
-                | !{marked(viz.description)}
+                if viz.description
+                    | !{marked(viz.description)}
 
             .description-editor
                 textarea
