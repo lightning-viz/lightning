@@ -14,6 +14,8 @@ var request = require('superagent');
 // require('../viz/roi-image');
 // require('../viz/gallery');
 
+require('../viz/force-bundle');
+
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
 
@@ -56,7 +58,8 @@ $('.feed-item').each(function() {
     var images = $(this).data('images');
 
     // var Viz = require('../viz/' + type);
-    var Viz = require(type);
+    // var Viz = require(type);
+    var Viz = require('../viz/force-bundle');
 
     var vid = $(this).attr('id');
     vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);

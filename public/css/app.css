@@ -1,0 +1,436 @@
+/*
+* Skeleton V1.2
+* Copyright 2011, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 6/20/2012
+*/
+/* Table of Contents
+==================================================
+    #Base 960 Grid
+    #Tablet (Portrait)
+    #Mobile (Portrait)
+    #Mobile (Landscape)
+    #Clearing */
+/* #Base 960 Grid
+================================================== */
+.container {
+  position: relative;
+  width: 960px;
+  margin: 0 auto;
+  padding: 0; }
+
+.container .column, .container .columns {
+  float: left;
+  display: inline;
+  margin-left: 10px;
+  margin-right: 10px; }
+
+.row {
+  margin-bottom: 20px; }
+
+/* Nested Column Classes */
+.column.alpha, .columns.alpha {
+  margin-left: 0; }
+
+.column.omega, .columns.omega {
+  margin-right: 0; }
+
+/* Base Grid */
+.container .one.column, .container .one.columns {
+  width: 40px; }
+
+.container .two.columns {
+  width: 100px; }
+
+.container .three.columns {
+  width: 160px; }
+
+.container .four.columns {
+  width: 220px; }
+
+.container .five.columns {
+  width: 280px; }
+
+.container .six.columns {
+  width: 340px; }
+
+.container .seven.columns {
+  width: 400px; }
+
+.container .eight.columns {
+  width: 460px; }
+
+.container .nine.columns {
+  width: 520px; }
+
+.container .ten.columns {
+  width: 580px; }
+
+.container .eleven.columns {
+  width: 640px; }
+
+.container .twelve.columns {
+  width: 700px; }
+
+.container .thirteen.columns {
+  width: 760px; }
+
+.container .fourteen.columns {
+  width: 820px; }
+
+.container .fifteen.columns {
+  width: 880px; }
+
+.container .sixteen.columns {
+  width: 940px; }
+
+.container .one-third.column {
+  width: 300px; }
+
+.container .two-thirds.column {
+  width: 620px; }
+
+/* Offsets */
+.container .offset-by-one {
+  padding-left: 60px; }
+
+.container .offset-by-two {
+  padding-left: 120px; }
+
+.container .offset-by-three {
+  padding-left: 180px; }
+
+.container .offset-by-four {
+  padding-left: 240px; }
+
+.container .offset-by-five {
+  padding-left: 300px; }
+
+.container .offset-by-six {
+  padding-left: 360px; }
+
+.container .offset-by-seven {
+  padding-left: 420px; }
+
+.container .offset-by-eight {
+  padding-left: 480px; }
+
+.container .offset-by-nine {
+  padding-left: 540px; }
+
+.container .offset-by-ten {
+  padding-left: 600px; }
+
+.container .offset-by-eleven {
+  padding-left: 660px; }
+
+.container .offset-by-twelve {
+  padding-left: 720px; }
+
+.container .offset-by-thirteen {
+  padding-left: 780px; }
+
+.container .offset-by-fourteen {
+  padding-left: 840px; }
+
+.container .offset-by-fifteen {
+  padding-left: 900px; }
+
+/* #Tablet (Portrait)
+================================================== */
+/* Note: Design for a width of 768px */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  /* Offsets */
+  .container {
+    width: 768px; }
+  .container .column, .container .columns {
+    margin-left: 10px;
+    margin-right: 10px; }
+  .column.alpha, .columns.alpha {
+    margin-left: 0;
+    margin-right: 10px; }
+  .column.omega, .columns.omega {
+    margin-right: 0;
+    margin-left: 10px; }
+  .alpha.omega {
+    margin-left: 0;
+    margin-right: 0; }
+  .container .one.column, .container .one.columns {
+    width: 28px; }
+  .container .two.columns {
+    width: 76px; }
+  .container .three.columns {
+    width: 124px; }
+  .container .four.columns {
+    width: 172px; }
+  .container .five.columns {
+    width: 220px; }
+  .container .six.columns {
+    width: 268px; }
+  .container .seven.columns {
+    width: 316px; }
+  .container .eight.columns {
+    width: 364px; }
+  .container .nine.columns {
+    width: 412px; }
+  .container .ten.columns {
+    width: 460px; }
+  .container .eleven.columns {
+    width: 508px; }
+  .container .twelve.columns {
+    width: 556px; }
+  .container .thirteen.columns {
+    width: 604px; }
+  .container .fourteen.columns {
+    width: 652px; }
+  .container .fifteen.columns {
+    width: 700px; }
+  .container .sixteen.columns {
+    width: 748px; }
+  .container .one-third.column {
+    width: 236px; }
+  .container .two-thirds.column {
+    width: 492px; }
+  .container .offset-by-one {
+    padding-left: 48px; }
+  .container .offset-by-two {
+    padding-left: 96px; }
+  .container .offset-by-three {
+    padding-left: 144px; }
+  .container .offset-by-four {
+    padding-left: 192px; }
+  .container .offset-by-five {
+    padding-left: 240px; }
+  .container .offset-by-six {
+    padding-left: 288px; }
+  .container .offset-by-seven {
+    padding-left: 336px; }
+  .container .offset-by-eight {
+    padding-left: 384px; }
+  .container .offset-by-nine {
+    padding-left: 432px; }
+  .container .offset-by-ten {
+    padding-left: 480px; }
+  .container .offset-by-eleven {
+    padding-left: 528px; }
+  .container .offset-by-twelve {
+    padding-left: 576px; }
+  .container .offset-by-thirteen {
+    padding-left: 624px; }
+  .container .offset-by-fourteen {
+    padding-left: 672px; }
+  .container .offset-by-fifteen {
+    padding-left: 720px; } }
+
+/*  #Mobile (Portrait)
+================================================== */
+/* Note: Design for a width of 320px */
+@media only screen and (max-width: 767px) {
+  /* Offsets */
+  .container {
+    width: 300px; }
+  .container .columns, .container .column {
+    margin: 0; }
+  .container .one.column, .container .one.columns, .container .two.columns, .container .three.columns, .container .four.columns, .container .five.columns, .container .six.columns, .container .seven.columns, .container .eight.columns, .container .nine.columns, .container .ten.columns, .container .eleven.columns, .container .twelve.columns, .container .thirteen.columns, .container .fourteen.columns, .container .fifteen.columns, .container .sixteen.columns, .container .one-third.column, .container .two-thirds.column {
+    width: 300px; }
+  .container .offset-by-one, .container .offset-by-two, .container .offset-by-three, .container .offset-by-four, .container .offset-by-five, .container .offset-by-six, .container .offset-by-seven, .container .offset-by-eight, .container .offset-by-nine, .container .offset-by-ten, .container .offset-by-eleven, .container .offset-by-twelve, .container .offset-by-thirteen, .container .offset-by-fourteen, .container .offset-by-fifteen {
+    padding-left: 0; } }
+
+/* #Mobile (Landscape)
+================================================== */
+/* Note: Design for a width of 480px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .container {
+    width: 420px; }
+  .container .columns, .container .column {
+    margin: 0; }
+  .container .one.column, .container .one.columns, .container .two.columns, .container .three.columns, .container .four.columns, .container .five.columns, .container .six.columns, .container .seven.columns, .container .eight.columns, .container .nine.columns, .container .ten.columns, .container .eleven.columns, .container .twelve.columns, .container .thirteen.columns, .container .fourteen.columns, .container .fifteen.columns, .container .sixteen.columns, .container .one-third.column, .container .two-thirds.column {
+    width: 420px; } }
+
+/* #Clearing
+================================================== */
+/* Self Clearing Goodness */
+.container:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden; }
+
+/* Use clearfix class on parent to clear nested columns,
+    or wrap each row of columns in a <div class="row"> */
+.clearfix:before, .clearfix:after, .row:before, .row:after {
+  content: '\0020';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0; }
+
+.row:after, .clearfix:after {
+  clear: both; }
+
+.row, .clearfix {
+  zoom: 1; }
+
+/* You can also use a <br class="clear" /> to clear columns */
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0; }
+
+.line-plot .plot {
+  fill: #ffffff; }
+.line-plot .grid .tick {
+  stroke: #BEC9CE;
+  opacity: 0.6; }
+.line-plot .grid path {
+  stroke-width: 0; }
+.line-plot .axis path, .line-plot .axis line {
+  fill: none;
+  stroke: none;
+  shape-rendering: crispEdges; }
+.line-plot .axis path {
+  display: none; }
+.line-plot .line {
+  fill: none;
+  stroke: #9175f0;
+  stroke-width: 2px; }
+.line-plot .dot {
+  stroke: #68a1e5;
+  fill: #deebfa; }
+  .line-plot .dot:hover {
+    fill: #85b6ed; }
+.line-plot text {
+  fill: #BEC9CE;
+  font-family: monospace; }
+
+.image-viz img {
+  max-height: 400px;
+  max-width: 100%; }
+
+.gallery-viz img {
+  width: 100%; }
+.gallery-viz .gallery-thumbnail {
+  cursor: pointer; }
+
+#roi .dot {
+  opacity: 0.4; }
+  #roi .dot:hover {
+    opacity: 1; }
+  #roi .dot.hidden {
+    display: none; }
+
+.panel {
+  position: fixed;
+  left: -12.625em;
+  /*left or right and the width of your navigation panel*/
+  width: 16.625em;
+  /*should match the above value*/
+  background-color: #626c7c; }
+  .panel .button-container {
+    width: 12.625em;
+    float: left; }
+    .panel .button-container a {
+      font-family: 'Open Sans', sans-serif;
+      display: block;
+      padding: 1em;
+      color: white;
+      text-decoration: none; }
+      .panel .button-container a:hover {
+        color: black;
+        background-color: #cfd8e0; }
+  .panel .side-color {
+    position: relative;
+    height: 100%;
+    /* width: 33%; */
+    background: #424b58;
+    width: 4em;
+    float: right;
+    text-align: center;
+    cursor: pointer; }
+  .panel .logo {
+    padding-top: 10px; }
+    .panel .logo img {
+      width: 80%; }
+
+.wrap {
+  position: relative; }
+
+html, body {
+  font-family: 'Open Sans', sans-serif; }
+
+.button {
+  border-radius: 2px;
+  border: 1px solid #719BEC;
+  font-size: 15px;
+  color: #68a1e5;
+  line-height: 20px;
+  cursor: pointer;
+  text-align: center;
+  padding: 5px 0; }
+  .button:hover {
+    background-color: #f2f2f2;
+    color: #277ada; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+  color: #545E6B; }
+
+p {
+  color: #545E6B; }
+
+a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #8F7BD9;
+  line-height: 19px; }
+  a:hover {
+    color: #A997EB; }
+  a:active {
+    color: #59A2E6; }
+
+li {
+  list-style: none; }
+
+ul, li {
+  margin: 0;
+  padding: 0; }
+
+.subheader {
+  color: #75808F; }
+
+.code {
+  background-color: #E4E4E4;
+  font-family: monospace;
+  padding: 5px;
+  border-radius: 4px; }
+
+.lightning-header {
+  padding-top: 33%;
+  text-align: center; }
+  .lightning-header h1, .lightning-header h2, .lightning-header h3 {
+    font-weight: normal; }
+
+.session-details {
+  color: gray;
+  font-family: 'Open Sans', sans-serif;
+  margin-left: 10px; }
+
+.session-id {
+  text-align: right; }
+
+input {
+  color: #545E6B; }
+  input.editable {
+    display: none;
+    width: 100%; }
+    input.editable.h2 {
+      font-size: 1.5em;
+      -webkit-margin-before: 0.83em; }

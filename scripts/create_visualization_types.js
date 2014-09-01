@@ -24,6 +24,8 @@ var visualizationTypes = [
         name: 'gallery'
     }, {
         name: 'volume'
+    }, {
+        name: 'force-bundle'
     }
 ];
 
