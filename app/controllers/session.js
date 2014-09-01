@@ -330,7 +330,12 @@ exports.appendData = function (req, res, next) {
                     }
                 } else {
                     if(_.isArray(viz.data)) {
-                        viz.data.push(req.body.data);
+                        if(_.isArray(req.body.data)) {
+                            viz.data = viz.data.concat(req.body.data);
+                            console.log(viz.data)
+                        } else {
+                            viz.data.push(req.body.data);
+                        }
                     } else if(_.isUndefined(viz.data)) {
                         viz.data = req.body.data;
                     } else {
