@@ -7,10 +7,10 @@ var request = require('superagent');
 
 require('../viz/line');
 require('../viz/pca');
-require('scatter');
+require('../viz/scatter');
 require('../viz/volume');
 require('../viz/image');
-require('roi');
+require('../viz/roi');
 require('../viz/roi-image');
 require('../viz/gallery');
 require('../viz/force-bundle');
