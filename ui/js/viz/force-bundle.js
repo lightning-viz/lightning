@@ -423,7 +423,7 @@ var height = 300 - margin.top - margin.bottom;
 
 
 module.exports = function(selector, data, images, opts) {
-    var nodes = data.nodes;
+    var nodes = data.points || data.nodes;
     nodes = _.object(_.range(nodes.length), nodes);
 
    // var xDomain = d3.extent(nodes, function(d) {
