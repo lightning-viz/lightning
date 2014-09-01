@@ -1,6 +1,25 @@
-
 if viz.getInitialData(vizTypes[viz.type])
-    .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}")
-    .permalink
-        a(href="/visualizations/#{viz.id}")
-            | permalink
+    .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
+        .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}")
+
+        .description-container
+            .description
+                | !{marked(viz.description)}
+
+            .description-editor
+                textarea
+                    | #{viz.description}
+
+
+        .bottom-container
+            .edit-description
+                a(href="#")
+                    if viz.description
+                        | edit description
+                    else
+                        | add description
+
+
+            .permalink
+                a(href="/visualizations/#{viz.id}")
+                    | permalink

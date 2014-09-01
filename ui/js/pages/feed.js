@@ -3,7 +3,7 @@ sid = sid.slice(0, sid.indexOf('/'));
 var feedItemHTML = require('../../templates/feed-item.jade');
 
 var request = require('superagent');
-
+var marked = require('marked');
 
 require('../viz/line');
 require('../viz/pca');
@@ -94,6 +94,42 @@ $('[data-editable]').each(function() {
                     return console.log('success');
                 }
             });
+        });
+    });
+});
+
+
+$('.edit-description').click(function() {
+    var $this = $(this);
+    var $itemContainer = $this.closest('.feed-item-container');
+    var h = $itemContainer.find('.description').height();
+
+    var $editor = $itemContainer.find('.description-editor');
+    var $description = $itemContainer.find('.description');
+
+    $itemContainer.find('.edit-description a').hide();
+    $description.hide();
+    $editor.height(h).show();
+
+
+    $editor.find('textarea').focus().unbind('blur').blur(function() {
+
+        var text = $editor.find('textarea').val();
+        $description.html(marked(text)).show();
+        $editor.hide();
+        $itemContainer.find('.edit-description a').show();
+
+        var url = '/' + $itemContainer.data('model').toLowerCase() + 's' + '/' + $itemContainer.data('model-id');
+        var params = {};
+
+        params.description = text;
+
+        request.put(url, params, function(error, res){
+            if(error) {
+                return console.log(error);
+            } else {
+                return console.log('success');
+            }
         });
     });
 });

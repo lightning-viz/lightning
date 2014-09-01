@@ -83,6 +83,7 @@ module.exports = function (app, io) {
         res.locals.env = env;
         res.locals.moment = moment;
         res.locals._ = require('lodash');
+        res.locals.marked = require('marked');
         res.locals.STATIC_URL = '/';
         next();
     });

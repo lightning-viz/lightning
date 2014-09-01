@@ -29,6 +29,7 @@ module.exports = function (app) {
     app.get('/sessions/:sid/feed', session.feed);
     
     app.put('/sessions/:sid', session.update);
+    app.put('/visualizations/:vid', session.updateVisualization);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
