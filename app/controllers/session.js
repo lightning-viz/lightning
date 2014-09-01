@@ -201,6 +201,11 @@ exports.addData = function (req, res, next) {
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
+                    if(err) {
+                        console.log('error in thumbnailAndUpload');
+                        return res.status(500).send();
+                    }
+
                     var imgData = data.imgData;
 
                     console.log(imgData);
@@ -347,6 +352,10 @@ exports.appendData = function (req, res, next) {
                     _.each(files, function(f) {
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
+                            if(err) {
+                                console.log('error in thumbnailAndUpload');
+                                return res.status(500).send();
+                            }
                             var imgData = data.imgData;
                             var s3Response = data.response;
 
@@ -457,10 +466,6 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 // var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
 
                 var imgData = imgURL;
-                // {
-                //     original: imgURL,
-                //     thumbnail: thumbURL
-                // };
 
                 callback(null, {
                     response: s3Response,
