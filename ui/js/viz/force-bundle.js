@@ -1,4 +1,5 @@
 var d3 = require('d3');
+var _ = require('_');
 
 d3.ForceEdgeBundling = function(){
         var data_nodes = {},        // {'nodeid':{'x':,'y':},..}
@@ -422,7 +423,8 @@ var height = 300 - margin.top - margin.bottom;
 
 
 module.exports = function(selector, data, images, opts) {
-
+    var nodes = data.nodes;
+    nodes = _.object(_.range(nodes.length), nodes);
 
    // var xDomain = d3.extent(nodes, function(d) {
    //      return d.x;
@@ -462,7 +464,7 @@ module.exports = function(selector, data, images, opts) {
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
-    var fbundling = d3.ForceEdgeBundling().nodes(data.nodes).edges(data.links);
+    var fbundling = d3.ForceEdgeBundling().nodes(nodes).edges(data.links);
     var results   = fbundling();    
 
     var d3line = d3.svg.line()
