@@ -102,7 +102,7 @@ $('[data-editable]').each(function() {
 $('.edit-description').click(function() {
     var $this = $(this);
     var $itemContainer = $this.closest('.feed-item-container');
-    var h = $itemContainer.find('.description').height();
+    var h = Math.max($itemContainer.find('.description').height(), 300);
 
     var $editor = $itemContainer.find('.description-editor');
     var $description = $itemContainer.find('.description');
