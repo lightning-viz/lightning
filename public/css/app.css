@@ -434,3 +434,19 @@ input {
     input.editable.h2 {
       font-size: 1.5em;
       -webkit-margin-before: 0.83em; }
+
+.permalink {
+  display: inline-block;
+  width: 50%;
+  text-align: right; }
+
+.edit-description {
+  display: inline-block;
+  width: 50%; }
+
+.description-editor {
+  display: none;
+  padding-bottom: 25px; }
+  .description-editor textarea {
+    width: 100%;
+    height: 100%; }

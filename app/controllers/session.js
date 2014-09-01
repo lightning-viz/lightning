@@ -89,6 +89,25 @@ exports.update = function (req, res, next) {
         }).error(next);
 
 };
+exports.updateVisualization = function (req, res, next) {
+
+    var vid = req.params.vid;
+    var Visualization = models.Visualization;
+
+    console.log('updating visualization ' + vid);
+
+
+    Visualization
+        .update(req.body, {
+            id: vid
+        }).success(function(visualizations) {
+            return res.status(200).send();
+        }).error(function(err) {
+            console.log(err);
+            return res.status(500).send();
+        });
+
+};
 
 exports.read = function (req, res, next) {
 
