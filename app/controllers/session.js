@@ -198,8 +198,6 @@ exports.addData = function (req, res, next) {
 
         form.parse(req, function(err, fields, files) {
 
-
-            console.log(fields.type[0]);
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
