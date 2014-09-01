@@ -556,7 +556,7 @@ module.exports = function(selector, data, images, opts) {
             .style('stroke-width', 1)
             .style('stroke', '#ff2222')
             .style('fill', 'none')
-            .style('stroke-opacity',0.15); //use opacity as blending
+            .style('stroke-opacity',0.05); //use opacity as blending
     });
 
 
