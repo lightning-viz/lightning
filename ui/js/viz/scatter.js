@@ -15,7 +15,18 @@ var height = 300 - margin.top - margin.bottom;
 var ScatterPlot = function(selector, data, images, opts) {
 
     var self = this;
-    data = data.points || data;
+
+    if (data.hasOwnProperty('colors')) {
+        fillcolors = data.colors.map(function(d) {return d3.rgb(d.r, d.g, d.b)})
+        strokecolors = fillcolors.map(function(d) {return d.darker(0.5)})
+    } else {
+        fillcolors = []
+        strokecolors = []
+    }
+
+    if (data.hasOwnProperty('points')) {
+        data = data.points
+    }
 
     var xDomain = d3.extent(data, function(d) {
             return d.x;
@@ -120,15 +131,25 @@ var ScatterPlot = function(selector, data, images, opts) {
     svg.selectAll('.dot')
         .data(data)
         .enter().append('circle')
-        .attr('class', 'dot')
+        //.attr('class', 'dot')
         .attr('r', 6)
+        .attr('fill',function(d, i) { return (fillcolors[i] || '#deebfa');})
+        .attr('stroke',function(d, i) { return (strokecolors[i] || '#68a1e5');})
         .attr('transform', function(d) {
             return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
         })
-        .on('mouseover', function(d) {
+        .on('mouseover', function(d, i) {
+            var point = d3.select(this)
+            var newcolor = d3.rgb(point.style('fill')).darker(0.75)
+            point.style('fill', newcolor)
             self.emit('hover', d);
+            console.log('in: ' + i);
+
         })
         .on('mouseout', function(d, i) {
+            var point = d3.select(this)
+            var newcolor = d3.rgb(point.style('fill')).brighter(0.75)
+            point.style('fill', newcolor)
             console.log('out: ' + i);
         });
 
