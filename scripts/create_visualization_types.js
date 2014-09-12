@@ -26,6 +26,8 @@ var visualizationTypes = [
         name: 'volume'
     }, {
         name: 'force-bundle'
+    }, {
+        name: 'force-directed-network'
     }
 ];
 
