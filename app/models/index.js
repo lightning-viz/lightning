@@ -3,7 +3,7 @@ var fs        = require('fs')
   , Sequelize = require('sequelize')
   , lodash    = require('lodash')
   , env       = process.env.NODE_ENV || 'development'
-  , config    = require(__dirname + '/../config/config')[env]
+  , config    = require(__dirname + '/../../config/database')[env]
   , sequelize = new Sequelize(config.database, config.username || process.env.USER, config.password, config)
   , db        = {}
 
