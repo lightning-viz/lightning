@@ -5,6 +5,11 @@ A notebook for storing and sharing custom data visualizations
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 
+![welcome](http://i.gif.fm/V1bPl.png)
+![session](http://i.gif.fm/KvPpI.png)
+![save-sessions](http://i.gif.fm/bBP8H.png)
+
+
 ## installation
 
 dependencies
