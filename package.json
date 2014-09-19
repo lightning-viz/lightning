@@ -17,7 +17,13 @@
     "transform": [
       "jadeify"
     ]
-  },
+  },  
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+
   "dependencies": {
     "async": "^0.9.0",
     "batch": "^0.5.1",
