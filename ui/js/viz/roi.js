@@ -23,7 +23,8 @@ var ROIViz = function(selector, data) {
 
     var r;
     scatter.on('hover', function(d) {
-        var url = $el.next('.permalink').find('a').attr('href');
+
+        var url = $el.parent().find('.permalink').find('a').attr('href');
 
         if(r) {
             r.abort();

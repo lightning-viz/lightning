@@ -166,7 +166,7 @@ exports.addData = function (req, res, next) {
 
                     if(err) {
                         console.log('error in thumbnailAndUpload');
-                        return res.status(500).send();
+                        return res.status(500).send('error creating image thumbnail');
                     }
 
                     var imgData = data.imgData;
@@ -259,7 +259,7 @@ exports.appendData = function (req, res, next) {
 
                             if(err) {
                                 console.log('error in thumbnailAndUpload');
-                                return res.status(500).send();
+                                return res.status(500).send('error creating image thumbnail');
                             }
                             var imgData = data.imgData;
                             var s3Response = data.response;
