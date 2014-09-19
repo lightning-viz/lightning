@@ -4,24 +4,6 @@ A notebook for storing and sharing custom data visualizations
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-## mockups
-
-### Stream of output for current interactive session
-
-![feed](./mocks/feed.png)
-
-### overview of an interactive session
-
-![overview](./mocks/overview.png)
-
-### sidebar showing options
-
-![sidebar](./mocks/sidebar.png)
-
-### permalink page for sharing 
-
-![viz](./mocks/viz-permalink.png)
-
 
 ## installation
 
@@ -36,7 +18,6 @@ install by running `npm install`.
 Compile client side libraries by running `gulp`. This can just keep running forever.
 
 Run server with `npm start`.
-
 
 
 ## chart types
