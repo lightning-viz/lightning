@@ -15,6 +15,7 @@ require('../viz/roi-image');
 require('../viz/gallery');
 require('../viz/force-bundle');
 require('../viz/force-directed-network');
+require('../viz/stacked-line');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
