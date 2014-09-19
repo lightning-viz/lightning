@@ -1,6 +1,6 @@
 # Lightning
 
-A notebook for storing and sharing custom visualizations
+A notebook for storing and sharing custom data visualizations
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
