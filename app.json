@@ -8,6 +8,7 @@
   ],
   "repository": "https://github.com/mathisonian/lightning",
   "env": {
+    "BUILDPACK_URL": "https://github.com/newyorkdata/heroku-buildpack-nodejs-gulp",
     "S3_BUCKET": {
       "description": "The name of the s3 bucket to use for hosting images."
     },
