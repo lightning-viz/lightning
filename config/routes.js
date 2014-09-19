@@ -7,6 +7,7 @@
 var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 var visualizationTypes = require('../app/controllers/visualizationTypes');
+var visualization = require('../app/controllers/visualization');
 
 /**
  * Expose
@@ -29,29 +30,29 @@ module.exports = function (app) {
     app.get('/sessions/:sid/feed', session.feed);
     
     app.put('/sessions/:sid', session.update);
-    app.put('/visualizations/:vid', session.updateVisualization);
+    app.put('/visualizations/:vid', visualization.update);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
-    app.get('/visualizations/:vid', session.read);
+    app.get('/visualizations/:vid', visualization.read);
 
 
     app.post('/sessions/:sid/visualizations/:vid/data', session.appendData);
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
 
 
-    app.put('/sessions/:sid/visualizations/:vid/data', session.updateData);
-    app.put('/sessions/:sid/visualizations/:vid/data/:field', session.updateData);
+    app.put('/sessions/:sid/visualizations/:vid/data', visualization.updateData);
+    app.put('/sessions/:sid/visualizations/:vid/data/:field', visualization.updateData);
 
 
     
     
-    app.get('/sessions/:sid/visualizations/:vid/data', session.getData);
-    app.get('/visualizations/:vid/data', session.getData);
-    app.get('/sessions/:sid/visualizations/:vid/data/:field', session.getDataField);
-    app.get('/visualizations/:vid/data/:field', session.getDataField);
-    app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
-    app.get('/visualizations/:vid/data/:field/:index', session.getDataAtIndex);
+    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
+    app.get('/visualizations/:vid/data', visualization.getData);
+    app.get('/sessions/:sid/visualizations/:vid/data/:field', visualization.getDataField);
+    app.get('/visualizations/:vid/data/:field', visualization.getDataField);
+    app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', visualization.getDataAtIndex);
+    app.get('/visualizations/:vid/data/:field/:index', visualization.getDataAtIndex);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 
