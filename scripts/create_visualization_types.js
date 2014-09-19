@@ -28,6 +28,8 @@ var visualizationTypes = [
         name: 'force-bundle'
     }, {
         name: 'force-directed-network'
+    }, {
+        name: 'stacked-line'
     }
 ];
 

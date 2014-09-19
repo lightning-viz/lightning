@@ -326,6 +326,36 @@
   #roi .dot.hidden {
     display: none; }
 
+.stacked-line-plot .plot {
+  fill: #ffffff; }
+.stacked-line-plot .grid .tick {
+  stroke: #BEC9CE;
+  opacity: 0.6; }
+.stacked-line-plot .grid path {
+  stroke-width: 0; }
+.stacked-line-plot .axis path, .stacked-line-plot .axis line {
+  fill: none;
+  stroke: none;
+  shape-rendering: crispEdges; }
+.stacked-line-plot .axis path {
+  display: none; }
+.stacked-line-plot .line {
+  fill: none;
+  stroke: #9175f0;
+  stroke-width: 2px; }
+.stacked-line-plot .dot {
+  stroke: #68a1e5;
+  fill: #deebfa; }
+  .stacked-line-plot .dot:hover {
+    fill: #85b6ed; }
+.stacked-line-plot text {
+  fill: #BEC9CE;
+  font-family: monospace; }
+.stacked-line-plot .brush .extent {
+  stroke: #fff;
+  fill-opacity: 0.125;
+  shape-rendering: crispEdges; }
+
 .panel {
   position: fixed;
   left: -12.625em;
