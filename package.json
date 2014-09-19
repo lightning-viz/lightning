@@ -57,9 +57,7 @@
     "view-helpers": "^0.1.5",
     "winston": "^0.7.3",
     "request": "~2.40.0",
-    "marked": "~0.3.2"
-  },
-  "devDependencies": {
+    "marked": "~0.3.2",
     "browserify": "~4.1.8",
     "colors": "~0.6.2",
     "d3": "~3.4.9",
