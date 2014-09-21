@@ -20,7 +20,6 @@ var ROIViz = function(selector, data) {
     var line = new LineChart(selector + ' #line-chart', Array.apply(null, new Array(1000)).map(Number.prototype.valueOf,0));
 
 
-
     var r;
     scatter.on('hover', function(d) {
 

@@ -2,3 +2,5 @@
 node_modules
 .keys
 public
+
+npm-debug.log

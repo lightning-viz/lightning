@@ -4,5 +4,9 @@
  */
 
 module.exports = {
-  db: 'mongodb://localhost/lightning-dev'
+  s3: {
+        key: process.env.S3_KEY,
+        secret: process.env.S3_SECRET,
+        bucket: process.env.S3_BUCKET,
+  }
 };
