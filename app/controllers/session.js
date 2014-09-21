@@ -12,14 +12,9 @@ var easyimage = require('easyimage');
 var async = require('async');
 var models = require('../models');
 var Q = require('q');
-
-
-var s3Client = knox.createClient({
-    secure: false,
-    key: process.env.S3_KEY,
-    secret: process.env.S3_SECRET,
-    bucket: process.env.S3_BUCKET,
-});
+var commandExists = require('command-exists');
+var config = require('../../config/config');
+var fs = require('fs-extra');
 
 
 exports.index = function (req, res, next) {
@@ -272,8 +267,13 @@ exports.appendData = function (req, res, next) {
                             viz
                                 .save()
                                 .then(function() {
-                                    res.statusCode = s3Response.statusCode;
-                                    s3Response.pipe(res);
+
+                                    if(typeof s3Response === 'object') {
+                                        res.statusCode = s3Response.statusCode;
+                                        s3Response.pipe(res);
+                                    } else {
+                                        return res.status(data.response).send('');
+                                    }
                                 });
 
                             req.io.of('/sessions/' + sessionId)
@@ -297,6 +297,22 @@ exports.appendData = function (req, res, next) {
 
 var thumbnailAndUpload = function(f, sessionId, callback) {
 
+
+    // check if thumbnailing exists,
+    // and if s3 creds exist
+    var s3Exists = !!config.s3.key;
+    var s3Client = null;
+
+    if(s3Exists) {
+
+        knox.createClient({
+            secure: false,
+            key: process.env.S3_KEY,
+            secret: process.env.S3_SECRET,
+            bucket: process.env.S3_BUCKET,
+        });
+     }
+
     var maxWidth = 500;
     var maxHeight = 500;
 
@@ -309,11 +325,10 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
     var thumbnailPath;
 
     if(process.env.NODE_ENV === 'production') {
-        thumbnailPath = path.resolve(__dirname + '/../../'  + './tmp/' + filenameWithoutExtension + '_thumbnail' + extension);
+        thumbnailPath = path.resolve(__dirname + '/../../' + './tmp/' + filenameWithoutExtension + '_thumbnail' + extension);
     } else {
         thumbnailPath = path.dirname(imgPath) + filenameWithoutExtension + '_thumbnail' + extension;
     }
-    
 
     // Upload paths for s3
     var uploadName = randomstring.generate();
@@ -332,54 +347,141 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
         headers['Content-Type'] = 'image/png';
     }
 
-    easyimage
-        .info(imgPath)
-        .then(function(file) {
-            var thumbWidth;
-            var thumbHeight;
+    commandExists('identify', function(err, imageMagickExists) {
 
-            console.log('outputing to: ' + thumbnailPath);
+        if(imageMagickExists) {
 
-            if(file.width > file.height) {
-                thumbWidth = Math.min(maxWidth, file.width);
-                thumbHeight = file.height * (thumbWidth / file.width);
-            } else {
-                thumbHeight = Math.min(maxHeight, file.height);
-                thumbWidth = file.width * (thumbHeight / file.height);
-            }
+            easyimage
+                .info(imgPath)
+                .then(function(file) {
+                    var thumbWidth;
+                    var thumbHeight;
 
-            return easyimage.resize({
-                src: imgPath,
-                dst: thumbnailPath,
-                width: thumbWidth,
-                height: thumbHeight
-            });
-        }).then(function() {
-            async.parallel([
-                function(callback) {
-                    console.log(imgPath + ':' + originalS3Path);
-                    s3Client.putFile(imgPath, originalS3Path, headers, callback);
-                },
-                function(callback) {
-                    console.log(thumbnailPath + ':' + thumbnailS3Path);
-                    s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
-                }
-            ], function(err, results) {
-                var s3Response = results[0];
+                    console.log('outputing to: ' + thumbnailPath);
 
-                var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
-                // var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+                    if(file.width > file.height) {
+                        thumbWidth = Math.min(maxWidth, file.width);
+                        thumbHeight = file.height * (thumbWidth / file.width);
+                    } else {
+                        thumbHeight = Math.min(maxHeight, file.height);
+                        thumbWidth = file.width * (thumbHeight / file.height);
+                    }
 
-                var imgData = imgURL;
+                    return easyimage.resize({
+                        src: imgPath,
+                        dst: thumbnailPath,
+                        width: thumbWidth,
+                        height: thumbHeight
+                    });
+                }).then(function() {
 
-                callback(null, {
-                    response: s3Response,
-                    imgData: imgData
+                    if(s3Exists) {
+                        async.parallel([
+                            function(callback) {
+                                console.log(imgPath + ':' + originalS3Path);
+                                s3Client.putFile(imgPath, originalS3Path, headers, callback);
+                            },
+                            function(callback) {
+                                console.log(thumbnailPath + ':' + thumbnailS3Path);
+                                s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
+                            }
+                        ], function(err, results) {
+                            var s3Response = results[0];
+
+                            var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
+                            // var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+
+                            var imgData = imgURL;
+
+                            callback(null, {
+                                response: s3Response,
+                                imgData: imgData
+                            });
+                            
+                        });
+                    } else {
+
+                        console.log('S3 Credentials not found. Using local images');
+
+                        async.parallel([
+                            function(callback) {
+                                var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
+                                fs.copy(imgPath, outpath, callback);        
+                            },
+                            function(callback) {
+                                var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);
+                                fs.copy(thumbnailPath, outpath, callback);
+                            }
+                        ], function(err) {
+                            if(err) {
+                                return callback(err);
+                            }
+
+                            return callback(null, {
+                                response: 200,
+                                imgData: '/images/uploads' + originalS3Path
+                            });
+                        });
+                    }
+
+                }, function(err) {
+                    console.log(err);
+                    callback(err);
                 });
-                
-            });
-        }, function(err) {
-            console.log(err);
-            callback(err);
-        });
+        } else {
+
+            if(s3Exists) {
+                async.parallel([
+                    function(callback) {
+                        console.log(imgPath + ':' + originalS3Path);
+                        s3Client.putFile(imgPath, originalS3Path, headers, callback);
+                    },
+                    function(callback) {
+                        console.log(thumbnailPath + ':' + thumbnailS3Path);
+                        s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
+                    }
+                ], function(err, results) {
+                    var s3Response = results[0];
+
+                    var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
+                    // var thumbURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + thumbnailS3Path;
+
+                    var imgData = imgURL;
+
+                    callback(null, {
+                        response: s3Response,
+                        imgData: imgData
+                    });
+                    
+                });
+            } else {
+
+                console.log('S3 Credentials not found. Using local images');
+
+                async.parallel([
+                    function(callback) {
+                        var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
+                        console.log(outpath);
+                        fs.copy(imgPath, outpath, callback);        
+                    },
+                    function(callback) {
+                        var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);
+                        console.log(outpath);
+                        fs.copy(imgPath, outpath, callback);
+                    }
+                ], function(err) {
+                    if(err) {
+                        return callback(err);
+                    }
+
+                    return callback(null, {
+                        response: 200,
+                        imgData: '/images/uploads' + originalS3Path
+                    });
+                });
+            }
+        }
+    })
+
+
 };
