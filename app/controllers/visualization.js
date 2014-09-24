@@ -1,4 +1,5 @@
 var models = require('../models');
+var Q = require('q');
 
 exports.getData = function (req, res, next) {
     var vizId = req.params.vid;
