@@ -1,6 +1,6 @@
 # Lightning
 
-A notebook for storing and sharing custom data visualizations
+A notebook server for storing and sharing custom data visualizations
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
@@ -8,6 +8,11 @@ A notebook for storing and sharing custom data visualizations
 ![welcome](http://i.gif.fm/V1bPl.png)
 ![session](http://i.gif.fm/KvPpI.png)
 ![save-sessions](http://i.gif.fm/bBP8H.png)
+
+## client libraries
+
+Python
+* https://github.com/mathisonian/lightning-python
 
 
 ## installation
