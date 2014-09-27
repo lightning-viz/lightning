@@ -35,6 +35,7 @@ module.exports = function (app) {
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
     app.get('/visualizations/:vid', visualization.read);
+    app.get('/visualizations/:vid/embed', visualization.embed);
 
 
     app.post('/sessions/:sid/visualizations/:vid/data', session.appendData);

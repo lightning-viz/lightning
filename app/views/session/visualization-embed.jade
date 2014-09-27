@@ -1,0 +1,16 @@
+extends ../embed-layout
+
+
+block sidebar
+    
+block content
+    //- .row
+        .two-thirds.column
+    .feed-container
+        include ./viz-data
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js")
+    script(src='#{STATIC_URL}js/feed.js')

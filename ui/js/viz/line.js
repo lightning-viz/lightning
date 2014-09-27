@@ -1,4 +1,6 @@
-var d3 = require('d3');
+if(!window.d3) {
+    d3 = require('d3');
+}
 
 var margin = {
     top: 20,
@@ -14,6 +16,10 @@ var height = 300 - margin.top - margin.bottom;
 var LineGraph = function(selector, data, images, opts) {
 
     var self = this;
+
+    console.log(d3);
+    console.log(d3.extent);
+    console.log(data);
     
     var yDomain = d3.extent(data, function(d) {
             return d;

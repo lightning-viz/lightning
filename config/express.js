@@ -77,6 +77,13 @@ module.exports = function (app, io) {
     });
 
 
+    var static_url = '/';
+    if(config.url) {
+        static_url = 'http://' + config.url + '/';
+    }
+
+
+
     // expose package.json to views
     app.use(function (req, res, next) {
         res.locals.pkg = pkg;
@@ -84,7 +91,7 @@ module.exports = function (app, io) {
         res.locals.moment = moment;
         res.locals._ = require('lodash');
         res.locals.marked = require('marked');
-        res.locals.STATIC_URL = '/';
+        res.locals.STATIC_URL =  static_url;
         next();
     });
 
