@@ -102,8 +102,6 @@ gulp.task('jade', function() {
 
     // delete require.cache[require.resolve('./' + srcDir + 'js/utils')];
     // var utils = require('./' + srcDir + '/js/utils');
-    
-    var host = '/interactives/' + projectName + '/';
 
     if(!PRODUCTION_MODE) {
         host = '/';

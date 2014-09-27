@@ -1,4 +1,7 @@
-var d3 = require('d3');
+if(!window.d3) {
+    d3 = require('d3');
+}
+
 var _ = require('lodash');
 
 d3.ForceEdgeBundling = function(){

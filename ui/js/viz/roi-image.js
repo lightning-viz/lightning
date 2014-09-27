@@ -1,4 +1,7 @@
-var d3 = require('d3');
+if(!window.d3) {
+    d3 = require('d3');
+}
+
 var inherits = require('inherits');
 var templateHTML = require('../../templates/viz/roi-image.jade');
 var request = require('superagent');

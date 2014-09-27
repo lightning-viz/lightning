@@ -13,7 +13,7 @@ require('../viz/image');
 require('../viz/roi');
 require('../viz/roi-image');
 require('../viz/gallery');
-require('../viz/force-bundle');
+// require('../viz/force-bundle');
 require('../viz/force-directed-network');
 require('../viz/stacked-line');
 
@@ -21,8 +21,17 @@ require('../lib/bigSlide');
 $('.menu-link').bigSlide();
 
 
-console.log('connecting to ' + '/sessions/' + sid);
-var socket = io.connect('/sessions/' + sid);
+var socket;
+io = window.io || false
+
+if(io) {
+    console.log('connecting to ' + '/sessions/' + sid);
+    socket = io.connect('/sessions/' + sid);
+} else {
+    socket = {
+        on: function(){}
+    }
+}
 
 var vizs = {};
 
