@@ -4,10 +4,10 @@ extends ../embed-layout
 block sidebar
     
 block content
-    //- .row
-        .two-thirds.column
     .feed-container
-        include ./viz-data
+        .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
+            .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}")
+
 
 
 block scripts
