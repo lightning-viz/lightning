@@ -11,6 +11,6 @@ block content
 
 
 block scripts
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-    script(src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js")
+    script.
+        window.lightningEmbeddedId = #{viz.id};
     script(src='#{STATIC_URL}js/feed.js')
