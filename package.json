@@ -46,6 +46,7 @@
     "google-spreadsheets": "~0.3.0",
     "gulp": "~3.8.0",
     "gulp-browserify": "~0.5.0",
+    "gulp-browserify-protect": "^0.1.0",
     "gulp-buster": "~0.2.2",
     "gulp-csso": "~0.2.7",
     "gulp-gzip": "0.0.6",
@@ -89,8 +90,5 @@
     "validator": "~3.17.0",
     "view-helpers": "^0.1.5",
     "winston": "^0.7.3"
-  },
-  "devDependencies": {
-    "gulp-browserify-protect": "^0.1.0"
   }
 }
