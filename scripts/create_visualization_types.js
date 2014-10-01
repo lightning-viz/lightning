@@ -30,6 +30,9 @@ var visualizationTypes = [
         name: 'force-directed-network'
     }, {
         name: 'stacked-line'
+    },
+    {
+        name: 'matrix'
     }
 ];
 
