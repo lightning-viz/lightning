@@ -1,7 +1,4 @@
-if(!window.d3) {
-    d3 = require('d3');
-}
-
+var d3 = require('d3');
 var _ = require('lodash');
 
 var margin = {
@@ -130,29 +127,14 @@ var StackedLineGraph = function(selector, data, images, opts) {
         // .attr('transform', 'translate(' + 0 + ',' + margin.top + ')');
 
 
-      // context.append('g')
-      //       .attr('class', 'x brush')
-      //       .call(brush)
-      //       .selectAll('rect')
-      //       .attr('y', 0)
-      //       .attr('height', height);
 
     function brushed() {
-          // x.domain(brush.empty() ? x2.domain() : brush.extent());
-          // focus.select('.area').attr('d', area);
-          // focus.select('.x.axis').call(this.xAxis);
     }
 
     function zoomed() {
         self.y = d3.scale.linear()
             .domain([yDomain[0] - 1, yDomain[1] + 1])
             .range([lineChartHeight * Math.pow(Math.max(1, self.zoom.scale()), 1/5), 0]);
-
-        // var scale = self.zoom.scale();
-        // var translate = self.zoom.translate();
-
-        // console.log(self.y);
-        // self.zoom.y(self.y).scale(scale).translate(translate);
 
         self.svg.select('.x.axis').call(self.xAxis);
         self.svg.select('.y.axis').call(self.yAxis);
@@ -161,11 +143,6 @@ var StackedLineGraph = function(selector, data, images, opts) {
             .call(makeXAxis()
                 .tickSize(-height, 0, 0)
                 .tickFormat(''));
-
-        // self.svg.select('.y.grid')
-        //     .call(makeYAxis()
-        //             .tickSize(-width, 0, 0)
-        //             .tickFormat(''));
 
         console.log(self.zoom.scale());
 

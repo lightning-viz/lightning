@@ -1,6 +1,5 @@
-if(!window.d3) {
-    d3 = require('d3');
-}
+var d3 = require('d3');
+
 
 var margin = {
     top: 20,

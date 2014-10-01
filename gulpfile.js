@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
+var browserifyProtect = require('gulp-browserify-protect');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var livereload = require('gulp-livereload');
@@ -55,6 +56,7 @@ gulp.task('browserify', function() {
         .on('error', gutil.log)
         .on('error', gutil.beep)
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
+        .pipe(browserifyProtect())
         .pipe(gulp.dest('./public/js/'))
         .pipe( livereload( server ));
 
@@ -65,6 +67,7 @@ gulp.task('browserify', function() {
         .on('error', gutil.log)
         .on('error', gutil.beep)
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
+        .pipe(browserifyProtect())
         .pipe(gulp.dest('./public/js/'))
         .pipe( livereload( server ));
 });

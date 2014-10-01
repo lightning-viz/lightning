@@ -1,6 +1,4 @@
-if(!window.d3) {
-    d3 = require('d3');
-}
+var d3 = require('d3');
 var _ = require('lodash');
 var templateHTML = require('../../templates/viz/roi.jade');
 var request = require('superagent');
