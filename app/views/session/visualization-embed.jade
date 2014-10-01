@@ -6,11 +6,9 @@ block sidebar
 block content
     .feed-container
         .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
-            .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}")
+            .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}", data-initialized="false")
 
 
 
 block scripts
-    script.
-        window.lightningEmbeddedId = #{viz.id};
     script(src='#{STATIC_URL}js/feed.js')

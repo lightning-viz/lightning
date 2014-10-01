@@ -40,125 +40,73 @@ if(io) {
 
 var vizs = {};
 
-if(window.lightningEmbeddedId) {
+socket.on('viz', function (viz) {
 
-    $('#viz-' + window.lightningEmbeddedId).each(function() {
-        console.log($(this));
+    $('.feed-container .empty').remove();
 
-        var type = $(this).data('type');
-        var data = $(this).data('data');
-        var images = $(this).data('images');
-
-        var Viz = require('../viz/' + type);
-
-        var vid = $(this).attr('id');
-        vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
-    });
-
- } else {
-
-    socket.on('viz', function (viz) {
-
-        $('.feed-container .empty').remove();
-
-        var Viz = require('../viz/' + viz.type);
+    var Viz = require('../viz/' + viz.type);
 
 
-        $('.feed-container').prepend(feedItemHTML({
-            sid: sid,
-            vid: viz.id
-        }));
-        vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
-    });
+    $('.feed-container').prepend(feedItemHTML({
+        sid: sid,
+        vid: viz.id
+    }));
+    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
+});
 
 
-    socket.on('update', function(message) {
+socket.on('update', function(message) {
 
-        console.log('got update');
-        console.log(message);
+    console.log('got update');
+    console.log(message);
 
-        var vizId = message.vizId;
-        var data = message.data;
+    var vizId = message.vizId;
+    var data = message.data;
 
-        vizs[vizId].updateData(data);
-    });
-
-
-    $('.feed-item').each(function() {
-
-        console.log($(this));
-
-        var type = $(this).data('type');
-        var data = $(this).data('data');
-        var images = $(this).data('images');
-
-        var Viz = require('../viz/' + type);
-
-        var vid = $(this).attr('id');
-        vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
-    });
+    vizs[vizId].updateData(data);
+});
 
 
-    $('[data-editable]').each(function() {
-        
-        var $this = $(this);
+$('.feed-item[data-initialized=false]').each(function() {
 
-        // append a hidden input after
-        var $input = $('<input type="text" class="editable ' + $this.prop('tagName').toLowerCase() + '" />');
-        $this.after($input);
+    console.log($(this));
 
-        // allow editable
-        $this.click(function() {
-            var text = $this.text();
-            $this.hide();
-            $input.val(text);
-            $input.show().focus();
+    var type = $(this).data('type');
+    var data = $(this).data('data');
+    var images = $(this).data('images');
 
-            $input.unbind('blur').blur(function() {
-                var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
-                var params = {};
-                params[$this.data('key')] = $input.val();
+    var Viz = require('../viz/' + type);
 
-                $this.text($input.val());
-                $this.show();
-                $input.hide();
-
-                request.put(url, params, function(error, res){
-                    if(error) {
-                        return console.log(error);
-                    } else {
-                        return console.log('success');
-                    }
-                });
-            });
-        });
-    });
+    var vid = $(this).attr('id');
+    vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
+    $(this).data('initialized', true);
+    $(this).attr('data-initialized', true);
+});
 
 
-    $('.edit-description').click(function() {
-        var $this = $(this);
-        var $itemContainer = $this.closest('.feed-item-container');
-        var h = Math.max($itemContainer.find('.description').height(), 300);
+$('[data-editable]').each(function() {
+    
+    var $this = $(this);
 
-        var $editor = $itemContainer.find('.description-editor');
-        var $description = $itemContainer.find('.description');
+    // append a hidden input after
+    var $input = $('<input type="text" class="editable ' + $this.prop('tagName').toLowerCase() + '" />');
+    $this.after($input);
 
-        $itemContainer.find('.edit-description a').hide();
-        $description.hide();
-        $editor.height(h).show();
+    // allow editable
+    $this.click(function() {
+        var text = $this.text();
+        $this.hide();
+        $input.val(text);
+        $input.show().focus();
 
-
-        $editor.find('textarea').focus().unbind('blur').blur(function() {
-
-            var text = $editor.find('textarea').val();
-            $description.html(marked(text)).show();
-            $editor.hide();
-            $itemContainer.find('.edit-description a').show();
-
-            var url = '/' + $itemContainer.data('model').toLowerCase() + 's' + '/' + $itemContainer.data('model-id');
+        $input.unbind('blur').blur(function() {
+            var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
             var params = {};
+            params[$this.data('key')] = $input.val();
 
-            params.description = text;
+            $this.text($input.val());
+            $this.show();
+            $input.hide();
 
             request.put(url, params, function(error, res){
                 if(error) {
@@ -169,5 +117,41 @@ if(window.lightningEmbeddedId) {
             });
         });
     });
-}
+});
+
+
+$('.edit-description').click(function() {
+    var $this = $(this);
+    var $itemContainer = $this.closest('.feed-item-container');
+    var h = Math.max($itemContainer.find('.description').height(), 300);
+
+    var $editor = $itemContainer.find('.description-editor');
+    var $description = $itemContainer.find('.description');
+
+    $itemContainer.find('.edit-description a').hide();
+    $description.hide();
+    $editor.height(h).show();
+
+
+    $editor.find('textarea').focus().unbind('blur').blur(function() {
+
+        var text = $editor.find('textarea').val();
+        $description.html(marked(text)).show();
+        $editor.hide();
+        $itemContainer.find('.edit-description a').show();
+
+        var url = '/' + $itemContainer.data('model').toLowerCase() + 's' + '/' + $itemContainer.data('model-id');
+        var params = {};
+
+        params.description = text;
+
+        request.put(url, params, function(error, res){
+            if(error) {
+                return console.log(error);
+            } else {
+                return console.log('success');
+            }
+        });
+    });
+});
 
