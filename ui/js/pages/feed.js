@@ -20,6 +20,7 @@ require('../viz/gallery');
 require('../viz/force-bundle');
 require('../viz/force-directed-network');
 require('../viz/stacked-line');
+require('../viz/matrix');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
