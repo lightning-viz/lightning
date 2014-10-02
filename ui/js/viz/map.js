@@ -41,7 +41,8 @@ var MapViz = function(selector, data) {
             var c = color(val);
             fills[c] = c;
             dataObj[key] = {
-                fillKey: c
+                fillKey: c,
+                value: val
             };
         });
     }
@@ -53,7 +54,19 @@ var MapViz = function(selector, data) {
         height: $el.width() * 0.65,
         scope: (isWorld) ? 'world' : 'usa',
         fills: fills,
-        data: dataObj
+        data: dataObj,
+        geographyConfig: {        
+
+            popupTemplate: function(geography, data) { //this function should just return a string
+                if(data) {
+                    return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong><br/>' + data.value + '</div>';
+                }
+                return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+            },
+            highlightBorderColor: '#fff',
+            highlightFillColor: '#68a1e5',
+        }
+
     });
 
 
