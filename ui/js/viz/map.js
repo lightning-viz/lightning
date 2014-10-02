@@ -47,9 +47,10 @@ var MapViz = function(selector, data) {
     }
 
 
+
     var map = new Datamap({
         element: $el.find('#map-container')[0],
-        height: 300,
+        height: $el.width() * 0.65,
         scope: (isWorld) ? 'world' : 'usa',
         fills: fills,
         data: dataObj

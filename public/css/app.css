@@ -436,10 +436,10 @@ ul, li {
 .subheader {
   color: #75808F; }
 
-.code {
+.code, code {
   background-color: #E4E4E4;
   font-family: monospace;
-  padding: 5px;
+  padding: 10px;
   border-radius: 4px; }
 
 .lightning-header {
