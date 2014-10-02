@@ -21,6 +21,7 @@ require('../viz/force-bundle');
 require('../viz/force-directed-network');
 require('../viz/stacked-line');
 require('../viz/matrix');
+require('../viz/map');
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
