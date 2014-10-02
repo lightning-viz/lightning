@@ -30,48 +30,36 @@ Compile client side libraries by running `gulp`. This can just keep running fore
 Run server with `npm start`.
 
 
-## chart types
+## viz types
 
 ### scatter
 
-```javascript
-{
-  "data": [
-    {"x": 10, "y": 5},
-    {"x": 11, "y": 4},
-    {"x": -3, "y": 0}
-  ],
-  "type": "scatter"
-}
-```
+![scatter](http://i.gif.fm/rNhO7.png)
+
 
 ### line
 
-```javascript
-{
-  "data": [1, 7, 8, 9, 11, -10, -3, 11, 2, 100, 0, 1, 20, 25, 27, 80, -10, 20, 30, 40, 30, 43, 50],
-  "type": "line"
-}
-```
+![line](http://i.gif.fm/che9k.png)
 
-### PCA
+### mix+match and server backed
 
-exact data format tbd
-```javascript
-{
-  "data": {
-    "points": [
-      {"x": 10, "y": 5, "category": 0}, 
-      {"x": 11, "y": 4, "category": 1},
-      {"x": -3, "y": 0, "category": 2}
-      
-    ],
-    "categories": [
-      [1, 3, 4, 6, 7],
-      [1, 0, 4, 8, 6],
-      [2, 3, 3, 7, 9]
-    ]
-  }
-  "type": "pca"
-}
-```
+Simple visualizations can be linked together to create new interactions
+
+![gif](http://i.imgur.com/XWquFgx.gif)
+
+
+### maps
+
+US and World Maps
+
+![us map](http://i.gif.fm/cqPbH.png)
+![world map](http://i.gif.fm/43r3E.png)
+
+### matrices
+
+![matrices](http://i.gif.fm/2DO3W.png)
+
+### bitmaps
+
+![bmp](http://i.gif.fm/yyl7z.png)
+
