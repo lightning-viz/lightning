@@ -46,7 +46,7 @@ Simple visualizations can be linked together to create new interactions
 
 ### force directed network
 
-![network](http://i.gif.fm/KgThp.png)
+![network](http://i.imgur.com/ftfVOOg.gif)
 
 ### maps
 
