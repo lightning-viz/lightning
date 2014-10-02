@@ -26,6 +26,9 @@ require('../viz/map');
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
 
+var hljs = require('highlight.js');
+hljs.initHighlightingOnLoad();
+
 
 var socket;
 io = window.io || false
@@ -151,6 +154,9 @@ $('.edit-description').click(function() {
                 return console.log(error);
             } else {
                 return console.log('success');
+                  $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                  });
             }
         });
     });

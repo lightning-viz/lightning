@@ -4,6 +4,7 @@
 @import "viz/gallery";
 @import "viz/roi";
 @import "viz/stacked-lines";
+@import "lib/codemirror";
 @import "sidebar";
 
 $purple: #9175f0;
@@ -72,8 +73,8 @@ ul, li {
 .subheader { color: #75808F; }
 
 .code,
-code {
-    background-color: #E4E4E4;
+pre {
+    background-color: #f0f0f0;
     font-family: monospace;
     padding: 10px;
     border-radius: 4px;
