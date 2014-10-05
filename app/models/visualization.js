@@ -3,7 +3,7 @@ var validator = require('validator');
 module.exports = function(sequelize, DataTypes) {
     var Visualization = sequelize.define('Visualization', {
         data: 'JSON',
-        options: 'JSON',
+        opts: 'JSON',
         name: DataTypes.STRING,
         description: DataTypes.TEXT,
         type: DataTypes.STRING,
