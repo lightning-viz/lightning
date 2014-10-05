@@ -4,7 +4,7 @@ var _ = require('lodash');
 var templateHTML = require('../../templates/viz/map.jade');
 
 
-var MapViz = function(selector, data) {
+var MapViz = function(selector, data, images, opts) {
 
     var $el = $(selector).first();
     $el.append(templateHTML());

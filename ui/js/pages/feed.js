@@ -55,7 +55,8 @@ socket.on('viz', function (viz) {
         sid: sid,
         vid: viz.id
     }));
-    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images);
+
+    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.options);
 });
 
 
@@ -78,11 +79,12 @@ $('.feed-item[data-initialized=false]').each(function() {
     var type = $(this).data('type');
     var data = $(this).data('data');
     var images = $(this).data('images');
+    var options = $(this).data('options');
 
     var Viz = require('../viz/' + type);
 
     var vid = $(this).attr('id');
-    vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images);
+    vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);
     $(this).data('initialized', true);
     $(this).attr('data-initialized', true);
 });
