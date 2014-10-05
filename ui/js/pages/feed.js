@@ -56,7 +56,7 @@ socket.on('viz', function (viz) {
         vid: viz.id
     }));
 
-    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.options);
+    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.opts);
 });
 
 
