@@ -1,7 +1,7 @@
 
 
 
-var PCAViz = function(selector, data) {
+var PCAViz = function(selector, data, images, options) {
 
     var $el = $(selector);
 

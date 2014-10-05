@@ -5,7 +5,7 @@ var request = require('superagent');
 
 
 
-var ROIViz = function(selector, data) {
+var ROIViz = function(selector, data, images, options) {
 
     var $el = $(selector).first();
     $el.append(templateHTML());
