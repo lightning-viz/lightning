@@ -8,7 +8,7 @@ link(rel='stylesheet', href='#{STATIC_URL}css/app.css')
 block head-js
 
 block header
-block sidebar    
+block sidebar
     nav(role="navigation")#menu.panel
 
         .button-container
@@ -29,7 +29,8 @@ block sidebar
         .side-color.menu-link
             .logo
                 img(src="/images/lightning.svg")
-.container.content.wrap.push
+
+.container.content.wrap.push#lightning-body
     block content
 
 block scripts

@@ -1,146 +1,150 @@
-@import "lib/skeleton";
-@import "viz/line";
-@import "viz/image";
-@import "viz/gallery";
-@import "viz/roi";
-@import "viz/stacked-lines";
-@import "lib/codemirror";
-@import "sidebar";
 
-$purple: #9175f0;
-$blue: #68a1e5;
 
-html, body {
+
+#lightning-body {
+
+    @import "lib/skeleton";
+    @import "viz/line";
+    @import "viz/image";
+    @import "viz/gallery";
+    @import "viz/roi";
+    @import "viz/stacked-lines";
+    @import "lib/codemirror";
+    @import "sidebar";
+
+    $purple: #9175f0;
+    $blue: #68a1e5;
+
     font-family: 'Open Sans', sans-serif;
-}
 
 
-.button {
-    border-radius: 2px;
-    border: 1px solid #719BEC;
+    .button {
+        border-radius: 2px;
+        border: 1px solid #719BEC;
 
-    font-size: 15px;
-    color: $blue;
-    line-height: 20px;
-    cursor: pointer;
-    text-align: center;
-    padding: 5px 0;
+        font-size: 15px;
+        color: $blue;
+        line-height: 20px;
+        cursor: pointer;
+        text-align: center;
+        padding: 5px 0;
 
-    &:hover {
-        background-color: darken(white, 5%);
-        color: darken($blue, 15%);
-    }
-}
-
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: normal;
-    color: #545E6B;
-}
-
-p {
-    color: #545E6B;
-}
-
-a {
-    text-decoration: none;
-    font-size: 14px;
-    color: #8F7BD9;
-    line-height: 19px;
-
-    &:hover {
-        color: #A997EB;
+        &:hover {
+            background-color: darken(white, 5%);
+            color: darken($blue, 15%);
+        }
     }
 
-    &:active {
-        color: #59A2E6;
-    }
-}
 
-li {
-    list-style: none;
-}
-ul, li {
-    margin: 0;
-    padding: 0;
-}
-.subheader { color: #75808F; }
-
-.code,
-pre {
-    background-color: #f0f0f0;
-    font-family: monospace;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-
-.lightning-header {
-    padding-top: 33%;
-    text-align: center;
-    h1, h2, h3 {
-        // font-family: 'Oswald', sans-serif;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Open Sans', sans-serif;
         font-weight: normal;
+        color: #545E6B;
     }
-}
 
-.session-details {
-    color: gray;
-    font-family: 'Open Sans', sans-serif;
-    margin-left: 10px;
-}
-
-.session-id {
-    text-align: right;
-}
-
-.feed-item {
-    &:not(:first-child) {
-        // padding-top: 60px;
+    p {
+        color: #545E6B;
     }
-}
+
+    a {
+        text-decoration: none;
+        font-size: 14px;
+        color: #8F7BD9;
+        line-height: 19px;
+
+        &:hover {
+            color: #A997EB;
+        }
+
+        &:active {
+            color: #59A2E6;
+        }
+    }
+
+    li {
+        list-style: none;
+    }
+    ul, li {
+        margin: 0;
+        padding: 0;
+    }
+    .subheader { color: #75808F; }
+
+    .code,
+    pre {
+        background-color: #f0f0f0;
+        font-family: monospace;
+        padding: 10px;
+        border-radius: 4px;
+    }
 
 
-input {
-    color: #545E6B;
+    .lightning-header {
+        padding-top: 33%;
+        text-align: center;
+        h1, h2, h3 {
+            // font-family: 'Oswald', sans-serif;
+            font-weight: normal;
+        }
+    }
 
-    &.editable {
+    .session-details {
+        color: gray;
+        font-family: 'Open Sans', sans-serif;
+        margin-left: 10px;
+    }
+
+    .session-id {
+        text-align: right;
+    }
+
+    .feed-item {
+        &:not(:first-child) {
+            // padding-top: 60px;
+        }
+    }
+
+
+    input {
+        color: #545E6B;
+
+        &.editable {
+            display: none;
+            width: 100%;
+
+            &.h1 {
+
+            }
+
+            &.h2 {
+                font-size: 1.5em;
+                -webkit-margin-before: 0.83em;
+            }
+        }
+    }
+
+    .permalink {
+        display: inline-block;
+        width: 50%;
+        text-align: right;
+    }
+
+    .edit-description {
+        display: inline-block;
+        width: 50%;
+    }
+
+    .description-editor {
         display: none;
-        width: 100%;
-
-        &.h1 {
-
+        textarea {
+            width: 100%;
+            height: 100%;
         }
-
-        &.h2 {
-            font-size: 1.5em;
-            -webkit-margin-before: 0.83em;
-        }
+        padding-bottom: 25px;
     }
-}
-
-.permalink {
-    display: inline-block;
-    width: 50%;
-    text-align: right;
-}
-
-.edit-description {
-    display: inline-block;
-    width: 50%;
-}
-
-.description-editor {
-    display: none;
-    textarea {
-        width: 100%;
-        height: 100%;
-    }
-    padding-bottom: 25px;
 }
