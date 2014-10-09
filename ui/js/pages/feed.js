@@ -9,19 +9,9 @@ var feedItemHTML = require('../../templates/feed-item.jade');
 var request = require('superagent');
 var marked = require('marked');
 
-require('../viz/line');
-require('../viz/pca');
-require('../viz/scatter');
-require('../viz/volume');
-require('../viz/image');
-require('../viz/roi');
-require('../viz/roi-image');
-require('../viz/gallery');
-require('../viz/force-bundle');
-require('../viz/force-directed-network');
-require('../viz/stacked-line');
-require('../viz/matrix');
-require('../viz/map');
+var bulk = require('bulk-require');
+var visualizations = bulk(__dirname + '/../viz/', ['*']);
+
 
 require('../lib/bigSlide');
 $('.menu-link').bigSlide();
@@ -48,8 +38,7 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-    var Viz = require('../viz/' + viz.type);
-
+    var Viz =  visualizations[viz.type];
 
     $('.feed-container').prepend(feedItemHTML({
         sid: sid,
@@ -81,7 +70,7 @@ $('.feed-item[data-initialized=false]').each(function() {
     var images = $(this).data('images');
     var options = $(this).data('options');
 
-    var Viz = require('../viz/' + type);
+    var Viz =  visualizations[type];
 
     var vid = $(this).attr('id');
     vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);
