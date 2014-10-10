@@ -4,11 +4,9 @@
 #lightning-body {
 
     @import "lib/skeleton";
-    @import "viz/line";
-    @import "viz/image";
-    @import "viz/gallery";
-    @import "viz/roi";
-    @import "viz/stacked-lines";
+    
+    @import "viz/*";
+
     @import "lib/codemirror";
     @import "sidebar";
 

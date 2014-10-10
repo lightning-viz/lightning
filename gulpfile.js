@@ -20,6 +20,7 @@ var d3 = require('d3');
 var gzip = require('gulp-gzip');
 var colors = require('colors');
 var rename = require('gulp-rename');
+var bulkSass = require('gulp-sass-bulk-import');
 var _ = require('lodash');
 
 var srcDir = 'ui/';
@@ -76,6 +77,7 @@ gulp.task('browserify', function() {
 gulp.task('css', function() {
     return gulp
             .src(srcDir + 'stylesheets/app.scss')
+            .pipe(bulkSass())
             .pipe(
                 sass({
                     includePaths: ['src/stylesheets'],
