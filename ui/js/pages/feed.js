@@ -2,6 +2,9 @@
 window.define = undefined;
 
 
+require('../lib/bigSlide');
+$('.menu-link').bigSlide();
+
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
 var feedItemHTML = require('../../templates/feed-item.jade');
@@ -13,8 +16,6 @@ var bulk = require('bulk-require');
 var visualizations = bulk(__dirname + '/../viz/', ['*']);
 
 
-require('../lib/bigSlide');
-$('.menu-link').bigSlide();
 
 var hljs = require('highlight.js');
 hljs.initHighlightingOnLoad();
