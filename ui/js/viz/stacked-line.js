@@ -51,7 +51,7 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
     var chartData = _.map(data, function(line, i) {
         return _.map(line, function(point) {
-            var p = point + (i * (chartLineHeight + chartLinePadding));
+            var p = point + (((data.length-1) - i) * (chartLineHeight + chartLinePadding));
             if(p > max) {
                 max = p;
             }
@@ -159,7 +159,6 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
             chartX.domain(xExt);
             chartY.domain([utils.mapRange(yExt[0], 0, 1, yDomain[0] - 1, max + 1), utils.mapRange(yExt[1], 0, 1, yDomain[0] - 1, max + 1)]);
-
         }
 
         chart.selectAll('.line')
@@ -170,17 +169,6 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
 
     function zoomed() {
-        console.log('zoomed');
-        // svg.select('.x.axis').call(self.xAxis);
-        // svg.select('.y.axis').call(self.yAxis);
-        // svg.select('.x.grid')
-        //     .call(makeXAxis()
-        //         .tickSize(-height, 0, 0)
-        //         .tickFormat(''));
-        // svg.select('.y.grid')
-        //     .call(makeYAxis()
-        //             .tickSize(-width, 0, 0)
-        //             .tickFormat(''));
         chart.selectAll('.line')
             .attr('d', chartLine);
     }
