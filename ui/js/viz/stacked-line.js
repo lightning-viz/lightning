@@ -1,5 +1,6 @@
 var d3 = require('d3');
 var _ = require('lodash');
+var utils = require('../utils');
 
 var margin = {
     top: 40,
@@ -8,159 +9,208 @@ var margin = {
     left: 10
 };
 
-var lineChartHeight = 100;
-var axisSize = 20;
-var width = 600 - margin.left - margin.right;
 
 
 var StackedLineGraph = function(selector, data, images, opts) {
 
-
-    var self = this;
-    var height = (data.length) * lineChartHeight + axisSize - margin.top - margin.bottom;
+    var colors = utils.getColors(data.length);
 
     
     var yDomain = d3.extent(data[0], function(d) {
             return d;
         });
 
-    this.x = d3.scale.linear()
-        .domain([-1, data[0].length + 1])
-        .range([0, width]);
+    // do everything for the minimap
+    var minimapWidth = 150;
+    var minimapLineHeight = 15;
+    var minimapLinePadding = 5;
 
-    this.y = d3.scale.linear()
-        .domain([yDomain[0] - 1, yDomain[1] + 1])
-        .range([lineChartHeight, 0]);
+    var minimapX = d3.scale.linear()
+                    .domain([-1, data[0].length + 1])
+                    .range([0, minimapWidth]);
 
-    this.line = d3.svg.line()
-        .x(function (d, i) {
-            return self.x(i);
-        })
-        .y(function (d) {
-            return self.y(d);
+    var minimapY = d3.scale.linear()
+                    .domain([yDomain[0] - 1, yDomain[1] + 1])
+                    .range([minimapLineHeight, 0]);
+
+    var minimapLine = d3.svg.line()
+                        .x(function(d, i) {
+                            return minimapX(i);
+                        })
+                        .y(function(d, i) {
+                            return minimapY(d);
+                        });
+
+
+    var chartWidth = $(selector).width() - minimapWidth;
+    var chartLineHeight = 100;
+    var chartLinePadding = 20;
+
+
+    var max = 0;
+
+    var chartData = _.map(data, function(line, i) {
+        return _.map(line, function(point) {
+            var p = point + (i * (chartLineHeight + chartLinePadding));
+            if(p > max) {
+                max = p;
+            }
+            return p;
         });
+    });
 
 
-    this.zoom = d3.behavior.zoom()
-        .x(this.x)
-        .y(this.y)
-        .on('zoomstart', function(scale, translate) {
-            self.y = d3.scale.linear()
-                .domain([yDomain[0] - 1, yDomain[1] + 1])
-                .range([lineChartHeight, 0]);
-        })
+    var chartX = d3.scale.linear()
+                    .domain([-1, data[0].length + 1])
+                    .range([0, chartWidth]);
+
+    var chartY = d3.scale.linear()
+                    .domain([yDomain[0] - 1, max + 1])
+                    .range([data.length * (chartLineHeight + chartLinePadding), 0]);
+
+    var chartLine = d3.svg.line()
+                        .x(function(d, i) {
+                            return chartX(i);
+                        })
+                        .y(function(d, i) {
+                            return chartY(d);
+                        });
+
+
+
+    var zoom = d3.behavior.zoom()
+        .x(chartX)
+        .y(chartY)
         .on('zoom', zoomed);
 
 
-    var svg = d3.select(selector).append('svg')
+    var minimapSvg = d3.select(selector).append('svg')
         .attr('class', 'stacked-line-plot')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom + axisSize)
-        .call(this.zoom);
+        .attr('width', minimapWidth)
+        .attr('height', (minimapLineHeight+minimapLinePadding) * data.length);
+
+    var chartSvg = d3.select(selector).append('svg')
+        .attr('class', 'stacked-line-plot')
+        .attr('width', chartWidth)
+        .attr('height', (chartLineHeight+chartLinePadding) * data.length)
+        .call(zoom);
 
 
-    svg.append('svg:rect')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('class', 'plot');
+    var minimap = minimapSvg.append('g')
+        .attr('class', 'minimap');
 
-    var makeXAxis = function () {
-        return d3.svg.axis()
-            .scale(self.x)
-            .orient('bottom')
-            .ticks(5);
-    };
+    var chart = chartSvg.append('g')
+        .attr('class', 'chart');
+        // .attr('transform', 'translate(' + minimapWidth + ', 0)');
 
-    var makeYAxis = function () {
-        return d3.svg.axis()
-            .scale(self.y)
-            .orient('left')
-            .ticks(5);
-    };
 
-    this.xAxis = d3.svg.axis()
-        .scale(this.x)
-        .orient('bottom')
-        .ticks(5);
-
-    svg.append('svg:g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0, ' + (height + margin.top) + ')')
-        .call(this.xAxis);
-
-    this.yAxis = d3.svg.axis()
-        .scale(this.y)
-        .orient('left')
-        .ticks(5);
-
-    svg.append('svg:g')
-        .attr('class', 'y axis')
-        .call(this.yAxis);
-
-    var clip = svg.append('svg:clipPath')
-        .attr('id', 'clip')
+    minimap.append('svg:clipPath')
+        .attr('id', 'minimapClip')
         .append('svg:rect')
         .attr('x', 0)
         .attr('y', 0)
-        .attr('width', width)
-        .attr('height', height + margin.top);
+        .attr('width', minimapWidth)
+        .attr('height', (minimapLineHeight + minimapLinePadding) * data.length);
 
-    var chartBody = svg.append('g')
-        .attr('clip-path', 'url(#clip)');
+
+    var chartBody = minimap.append('g')
+        .attr('clip-path', 'url(#minimapClip)');
 
 
     _.each(data, function(d, i) {
+
         chartBody.append('path')
             .datum(d)
             .attr('class', 'line')
-            .attr('d', self.line)
-            .attr('transform', 'translate(0, ' + (i * lineChartHeight) + ')');
-    
+            .attr('d', minimapLine)
+            .style('stroke', colors[i])
+            .attr('transform', 'translate(0, ' + (i * (minimapLineHeight + minimapLinePadding)) + ')');
     });
     
-    var focus = svg.append('g')
-        .attr('class', 'focus')
-        // .attr('transform', 'translate(' + 0 + ',' + margin.top + ')');
-
-    var context = svg.append('g')
-        .attr('class', 'context')
-        // .attr('transform', 'translate(' + 0 + ',' + margin.top + ')');
+    var brush = d3.svg.brush()
+        .x(minimapX)
+        .y(d3.scale.linear().range([(minimapLineHeight + minimapLinePadding) * data.length, 0]))
+        .on('brush', brushed);
 
 
 
-    function brushed() {
+    minimap.append('g')
+      .attr('class', 'brush')
+      .call(brush);
+            
+
+
+    function brushed(duration) {
+
+        console.log('brushed');
+        if (!duration) {
+            duration = 0;
+        }
+
+        if (brush.empty()) {
+            duration = 750;
+            chartY.domain([yDomain[0] - 1, max + 1]);
+            chartX.domain([-1, data[0].length +1]);
+        } else {
+
+            var ext = brush.extent();
+            var xExt = [ext[0][0], ext[1][0]];
+            var yExt = [ext[0][1], ext[1][1]];
+
+            chartX.domain(xExt);
+            chartY.domain([utils.mapRange(yExt[0], 0, 1, yDomain[0] - 1, max + 1), utils.mapRange(yExt[1], 0, 1, yDomain[0] - 1, max + 1)]);
+
+        }
+
+        chart.selectAll('.line')
+            .transition().duration(duration)
+            .attr('d', chartLine);
+
     }
+
 
     function zoomed() {
-        self.y = d3.scale.linear()
-            .domain([yDomain[0] - 1, yDomain[1] + 1])
-            .range([lineChartHeight * Math.pow(Math.max(1, self.zoom.scale()), 1/5), 0]);
-
-        self.svg.select('.x.axis').call(self.xAxis);
-        self.svg.select('.y.axis').call(self.yAxis);
-
-        self.svg.select('.x.grid')
-            .call(makeXAxis()
-                .tickSize(-height, 0, 0)
-                .tickFormat(''));
-
-        console.log(self.zoom.scale());
-
-        self.svg.selectAll('.line').each(function() {
-            d3.select(this)
-                .attr('class', 'line')
-                .attr('d', self.line);
-        });
+        console.log('zoomed');
+        // svg.select('.x.axis').call(self.xAxis);
+        // svg.select('.y.axis').call(self.yAxis);
+        // svg.select('.x.grid')
+        //     .call(makeXAxis()
+        //         .tickSize(-height, 0, 0)
+        //         .tickFormat(''));
+        // svg.select('.y.grid')
+        //     .call(makeYAxis()
+        //             .tickSize(-width, 0, 0)
+        //             .tickFormat(''));
+        chart.selectAll('.line')
+            .attr('d', chartLine);
     }
 
-    this.svg = svg;
+    chart.append('svg:clipPath')
+        .attr('id', 'chartClip')
+        .append('svg:rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', chartWidth)
+        .attr('height', (chartLineHeight + chartLinePadding) * data.length);
+
+
+    chartBody = chart.append('g')
+        .attr('clip-path', 'url(#chartClip)');
+        // .call(zoom);
+
+
+    _.each(chartData, function(d, i) {
+        chartBody.append('path')
+            .datum(d)
+            .attr('class', 'line')
+            .style('stroke', colors[i])
+            .attr('d', chartLine);
+    });
+
 
 };
 
-
 module.exports = StackedLineGraph;
-
-
 
 
 
