@@ -18,10 +18,20 @@
     .axis path {
         display: none;
     }
+
+
     .line {
         fill: none;
         stroke: #9175f0;
-        stroke-width: 2px;
+        stroke-width: 3px;
+    }
+
+    .minimap {
+        .line {
+            fill: none;
+            stroke: #9175f0;
+            stroke-width: 2px;
+        }
     }
 
     .dot {
