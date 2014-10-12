@@ -12,11 +12,6 @@ var feedItemHTML = require('../../templates/feed-item.jade');
 var request = require('superagent');
 var marked = require('marked');
 
-var bulk = require('bulk-require');
-var visualizations = bulk(__dirname + '/../viz/', ['*']);
-
-
-
 var hljs = require('highlight.js');
 hljs.initHighlightingOnLoad();
 
@@ -52,9 +47,6 @@ socket.on('viz', function (viz) {
 
 socket.on('update', function(message) {
 
-    console.log('got update');
-    console.log(message);
-
     var vizId = message.vizId;
     var data = message.data;
 
@@ -62,59 +54,65 @@ socket.on('update', function(message) {
 });
 
 
-$('.feed-item[data-initialized=false]').each(function() {
+setTimeout(function() {
 
-    console.log($(this));
+    var bulk = require('bulk-require');
+    var visualizations = bulk(__dirname + '/../viz/', ['*']);
 
-    var type = $(this).data('type');
-    var data = $(this).data('data');
-    var images = $(this).data('images');
-    var options = $(this).data('options');
+    $('.feed-item[data-initialized=false]').each(function() {
 
-    var Viz =  visualizations[type];
+        console.log($(this));
 
-    var vid = $(this).attr('id');
-    vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);
-    $(this).data('initialized', true);
-    $(this).attr('data-initialized', true);
-});
+        var type = $(this).data('type');
+        var data = $(this).data('data');
+        var images = $(this).data('images');
+        var options = $(this).data('options');
+
+        var Viz =  visualizations[type];
+
+        var vid = $(this).attr('id');
+        vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);
+        $(this).data('initialized', true);
+        $(this).attr('data-initialized', true);
+    });
 
 
-$('[data-editable]').each(function() {
-    
-    var $this = $(this);
+    $('[data-editable]').each(function() {
+        
+        var $this = $(this);
 
-    // append a hidden input after
-    var $input = $('<input type="text" class="editable ' + $this.prop('tagName').toLowerCase() + '" />');
-    $this.after($input);
+        // append a hidden input after
+        var $input = $('<input type="text" class="editable ' + $this.prop('tagName').toLowerCase() + '" />');
+        $this.after($input);
 
-    // allow editable
-    $this.click(function() {
-        var text = $this.text();
-        $this.hide();
-        $input.val(text);
-        $input.show().focus();
+        // allow editable
+        $this.click(function() {
+            var text = $this.text();
+            $this.hide();
+            $input.val(text);
+            $input.show().focus();
 
-        $input.unbind('blur').blur(function() {
-            var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
-            var params = {};
-            params[$this.data('key')] = $input.val();
+            $input.unbind('blur').blur(function() {
+                var url = '/' + $this.data('model').toLowerCase() + 's' + '/' + $this.data('model-id');
+                var params = {};
+                params[$this.data('key')] = $input.val();
 
-            $this.text($input.val());
-            $this.show();
-            $input.hide();
+                $this.text($input.val());
+                $this.show();
+                $input.hide();
 
-            request.put(url, params, function(error, res){
-                if(error) {
-                    return console.log(error);
-                } else {
-                    return console.log('success');
-                }
+                request.put(url, params, function(error, res){
+                    if(error) {
+                        return console.log(error);
+                    } else {
+                        return console.log('success');
+                    }
+                });
             });
         });
     });
-});
 
+}, 0);
 
 $('.edit-description').click(function() {
     var $this = $(this);
