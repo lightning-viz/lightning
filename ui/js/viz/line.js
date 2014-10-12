@@ -8,18 +8,19 @@ var margin = {
     left: 45
 };
 
-var width = 600 - margin.left - margin.right;
-var height = 300 - margin.top - margin.bottom;
-
-
 var LineGraph = function(selector, data, images, opts) {
 
     var self = this;
 
-    console.log(d3);
-    console.log(d3.extent);
-    console.log(data);
-    
+ 
+    if(!opts) {
+        opts = {};
+    }
+
+    var width = (opts.width || $(selector).width()) - margin.left - margin.right;
+    var height = (opts.height || (width * 0.6)) - margin.top - margin.bottom;
+
+
     var yDomain = d3.extent(data, function(d) {
             return d;
         });
