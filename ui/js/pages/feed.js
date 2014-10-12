@@ -57,7 +57,7 @@ socket.on('update', function(message) {
 setTimeout(function() {
 
     var bulk = require('bulk-require');
-    var visualizations = bulk(__dirname + '/../viz/', ['*']);
+    var visualizations = bulk(__dirname + '/../viz/', ['**/*.js']);
 
     $('.feed-item[data-initialized=false]').each(function() {
 
