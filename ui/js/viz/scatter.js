@@ -9,11 +9,15 @@ var margin = {
     left: 45
 };
 
-var width = 600 - margin.left - margin.right;
-var height = 300 - margin.top - margin.bottom;
-
 
 var ScatterPlot = function(selector, data, images, opts) {
+
+    if(!opts) {
+        opts = {};
+    }
+
+    var width = (opts.width || $(selector).width()) - margin.left - margin.right;
+    var height = (opts.height || (width * 0.6)) - margin.top - margin.bottom;
 
     var self = this;
 
