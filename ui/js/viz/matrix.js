@@ -43,6 +43,7 @@ var Matrix = function(selector, data, images, opts) {
 
     var zoom = d3.behavior.zoom()
         .scaleExtent([0.1, 20])
+        .translate([(margin.left + (width / 2) - Math.min(width, height)/2), 0])
         .on('zoom', zoomed);
 
     var svg = d3.select(selector)
