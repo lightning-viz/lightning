@@ -58,21 +58,18 @@ var editor = CodeMirror.fromTextArea(editor, {
     }
 });
 
+setTimeout(function() {
+    var $feedItem = $('.feed-item');
+    var type = $feedItem.data('type');
+    var data = $feedItem.data('data');
+    var options = $feedItem.data('options');
 
-var bulk = require('bulk-require');
-var visualizations = bulk(__dirname + '/../viz/', ['**/*.js']);
 
+    var Viz =  require('viz/' + type);
 
-var $feedItem = $('.feed-item');
-var type = $feedItem.data('type');
-var data = $feedItem.data('data');
-var options = $feedItem.data('options');
+    var vid = $(this).attr('id');
+    new Viz('.feed-item', data, null, options);
 
-var Viz =  visualizations[type];
-
-var vid = $(this).attr('id');
-new Viz('.feed-item', data, null, options);
-
-$feedItem.data('initialized', true);
-$feedItem.attr('data-initialized', true);
-
+    $feedItem.data('initialized', true);
+    $feedItem.attr('data-initialized', true);
+}, 0);

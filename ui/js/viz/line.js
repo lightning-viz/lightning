@@ -4,23 +4,19 @@ var margin = {
     top: 30,
     right: 20,
     bottom: 20,
-    left: 45
+    left: 20
 };
-
 
 var LineGraph = function(selector, data, images, opts) {
 
     var self = this;
 
-    console.log('making lineeeee');
- 
     if(!opts) {
         opts = {};
     }
 
     var width = (opts.width || $(selector).width()) - margin.left - margin.right;
     var height = (opts.height || (width * 0.6)) - margin.top - margin.bottom;
-
 
     var yDomain = d3.extent(data, function(d) {
             return d;
@@ -46,8 +42,6 @@ var LineGraph = function(selector, data, images, opts) {
         .x(this.x)
         .y(this.y)
         .on('zoom', zoomed);
-
-
 
     var svg = d3.select(selector)
         .append('svg:svg')

@@ -64,6 +64,10 @@ var StackedLineGraph = function(selector, data, images, opts) {
                     .domain([-1, data[0].length + 1])
                     .range([0, chartWidth]);
 
+    var chartXInvert = d3.scale.linear()
+                    .range([-1, data[0].length + 1])
+                    .domain([0, chartWidth]);
+
     var chartY = d3.scale.linear()
                     .domain([yDomain[0] - 1, max + 1])
                     .range([data.length * (chartLineHeight + chartLinePadding), 0]);
@@ -134,7 +138,7 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
 
 
-    minimap.append('g')
+    var brushG = minimap.append('g')
       .attr('class', 'brush')
       .call(brush);
             
@@ -142,7 +146,12 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
     function brushed(duration) {
 
-        console.log('brushed');
+        // console.log(brush.extent()[0][0] + ', ' + brush.extent()[1][0]);
+
+        // console.log(brush.x());
+        // console.log(brush.y());
+
+        // console.log('brushed');
         if (!duration) {
             duration = 0;
         }
@@ -161,6 +170,9 @@ var StackedLineGraph = function(selector, data, images, opts) {
             chartY.domain([utils.mapRange(yExt[0], 0, 1, yDomain[0] - 1, max + 1), utils.mapRange(yExt[1], 0, 1, yDomain[0] - 1, max + 1)]);
         }
 
+
+        // center Ze zoom
+
         chart.selectAll('.line')
             .transition().duration(duration)
             .attr('d', chartLine);
@@ -169,6 +181,25 @@ var StackedLineGraph = function(selector, data, images, opts) {
 
 
     function zoomed() {
+
+        console.log(zoom.center());
+
+        // console.log(zoom.translate()[0]);
+        // console.log(chartXInvert(zoom.translate()[0]));
+        // // console.log(zoom.scale());
+
+        // var brushExt = brush.extent();
+
+
+        // var extXStart = utils.mapRange(zoom.translate()[0], -chartWidth, chartWidth, minimapX.domain(), 0);
+
+        // console.log([[-zoom.translate()[0], brushExt[0][1]], [brushExt[1][0], brushExt[1][1]]]);    
+
+        // brushG.transition()
+        //     .call(brush.extent([[-chartXInvert(zoom.translate()[0]), brushExt[0][1]], [brushExt[1][0], brushExt[1][1]]]))
+        //     .call(brush.event);
+        // brushed();
+
         chart.selectAll('.line')
             .attr('d', chartLine);
     }
