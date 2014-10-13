@@ -20,6 +20,10 @@
         width: 100%;
     }
 
+    .fixed {
+        position: fixed;
+    }
+
     @import "lib/highlightjs";
     @import "lib/codemirror";
     @import "lib/solarized";

@@ -11,14 +11,14 @@ block content
                 a(href="..")
                     | &larr; back
                 
-    .row
+    .row.editor-container
         .ten.columns
             .visualization-type(data-id="#{vizType.id}")
                 textarea#js-editor
                     | #{vizType.javascript}
         
 
-        .six.columns
+        .six.columns.fixed
             .feed-item-container
                 .feed-item(data-type="#{vizType.name}", data-data="#{JSON.stringify(vizType.sampleData)}", data-initialized="false")
 
