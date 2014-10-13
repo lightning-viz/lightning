@@ -8,12 +8,15 @@ var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 var visualizationTypes = require('../app/controllers/visualizationTypes');
 var visualization = require('../app/controllers/visualization');
+var staticController = require('../app/controllers/static');
 
 /**
  * Expose
  */
 
 module.exports = function (app) {
+
+    app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
 
     // visualizatinos
     app.post('/visualizations/types', visualizationTypes.create);

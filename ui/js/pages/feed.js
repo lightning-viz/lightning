@@ -32,7 +32,7 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-    var Viz =  visualizations[viz.type];
+    var Viz = require('viz/' + viz.type);
 
     $('.feed-container').prepend(feedItemHTML({
         sid: sid,
@@ -54,8 +54,6 @@ socket.on('update', function(message) {
 
 setTimeout(function() {
 
-    var bulk = require('bulk-require');
-    var visualizations = bulk(__dirname + '/../viz/', ['**/*.js']);
 
     $('.feed-item[data-initialized=false]').each(function() {
 
@@ -66,7 +64,7 @@ setTimeout(function() {
         var images = $(this).data('images');
         var options = $(this).data('options');
 
-        var Viz =  visualizations[type];
+        var Viz =  require('viz/' + type);
 
         var vid = $(this).attr('id');
         vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);

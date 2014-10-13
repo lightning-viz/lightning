@@ -12,4 +12,5 @@ block content
 
 block scripts
     script(src='#{STATIC_URL}js/basic.js')
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.type}")
     script(src='#{STATIC_URL}js/feed.js')
