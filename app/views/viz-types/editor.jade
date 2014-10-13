@@ -1,0 +1,35 @@
+extends ../layout
+
+
+block content
+
+    .row
+        .six.columns
+            h2
+                | #{vizType.name}
+            .subheader
+                a(href="..")
+                    | &larr; back
+                
+    .row
+        .ten.columns
+            .visualization-type(data-id="#{vizType.id}")
+                textarea#js-editor
+                    | #{vizType.javascript}
+        
+
+        .six.columns
+            .feed-item-container
+                .feed-item(data-type="#{vizType.name}", data-data="#{JSON.stringify(vizType.sampleData)}", data-initialized="false")
+
+
+
+    .saved
+        | Saved!
+    .problem-saving
+        | Problem Saving...
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='#{STATIC_URL}js/editor.js')

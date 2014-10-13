@@ -1,17 +1,18 @@
 var d3 = require('d3');
 
-
 var margin = {
-    top: 20,
+    top: 30,
     right: 20,
     bottom: 20,
     left: 45
 };
 
+
 var LineGraph = function(selector, data, images, opts) {
 
     var self = this;
 
+    console.log('making lineeeee');
  
     if(!opts) {
         opts = {};
@@ -147,9 +148,6 @@ var LineGraph = function(selector, data, images, opts) {
 
 
 module.exports = LineGraph;
-
-
-
 
 
 LineGraph.prototype.updateData = function(data) {

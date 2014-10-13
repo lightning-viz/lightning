@@ -7,7 +7,8 @@
     
     @import "viz/*";
 
-    @import "lib/codemirror";
+    
+
     @import "sidebar";
 
     $purple: #9175f0;
@@ -15,10 +16,38 @@
 
     font-family: 'Open Sans', sans-serif;
 
+    .full-width {
+        width: 100%;
+    }
+
+    @import "lib/highlightjs";
+    @import "lib/codemirror";
+    @import "lib/solarized";
+    
+    .CodeMirror {
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+
+    input[type="text"] {
+        display: block;
+        width: 100%;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
 
     .button {
         border-radius: 2px;
         border: 1px solid #719BEC;
+        background-color: white;
 
         font-size: 15px;
         color: $blue;
@@ -26,6 +55,24 @@
         cursor: pointer;
         text-align: center;
         padding: 5px 0;
+
+        &:hover {
+            background-color: darken(white, 5%);
+            color: darken($blue, 15%);
+        }
+    }
+
+    input[type="submit"] {
+        border-radius: 2px;
+        border: 1px solid #719BEC;
+        background-color: white;
+
+        font-size: 15px;
+        color: $blue;
+        line-height: 20px;
+        cursor: pointer;
+        text-align: center;
+        // padding: 5px 0;
 
         &:hover {
             background-color: darken(white, 5%);
@@ -144,5 +191,17 @@
             height: 100%;
         }
         padding-bottom: 25px;
+    }
+
+    .saved,
+    .problem-saving {
+        display: none;
+        color: white;
+        position: fixed;
+        top: 0;
+        right: 10%;
+        background: rgba(0, 0, 0, .8);
+        font-family: 'Open Sans', sans-serif;
+        padding: 5px 10px;
     }
 }

@@ -1,0 +1,34 @@
+extends ../layout
+
+
+block content
+
+    .row
+        .six.columns
+            h2
+                | Visualization Types
+
+    .row
+        .sixteen.columns
+            ul
+                for vizType in vizTypes
+                    li
+                        a(href="./#{vizType.id}")
+                            | #{vizType.name}
+
+    .row
+        .sixteen.columns
+            h4
+                | Import Remote Viz
+            form(method="post", action=".")
+                .row
+                    .six.columns
+                        input(type="text", name="name", placeholder="name").full-width
+                .row
+                    .six.columns
+                        input(type="text", name="url", placeholder="git url").full-width
+                .row
+                    .three.columns
+                        input(type="submit", value="import")
+
+

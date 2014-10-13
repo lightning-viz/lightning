@@ -57,6 +57,7 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {
             beforeValidate: function(visualization, next) {
                 visualization.data = JSON.stringify(visualization.data);
+                visualization.opts = JSON.stringify(visualization.opts);
                 next();
             }
         }
