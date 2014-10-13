@@ -3,18 +3,25 @@ var _ = require('lodash');
 var resumer = require('resumer');
 var browserify = require('browserify');
 var path = require('path');
+var cache = require('memory-cache');
 
 
 exports.getDynamicVizBundle = function (req, res, next) {
 
+    res.set('Content-Type', 'application/javascript');
+
+
     // Get all vizTypes in array
+    var visualizationTypes = _.uniq(req.query.visualizations).sort();    
+    var bundle = cache.get(visualizationTypes.toString());
 
-    console.log(req.query);
+    if(bundle) {
+        return res.send(bundle);
+    }
 
-    var visualizationTypes = req.query.visualizations;
+    console.log('building viz bundle with ' + visualizationTypes);
 
     var b = browserify();
-    res.set('Content-Type', 'application/javascript');
 
     models.VisualizationType
         .findAll({
@@ -32,7 +39,10 @@ exports.getDynamicVizBundle = function (req, res, next) {
                 });
             });
 
-            b.bundle().pipe(res);
+            b.bundle(function(err, buf) {
+                cache.put(visualizationTypes.toString(), buf, 1000 * 60 * 60);
+                res.send(buf); 
+            });
         }).error(next);
 
 };
