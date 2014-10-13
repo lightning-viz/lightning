@@ -6,6 +6,21 @@ var path = require('path');
 var cache = require('memory-cache');
 
 
+function protectRequire(str) {
+    var protectedVars = ['define', 'require'];
+    var initialCode = ';';
+    var postCode = ';';
+    _.each(protectedVars, function(v) {
+        initialCode += 'window._' + v + ' = window.' + v + ';';
+        initialCode += 'window.' + v + ' = undefined;';
+
+        postCode += 'window.' + v + ' = window._' + v + ';';
+    });
+
+    return initialCode + str;// + postCode;
+
+}
+
 exports.getDynamicVizBundle = function (req, res, next) {
 
     res.set('Content-Type', 'application/javascript');
@@ -40,8 +55,10 @@ exports.getDynamicVizBundle = function (req, res, next) {
             });
 
             b.bundle(function(err, buf) {
-                cache.put(visualizationTypes.toString(), buf, 1000 * 60 * 60);
-                res.send(buf); 
+
+                var out = protectRequire(buf.toString('utf8'));
+                cache.put(visualizationTypes.toString(), out, 1000 * 60 * 60);
+                res.send(out); 
             });
         }).error(next);
 
