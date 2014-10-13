@@ -13,6 +13,12 @@ module.exports = function(sequelize, DataTypes) {
         initialDataField: DataTypes.STRING,
 
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
+        imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+
+        thumbnailLocation: DataTypes.STRING,
+        sampleData: 'JSON',
+        sampleOptions: 'JSON',
+        sampleImages: DataTypes.ARRAY(DataTypes.STRING),
 
         javascript: DataTypes.TEXT,
         markup: DataTypes.TEXT,
@@ -79,9 +85,9 @@ module.exports = function(sequelize, DataTypes) {
 
                 var self = this;
 
-                var jsPath = path.resolve(__dirname + '/../../ui/js/viz/imported/');
-                var stylePath = path.resolve(__dirname + '/../../ui/stylesheets/viz/imported/');
-                var markupPath = path.resolve(__dirname + '/../../ui/templates/viz/imported/');
+                var jsPath = path.resolve(__dirname + '/../../ui/js/viz/' + ((this.imported) ? 'imported/' : ''));
+                var stylePath = path.resolve(__dirname + '/../../ui/stylesheets/viz/' + ((this.imported) ? 'imported/' : ''));
+                var markupPath = path.resolve(__dirname + '/../../ui/templates/viz/' + ((this.imported) ? 'imported/' : ''));
 
                 var funcs = [];
                 if(self.javascript) {
@@ -96,6 +102,16 @@ module.exports = function(sequelize, DataTypes) {
                 return Q.all(funcs);
             }
 
+        },
+
+        hooks: {
+
+            beforeValidate: function(vizType, next) {
+
+                vizType.sampleData = JSON.stringify(vizType.sampleData);
+                vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+                next();
+            }
         }
     });
 

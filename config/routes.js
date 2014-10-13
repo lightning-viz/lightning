@@ -17,7 +17,12 @@ module.exports = function (app) {
 
     // visualizatinos
     app.post('/visualizations/types', visualizationTypes.create);
+    app.put('/visualizations/types/:vid', visualizationTypes.edit);
     app.get('/visualizations/types', visualizationTypes.index);
+
+    app.get('/visualization-types', visualizationTypes.show);
+    app.post('/visualization-types', visualizationTypes.importViz);
+    app.get('/visualization-types/:vid', visualizationTypes.editor);
     
     app.get('/', home.index);
     app.get('/sessions', session.index);

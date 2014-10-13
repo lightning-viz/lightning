@@ -19,7 +19,9 @@ var port = process.env.PORT || 3000;
 
 var models = require('./app/models');
 models.sequelize.sync(function() {
-    require('./scripts/create_visualization_types');
+    // setTimeout(function() {
+    //     require('./scripts/create_visualization_types');
+    // }, 1000);
 });
 
 

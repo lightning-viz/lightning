@@ -12,8 +12,6 @@ var feedItemHTML = require('../../templates/feed-item.jade');
 var request = require('superagent');
 var marked = require('marked');
 
-var hljs = require('highlight.js');
-hljs.initHighlightingOnLoad();
 
 
 var socket;
