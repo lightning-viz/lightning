@@ -1,14 +1,12 @@
 'use strict';
-/**
- * Module dependencies.
- */
 
-// var mongoose = require('mongoose');
+// controllers
 var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 var visualizationTypes = require('../app/controllers/visualizationTypes');
 var visualization = require('../app/controllers/visualization');
 var staticController = require('../app/controllers/static');
+
 
 /**
  * Expose
