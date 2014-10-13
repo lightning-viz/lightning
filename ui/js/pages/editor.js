@@ -58,12 +58,13 @@ var editor = CodeMirror.fromTextArea(editor, {
     }
 });
 
-setTimeout(function() {
-    var $feedItem = $('.feed-item');
-    var type = $feedItem.data('type');
-    var data = $feedItem.data('data');
-    var options = $feedItem.data('options');
 
+var $feedItem = $('.feed-item');
+var type = $feedItem.data('type');
+var data = $feedItem.data('data');
+var options = $feedItem.data('options');
+
+setTimeout(function() {
 
     var Viz =  require('viz/' + type);
 

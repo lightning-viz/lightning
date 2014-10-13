@@ -1,7 +1,7 @@
 
 var models = require('../models');
 var _ = require('lodash');
-
+var cache = require('memory-cache');
 
 exports.index = function (req, res, next) {
 
@@ -45,12 +45,17 @@ exports.edit = function (req, res, next) {
             return vizType.updateAttributes(_.pick(req.body, 'name', 'initialDataField', 'javascript', 'styles', 'markup'));
         })
         .success(function(vizType) {
-            vizType.exportToFS().spread(function() {
-                return res.status(200).send();    
-            }).fail(function(err) {
-                next(err);
-            });
-            
+            setTimeout(function() {
+                _.each(cache.keys(), function(key) {
+
+                    console.log(key);
+                    if(key.indexOf(vizType.name) > -1) {
+                        console.log('deleting ' + key);
+                        cache.del(key);        
+                    }
+                });
+            }, 0);
+            return res.status(200).send();
         }).error(function() {
             return res.status(500).send();
         });
