@@ -41,6 +41,7 @@
     "cookie-parser": "^1.3.2",
     "csurf": "^1.3.0",
     "d3": "~3.4.9",
+    "datamaps-all-browserify": "^0.3.4",
     "easyimage": "^1.0.1",
     "expect.js": "^0.3.1",
     "express": "~4.0.0",
