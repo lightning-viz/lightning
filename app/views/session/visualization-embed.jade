@@ -1,5 +1,8 @@
 extends ../embed-layout
 
+block dynamic-css
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.type}")
+
 
 block sidebar
     

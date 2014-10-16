@@ -15,36 +15,49 @@ var inherits = require('inherits');
 var saveViz = function () {
     console.log('SAVE VIZ')
 
+    var dynamicBundleName = 'dynamicallyBundledJavascript';
+
     var jsVal = editor.getValue();
-    eval(jsVal);
-    
-    var Viz = module.exports;
-    $('.feed-item').html('');
-    new Viz('.feed-item', data, null, options);
 
 
-    var url = '/visualizations/types/' + $('.visualization-type').data('id');
-    var params = {};
-    params.javascript = jsVal;
 
-    request.put(url, params, function(error, res){
-        if(error) {
-            
-            $('.problem-saving').slideDown(function() {
-                var $self = $(this);
-                setTimeout(function() {
-                    $self.slideUp('slow');    
-                }, 2000);        
-            });
-        } else {
-            $('.saved').slideDown(function() {
-                var $self = $(this);
-                setTimeout(function() {
-                    $self.slideUp('slow');    
-                }, 2000);        
-            });
-        }
+    request.post('/js/dynamic', {javascript: jsVal}, function(error, res) {
+        console.log('javascript');
+        console.log(res);
+        console.log(error);
+
+        eval(res.text);
+
+        var Viz = require(dynamicBundleName);
+        $('.feed-item').html('');
+        new Viz('.feed-item', data, null, options);
     });
+
+
+   
+
+    // var url = '/visualizations/types/' + $('.visualization-type').data('id');
+    // var params = {};
+    // params.javascript = jsVal;
+
+    // request.put(url, params, function(error, res){
+    //     if(error) {
+            
+    //         $('.problem-saving').slideDown(function() {
+    //             var $self = $(this);
+    //             setTimeout(function() {
+    //                 $self.slideUp('slow');    
+    //             }, 2000);        
+    //         });
+    //     } else {
+    //         $('.saved').slideDown(function() {
+    //             var $self = $(this);
+    //             setTimeout(function() {
+    //                 $self.slideUp('slow');    
+    //             }, 2000);        
+    //         });
+    //     }
+    // });
 
 
 };
@@ -55,7 +68,8 @@ var editor = CodeMirror.fromTextArea(editor, {
     theme : 'solarized light',
     extraKeys: {
         'Ctrl-Enter': saveViz
-    }
+    },
+    indentUnit: 4
 });
 
 

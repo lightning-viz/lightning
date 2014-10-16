@@ -34,6 +34,8 @@ module.exports = function(sequelize, DataTypes) {
                 attributes = attributes || {};
                 // clone REPO, extract js, css, and html files...
 
+                var self = this;
+
                 var repoPath = path.resolve(__dirname + '/../../tmp/repos/' + uuid.v4());
 
                 return Q.nfcall(fs.remove, repoPath)
@@ -41,66 +43,135 @@ module.exports = function(sequelize, DataTypes) {
                         return Q.ninvoke(git, 'clone', url, repoPath);
                     })
                     .then(function() {
-                        // read some fiiiiles
-                        return [
-                            Q.nfcall(glob, repoPath + '/*.js'),
-                            Q.nfcall(glob, repoPath + '/*.s?css'),
-                            Q.nfcall(glob, repoPath + '/*.{html,jade}')
-                        ];
-                    })
-                    .spread(function(jsFiles, styleFiles, markupFiles) {
-
-                        if(jsFiles.length > 1) {
-                            throw new Error('There can\'t be more than one javascript file');
-                        } else if(styleFiles.length > 1) {
-                            throw new Error('There can\'t be more than one style file');
-                        } else if(markupFiles.length > 1) {
-                            throw new Error('There can\'t be more than one markup file');
-                        }
-
-                        return [
-                            (jsFiles.length) ? Q.nfcall(fs.readFile, jsFiles[0]) : '',
-                            (styleFiles.length) ? Q.nfcall(fs.readFile, styleFiles[0]) : '',
-                            (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : ''
-                        ];
-
-
-                    }).spread(function(javascript, styles, markup) {
-
-                        var vizTypeObj = _.extend(attributes, {
-                            javascript: javascript.toString('utf8'),
-                            styles: styles.toString('utf8'),
-                            markup: markup.toString('utf8')
-                        });
-
-                        return VisualizationType.create(vizTypeObj);
-
+                        return self.createFromFolder(repoPath, attributes);
                     });
             },
+            
+
+            createManyFromRepoURL: function(url) {
+
+                var ignoreFolders = ['.git'];
+
+                var self = this;
+
+                var infoStat = function(filename, callback) {
+
+                    console.log('Stating file: ' + filename);
+
+                    fs.stat(filename, function(err, stat) {
+                        stat.filename = filename;
+
+                        if(err) {
+                            callback(err);
+                        } else {
+                            callback(err, stat);
+                        }
+
+                    });
+                };
+
+                var repoPath = path.resolve(__dirname + '/../../tmp/repos/' + uuid.v4());
+
+                return Q.nfcall(fs.remove, repoPath)
+                    .then(function() {
+                        return Q.ninvoke(git, 'clone', url, repoPath);
+                    })
+                    .then(function() {
+                        return Q.nfcall(fs.readdir, repoPath);
+                    }).then(function(files) {
+                        var funcs = [];
+                        _.each(files, function(file) {
+                            if(ignoreFolders.indexOf(file) === -1) {
+                                funcs.push(Q.nfcall(infoStat, repoPath + '/' + file));
+                            }
+                        });
+
+                        return funcs;
+                    }).spread(function() {
+                        var stats = Array.prototype.slice.call(arguments, 0);
+
+                        var funcs = [];
+                        _.each(stats, function(stat) {
+                            if(stat.isDirectory()) {
+                                funcs.push(self.createFromFolder(stat.filename, {
+                                    name: stat.filename.replace(/^.*[\\\/]/, '')
+                                }));
+                            }
+                        });
+
+                        return funcs;
+                    });
+
+            },
+
+            createFromFolder: function(path, attributes) {
+
+                attributes = attributes || {};
+                // clone REPO, extract js, css, and html files...
+
+                return Q.all([
+                    Q.nfcall(glob, path + '/*.js'),
+                    Q.nfcall(glob, path + '/*.{css,scss}'),
+                    Q.nfcall(glob, path + '/*.{html,jade}')
+                ])
+                .spread(function(jsFiles, styleFiles, markupFiles) {
+
+                    if(jsFiles.length > 1) {
+                        throw new Error('There can\'t be more than one javascript file');
+                    } else if(styleFiles.length > 1) {
+                        throw new Error('There can\'t be more than one style file');
+                    } else if(markupFiles.length > 1) {
+                        throw new Error('There can\'t be more than one markup file');
+                    }
+
+                    return [
+                        (jsFiles.length) ? Q.nfcall(fs.readFile, jsFiles[0]) : '',
+                        (styleFiles.length) ? Q.nfcall(fs.readFile, styleFiles[0]) : '',
+                        (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : ''
+                    ];
+
+
+                }).spread(function(javascript, styles, markup) {
+
+                    var vizTypeObj = _.extend(attributes, {
+                        javascript: javascript.toString('utf8'),
+                        styles: styles.toString('utf8'),
+                        markup: markup.toString('utf8')
+                    });
+
+                    return VisualizationType.create(vizTypeObj);
+
+                });
+            },
+
+
         },
 
         instanceMethods: {
 
-            exportToFS: function() {
+            // exportToFS: function() {
 
-                var self = this;
+            //     var self = this;
 
-                var jsPath = path.resolve(__dirname + '/../../ui/js/viz/' + ((this.imported) ? 'imported/' : ''));
-                var stylePath = path.resolve(__dirname + '/../../ui/stylesheets/viz/' + ((this.imported) ? 'imported/' : ''));
-                var markupPath = path.resolve(__dirname + '/../../ui/templates/viz/' + ((this.imported) ? 'imported/' : ''));
+            //     var jsPath = path.resolve(__dirname + '/../../ui/js/viz/');
+            //     var stylePath = path.resolve(__dirname + '/../../ui/stylesheets/viz/');
+            //     var markupPath = path.resolve(__dirname + '/../../ui/templates/viz/');
 
-                var funcs = [];
-                if(self.javascript) {
-                    funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
-                }
-                if(self.styles) {
-                    funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
-                }
-                if(self.markup) {
-                    funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
-                }
-                return Q.all(funcs);
-            }
+            //     var funcs = [];
+            //     if(self.javascript) {
+            //         funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
+            //     }
+            //     if(self.styles) {
+
+            //         console.log(stylePath + '/' + self.name + '.scss');
+            //         funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
+            //     }
+            //     if(self.markup) {
+            //         console.log(markupPath + '/' + self.name + '.jade');
+            //         funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
+            //     }
+            //     return Q.all(funcs);
+            // }
 
         },
 

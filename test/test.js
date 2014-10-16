@@ -5,7 +5,7 @@
 
 var expect = require('expect.js');
 var models = require('../app/models');
-
+var _ = require('lodash');
 
 
 describe('repo import tests', function() {
@@ -34,20 +34,64 @@ describe('repo import tests', function() {
             });
     });
 
-    it('should create files in the UI folder from a remote repository', function(done) {
+    // it('should create files in the UI folder from a remote repository', function(done) {
+    //     models.VisualizationType
+    //         .find({
+    //             where: {
+    //                 name: 'imported-matrix'
+    //             }
+    //         }).success(function(vizType) {
+    //             return vizType.exportToFS();
+    //         }).spread(function() {
+    //             done();
+    //         }).error(function(err) {
+    //             console.log(err);
+    //             expect(err).to.not.be.ok();
+    //         });
+    // });
+
+});
+
+
+describe('multi repo import tests', function() {
+
+    before(function(done) {
+
         models.VisualizationType
-            .find({
-                where: {
-                    name: 'imported-matrix'
-                }
-            }).success(function(vizType) {
-                return vizType.exportToFS();
-            }).spread(function() {
+            .destroy({
+            }).success(function() {
                 done();
-            }).error(function(err) {
+            });
+    });
+
+    it('should fetch default visualizations from a remote repository', function(done) {
+        models.VisualizationType
+            .createManyFromRepoURL('https://github.com/mathisonian/lightning-default-visualizations')
+            .spread(function() {
+                var vizTypes = Array.prototype.slice.call(arguments, 0);
+                expect(vizTypes).to.be.an('array');
+                done();
+            }).fail(function(err) {
                 console.log(err);
                 expect(err).to.not.be.ok();
             });
     });
 
+    // it('should create files in the UI folder from the remote repository', function(done) {
+    //     models.VisualizationType
+    //         .findAll().success(function(vizTypes) {
+
+    //             _.each(vizTypes, function(vizType) {
+    //                 vizType.exportToFS();
+    //             });
+
+    //         }).spread(function() {
+    //             done();
+    //         }).error(function(err) {
+    //             console.log(err);
+    //             expect(err).to.not.be.ok();
+    //         });
+    // });
+
 });
+

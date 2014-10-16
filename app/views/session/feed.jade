@@ -1,5 +1,7 @@
 extends ../layout
 
+block dynamic-css
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
 
 block content
 
