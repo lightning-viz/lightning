@@ -5,6 +5,8 @@ var browserify = require('browserify');
 var path = require('path');
 var cache = require('memory-cache');
 var sass = require('node-sass');
+var uuid = require('node-uuid');
+var Q = require('q');
 
 
 function protectRequire(str) {
@@ -37,6 +39,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
     }
 
     console.log('building viz bundle with ' + visualizationTypes);
+    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
 
     var b = browserify();
 
@@ -51,26 +54,34 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
             console.log(_.pluck(vizTypes, 'name'));
 
+
+            var funcs = [];
             _.each(vizTypes, function(vizType) {
-
-                var stream = resumer().queue(vizType.javascript).end();
-                b.add(stream, {
-                    // basedir: path.resolve(__dirname + '/../../ui/js/viz/'),
-                    expose: 'viz/' + vizType.name,
-                    entry: false
-                });
-
+                funcs.push(vizType.exportToFS(tmpPath));
             });
 
-            b.bundle(function(err, buf) {
+            Q.all(funcs).spread(function() {
 
-                if(err) {
-                    return next(err);
-                }               
+                _.each(vizTypes, function(vizType) {
 
-                var out = protectRequire(buf.toString('utf8'));
-                cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
-                res.send(out); 
+                    var stream = resumer().queue(vizType.javascript).end();
+                    b.require(stream, {
+                        basedir: tmpPath,
+                        expose: 'viz/' + vizType.name
+                    });
+
+                });
+
+                b.bundle(function(err, buf) {
+
+                    if(err) {
+                        return next(err);
+                    }               
+
+                    var out = protectRequire(buf.toString('utf8'));
+                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
+                    res.send(out); 
+                });
             });
         }).error(next);
 
