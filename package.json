@@ -74,7 +74,7 @@
     "lightning-client-utils": "^0.1.0",
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
-    "memory-cache": "git+ssh://git@github.com:ptarjan/node-cache.git",
+    "memory-cache": "git+https://git@github.com/ptarjan/node-cache.git",
     "method-override": "^2.1.1",
     "mocha": "^1.21.5",
     "moment": "~2.6.0",
