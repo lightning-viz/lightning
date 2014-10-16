@@ -74,14 +74,8 @@ exports.importViz = function(req, res, next) {
 
     models.VisualizationType
         .createFromRepoURL(url, { name: name})
-        .then(function(vizType) {
-            
-            vizType.exportToFS().spread(function() {
-                return res.redirect(backURL);
-            }).fail(function(err) {
-                next(err);
-            });
-            
+        .then(function() {
+            return res.redirect(backURL);
         }).fail(function(err) {
             next(err);
         });

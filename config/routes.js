@@ -15,6 +15,8 @@ var staticController = require('../app/controllers/static');
 module.exports = function (app) {
 
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
+    app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
+    app.post('/js/dynamic', staticController.bundleJSForExecution);
 
     // visualizatinos
     app.post('/visualizations/types', visualizationTypes.create);

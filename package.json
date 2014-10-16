@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development nodemon server.js",
-    "test": "make test"
+    "test": "mocha --timeout 20000"
   },
   "browserify": {
     "transform": [
@@ -79,6 +79,7 @@
     "moment": "~2.6.0",
     "morgan": "^1.2.0",
     "multiparty": "^3.3.1",
+    "node-sass": "^0.9.6",
     "node-uuid": "^1.4.1",
     "nodemon": "*",
     "passport": "^0.2.0",
