@@ -31,7 +31,6 @@
     "browserify": "^6.0.1",
     "bulk-require": "^0.2.1",
     "bulkify": "^1.0.2",
-    "codemirror": "^4.6.0",
     "colors": "~0.6.2",
     "command-exists": "^0.1.0",
     "compression": "^1.0.8",
