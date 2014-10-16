@@ -30,34 +30,34 @@ var saveViz = function () {
 
         var Viz = require(dynamicBundleName);
         $('.feed-item').html('');
-        new Viz('.feed-item', data, null, options);
+        new Viz('.feed-item', data, images, options);
     });
 
 
    
 
-    // var url = '/visualizations/types/' + $('.visualization-type').data('id');
-    // var params = {};
-    // params.javascript = jsVal;
+    var url = '/visualizations/types/' + $('.visualization-type').data('id');
+    var params = {};
+    params.javascript = jsVal;
 
-    // request.put(url, params, function(error, res){
-    //     if(error) {
+    request.put(url, params, function(error, res){
+        if(error) {
             
-    //         $('.problem-saving').slideDown(function() {
-    //             var $self = $(this);
-    //             setTimeout(function() {
-    //                 $self.slideUp('slow');    
-    //             }, 2000);        
-    //         });
-    //     } else {
-    //         $('.saved').slideDown(function() {
-    //             var $self = $(this);
-    //             setTimeout(function() {
-    //                 $self.slideUp('slow');    
-    //             }, 2000);        
-    //         });
-    //     }
-    // });
+            $('.problem-saving').slideDown(function() {
+                var $self = $(this);
+                setTimeout(function() {
+                    $self.slideUp('slow');    
+                }, 2000);        
+            });
+        } else {
+            $('.saved').slideDown(function() {
+                var $self = $(this);
+                setTimeout(function() {
+                    $self.slideUp('slow');    
+                }, 2000);        
+            });
+        }
+    });
 
 
 };
@@ -76,6 +76,7 @@ var editor = CodeMirror.fromTextArea(editor, {
 var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');
 var data = $feedItem.data('data');
+var images = $feedItem.data('images');
 var options = $feedItem.data('options');
 
 setTimeout(function() {
@@ -83,7 +84,7 @@ setTimeout(function() {
     var Viz =  require('viz/' + type);
 
     var vid = $(this).attr('id');
-    new Viz('.feed-item', data, null, options);
+    new Viz('.feed-item', data, images, options);
 
     $feedItem.data('initialized', true);
     $feedItem.attr('data-initialized', true);

@@ -22,8 +22,7 @@ block content
 
         .six.columns.fixed
             .feed-item-container
-                .feed-item(data-type="#{vizType.name}", data-data="#{JSON.stringify(vizType.sampleData)}", data-initialized="false")
-
+                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
 
 
     .saved

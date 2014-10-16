@@ -110,9 +110,11 @@ module.exports = function(sequelize, DataTypes) {
                 return Q.all([
                     Q.nfcall(glob, path + '/*.js'),
                     Q.nfcall(glob, path + '/*.{css,scss}'),
-                    Q.nfcall(glob, path + '/*.{html,jade}')
+                    Q.nfcall(glob, path + '/*.{html,jade}'),
+                    Q.nfcall(glob, path + '/sample-data.json'),
+                    Q.nfcall(glob, path + '/sample-images.json'),
                 ])
-                .spread(function(jsFiles, styleFiles, markupFiles) {
+                .spread(function(jsFiles, styleFiles, markupFiles, sampleDataFiles, sampleImageFiles) {
 
                     if(jsFiles.length > 1) {
                         throw new Error('There can\'t be more than one javascript file');
@@ -125,16 +127,26 @@ module.exports = function(sequelize, DataTypes) {
                     return [
                         (jsFiles.length) ? Q.nfcall(fs.readFile, jsFiles[0]) : '',
                         (styleFiles.length) ? Q.nfcall(fs.readFile, styleFiles[0]) : '',
-                        (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : ''
+                        (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : '',
+                        (sampleDataFiles.length) ? Q.nfcall(fs.readFile, sampleDataFiles[0]) : '[]',
+                        (sampleImageFiles.length) ? Q.nfcall(fs.readFile, sampleImageFiles[0]) : '[]'
                     ];
 
 
-                }).spread(function(javascript, styles, markup) {
+                }).spread(function(javascript, styles, markup, sampleData, sampleImages) {
+
+
+                    sampleImages = JSON.parse(sampleImages);
+                    if(!sampleImages.length) {
+                        sampleImages = null;
+                    }
 
                     var vizTypeObj = _.extend(attributes, {
                         javascript: javascript.toString('utf8'),
                         styles: styles.toString('utf8'),
-                        markup: markup.toString('utf8')
+                        markup: markup.toString('utf8'),
+                        sampleData: JSON.parse(sampleData.toString('utf8')),
+                        sampleImages: sampleImages
                     });
 
                     return VisualizationType.create(vizTypeObj);
@@ -176,7 +188,6 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {
 
             beforeValidate: function(vizType, next) {
-
                 vizType.sampleData = JSON.stringify(vizType.sampleData);
                 vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
                 next();
