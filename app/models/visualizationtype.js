@@ -147,29 +147,29 @@ module.exports = function(sequelize, DataTypes) {
 
         instanceMethods: {
 
-            // exportToFS: function() {
+            exportToFS: function(p) {
 
-            //     var self = this;
+                var self = this;
 
-            //     var jsPath = path.resolve(__dirname + '/../../ui/js/viz/');
-            //     var stylePath = path.resolve(__dirname + '/../../ui/stylesheets/viz/');
-            //     var markupPath = path.resolve(__dirname + '/../../ui/templates/viz/');
+                var jsPath = path.resolve(p);
+                var stylePath = path.resolve(p);
+                var markupPath = path.resolve(p);
 
-            //     var funcs = [];
-            //     if(self.javascript) {
-            //         funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
-            //     }
-            //     if(self.styles) {
+                var funcs = [];
+                if(self.javascript) {
+                    funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
+                }
+                if(self.styles) {
 
-            //         console.log(stylePath + '/' + self.name + '.scss');
-            //         funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
-            //     }
-            //     if(self.markup) {
-            //         console.log(markupPath + '/' + self.name + '.jade');
-            //         funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
-            //     }
-            //     return Q.all(funcs);
-            // }
+                    console.log(stylePath + '/' + self.name + '.scss');
+                    funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
+                }
+                if(self.markup) {
+                    console.log(markupPath + '/' + self.name + '.jade');
+                    funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
+                }
+                return Q.all(funcs);
+            }
 
         },
 
