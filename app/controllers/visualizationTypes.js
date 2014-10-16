@@ -1,7 +1,7 @@
 
 var models = require('../models');
 var _ = require('lodash');
-var cache = require('memory-cache');
+var cache = require('../cache');
 
 exports.index = function (req, res, next) {
 
