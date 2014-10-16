@@ -10,7 +10,7 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "NODE_ENV=development nodemon server.js",
+    "start": "NODE_ENV=development nodemon server.js --ignore tmp/ --ignore node_modules/",
     "test": "mocha --timeout 20000"
   },
   "browserify": {
@@ -93,7 +93,7 @@
     "randomstring": "^1.0.3",
     "request": "~2.36.0",
     "resumer": "0.0.0",
-    "sequelize": "1.7.10",
+    "sequelize": "^1.7.10",
     "serve-static": "*",
     "should": "*",
     "socket.io": "~1.0.6",
