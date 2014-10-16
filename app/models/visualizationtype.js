@@ -56,8 +56,6 @@ module.exports = function(sequelize, DataTypes) {
 
                 var infoStat = function(filename, callback) {
 
-                    console.log('Stating file: ' + filename);
-
                     fs.stat(filename, function(err, stat) {
                         stat.filename = filename;
 

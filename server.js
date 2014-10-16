@@ -2,12 +2,13 @@
 /**
  * Module dependencies
  */
-
+var tasks = require('./tasks');
 var express = require('express');
 // var passport = require('passport');
-
+var _ = require('lodash');
 var app = express();
 var server = require('http').Server(app);
+
 
 // var cluster = require('cluster');
 // var cpuCount = Math.max(1, require('os').cpus().length);
@@ -35,10 +36,17 @@ var port = process.env.PORT || 3000;
 
 
 var models = require('./app/models');
-models.sequelize.sync(function() {
-    // setTimeout(function() {
-    //     require('./scripts/create_visualization_types');
-    // }, 1000);
+models.sequelize.sync({force: false})
+    .success(function() {
+
+    models.VisualizationType
+        .findAll()
+        .success(function(vizTypes) {
+            console.log(_.pluck(vizTypes, 'name'));
+            if(vizTypes.length === 0) {
+                tasks.getDefaultVisualizations();
+            }
+        });
 });
 
 var io = require('socket.io')(server);
