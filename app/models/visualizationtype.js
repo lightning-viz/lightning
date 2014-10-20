@@ -40,6 +40,7 @@ module.exports = function(sequelize, DataTypes) {
 
                 return Q.nfcall(fs.remove, repoPath)
                     .then(function() {
+                        console.log('about to clone ' + url);
                         return Q.ninvoke(git, 'clone', url, repoPath);
                     })
                     .then(function() {
@@ -141,13 +142,17 @@ module.exports = function(sequelize, DataTypes) {
                         sampleImages = null;
                     }
 
-                    var vizTypeObj = _.extend(attributes, {
+                    var vizTypeObj = _.extend(_.omit(attributes, 'preview'), {
                         javascript: javascript.toString('utf8'),
                         styles: styles.toString('utf8'),
                         markup: markup.toString('utf8'),
                         sampleData: JSON.parse(sampleData.toString('utf8')),
                         sampleImages: sampleImages
                     });
+
+                    if(attributes.preview) {
+                        return VisualizationType.build(vizTypeObj);
+                    }
 
                     return VisualizationType.create(vizTypeObj);
 
