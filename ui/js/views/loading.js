@@ -6,6 +6,7 @@ module.exports = function(el) {
         .attr('width', 100)
         .attr('height', 100);
 
+      console.log('yo');
     svg.append('path')
         .style('fill', 'none')
         .style('stroke', '#9175f0')
@@ -13,6 +14,7 @@ module.exports = function(el) {
         .call(backTransition);
 
     var transition = function(path) {
+      console.log('forward');
       path
           .attr('stroke-dashoffset', 0)
           .attr('stroke-dasharray', function() {
@@ -25,6 +27,7 @@ module.exports = function(el) {
     };
 
     var backTransition = function(path) {
+      console.log('back');
       path
         .transition()
           .duration(3000)
