@@ -14,6 +14,8 @@ var staticController = require('../app/controllers/static');
 
 module.exports = function (app) {
 
+    app.get('/playground', home.playground);
+
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
     app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
     app.post('/js/dynamic', staticController.bundleJSForExecution);

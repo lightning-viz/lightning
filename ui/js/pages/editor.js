@@ -3,7 +3,9 @@ $('.menu-link').bigSlide();
 
 var request = require('superagent');
 
-var editor = document.getElementById('js-editor');
+var jsEditorEl = document.getElementById('js-editor');
+var styleEditorEl = document.getElementById('style-editor');
+var markupEditorEl = document.getElementById('markup-editor');
 
 var CodeMirror = require('../lib/codemirror/codemirror');
 require('../lib/codemirror/javascript.js');
@@ -12,29 +14,30 @@ var d3 = require('d3');
 var inherits = require('inherits');
 
 
-var saveViz = function () {
-    console.log('SAVE VIZ')
 
-    var dynamicBundleName = 'dynamicallyBundledJavascript';
+setTimeout(function() {
+    $('.feed-item-container').addClass('fixed');
+}, 500);
 
-    var jsVal = editor.getValue();
+// var t = $obj.offset().top - parseFloat($obj.css('marginTop').replace(/auto/, 0));
+
+// $(window).scroll(function (event) {
+//     // what the y position of the scroll is
+//     var y = $(this).scrollTop();
+
+//     // whether that's below the form
+//     if (y >= t) {
+//       // if so, ad the fixed class
+//       $obj.addClass('fixed').css({top: t});
+//     } else {
+//       // otherwise remove it
+//       $obj.removeClass('fixed');
+//     }
+// });
 
 
-
-    request.post('/js/dynamic', {javascript: jsVal}, function(error, res) {
-        console.log('javascript');
-        console.log(res);
-        console.log(error);
-
-        eval(res.text);
-
-        var Viz = require(dynamicBundleName);
-        $('.feed-item').html('');
-        new Viz('.feed-item', data, images, options);
-    });
-
-
-   
+var saveVis = function() {
+    console.log('SAVE VIZ');
 
     var url = '/visualizations/types/' + $('.visualization-type').data('id');
     var params = {};
@@ -59,19 +62,66 @@ var saveViz = function () {
         }
     });
 
+};
+
+
+var updateJS = function () {
+
+    var dynamicBundleName = 'dynamicallyBundledJavascript';
+
+    var jsVal = jsEditor.getValue();
+
+    request.post('/js/dynamic', {javascript: jsVal}, function(error, res) {
+        eval(res.text);
+
+        var Viz = require(dynamicBundleName);
+        $('.feed-item').html('');
+        new Viz('.feed-item', data, images, options);
+    }); 
+};
+
+var updateStyles = function() {
+
+};
+
+var updateMarkup = function() {
 
 };
 
 
-var editor = CodeMirror.fromTextArea(editor, {
-    mode: 'text/javascript',
-    theme : 'solarized light',
-    extraKeys: {
-        'Ctrl-Enter': saveViz
-    },
-    indentUnit: 4
-});
+var jsEditor, styleEditor, markupEditor;
 
+if(jsEditorEl) {
+    jsEditor = CodeMirror.fromTextArea(jsEditorEl, {
+        mode: 'text/javascript',
+        theme : 'solarized light',
+        extraKeys: {
+            'Ctrl-Enter': updateJS
+        },
+        indentUnit: 4
+    });
+}
+if(styleEditorEl) {
+    styleEditor = CodeMirror.fromTextArea(styleEditorEl, {
+        mode: 'text/x-sass',
+        theme : 'solarized light',
+        extraKeys: {
+            'Ctrl-Enter': updateStyles
+        },
+        indentUnit: 4
+    });
+}
+
+if(markupEditorEl) {
+    markupEditor = CodeMirror.fromTextArea(markupEditorEl, {
+        mode: 'text/x-jade',
+        theme : 'solarized light',
+        extraKeys: {
+            'Ctrl-Enter': updateMarkup
+        },
+        indentUnit: 4
+    });
+}
 
 var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');

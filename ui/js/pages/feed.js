@@ -72,6 +72,8 @@ setTimeout(function() {
         $(this).attr('data-initialized', true);
     });
 
+    $('.feed-container').animate({opacity: 1});
+
 
     $('[data-editable]').each(function() {
         

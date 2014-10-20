@@ -24,7 +24,6 @@ function protectRequire(str) {
 
 }
 
-var lastBundle;
 
 exports.getDynamicVizBundle = function (req, res, next) {
 
@@ -42,7 +41,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
     console.log('building viz bundle with ' + visualizationTypes);
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
-    lastBundle = tmpPath;
+
+    req.session.lastBundlePath = tmpPath;
+
 
     var b = browserify();
 
@@ -100,7 +101,7 @@ exports.bundleJSForExecution = function(req, res, next) {
     var js = req.body.javascript;
     var stream = resumer().queue(js).end();
     b.require(stream, {
-        basedir: lastBundle,
+        basedir: req.session.lastBundlePath || '',
         expose: 'dynamicallyBundledJavascript'
     });
 
