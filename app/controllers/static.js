@@ -112,6 +112,23 @@ exports.bundleJSForExecution = function(req, res, next) {
 
 
 
+exports.buildSCSS = function(req, res) {
+    res.set('Content-Type', 'text/css');
+
+    var scssData = '#lightning-body {\n';
+    scssData += req.body.styles + '\n';
+    scssData += '\n}';
+
+    sass.render({
+        data: scssData,
+        success: function(css) {
+            res.send(css);
+        }
+    });
+};
+
+
+
 exports.getDynamicVizStyles = function (req, res, next) {
 
     res.set('Content-Type', 'text/css');
