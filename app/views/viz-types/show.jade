@@ -31,3 +31,16 @@ block content
                     .three.columns
                         input(type="submit", value="import")
 
+    .row
+        .sixteen.columns
+            h4
+                | Preview Remote Viz
+            
+            form(method="get", action="./preview")
+                .row
+                    .six.columns
+                        input(type="text", name="url", placeholder="git url").full-width
+                .row
+                    .three.columns
+                        input(type="submit", value="preview")
+
