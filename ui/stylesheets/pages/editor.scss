@@ -4,9 +4,30 @@
     width: 100%;
     padding-left: 100px;
 
+    .section-header {
+        width: 100%;
+        cursor: pointer;
+        padding: 7px 10px;
+        border-bottom: solid 2px #626c7c;
+        margin-bottom: 20px;
+        h3 {
+            padding: 0;
+            margin: 0;
+        }
+        &:hover {
+            background-color: lighten(#626c7c, 50%);
+        }
+    }
+
     .top-matter {
         width: 33%;
         margin-bottom: 30px;
+    }
+
+    .save-container {
+        width: 33%;
+        float: left;
+        text-align: right;
     }
 
     .editor-code-container {

@@ -1,3 +1,14 @@
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") {
+    mod(require("./codemirror"));
+  }
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+
 CodeMirror.defineMode('jade', function (config) {
   'use strict';
 
@@ -604,3 +615,4 @@ CodeMirror.defineMode('jade', function (config) {
     token: nextToken
   }
 });
+})

@@ -9,6 +9,8 @@ var markupEditorEl = document.getElementById('markup-editor');
 
 var CodeMirror = require('../lib/codemirror/codemirror');
 require('../lib/codemirror/javascript.js');
+require('../lib/codemirror/sass.js');
+require('../lib/codemirror/jade.js');
 
 var d3 = require('d3');
 var inherits = require('inherits');
@@ -124,6 +126,11 @@ if(markupEditorEl) {
         indentUnit: 4
     });
 }
+
+
+$('.section-header').click(function() {
+    $(this).nextAll('.CodeMirror').first().slideToggle();
+})
 
 var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');
