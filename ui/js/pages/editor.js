@@ -72,11 +72,13 @@ var updateJS = function () {
     var jsVal = jsEditor.getValue();
 
     request.post('/js/dynamic', {javascript: jsVal}, function(error, res) {
+        $('.feed-item-container').removeClass('fixed');
         eval(res.text);
 
         var Viz = require(dynamicBundleName);
         $('.feed-item').html('');
         new Viz('.feed-item', data, images, options);
+        $('.feed-item-container').addClass('fixed');
     }); 
 };
 

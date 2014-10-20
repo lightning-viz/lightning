@@ -33,10 +33,12 @@ exports.getDynamicVizBundle = function (req, res, next) {
     // Get all vizTypes in array
     var visualizationTypes = _.uniq(req.query.visualizations).sort();
 
-    var bundle = cache.get('js/' + visualizationTypes.toString());
+    if(!req.query.cachemiss) {
+        var bundle = cache.get('js/' + visualizationTypes.toString());
 
-    if(bundle) {
-        return res.send(bundle);
+        if(bundle) {
+            return res.send(bundle);
+        }
     }
 
     console.log('building viz bundle with ' + visualizationTypes);
