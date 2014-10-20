@@ -86,9 +86,6 @@ exports.editor = function (req, res, next) {
 
     models.VisualizationType.find(req.params.vid)
         .then(function(type) {
-
-            console.log(type.sampleData);
-            console.log(type.sampleData[0]);
             
             return res.render('viz-types/editor', {
                 vizType: type

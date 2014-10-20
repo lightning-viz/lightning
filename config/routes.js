@@ -19,6 +19,7 @@ module.exports = function (app) {
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
     app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
     app.post('/js/dynamic', staticController.bundleJSForExecution);
+    app.post('/css/dynamic', staticController.buildSCSS);
 
     // visualizatinos
     app.post('/visualizations/types', visualizationTypes.create);

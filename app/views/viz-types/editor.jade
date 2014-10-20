@@ -1,7 +1,7 @@
 extends ../layout
 
 block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{vizType.name}")
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{vizType.name}")#viz-styles
 
 block container
 

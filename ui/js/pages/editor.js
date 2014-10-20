@@ -85,7 +85,13 @@ var updateJS = function () {
 };
 
 var updateStyles = function() {
+    
+    var stylesVal = styleEditor.getValue();
 
+    request.post('/css/dynamic', {styles: stylesVal}, function(error, res) {
+        $('#viz-styles').removeAttr('href').replaceWith('<style id="viz-styles">');
+        $('#viz-styles').html(res.text);
+    }); 
 };
 
 var updateMarkup = function() {
