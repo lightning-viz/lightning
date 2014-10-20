@@ -12,6 +12,20 @@
 
     font-family: 'Open Sans', sans-serif;
 
+    .loading {
+        text-align: center;
+    }
+    .viz-container {
+
+        position: relative;
+        .loading {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
     .full-width {
         width: 100%;
     }
@@ -28,6 +42,10 @@
         height: auto;
         overflow-x: hidden;
         overflow-y: hidden;
+    }
+
+    .feed-container {
+        opacity: 0;
     }
 
 
@@ -204,4 +222,6 @@
         font-family: 'Open Sans', sans-serif;
         padding: 5px 10px;
     }
+
+    @import "pages/editor";
 }

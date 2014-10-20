@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-var session = require('express-session');
+var session = require('cookie-session')
 var compression = require('compression');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -119,8 +119,9 @@ module.exports = function (app, io) {
         //     url: config.db,
         //     collection : 'sessions'
         // }),
-        saveUninitialized: true,
-        resave: true
+        cookie: {
+            maxAge: 1000*60*60
+        }
     }));
 
     // use passport session

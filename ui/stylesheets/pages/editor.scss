@@ -1,0 +1,26 @@
+
+
+.editor-container {
+    width: 100%;
+    padding-left: 100px;
+
+    .top-matter {
+        width: 33%;
+        margin-bottom: 30px;
+    }
+
+    .editor-code-container {
+        width: 33%;
+        float: left;
+    }
+
+    .editor-viz-container {
+        margin-left: 7%;
+        width: 50%;
+        float: left;
+
+        // .feed-item-container {
+        //     position: fixed;
+        // }
+    }
+}

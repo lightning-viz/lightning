@@ -19,9 +19,12 @@ block content
 
     .row
         .sixteen.columns
+            .loading
+
+    .row
+        .sixteen.columns
             .feed-container
                 if visualizations.length
-
                     for viz in visualizations.reverse()
                         include ./viz-data
                         hr
@@ -35,7 +38,7 @@ block content
 
 
 
-block scripts
+block append scripts
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/basic.js')

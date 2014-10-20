@@ -3,24 +3,43 @@ extends ../layout
 block dynamic-css
     link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{vizType.name}")
 
-block content
+block container
 
-    .row
+    //- .row
         .six.columns
             h2
                 | #{vizType.name}
             .subheader
                 a(href="..")
                     | &larr; back
-                
-    .row.editor-container
-        .ten.columns
-            .visualization-type(data-id="#{vizType.id}")
-                textarea#js-editor
-                    | #{vizType.javascript}
-        
 
-        .six.columns.fixed
+    .editor-container
+        .top-matter
+            h2
+                | #{vizType.name}
+            .subheader
+                a(href="..")
+                    | &larr; back
+            hr
+
+        .editor-code-container
+            
+            .visualization-type(data-id="#{vizType.id}")
+                if vizType.javascript
+                    textarea#js-editor
+                        | #{vizType.javascript}
+            
+            
+                if vizType.styles
+                    textarea#style-editor
+                        | #{vizType.styles}
+
+                if vizType.markup            
+                    textarea#markup-editor
+                        | #{vizType.markup}
+            
+            
+        .editor-viz-container
             .feed-item-container
                 .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
 
