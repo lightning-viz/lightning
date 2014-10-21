@@ -29,9 +29,10 @@ module.exports = function(sequelize, DataTypes) {
                  // associations can be defined here
             },
 
-            createFromRepoURL: function(url, attributes) {
+            createFromRepoURL: function(url, attributes, opts) {
 
                 attributes = attributes || {};
+                opts = opts || {};
                 // clone REPO, extract js, css, and html files...
 
                 var self = this;
@@ -44,7 +45,8 @@ module.exports = function(sequelize, DataTypes) {
                         return Q.ninvoke(git, 'clone', url, repoPath);
                     })
                     .then(function() {
-                        return self.createFromFolder(repoPath, attributes);
+                        console.log(opts)
+                        return self.createFromFolder(repoPath + (opts.path ? ('/' + opts.path) : ''), attributes, opts);
                     });
             },
             
@@ -103,7 +105,9 @@ module.exports = function(sequelize, DataTypes) {
 
             },
 
-            createFromFolder: function(path, attributes) {
+            createFromFolder: function(path, attributes, opts) {
+
+                console.log('Create from folder: ' + path);
 
                 attributes = attributes || {};
                 // clone REPO, extract js, css, and html files...
@@ -142,7 +146,7 @@ module.exports = function(sequelize, DataTypes) {
                         sampleImages = null;
                     }
 
-                    var vizTypeObj = _.extend(_.omit(attributes, 'preview'), {
+                    var vizTypeObj = _.extend(attributes, {
                         javascript: javascript.toString('utf8'),
                         styles: styles.toString('utf8'),
                         markup: markup.toString('utf8'),
@@ -150,7 +154,7 @@ module.exports = function(sequelize, DataTypes) {
                         sampleImages: sampleImages
                     });
 
-                    if(attributes.preview) {
+                    if(opts.preview) {
                         return VisualizationType.build(vizTypeObj);
                     }
 
