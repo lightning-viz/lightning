@@ -85,22 +85,37 @@ exports.edit = function (req, res, next) {
 exports.preview = function(req, res, next) {
 
     var url = req.query.url;
+    var file = req.query.file;
 
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
 
     req.session.lastBundlePath = tmpPath;
-    var b = browserify();
+    
 
+    var vizTypePromise;
 
-    models.VisualizationType
-        .createFromRepoURL(url, { name: url, preview: true })
+    if(req.query.url) {
+        var url = req.query.url;
+        var name = url;
+        if(req.query.path) {
+            name += '/' + req.query.path;
+        }
+        vizTypePromise = models.VisualizationType
+            .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
+    } else if(req.query.path && process.env.NODE_ENV !== 'production') {
+        var p = path.resolve(req.query.path);
+        vizTypePromise = models.VisualizationType
+            .createFromFolder(p, { name: p}, {preview: true});
+    }
+
+    vizTypePromise
         .then(function(vizType) {
 
             console.log('created viz preview');
 
             vizType.exportToFS(tmpPath)
                 .spread(function() {
-
+                    var b = browserify();
                     var stream = resumer().queue(vizType.javascript).end();
                     b.require(stream, {
                         basedir: tmpPath,
@@ -150,7 +165,7 @@ exports.preview = function(req, res, next) {
             next(err);
         });
 
-}
+};
 
 
 exports.importViz = function(req, res, next) {
