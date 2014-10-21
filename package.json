@@ -98,6 +98,7 @@
     "superagent": "^0.18.2",
     "supertest": "*",
     "swig": "^1.4.1",
+    "three": "^0.66.4",
     "tiny-lr": "0.0.5",
     "topojson": "^1.6.18",
     "validator": "~3.17.0",
