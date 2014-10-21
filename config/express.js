@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-var session = require('cookie-session')
+var session = require('cookie-session');
 var compression = require('compression');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -14,6 +14,7 @@ var csrf = require('csurf');
 var swig = require('swig');
 var serveStatic = require('serve-static');
 var slashes = require('connect-slashes');
+var favicon = require('serve-favicon');
 
 var flash = require('connect-flash');
 var winston = require('winston');
@@ -21,6 +22,7 @@ var helpers = require('view-helpers');
 var config = require('./config');
 var pkg = require('../package.json');
 var moment = require('moment');
+var path = require('path');
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -36,6 +38,7 @@ module.exports = function (app, io) {
     }));
 
     // Static files middleware
+    app.use(favicon(path.resolve(__dirname + '/../public/images/favicon.ico')));
     app.use(serveStatic(config.root + '/public'));
 
     // Use winston on production

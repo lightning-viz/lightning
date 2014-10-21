@@ -92,6 +92,7 @@
     "request": "~2.36.0",
     "resumer": "0.0.0",
     "sequelize": "^1.7.10",
+    "serve-favicon": "^2.1.6",
     "serve-static": "*",
     "should": "*",
     "socket.io": "~1.0.6",
