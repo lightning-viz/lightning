@@ -7,12 +7,19 @@ block dynamic-css
 block container
 
     .editor-container.push.wrap
-        .top-matter
-            h2
-                | #{vizType.name}
-            .subheader
-                a(href="..")
-                    | &larr; back
+        .top-matter           
+            .meta
+                h2
+                    | #{vizType.name}
+                .subheader
+                    a(href="..")
+                        | &larr; back
+
+                .action-container
+                    a(href="#")#import-button
+                        .button
+                            | Import
+
             
         .editor-code-container
             
@@ -28,13 +35,19 @@ block container
                     h3
                         | styles
                 textarea#style-editor
-                    | #{vizType.styles}
+                    if vizType.styles
+                        | #{vizType.styles}
+                    else
+                        | .feed-item-container {
+                        |       
+                        | }
 
-                .section-header
-                    h3
-                        | markup
-                textarea#markup-editor
-                    | #{vizType.markup}
+
+                //- .section-header
+                //-     h3
+                //-         | markup
+                //- textarea#markup-editor
+                //-     | #{vizType.markup}
             
             
         .editor-viz-container
