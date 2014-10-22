@@ -21,11 +21,26 @@
         &:hover {
             background-color: lighten(#626c7c, 50%);
         }
+
     }
 
     .top-matter {
         width: 33%;
         margin-bottom: 30px;
+        .action-container {
+
+            margin-top: 15px;
+
+            .button {
+                width: 45%;
+                display: inline-block;
+
+                &.pad-left {
+                    margin-left: 7.5%;
+                }
+            }
+
+        }
     }
 
     .save-container {

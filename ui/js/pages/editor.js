@@ -15,6 +15,7 @@ require('../lib/codemirror/jade.js');
 var d3 = require('d3');
 var inherits = require('inherits');
 
+var _ = require('lodash');
 
 
 setTimeout(function() {
@@ -25,9 +26,22 @@ setTimeout(function() {
 var saveVis = function() {
     console.log('SAVE VIZ');
 
+
     var url = '/visualizations/types/' + $('.visualization-type').data('id');
     var params = {};
-    params.javascript = jsVal;
+
+    var fieldMap = {
+        javascript: jsEditor,
+        styles: styleEditor
+    };
+
+    _.each(fieldMap, function(val, key) {
+
+        var editorText = val.getValue();
+        if(editorText.trim()) {
+            params[key] = editorText;
+        }
+    });
 
     request.put(url, params, function(error, res){
         if(error) {
@@ -49,6 +63,8 @@ var saveVis = function() {
     });
 
 };
+
+$('#save-button').click(saveVis);
 
 
 var updateJS = function () {

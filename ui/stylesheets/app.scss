@@ -70,7 +70,9 @@
         border-radius: 4px;
     }
 
-    .button {
+    .button,
+    button,
+    input[type=submit] {
         border-radius: 2px;
         border: 1px solid #719BEC;
         background-color: white;
@@ -88,22 +90,8 @@
         }
     }
 
-    input[type="submit"] {
-        border-radius: 2px;
-        border: 1px solid #719BEC;
-        background-color: white;
-
-        font-size: 15px;
-        color: $blue;
-        line-height: 20px;
-        cursor: pointer;
-        text-align: center;
-        // padding: 5px 0;
-
-        &:hover {
-            background-color: darken(white, 5%);
-            color: darken($blue, 15%);
-        }
+    input[type=submit] {
+        padding: 5px 10px;
     }
 
 
