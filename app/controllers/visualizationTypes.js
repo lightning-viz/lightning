@@ -7,6 +7,8 @@ var browserify = require('browserify');
 var path = require('path');
 var uuid = require('node-uuid');
 var resumer = require('resumer');
+var tasks = require('../../tasks');
+
 
 function protectRequire(str) {
     var protectedVars = ['define', 'require'];
@@ -42,6 +44,14 @@ exports.show = function (req, res, next) {
             });
 
         }).error(next);
+};
+
+
+exports.fetchDefaults = function (req, res, next) {
+
+    tasks.getDefaultVisualizations(function() {
+        return res.redirect('/visualization-types');
+    });
 };
 
 exports.create = function (req, res, next) {
