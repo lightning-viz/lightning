@@ -31,27 +31,31 @@ block container
         .editor-code-container
             
             .visualization-type(data-id="#{vizType.id}", data-collapse)
-                if vizType.javascript
-                    .section-header
-                        h3
-                            | javascript
-                    textarea#js-editor
-                        | #{vizType.javascript}
-            
-            
-                if vizType.styles
-                    .section-header
-                        h3
-                            | styles
-                    textarea#style-editor
-                        | #{vizType.styles}
 
-                if vizType.markup            
-                    .section-header
-                        h3
-                            | markup
-                    textarea#markup-editor
-                        | #{vizType.markup}
+                .section-header
+                    h3
+                        | javascript
+                textarea#js-editor
+                    | #{vizType.javascript}
+            
+            
+                .section-header
+                    h3
+                        | styles
+                textarea#style-editor
+                    if vizType.styles
+                        | #{vizType.styles}
+                    else
+                        | .#{vizType.name} {
+                        |       
+                        | }
+
+                //- if vizType.markup            
+                //-     .section-header
+                //-         h3
+                //-             | markup
+                //-     textarea#markup-editor
+                //-         | #{vizType.markup}
             
             
         .editor-viz-container

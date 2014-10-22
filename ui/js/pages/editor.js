@@ -23,18 +23,15 @@ setTimeout(function() {
 }, 500);
 
 
-var saveVis = function() {
-    console.log('SAVE VIZ');
 
+var getVizTypeValues = function() {
 
-    var url = '/visualizations/types/' + $('.visualization-type').data('id');
     var params = {};
 
     var fieldMap = {
         javascript: jsEditor,
         styles: styleEditor
     };
-
     _.each(fieldMap, function(val, key) {
 
         var editorText = val.getValue();
@@ -42,6 +39,34 @@ var saveVis = function() {
             params[key] = editorText;
         }
     });
+
+    return params;
+
+};
+
+var importViz = function() {
+    console.log('IMPORT VIZ');
+    var url = '/visualizations/types/';
+    var params = getVizTypeValues();
+
+    var name = prompt("Please enter the name for this Visualization Type");
+
+    if(name) {
+        request.post(url, _.extend(params, {name: name, sampleData: []}), function(err, res) {
+            if(err) {
+                alert('problem saving!');
+            } else {
+                window.location.href = '/visualization-types/' + res.body.id;
+            }
+        });
+    }   
+};
+
+var saveVis = function() {
+    console.log('SAVE VIZ');
+
+    var url = '/visualizations/types/' + $('.visualization-type').data('id');
+    var params = getVizTypeValues();
 
     request.put(url, params, function(error, res){
         if(error) {
@@ -65,6 +90,7 @@ var saveVis = function() {
 };
 
 $('#save-button').click(saveVis);
+$('#import-button').click(importViz);
 
 
 var updateJS = function () {
