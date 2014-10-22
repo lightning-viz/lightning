@@ -155,7 +155,9 @@ exports.getDynamicVizStyles = function (req, res, next) {
 
             var scssData = '#lightning-body {\n';
             _.each(vizTypes, function(vizType) {
-                scssData += vizType.styles + '\n';
+                if(vizType.styles) {
+                    scssData += vizType.styles  + '\n';
+                }
             });
 
             scssData += '\n}';
