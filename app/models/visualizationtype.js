@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
 
         thumbnailLocation: DataTypes.STRING,
+
         sampleData: 'JSON',
         sampleOptions: 'JSON',
         sampleImages: DataTypes.ARRAY(DataTypes.STRING),
@@ -110,6 +111,7 @@ module.exports = function(sequelize, DataTypes) {
                 console.log('Create from folder: ' + path);
 
                 attributes = attributes || {};
+                opts = opts || {};
                 // clone REPO, extract js, css, and html files...
 
                 return Q.all([
