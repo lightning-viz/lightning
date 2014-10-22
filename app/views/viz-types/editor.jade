@@ -7,15 +7,25 @@ block container
 
     .editor-container.push.wrap
         .top-matter
-            h2
-                | #{vizType.name}
-            .subheader
-                a(href="..")
-                    | &larr; back
-                p
-                    small
-                        a(href="/visualization-types/#{vizType.id}/delete")
+
+            .meta
+                h2
+                    | #{vizType.name}
+                .subheader
+                    a(href="..")
+                        | &larr; back
+
+                .action-container
+                    a(href="/visualization-types/#{vizType.id}/delete")
+                        .button.danger
                             | Delete Visualization
+
+
+                    a(href="#")#save-button
+                        .button.pad-left
+                            | Save
+
+
 
             
         .editor-code-container
