@@ -241,7 +241,7 @@ exports.appendData = function (req, res, next) {
                 req.io.of('/sessions/' + sessionId)
                     .emit('update', {
                         vizId: viz.id, 
-                        data: viz.data
+                        data: req.body.data
                     });
             
             } else if(fieldName === 'images') {

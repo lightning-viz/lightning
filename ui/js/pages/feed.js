@@ -12,6 +12,7 @@ var feedItemHTML = require('../../templates/feed-item.jade');
 var request = require('superagent');
 var marked = require('marked');
 
+var utils = require('../utils');
 
 
 var socket;
@@ -32,14 +33,21 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-    var Viz = require('viz/' + viz.type);
+    console.log('got viz');
+    utils.requireOrFetchViz(viz.type, function(err, Viz) {
+        if(err) {
+            return console.log(err);
+        }
 
-    $('.feed-container').prepend(feedItemHTML({
-        sid: sid,
-        vid: viz.id
-    }));
+        console.log(Viz);
+        $('.feed-container').prepend(feedItemHTML({
+            sid: sid,
+            vid: viz.id
+        }));
 
-    vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.opts);
+        vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.opts);
+    });
+
 });
 
 
