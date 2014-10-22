@@ -82,6 +82,36 @@ exports.edit = function (req, res, next) {
         });      
 };
 
+exports.delete = function (req, res, next) {
+
+    var vizTypeId = req.params.vid;
+
+    models.VisualizationType
+        .find(vizTypeId)
+        .then(function(vizType) {
+            vizType.destroy().success(function() {
+                return res.json(vizType);                
+            }).error(next);
+        }).error(next);
+};
+
+exports.getDelete = function(req, res, next) {
+    
+    var vizTypeId = req.params.vid;
+
+    models.VisualizationType
+        .find(vizTypeId)
+        .then(function(vizType) {
+            vizType.destroy().success(function() {
+                return res.redirect('/visualization-types/');
+            }).error(next);
+        }).error(next);
+};
+
+
+
+
+
 exports.preview = function(req, res, next) {
 
     var url = req.query.url;

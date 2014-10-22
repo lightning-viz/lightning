@@ -37,6 +37,8 @@ module.exports = function (app) {
 
     app.get('/sessions/:sid/delete/', session.getDelete);
     app.delete('/sessions/:sid/', session.delete);
+    app.delete('/visualization-types/:vid/', visualizationTypes.delete);
+    app.get('/visualization-types/:vid/delete', visualizationTypes.getDelete);
 
     app.get('/sessions/:sid', session.feed);
     app.get('/sessions/:sid/feed', session.feed);
