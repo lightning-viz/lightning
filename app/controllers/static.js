@@ -50,13 +50,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
     var b = browserify();
 
     models.VisualizationType
-        .findAll({
-            where: {
-                name: {
-                    in: visualizationTypes
-                }
-            }
-        }).success(function(vizTypes) {
+        .findAll().success(function(vizTypes) {
 
             console.log(_.pluck(vizTypes, 'name'));
 
@@ -68,7 +62,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
             Q.all(funcs).spread(function() {
 
-                _.each(vizTypes, function(vizType) {
+                _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
 
                     var stream = resumer().queue(vizType.javascript).end();
                     b.require(stream, {
