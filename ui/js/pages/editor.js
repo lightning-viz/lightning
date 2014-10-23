@@ -6,6 +6,7 @@ var request = require('superagent');
 var jsEditorEl = document.getElementById('js-editor');
 var styleEditorEl = document.getElementById('style-editor');
 var markupEditorEl = document.getElementById('markup-editor');
+var dataEditorEl = document.getElementById('data-editor');
 
 var CodeMirror = require('../lib/codemirror/codemirror');
 require('../lib/codemirror/javascript.js');
@@ -16,6 +17,8 @@ var d3 = require('d3');
 var inherits = require('inherits');
 
 var _ = require('lodash');
+
+var Viz;
 
 
 setTimeout(function() {
@@ -39,6 +42,8 @@ var getVizTypeValues = function() {
             params[key] = editorText;
         }
     });
+
+    // todo the sampleData
 
     return params;
 
@@ -105,7 +110,7 @@ var updateJS = function () {
         try {
             eval(res.text);
             $('.feed-item-container').removeClass('fixed');
-            var Viz = require(dynamicBundleName);
+            Viz = require(dynamicBundleName);
             $('.feed-item').html('');
             new Viz('.feed-item', data, images, options);
             $('.feed-item-container').addClass('fixed');
@@ -128,9 +133,20 @@ var updateStyles = function() {
 var updateMarkup = function() {
 
 };
+var updateData = function() {
+    try {
+        data = JSON.parse(dataEditor.getValue());
+        $('.feed-item-container').removeClass('fixed');
+        $('.feed-item').html('');
+        new Viz('.feed-item', data, images, options);
+        $('.feed-item-container').addClass('fixed');
+    } catch(e) {
+        console.log('fail');
+    } 
+};
 
 
-var jsEditor, styleEditor, markupEditor;
+var jsEditor, styleEditor, markupEditor, dataEditor;
 
 if(jsEditorEl) {
     jsEditor = CodeMirror.fromTextArea(jsEditorEl, {
@@ -163,11 +179,27 @@ if(markupEditorEl) {
         indentUnit: 4
     });
 }
+if(dataEditorEl) {
+    dataEditor = CodeMirror.fromTextArea(dataEditorEl, {
+        mode: 'text/x-jade',
+        theme : 'solarized light',
+        extraKeys: {
+            'Ctrl-Enter': updateData
+        },
+        indentUnit: 4
+    });
+}
 
 
 $('.section-header').click(function() {
     $(this).nextAll('.CodeMirror').first().slideToggle();
 })
+
+$('.data-button').click(function() {
+    console.log($(this).data('data'));
+    dataEditor.setValue(JSON.stringify($(this).data('data')));
+    updateData();
+});
 
 var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');
@@ -177,7 +209,7 @@ var options = $feedItem.data('options');
 
 setTimeout(function() {
 
-    var Viz =  require('viz/' + type);
+    Viz =  require('viz/' + type);
 
     var vid = $(this).attr('id');
     new Viz('.feed-item', data, images, options);
