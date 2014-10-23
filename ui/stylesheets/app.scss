@@ -90,9 +90,14 @@
             background-color: darken(white, 5%);
             color: darken($blue, 15%);
         }
+
+        &:focus {
+            outline:0;
+        }
     }
 
-    input[type=submit] {
+    input[type=submit],
+    button {
         padding: 5px 10px;
     }
 
