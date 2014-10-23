@@ -28,7 +28,7 @@ function protectRequire(str) {
 exports.getDynamicVizBundle = function (req, res, next) {
 
     res.set('Content-Type', 'application/javascript');
-
+    res.set('Access-Control-Allow-Origin', "*");
 
     // Get all vizTypes in array
     var visualizationTypes = _.uniq(req.query.visualizations).sort();
@@ -84,7 +84,8 @@ exports.getDynamicVizBundle = function (req, res, next) {
                         return next(err);
                     }               
 
-                    var out = protectRequire(buf.toString('utf8'));
+                    // var out = protectRequire(buf.toString('utf8'));
+                    var out = buf.toString('utf8');
                     cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
                     res.send(out); 
                 });

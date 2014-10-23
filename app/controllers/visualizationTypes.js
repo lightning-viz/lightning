@@ -10,20 +10,20 @@ var resumer = require('resumer');
 var tasks = require('../../tasks');
 
 
-function protectRequire(str) {
-    var protectedVars = ['define', 'require'];
-    var initialCode = ';';
-    var postCode = ';';
-    _.each(protectedVars, function(v) {
-        initialCode += 'window._' + v + ' = window.' + v + ';';
-        initialCode += 'window.' + v + ' = undefined;';
+// function protectRequire(str) {
+//     var protectedVars = ['define', 'require'];
+//     var initialCode = ';';
+//     var postCode = ';';
+//     _.each(protectedVars, function(v) {
+//         initialCode += 'window._' + v + ' = window.' + v + ';';
+//         initialCode += 'window.' + v + ' = undefined;';
 
-        postCode += 'window.' + v + ' = window._' + v + ';';
-    });
+//         postCode += 'window.' + v + ' = window._' + v + ';';
+//     });
 
-    return initialCode + str;// + postCode;
+//     return initialCode + str;// + postCode;
 
-}
+// }
 
 
 exports.index = function (req, res, next) {
@@ -168,7 +168,10 @@ exports.preview = function(req, res, next) {
                             return next(err);
                         }               
 
-                        var javascript = protectRequire(buf.toString('utf8'));
+                        
+                        // var javascript = protectRequire(buf.toString('utf8'));
+                        var javascript = buf.toString('utf8');
+
 
                         if(vizType.styles) {
                             var scssData = '#lightning-body {\n';
