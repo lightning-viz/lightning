@@ -45,6 +45,12 @@
 
     .data-container {
         margin-bottom: 30px;
+
+        button {
+            &:not(:first-child) {
+                margin-left: 2.5%;
+            }
+        }
     }
 
     .CodeMirror {
