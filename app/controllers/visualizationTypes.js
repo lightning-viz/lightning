@@ -36,7 +36,9 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
-    models.VisualizationType.findAll()
+    models.VisualizationType.findAll({
+            order: '"name" ASC'
+        })
         .then(function(types) {
             
             return res.render('viz-types/show', {
