@@ -43,6 +43,18 @@ block container
                         | }
 
 
+                .section-header
+                    h3
+                        | data
+
+                .data-container
+                    for sampleData in vizType.sampleData
+                        button(data-data="#{JSON.stringify(sampleData.data)}").data-button
+                            | #{sampleData.name}
+
+                textarea#data-editor
+                    if vizType.sampleData.length
+                        | #{JSON.stringify(vizType.sampleData[0].data)}
                 //- .section-header
                 //-     h3
                 //-         | markup
