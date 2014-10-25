@@ -1,6 +1,3 @@
-require('../lib/bigSlide');
-$('.menu-link').bigSlide();
-
 var request = require('superagent');
 
 var jsEditorEl = document.getElementById('js-editor');
@@ -12,9 +9,6 @@ var CodeMirror = require('../lib/codemirror/codemirror');
 require('../lib/codemirror/javascript.js');
 require('../lib/codemirror/sass.js');
 require('../lib/codemirror/jade.js');
-
-var d3 = require('d3');
-var inherits = require('inherits');
 
 var _ = require('lodash');
 
@@ -104,8 +98,11 @@ var updateJS = function () {
 
     var jsVal = jsEditor.getValue();
 
-    request.post('/js/dynamic', {javascript: jsVal}, function(error, res) {
+    request.post('/js/dynamic', {javascript: jsVal}, function(err, res) {
         
+        if(err) {
+            return console.log('Error bundling javascript!');
+        }
 
         try {
             eval(res.text);
@@ -204,6 +201,8 @@ $('.data-button').click(function() {
 var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');
 var data = $feedItem.data('data');
+
+console.log(data);
 var images = $feedItem.data('images');
 var options = $feedItem.data('options');
 
