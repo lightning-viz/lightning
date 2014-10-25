@@ -102,7 +102,15 @@ exports.bundleJSForExecution = function(req, res, next) {
         expose: 'dynamicallyBundledJavascript'
     });
 
-    b.bundle().pipe(res);
+    var bundle = b.bundle();
+
+    bundle.on('error', function(err) {
+        return res.status(500).send();
+    });
+
+    bundle.pipe(res);
+
+
 };
 
 
