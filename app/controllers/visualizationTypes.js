@@ -1,4 +1,3 @@
-
 var models = require('../models');
 var _ = require('lodash');
 var cache = require('../cache');
@@ -36,9 +35,7 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
-    models.VisualizationType.findAll({
-            order: '"name" ASC'
-        })
+    models.VisualizationType.findAll()
         .then(function(types) {
             
             return res.render('viz-types/show', {
