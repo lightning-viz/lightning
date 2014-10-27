@@ -105,6 +105,7 @@ exports.bundleJSForExecution = function(req, res, next) {
     var bundle = b.bundle();
 
     bundle.on('error', function(err) {
+        console.log(err);
         return res.status(500).send();
     });
 
