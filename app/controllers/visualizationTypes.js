@@ -146,6 +146,8 @@ exports.preview = function(req, res, next) {
             .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
     } else if(req.query.path && process.env.NODE_ENV !== 'production') {
         var p = path.resolve(req.query.path);
+        tmpPath = req.query.path;
+        req.session.lastBundlePath = tmpPath;
         vizTypePromise = models.VisualizationType
             .createFromFolder(p, { name: p}, {preview: true});
     }
