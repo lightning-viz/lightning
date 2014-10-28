@@ -298,6 +298,13 @@ exports.appendData = function (req, res, next) {
 var thumbnailAndUpload = function(f, sessionId, callback) {
 
 
+
+    var staticUrl = '/';
+    if(config.url) {
+        staticUrl = 'http://' + config.url + '/';
+    }
+
+
     // check if thumbnailing exists,
     // and if s3 creds exist
     var s3Exists = !!config.s3.key;
@@ -419,7 +426,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
 
                             return callback(null, {
                                 response: 200,
-                                imgData: '/images/uploads' + originalS3Path
+                                imgData: staticUrl + 'images/uploads' + originalS3Path
                             });
                         });
                     }
@@ -476,7 +483,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
 
                     return callback(null, {
                         response: 200,
-                        imgData: '/images/uploads' + originalS3Path
+                        imgData: staticUrl + 'images/uploads' + originalS3Path
                     });
                 });
             }
