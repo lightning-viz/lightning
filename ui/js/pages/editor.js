@@ -16,9 +16,11 @@ var Viz;
 
 
 setTimeout(function() {
-    $('.feed-item-container').addClass('fixed');
+    var $container = $('.feed-item-container').addClass('fixed');
+    if($(window).height() < 900) {
+        $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
+    }
 }, 500);
-
 
 
 var getVizTypeValues = function() {
