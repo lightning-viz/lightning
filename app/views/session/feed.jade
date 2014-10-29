@@ -17,9 +17,17 @@ block content
                         a(href="/sessions/#{session.id}/delete")
                             | Delete Session
 
+                p
+                    small
+                        a(href="#add-data-modal", rel="modal:open")
+                            | Create Visualization
+
+
+
     .row
         .sixteen.columns
             .feed-container
+
                 if visualizations.length
                     for viz in visualizations.reverse()
                         include ./viz-data
@@ -30,6 +38,21 @@ block content
                         | No data found. Post data to  
                         span.code
                             | /sessions/#{session.id}/visualizations
+
+
+
+    .modal#add-data-modal
+        form#data-input-form(method="post", action="../visualizations")
+            h3
+                | Manually Create Visualization
+            select(name="type")
+                each type, typeName in vizTypes
+                    option(value="#{typeName}")
+                        | #{typeName}
+
+            textarea(name="data", placeholder="e.g. [1, 2, 3, 4, 5]")
+
+            input(type="submit", value="Submit")
 
 
 

@@ -1,9 +1,7 @@
 
 window.define = undefined;
 
-
-require('../lib/bigSlide');
-$('.menu-link').bigSlide();
+require('../lib/modal');
 
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
@@ -157,4 +155,31 @@ $('.edit-description').click(function() {
         });
     });
 });
+
+$('#data-input-form').submit(function(e) {
+    e.preventDefault();
+
+    var url = $(this).attr('action');
+    console.log(url);
+
+    var params = {};
+    var inputs = $(this).serializeArray();
+    $.each(inputs, function (i, input) {
+        params[input.name] = input.value;
+    });
+
+    params.data = JSON.parse(params.data);
+
+    console.log(params);
+
+
+    request.post(url, params, function(error, res){
+        if(error) {
+            return console.log(error);
+        } else {
+            console.log('success');
+            $.modal.close();
+        }
+    });
+})
 
