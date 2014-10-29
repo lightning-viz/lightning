@@ -49,7 +49,9 @@ exports.feed = function (req, res, next) {
                     SessionId: sessionId
                 }
             }),
-        VisualizationType.findAll()
+        VisualizationType.findAll({
+            order: '"name" ASC'
+        })
     ]).spread(function(session, visualizations, vizTypes) {
 
         if(!session) {
