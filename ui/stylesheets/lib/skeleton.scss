@@ -240,3 +240,25 @@
       width: 0;
       height: 0;
     }
+
+        input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    textarea,
+    select {
+        border: 1px solid #ccc;
+        padding: 6px 4px;
+        outline: none;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #777;
+        margin: 0;
+        width: 210px;
+        max-width: 100%;
+        display: block;
+        margin-bottom: 20px;
+        background: #fff; }
+    select {
+        padding: 0; }
