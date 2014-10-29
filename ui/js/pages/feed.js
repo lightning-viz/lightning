@@ -44,6 +44,8 @@ socket.on('viz', function (viz) {
         }));
 
         vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.opts);
+
+        $('.edit-description').unbind().click(editDesctiption);
     });
 
 });
@@ -118,7 +120,8 @@ setTimeout(function() {
 
 }, 0);
 
-$('.edit-description').click(function() {
+
+var editDesctiption = function() {
     var $this = $(this);
     var $itemContainer = $this.closest('.feed-item-container');
     var h = Math.max($itemContainer.find('.description').height(), 300);
@@ -154,7 +157,9 @@ $('.edit-description').click(function() {
             }
         });
     });
-});
+};
+
+$('.edit-description').click(editDesctiption);
 
 $('#data-input-form').submit(function(e) {
     e.preventDefault();

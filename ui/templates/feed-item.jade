@@ -1,6 +1,22 @@
 
-.feed-item
-.permalink
-    a(href="/visualizations/#{vid}")
-        | permalink
+.feed-item-container(data-model="visualization", data-model-id="#{vid}")
+    .feed-item
+
+    .description-container
+        .description
+
+        .description-editor
+            textarea
+
+
+    .bottom-container
+        .edit-description
+            a(href="#")
+                | add description
+
+
+        .permalink
+            a(href="/visualizations/#{vid}")
+                | permalink
+
 hr
