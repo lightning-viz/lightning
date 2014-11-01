@@ -17,14 +17,17 @@ Python
 dependencies
 
 * [node.js](http://nodejs.org/)
+* gulp build system
+    * to install run `npm install --global gulp` once node.js is installed (may need sudo)
 * postgres
+    * Create a database named `lightning-viz` by running `CREATE DATABASE "lightning-viz";`
 
 
-install by running `npm install`. 
+Install libraries by running `npm install`. 
 
-Compile client side libraries by running `gulp`. This can just keep running forever.
+Compile client side libraries by running `gulp`. This can will continue to watch for changes of client side files.
 
-Run server with `npm start`.
+Run server with `npm start`. Open your browser to [http://localhost:3000](http://localhost:3000)
 
 
 ## viz types
