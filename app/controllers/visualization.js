@@ -17,34 +17,21 @@ exports.getData = function (req, res, next) {
         }).error(next);
 };
 
-exports.getDataField = function (req, res, next) {
+exports.getDataWithKeys = function (req, res, next) {
 
-    var vizId = req.params.vid;
-    var fieldName = req.params.field;
+    var vizId = req.params[0];
+    var keys = _.filter(req.params[1].split('/'), function(k) {
+        return k.trim() !== '';
+    });
 
-    console.log('getting data field ' + fieldName);
+    console.log(keys);
+
 
     models.Visualization
-        .getNamedObjectForVisualization(vizId, fieldName)
-        .then(function(data) {
+        .queryDataForVisualization(vizId, keys)
+        .then(function(results) {
             return res.json({
-                data: data
-            });
-        }).error(next);
-};
-
-
-exports.getDataAtIndex = function (req, res, next) {
-
-    var vizId = req.params.vid;
-    var fieldName = req.params.field;
-    var index = req.params.index;
-
-    models.Visualization
-        .getNamedObjectAtIndexForVisualization(vizId, fieldName, index)
-        .then(function(data) {
-            return res.json({
-                data: data[0][fieldName]
+                data: results[0].data
             });
         }).error(next);
 };

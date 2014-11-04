@@ -1,4 +1,5 @@
 var validator = require('validator');
+var _ = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
     var Visualization = sequelize.define('Visualization', {
@@ -32,6 +33,23 @@ module.exports = function(sequelize, DataTypes) {
 
             getDataForVisualization: function(vid) {
                 return sequelize.query('SELECT * from "Visualizations" WHERE id=' + vid);
+            },
+
+            queryDataForVisualization: function(vid, keys) {
+
+                var qs = _.chain(keys)
+                            .map(validator.escape)
+                            .map(function(key) {
+                                if(!validator.isNumeric(key)) {
+                                    return '\'' + key + '\'';
+                                }
+                                return key;
+                            })
+                            .value()
+                            .join('->');
+
+                return sequelize
+                    .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
             }
         },
 
@@ -44,6 +62,9 @@ module.exports = function(sequelize, DataTypes) {
             },
             getData: function() {
                 return Visualization.getDataForVisualization(this.id);
+            },
+            queryData: function(keys) {
+                return Visualization.queryDataForVisualization(this.id, keys);
             },
             getInitialData: function(type) {
                 if(type.initialDataField) {
