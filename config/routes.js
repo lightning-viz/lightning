@@ -65,10 +65,8 @@ module.exports = function (app) {
     
     app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
     app.get('/visualizations/:vid/data', visualization.getData);
-    app.get('/sessions/:sid/visualizations/:vid/data/:field', visualization.getDataField);
-    app.get('/visualizations/:vid/data/:field', visualization.getDataField);
-    app.get('/sessions/:sid/visualizations/:vid/data/:field/:index', visualization.getDataAtIndex);
-    app.get('/visualizations/:vid/data/:field/:index', visualization.getDataAtIndex);
+    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/(\d+)\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 
