@@ -314,7 +314,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
 
     if(s3Exists) {
 
-        knox.createClient({
+        s3Client = knox.createClient({
             secure: false,
             key: process.env.S3_KEY,
             secret: process.env.S3_SECRET,
@@ -387,14 +387,20 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     if(s3Exists) {
                         async.parallel([
                             function(callback) {
+                                console.log('s3 exists');
+                                console.log('uploading image');
                                 console.log(imgPath + ':' + originalS3Path);
                                 s3Client.putFile(imgPath, originalS3Path, headers, callback);
                             },
                             function(callback) {
+                                console.log('uploading thumbnail');
                                 console.log(thumbnailPath + ':' + thumbnailS3Path);
                                 s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                             }
                         ], function(err, results) {
+
+                            console.log('in herrrr')
+
                             var s3Response = results[0];
 
                             var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
