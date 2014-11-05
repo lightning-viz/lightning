@@ -121,7 +121,10 @@ setTimeout(function() {
 }, 0);
 
 
-var editDesctiption = function() {
+var editDesctiption = function(e) {
+
+    e.preventDefault();
+
     var $this = $(this);
     var $itemContainer = $this.closest('.feed-item-container');
     var h = Math.max($itemContainer.find('.description').height(), 300);
