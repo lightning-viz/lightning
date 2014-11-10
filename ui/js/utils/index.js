@@ -26,7 +26,7 @@ module.exports = {
 
             request('/js/dynamic/viz/?visualizations[]=' + vizName, function(err, res) {
                 if(err) {
-                    cb(err);
+                    return cb(err);
                 }
 
                 eval(res.text);

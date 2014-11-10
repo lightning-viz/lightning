@@ -5,6 +5,7 @@ require('../lib/modal');
 
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
+sid = (window.lightning || {}).sid || sid;
 var feedItemHTML = require('../../templates/feed-item.jade');
 
 var request = require('superagent');
@@ -56,7 +57,11 @@ socket.on('update', function(message) {
     var vizId = message.vizId;
     var data = message.data;
 
-    vizs[vizId].updateData(data);
+    if(vizs[vizId].appendData) {
+        vizs[vizId].appendData(data);
+    } else if(vizs[vizId].updateData) {
+        vizs[vizId].updateData(data);    
+    }
 });
 
 
