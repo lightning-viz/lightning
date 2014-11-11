@@ -30,6 +30,7 @@ module.exports = function (app) {
     app.get('/visualization-types/fetch-defaults', visualizationTypes.fetchDefaults);
     app.post('/visualization-types', visualizationTypes.importViz);
     app.get('/visualization-types/preview', visualizationTypes.preview);
+    app.get('/visualization-types/preview/full', visualizationTypes.preview);
     app.get('/visualization-types/:vid', visualizationTypes.editor);
     
     app.get('/', home.index);

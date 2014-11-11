@@ -74,6 +74,10 @@
         width: 50%;
         float: left;
 
+        &.full {
+            width: 60%;
+            margin-bottom: 30px;
+        }
         // .feed-item-container {
         //     position: fixed;
         // }
