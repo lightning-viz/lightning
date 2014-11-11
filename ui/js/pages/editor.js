@@ -16,7 +16,7 @@ var Viz;
 
 
 setTimeout(function() {
-    var $container = $('.feed-item-container').addClass('fixed');
+    var $container = $('.feed-item-container').not('.full').addClass('fixed');
     if($(window).height() < 900) {
         $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
     }
@@ -112,7 +112,7 @@ var updateJS = function () {
             Viz = require(dynamicBundleName);
             $('.feed-item').html('');
             new Viz('.feed-item', data, images, options);
-            $('.feed-item-container').addClass('fixed');
+            $('.feed-item-container').not('.full').addClass('fixed');
         } catch (e) {
             console.log('error evaluating js');
         }

@@ -1,0 +1,41 @@
+extends ../layout
+
+block dynamic-css
+    style#viz-styles.
+        #{css}
+
+block container
+
+    .editor-container.push.wrap
+        .top-matter           
+            .meta
+                h2
+                    | #{vizType.name}
+                .subheader
+                    a(href="..")
+                        | &larr; back
+
+                .action-container
+                    a(href="#")#import-button
+                        .button
+                            | Import
+
+            
+        .editor-viz-container.full
+            .feed-item-container.full
+                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
+
+
+    .saved
+        | Saved!
+    .problem-saving
+        | Problem Saving...
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='#{STATIC_URL}js/basic.js')
+    script.
+        !{javascript}
+    script(src='#{STATIC_URL}js/editor.js')
+
