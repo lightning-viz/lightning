@@ -125,6 +125,8 @@ exports.getDelete = function(req, res, next) {
 
 exports.preview = function(req, res, next) {
 
+    console.log('requested url: ' + req.url);
+
     var url = req.query.url;
     var file = req.query.file;
 
@@ -182,6 +184,13 @@ exports.preview = function(req, res, next) {
                                 data: scssData,
                                 success: function(css) {
 
+                                    if(req.url.indexOf('/preview/full') > -1) {
+                                        return res.render('viz-types/full-preview', {
+                                            vizType: vizType,
+                                            javascript: javascript,
+                                            css: css
+                                        });
+                                    }
                                     return res.render('viz-types/preview-editor', {
                                         vizType: vizType,
                                         javascript: javascript,
@@ -193,6 +202,13 @@ exports.preview = function(req, res, next) {
                             });
                         } else {
 
+                            if(req.url.indexOf('/preview/full') > -1) {
+                                return res.render('viz-types/full-preview', {
+                                    vizType: vizType,
+                                    javascript: javascript,
+                                    css: ''
+                                });
+                            }
                             return res.render('viz-types/preview-editor', {
                                 vizType: vizType,
                                 javascript: javascript,

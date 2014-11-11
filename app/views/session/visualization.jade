@@ -18,4 +18,8 @@ block scripts
     script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/basic.js')
     script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.type}")
+    script.
+        window.lightning = window.lightning || {
+            sid: #{viz.SessionId}
+        }
     script(src='#{STATIC_URL}js/feed.js')
