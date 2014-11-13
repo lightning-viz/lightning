@@ -241,7 +241,7 @@ exports.appendData = function (req, res, next) {
                     }).error(next);
 
                 req.io.of('/sessions/' + sessionId)
-                    .emit('update', {
+                    .emit('append', {
                         vizId: viz.id, 
                         data: req.body.data
                     });
@@ -279,6 +279,85 @@ exports.appendData = function (req, res, next) {
                                 });
 
                             req.io.of('/sessions/' + sessionId)
+                                .emit('append', {
+                                    vizId: viz.id, 
+                                    data: imgData
+                                });
+
+                        });
+                    });
+                });
+            } else {
+                return next(500);
+            }
+
+
+        }).error(next);
+
+};
+
+
+
+exports.updateData = function (req, res, next) {
+
+    var sessionId = req.params.sid;
+    var vizId = req.params.vid;
+    var fieldName = req.params.field;
+
+
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            if(req.is('json')) {
+
+                if(fieldName) {
+                    viz.data[fieldName] = req.body.data;
+                } else {
+                    viz.data = req.body.data;
+                }
+
+                viz
+                    .save()
+                    .then(function() {
+                        return res.json(viz);
+                    }).error(next);
+
+                req.io.of('/sessions/' + sessionId)
+                    .emit('update', {
+                        vizId: viz.id, 
+                        data: req.body.data
+                    });
+            
+            } else if(fieldName === 'images') {
+
+                var form = new multiparty.Form();
+
+                form.parse(req, function(err, fields, files) {
+                    _.each(files, function(f) {
+                        thumbnailAndUpload(f, sessionId, function(err, data) {
+
+                            if(err) {
+                                console.log('error in thumbnailAndUpload');
+                                return res.status(500).send('error creating image thumbnail');
+                            }
+                            var imgData = data.imgData;
+                            var s3Response = data.response;
+
+                            viz.images = [imgData];
+                            
+                            viz
+                                .save()
+                                .then(function() {
+
+                                    if(typeof s3Response === 'object') {
+                                        res.statusCode = s3Response.statusCode;
+                                        s3Response.pipe(res);
+                                    } else {
+                                        return res.status(data.response).send('');
+                                    }
+                                });
+
+                            req.io.of('/sessions/' + sessionId)
                                 .emit('update', {
                                     vizId: viz.id, 
                                     data: imgData
@@ -295,6 +374,7 @@ exports.appendData = function (req, res, next) {
         }).error(next);
 
 };
+
 
 
 var thumbnailAndUpload = function(f, sessionId, callback) {

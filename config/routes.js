@@ -58,8 +58,8 @@ module.exports = function (app) {
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
 
 
-    app.put('/sessions/:sid/visualizations/:vid/data', visualization.updateData);
-    app.put('/sessions/:sid/visualizations/:vid/data/:field', visualization.updateData);
+    app.put('/sessions/:sid/visualizations/:vid/data', session.updateData);
+    app.put('/sessions/:sid/visualizations/:vid/data/:field', session.updateData);
 
 
     
