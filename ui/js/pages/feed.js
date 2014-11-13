@@ -52,14 +52,22 @@ socket.on('viz', function (viz) {
 });
 
 
-socket.on('update', function(message) {
+socket.on('append', function(message) {
 
     var vizId = message.vizId;
     var data = message.data;
 
     if(vizs[vizId].appendData) {
         vizs[vizId].appendData(data);
-    } else if(vizs[vizId].updateData) {
+    }
+});
+
+socket.on('update', function(message) {
+
+    var vizId = message.vizId;
+    var data = message.data;
+
+    if(vizs[vizId].updateData) {
         vizs[vizId].updateData(data);    
     }
 });
