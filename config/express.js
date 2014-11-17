@@ -86,24 +86,30 @@ module.exports = function (app, io) {
     }
 
 
-
-    // expose package.json to views
-    app.use(function (req, res, next) {
-        res.locals.pkg = pkg;
-        res.locals.env = env;
-        res.locals.moment = moment;
-        res.locals._ = require('lodash');
-        res.locals.marked = require('marked');
-        res.locals.STATIC_URL =  static_url;
-        next();
-    });
-
     // cookieParser should be above session
     app.use(cookieParser());
 
     // bodyParser should be above methodOverride
     app.use(bodyParser.json({limit: '50mb'}));    
     app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+
+
+    // expose package.json to views
+    app.use(function (req, res, next) {
+        
+        var staticUrl = req.query.host || static_url;
+        if(staticUrl.slice(-1) !== '/') {
+            staticUrl += '/';
+        }
+
+        res.locals.pkg = pkg;
+        res.locals.env = env;
+        res.locals.moment = moment;
+        res.locals._ = require('lodash');
+        res.locals.marked = require('marked');
+        res.locals.STATIC_URL =  staticUrl;
+        next();
+    });
 
 
     app.use(methodOverride(function (req, res) {
