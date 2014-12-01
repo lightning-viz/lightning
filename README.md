@@ -30,6 +30,14 @@ Compile client side libraries by running `gulp`. This can will continue to watch
 Run server with `npm start`. Open your browser to [http://localhost:3000](http://localhost:3000)
 
 
+### database migrations
+
+If a change has been made to the database, you can update using the sequelize cli migration tool.
+
+Simply run `sequelize db:migrate --config ./config/database.js` from the root of the project and sequelize should automatically 
+run any pending migrations.
+
+
 ## viz types
 
 With companion code from the [python client](https://github.com/mathisonian/lightning-python)

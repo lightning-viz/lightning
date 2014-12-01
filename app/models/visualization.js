@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     var Visualization = sequelize.define('Visualization', {
         data: 'JSON',
         opts: 'JSON',
+        settings: 'JSON',
         name: DataTypes.STRING,
         description: DataTypes.TEXT,
         type: DataTypes.STRING,
