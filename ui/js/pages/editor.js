@@ -152,7 +152,8 @@ if(jsEditorEl) {
         mode: 'text/javascript',
         theme : 'solarized light',
         extraKeys: {
-            'Ctrl-Enter': updateJS
+            'Ctrl-Enter': updateJS,
+            'Ctrl-S': saveVis
         },
         indentUnit: 4
     });
@@ -162,7 +163,8 @@ if(styleEditorEl) {
         mode: 'text/x-sass',
         theme : 'solarized light',
         extraKeys: {
-            'Ctrl-Enter': updateStyles
+            'Ctrl-Enter': updateStyles,
+            'Ctrl-S': saveVis
         },
         indentUnit: 4
     });
@@ -173,7 +175,8 @@ if(markupEditorEl) {
         mode: 'text/x-jade',
         theme : 'solarized light',
         extraKeys: {
-            'Ctrl-Enter': updateMarkup
+            'Ctrl-Enter': updateMarkup,
+            'Ctrl-S': saveVis
         },
         indentUnit: 4
     });
@@ -183,7 +186,8 @@ if(dataEditorEl) {
         mode: 'text/x-jade',
         theme : 'solarized light',
         extraKeys: {
-            'Ctrl-Enter': updateData
+            'Ctrl-Enter': updateData,
+            'Ctrl-S': saveVis
         },
         indentUnit: 4
     });
