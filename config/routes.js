@@ -47,6 +47,7 @@ module.exports = function (app) {
     
     app.put('/sessions/:sid', session.update);
     app.put('/visualizations/:vid', visualization.update);
+    app.put('/visualizations/:vid/settings', visualization.updateSettings);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
@@ -61,15 +62,16 @@ module.exports = function (app) {
     app.put('/sessions/:sid/visualizations/:vid/data', session.updateData);
     app.put('/sessions/:sid/visualizations/:vid/data/:field', session.updateData);
 
-
-    
     
     app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
+    app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
+    app.get('/visualizations/:vid/settings', visualization.getSettings);
     app.get('/visualizations/:vid/data', visualization.getData);
     app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/(\d+)\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
-
 
 
 
