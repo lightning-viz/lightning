@@ -213,7 +213,18 @@ exports.appendData = function (req, res, next) {
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
-                        viz.data[fieldName].push(req.body.data);
+
+                        if(viz.type.indexOf('streaming') > -1) {
+                            _.each(req.body.data, function(d, i) {
+                                if(i < viz.data[fieldName].length) {
+                                    viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
+                                }
+                            });
+                        } else {
+                            viz.data[fieldName].push(req.body.data);    
+                        }
+
+
                     } else if(_.isUndefined(viz.data[fieldName])) {
                         console.log(fieldName);
                         viz.data[fieldName] = req.body.data;
@@ -223,7 +234,16 @@ exports.appendData = function (req, res, next) {
                 } else {
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
-                            viz.data = viz.data.concat(req.body.data);
+
+                            if(viz.type.indexOf('streaming') > -1) {
+                                _.each(req.body.data, function(d, i) {
+
+                                });
+                            } else {
+                                viz.data = viz.data.concat(req.body.data);
+                            }
+
+
                         } else {
                             viz.data.push(req.body.data);
                         }
@@ -478,9 +498,6 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                                 s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                             }
                         ], function(err, results) {
-
-                            console.log('in herrrr')
-
                             var s3Response = results[0];
 
                             var imgURL = 'https://s3.amazonaws.com/' + process.env.S3_BUCKET + originalS3Path;
