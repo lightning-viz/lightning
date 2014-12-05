@@ -17,6 +17,20 @@ exports.getData = function (req, res, next) {
         }).error(next);
 };
 
+exports.getSettings = function (req, res, next) {
+    var vizId = req.params.vid;
+
+    var Visualization = models.Visualization;
+
+    Visualization
+        .find(vizId)
+        .then(function(viz) {
+            return res.json({
+                settings: viz.settings || {}
+            });
+        }).error(next);
+};
+
 exports.getDataWithKeys = function (req, res, next) {
 
     var vizId = req.params[0];
@@ -32,6 +46,24 @@ exports.getDataWithKeys = function (req, res, next) {
         .then(function(results) {
             return res.json({
                 data: results[0].data
+            });
+        }).error(next);
+};
+
+exports.getSettingsWithKeys = function (req, res, next) {
+
+    var vizId = req.params[0];
+    var keys = _.filter(req.params[1].split('/'), function(k) {
+        return k.trim() !== '';
+    });
+
+    console.log(keys);
+
+    models.Visualization
+        .querySettingsForVisualization(vizId, keys)
+        .then(function(results) {
+            return res.json({
+                settings: results[0].settings || {}
             });
         }).error(next);
 };
@@ -54,6 +86,28 @@ exports.update = function (req, res, next) {
             console.log(err);
             return res.status(500).send();
         });
+
+};
+
+exports.updateSettings = function (req, res, next) {
+
+    var vid = req.params.vid;
+    var Visualization = models.Visualization;
+
+    console.log('updating visualization ' + vid);
+
+    Visualization
+        .find(vizId)
+        .then(function(viz) {
+            viz.settings = _.extend(viz.settings, req.body);
+
+            viz.save()
+                .then(function() {
+                    return res.json({
+                        settings: viz.settings
+                    });
+                }).error(next);
+        }).error(next);
 
 };
 

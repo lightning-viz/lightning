@@ -51,6 +51,23 @@ module.exports = function(sequelize, DataTypes) {
 
                 return sequelize
                     .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
+            },
+
+            querySettingsForVisualization: function(vid, keys) {
+
+                var qs = _.chain(keys)
+                            .map(validator.escape)
+                            .map(function(key) {
+                                if(!validator.isNumeric(key)) {
+                                    return '\'' + key + '\'';
+                                }
+                                return key;
+                            })
+                            .value()
+                            .join('->');
+
+                return sequelize
+                    .query('SELECT settings->' + qs + ' AS settings FROM "Visualizations" WHERE id=' + vid);
             }
         },
 
