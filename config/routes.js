@@ -48,6 +48,7 @@ module.exports = function (app) {
     app.put('/sessions/:sid', session.update);
     app.put('/visualizations/:vid', visualization.update);
     app.put('/visualizations/:vid/settings', visualization.updateSettings);
+    app.post('/visualizations/:vid/settings', visualization.updateSettings);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
