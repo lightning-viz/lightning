@@ -97,9 +97,9 @@ exports.updateSettings = function (req, res, next) {
     console.log('updating visualization ' + vid);
 
     Visualization
-        .find(vizId)
+        .find(vid)
         .then(function(viz) {
-            viz.settings = _.extend(viz.settings, req.body);
+            viz.settings = _.extend(viz.settings || {}, req.body);
 
             viz.save()
                 .then(function() {
