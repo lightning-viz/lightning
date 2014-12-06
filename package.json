@@ -72,7 +72,7 @@
     "jade": "~1.3.1",
     "jadeify": "^2.7.0",
     "knox": "^0.9.0",
-    "lightning-client-utils": "^0.2.0",
+    "lightning-client-utils": "^0.3.1",
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
     "method-override": "^2.1.1",
