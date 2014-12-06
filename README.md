@@ -34,7 +34,7 @@ Run server with `npm start`. Open your browser to [http://localhost:3000](http:/
 
 If a change has been made to the database, you can update using the sequelize cli migration tool.
 
-Simply run `sequelize db:migrate --config ./config/database.js` from the root of the project and sequelize should automatically 
+Simply run `npm run migrate` from the root of the project and sequelize should automatically 
 run any pending migrations.
 
 

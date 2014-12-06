@@ -11,7 +11,8 @@
   },
   "scripts": {
     "start": "NODE_ENV=development nodemon --watch app --watch public/js server.js ",
-    "test": "mocha --timeout 20000"
+    "test": "mocha --timeout 20000",
+    "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js"
   },
   "browserify": {
     "transform": [
@@ -92,6 +93,7 @@
     "request": "~2.36.0",
     "resumer": "0.0.0",
     "sequelize": "^1.7.10",
+    "sequelize-cli": "^0.3.3",
     "serve-favicon": "^2.1.6",
     "serve-static": "*",
     "should": "*",
