@@ -32,6 +32,7 @@ module.exports = function (app) {
     app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
     app.post('/js/dynamic', staticController.bundleJSForExecution);
     app.post('/css/dynamic', staticController.buildSCSS);
+    app.get('/visualizations/:vid/public', visualization.publicRead);
 
     // visualizatinos
     app.post('/visualizations/types', authMiddleware, visualizationTypes.create);
