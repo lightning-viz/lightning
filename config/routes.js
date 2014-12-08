@@ -33,8 +33,9 @@ module.exports = function (app) {
     app.post('/js/dynamic', staticController.bundleJSForExecution);
     app.post('/css/dynamic', staticController.buildSCSS);
     app.get('/visualizations/:vid/public', visualization.publicRead);
+    app.get('/sessions/:sid/public', session.publicRead);
 
-    // visualizatinos
+    // visualizations
     app.post('/visualizations/types', authMiddleware, visualizationTypes.create);
     app.put('/visualizations/types/:vid', authMiddleware, visualizationTypes.edit);
     app.get('/visualizations/types', authMiddleware, visualizationTypes.index);
