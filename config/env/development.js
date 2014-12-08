@@ -5,6 +5,8 @@
 
 module.exports = {
 
+    auth: {
+    },
     url: 'localhost:3000',
     s3: {
         key: process.env.S3_KEY,
