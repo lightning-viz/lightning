@@ -183,7 +183,6 @@ module.exports = function(sequelize, DataTypes) {
                     funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
                 }
                 if(self.styles) {
-
                     console.log(stylePath + '/' + self.name + '.scss');
                     funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
                 }

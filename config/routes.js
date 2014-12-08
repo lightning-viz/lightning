@@ -6,6 +6,8 @@ var session = require('../app/controllers/session');
 var visualizationTypes = require('../app/controllers/visualizationTypes');
 var visualization = require('../app/controllers/visualization');
 var staticController = require('../app/controllers/static');
+var basicAuth = require('basic-auth-connect');
+var config = require('./config');
 
 
 /**
@@ -14,64 +16,75 @@ var staticController = require('../app/controllers/static');
 
 module.exports = function (app) {
 
+    var auth = config.auth || {};
+
+    var authMiddleware = function(req, res, next) {next()};
+
+
+    if(auth.username && auth.password) {
+        authMiddleware = basicAuth(auth.username, auth.password);
+    }
+
+
     app.get('/playground', home.playground);
 
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
     app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
     app.post('/js/dynamic', staticController.bundleJSForExecution);
     app.post('/css/dynamic', staticController.buildSCSS);
+    app.get('/visualizations/:vid/public', visualization.publicRead);
 
     // visualizatinos
-    app.post('/visualizations/types', visualizationTypes.create);
-    app.put('/visualizations/types/:vid', visualizationTypes.edit);
-    app.get('/visualizations/types', visualizationTypes.index);
+    app.post('/visualizations/types', authMiddleware, visualizationTypes.create);
+    app.put('/visualizations/types/:vid', authMiddleware, visualizationTypes.edit);
+    app.get('/visualizations/types', authMiddleware, visualizationTypes.index);
 
-    app.get('/visualization-types', visualizationTypes.show);
-    app.get('/visualization-types/fetch-defaults', visualizationTypes.fetchDefaults);
-    app.post('/visualization-types', visualizationTypes.importViz);
-    app.get('/visualization-types/preview', visualizationTypes.preview);
-    app.get('/visualization-types/preview/full', visualizationTypes.preview);
-    app.get('/visualization-types/:vid', visualizationTypes.editor);
+    app.get('/visualization-types', authMiddleware, visualizationTypes.show);
+    app.get('/visualization-types/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
+    app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
+    app.get('/visualization-types/preview', authMiddleware, visualizationTypes.preview);
+    app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
+    app.get('/visualization-types/:vid', authMiddleware, visualizationTypes.editor);
     
-    app.get('/', home.index);
-    app.get('/sessions', session.index);
-    app.get('/sessions/create/', session.getCreate);
+    app.get('/', authMiddleware, home.index);
+    app.get('/sessions', authMiddleware, session.index);
+    app.get('/sessions/create/', authMiddleware, session.getCreate);
 
-    app.get('/sessions/:sid/delete/', session.getDelete);
-    app.delete('/sessions/:sid/', session.delete);
-    app.delete('/visualization-types/:vid/', visualizationTypes.delete);
-    app.get('/visualization-types/:vid/delete', visualizationTypes.getDelete);
+    app.get('/sessions/:sid/delete/', authMiddleware, session.getDelete);
+    app.delete('/sessions/:sid/', authMiddleware, session.delete);
+    app.delete('/visualization-types/:vid/', authMiddleware, visualizationTypes.delete);
+    app.get('/visualization-types/:vid/delete', authMiddleware, visualizationTypes.getDelete);
 
-    app.get('/sessions/:sid', session.feed);
-    app.get('/sessions/:sid/feed', session.feed);
+    app.get('/sessions/:sid', authMiddleware, session.feed);
+    app.get('/sessions/:sid/feed', authMiddleware, session.feed);
     
-    app.put('/sessions/:sid', session.update);
-    app.put('/visualizations/:vid', visualization.update);
-    app.put('/visualizations/:vid/settings', visualization.updateSettings);
-    app.post('/visualizations/:vid/settings', visualization.updateSettings);
+    app.put('/sessions/:sid', authMiddleware, session.update);
+    app.put('/visualizations/:vid', authMiddleware, visualization.update);
+    app.put('/visualizations/:vid/settings', authMiddleware, visualization.updateSettings);
+    app.post('/visualizations/:vid/settings', authMiddleware, visualization.updateSettings);
 
-    app.post('/sessions', session.create);
-    app.post('/sessions/:sid/visualizations', session.addData);
-    app.get('/visualizations/:vid', visualization.read);
-    app.get('/visualizations/:vid/embed', visualization.embed);
-
-
-    app.post('/sessions/:sid/visualizations/:vid/data', session.appendData);
-    app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
+    app.post('/sessions', authMiddleware, session.create);
+    app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
+    app.get('/visualizations/:vid', authMiddleware, visualization.read);
+    app.get('/visualizations/:vid/embed', authMiddleware, visualization.embed);
 
 
-    app.put('/sessions/:sid/visualizations/:vid/data', session.updateData);
-    app.put('/sessions/:sid/visualizations/:vid/data/:field', session.updateData);
+    app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
+    app.post('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.appendData);
+
+
+    app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
+    app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
 
     
-    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
-    app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
-    app.get('/visualizations/:vid/settings', visualization.getSettings);
-    app.get('/visualizations/:vid/data', visualization.getData);
-    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
+    app.get('/sessions/:sid/visualizations/:vid/data', authMiddleware, visualization.getData);
+    app.get('/sessions/:sid/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
+    app.get('/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
+    app.get('/visualizations/:vid/data', authMiddleware, visualization.getData);
+    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
+    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, authMiddleware, visualization.getSettingsWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 
