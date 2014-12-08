@@ -10,6 +10,14 @@
   "env": {
     "NODE_ENV": "production",
     "BUILDPACK_URL": "https://github.com/newyorkdata/heroku-buildpack-nodejs-gulp",
+    "LIGHTNING_USERNAME": {
+      "description": "Username to secure this instance with basic auth. (optional)",
+      "required": false
+    },
+    "LIGHTNING_PASSWORD": {
+      "description": "Password to secure this instance with basic auth. (optional)",
+      "required": false
+    },
     "S3_BUCKET": {
       "description": "The name of the s3 bucket to use for hosting images. (optional)",
       "required": false
