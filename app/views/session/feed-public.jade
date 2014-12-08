@@ -3,30 +3,18 @@ extends ../layout
 block dynamic-css
     link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
 
-    
+block sidebar
+
+
 block content
 
     .row
         .six.columns
-            h2(data-editable, data-model="session", data-model-id="#{session.id}", data-key="name")
+            h2
                 | #{session.getDisplayName()}
             .subheader
                 p
                     | Created #{moment(session.createdAt).fromNow()}
-                p
-                    small
-                        a(href="/sessions/#{session.id}/delete")
-                            | Delete Session
-
-                p
-                    small
-                        a(href="#add-data-modal", rel="modal:open")
-                            | Create Visualization
-                p
-                    small
-                        a(href="../public")
-                            | Public Link
-
 
 
     .row
@@ -35,7 +23,7 @@ block content
 
                 if visualizations.length
                     for viz in visualizations.reverse()
-                        include ./viz-data
+                        include ./viz-data-public
                         hr
 
                 else
@@ -43,21 +31,6 @@ block content
                         | No data found. Post data to  
                         span.code
                             | /sessions/#{session.id}/visualizations
-
-
-
-    .modal#add-data-modal
-        form#data-input-form(method="post", action="../visualizations")
-            h3
-                | Manually Create Visualization
-            select(name="type")
-                each type, typeName in vizTypes
-                    option(value="#{typeName}")
-                        | #{typeName}
-
-            textarea(name="data", placeholder="e.g. [1, 2, 3, 4, 5]")
-
-            input(type="submit", value="Submit")
 
 
 
