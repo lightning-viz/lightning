@@ -1,0 +1,25 @@
+extends ../layout
+
+
+block dynamic-css
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.type}")
+
+block sidebar
+    
+block content
+    //- .row
+        .two-thirds.column
+    .feed-container
+        include ./viz-data-public
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="/socket.io/socket.io.js")
+    script(src='#{STATIC_URL}js/basic.js')
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.type}")
+    script.
+        window.lightning = window.lightning || {
+            sid: #{viz.SessionId}
+        }
+    script(src='#{STATIC_URL}js/feed.js')
