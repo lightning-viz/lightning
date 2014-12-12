@@ -72,6 +72,51 @@ exports.feed = function (req, res, next) {
     }).fail(next);
 };
 
+
+exports.publicRead = function (req, res, next) {
+
+    var sessionId = req.params.sid;
+    var Session = models.Session;
+    var VisualizationType = models.VisualizationType;
+    var Visualization = models.Visualization;
+
+    Q.all([
+        Session
+            .find({
+                where: {
+                    id: sessionId
+                }
+            }),
+        Visualization
+            .findAll({
+                where: {
+                    SessionId: sessionId
+                }
+            }),
+        VisualizationType.findAll({
+            order: '"name" ASC'
+        })
+    ]).spread(function(session, visualizations, vizTypes) {
+
+        if(!session) {
+            return res.status(404).send('Session not found');
+        }
+
+        _.each(visualizations, function(viz) {
+            console.log(viz.images);
+        });
+
+        res.render('session/feed-public', {
+            session: session,
+            visualizations: visualizations,
+            vizTypes: _.object(_.map(vizTypes, function(item) {
+                return [item.name, item];
+            }))
+        });
+    }).fail(next);
+};
+
+
 exports.update = function (req, res, next) {
 
     var sessionId = req.params.sid;
