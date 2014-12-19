@@ -20,7 +20,7 @@ dependencies
 * gulp build system
     * to install run `npm install --global gulp` once node.js is installed (may need sudo)
 * postgres
-    * Create a database named `lightning-viz` by running `CREATE DATABASE "lightning-viz";`
+    * Create the database by running `npm run createdb`
 
 
 Install libraries by running `npm install`. 
