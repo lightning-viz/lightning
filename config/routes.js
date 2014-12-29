@@ -42,6 +42,7 @@ module.exports = function (app) {
 
     app.get('/visualization-types', authMiddleware, visualizationTypes.show);
     app.get('/visualization-types/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
+    app.get('/visualization-types/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
     app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
     app.get('/visualization-types/preview', authMiddleware, visualizationTypes.preview);
     app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
@@ -68,6 +69,7 @@ module.exports = function (app) {
     app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
     app.get('/visualizations/:vid', authMiddleware, visualization.read);
     app.get('/visualizations/:vid/embed', authMiddleware, visualization.embed);
+    app.get('/visualizations/:vid/iframe', authMiddleware, visualization.iframe);
 
 
     app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);

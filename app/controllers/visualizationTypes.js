@@ -47,6 +47,24 @@ exports.show = function (req, res, next) {
         }).error(next);
 };
 
+exports.resetDefaults = function(req, res, next) {
+
+    console.log('resetting visualization defaults');
+
+    models.VisualizationType
+        .destroy({}, {truncate: true}).success(function() {
+
+            console.log('successfully deleted current visualizations');
+            
+            tasks.getDefaultVisualizations(function() {
+                return res.redirect('/visualization-types');
+            });
+
+        }).error(function(err) {
+            console.log(err);
+            return res.status(500).send();
+        });
+};
 
 exports.fetchDefaults = function (req, res, next) {
 
