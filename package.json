@@ -77,7 +77,7 @@
     "knox": "^0.9.0",
     "leaflet.freedraw-browserify": "~1.2.1",
     "leaflet": "^0.7.3",
-    "lightning-client-utils": "^0.3.1",
+    "lightning-client-utils": "^0.3.3",
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
     "method-override": "^2.1.1",
