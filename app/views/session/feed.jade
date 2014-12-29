@@ -15,7 +15,7 @@ block content
                     | Created #{moment(session.createdAt).fromNow()}
                 p
                     small
-                        a(href="/sessions/#{session.id}/delete")
+                        a(href="/sessions/#{session.id}/delete", data-confirm="Are you sure you want to delete this session?")
                             | Delete Session
 
                 p
@@ -62,7 +62,7 @@ block content
 
 
 
-block append scripts
+block scripts
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/basic.js')
