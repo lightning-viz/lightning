@@ -1,0 +1,29 @@
+extends ../embed-layout
+
+block dynamic-css
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.type}")
+
+
+block sidebar
+    
+block content
+
+    .full-screen.feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
+        .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", data-options="#{JSON.stringify(viz.opts)}" id="viz-#{viz.id}", data-initialized="false")
+
+
+
+block scripts
+    script.
+        window.lightning = window.lightning || {};
+        window.lightning.host = window.lightning.host || "#{STATIC_URL}" || 'http://127.0.0.1:3000/';
+        window.lightning.requiredVizTypes = window.lightning.requiredVizTypes || [];
+        if(window.lightning.requiredVizTypes.indexOf("#{viz.type}") === -1) {
+            window.lightning.requiredVizTypes.push("#{viz.type}");
+        }
+        window._require = window.require;
+        window.require = undefined;
+        window._define = window.define;
+        window.define = undefined;
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='#{STATIC_URL}js/embed.js')
