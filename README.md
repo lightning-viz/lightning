@@ -19,7 +19,7 @@ dependencies
 * [node.js](http://nodejs.org/)
 * gulp build system
     * to install run `npm install --global gulp` once node.js is installed (may need sudo)
-* postgres
+* PostgreSQL ([Install instructions](http://www.postgresql.org/download/))
     * Create the database by running `npm run createdb`
 
 
