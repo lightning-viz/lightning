@@ -68,6 +68,8 @@ module.exports = function (app) {
     app.post('/sessions', authMiddleware, session.create);
     app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
     app.get('/visualizations/:vid', authMiddleware, visualization.read);
+    app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
+    app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
     app.get('/visualizations/:vid/embed', authMiddleware, visualization.embed);
     app.get('/visualizations/:vid/iframe', authMiddleware, visualization.iframe);
 

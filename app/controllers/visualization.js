@@ -172,6 +172,48 @@ exports.publicRead = function (req, res, next) {
     }).fail(next);
 };
 
+
+
+exports.delete = function (req, res, next) {
+
+    var vizId = req.params.vid;
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            if(!viz) {
+                return res.status(404).send();
+            }            
+
+            var sessionId = viz.SessionId;
+            viz.destroy().success(function() {                
+                req.io.of('/sessions/' + sessionId)
+                    .emit('viz:delete', vizId);
+                return res.json(viz);                
+            }).error(next);
+        }).error(next);
+};
+
+exports.getDelete = function(req, res, next) {
+    
+    var vizId = req.params.vid;
+
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            if(!viz) {
+                return res.status(404).send();
+            }
+            var sessionId = viz.SessionId;
+            viz.destroy().success(function() {
+                req.io.of('/sessions/' + sessionId)
+                    .emit('viz:delete', vizId);
+                return res.redirect('/sessions/' + sessionId);
+            }).error(next);
+        }).error(next);
+};
+
+
+
 exports.embed = function (req, res, next) {
 
     var vizId = req.params.vid;

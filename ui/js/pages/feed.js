@@ -51,6 +51,10 @@ socket.on('viz', function (viz) {
 
 });
 
+socket.on('viz:delete' , function(vizId) {
+    $('.feed-container .feed-item-container[data-model-id="' + vizId + '"]').remove();
+});
+
 
 socket.on('append', function(message) {
 
