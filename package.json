@@ -36,6 +36,7 @@
     "bulkify": "^1.0.2",
     "color": "^0.7.3",
     "colors": "~0.6.2",
+    "colorbrewer": "0.0.2",
     "command-exists": "^0.1.0",
     "compression": "^1.0.8",
     "connect-basic-auth": "^0.1.0",
