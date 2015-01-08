@@ -111,7 +111,7 @@
     "supertest": "*",
     "svg-path-generator": "^1.0.0",
     "swig": "^1.4.1",
-    "three-fly-controls": "^0.1.0",
+    "three-fly-controls": "^1.0.0",
     "three.js": "git://github.com/mathisonian/three.js",
     "tiny-lr": "0.0.5",
     "topojson": "^1.6.18",
