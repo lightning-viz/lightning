@@ -34,6 +34,7 @@ module.exports = function (app) {
     app.post('/css/dynamic', staticController.buildSCSS);
     app.get('/visualizations/:vid/public', visualization.publicRead);
     app.get('/sessions/:sid/public', session.publicRead);
+    app.get('/visualizations/:vid/iframe', visualization.iframe);
 
     // visualizations
     app.post('/visualizations/types', authMiddleware, visualizationTypes.create);
@@ -71,7 +72,6 @@ module.exports = function (app) {
     app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
     app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
     app.get('/visualizations/:vid/embed', authMiddleware, visualization.embed);
-    app.get('/visualizations/:vid/iframe', authMiddleware, visualization.iframe);
 
 
     app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
@@ -80,7 +80,6 @@ module.exports = function (app) {
 
     app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
     app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
-
     
     app.get('/sessions/:sid/visualizations/:vid/data', authMiddleware, visualization.getData);
     app.get('/sessions/:sid/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
