@@ -21,7 +21,6 @@ exports.getData = function (req, res, next) {
 exports.getSettings = function (req, res, next) {
     var vizId = req.params.vid;
 
-    console.log('setting headers');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
@@ -38,19 +37,10 @@ exports.getSettings = function (req, res, next) {
 
 exports.getDataWithKeys = function (req, res, next) {
 
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
-    res.set("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-
-    console.log('setting headers getDataWithKeys');
-    // res.set('Access-Control-Allow-Origin', "*");
-    // res.set("Access-Control-Allow-Headers", "X-Requested-With");    
-    // res.set('Content-Type', 'application/javascript');
+    res.set("Access-Control-Allow-Methods", "GET");
 
 
     var vizId = req.params[0];
@@ -73,7 +63,6 @@ exports.getDataWithKeys = function (req, res, next) {
 
 exports.getSettingsWithKeys = function (req, res, next) {
     
-    console.log('setting headers');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 

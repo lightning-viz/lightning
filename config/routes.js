@@ -83,12 +83,14 @@ module.exports = function (app) {
     
     app.get('/sessions/:sid/visualizations/:vid/data', authMiddleware, visualization.getData);
     app.get('/sessions/:sid/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
-    app.get('/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
-    app.get('/visualizations/:vid/data', authMiddleware, visualization.getData);
-    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
-    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, authMiddleware, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, authMiddleware, visualization.getSettingsWithKeys);
+
+
+    app.get('/visualizations/:vid/settings', visualization.getSettings);
+    app.get('/visualizations/:vid/data', visualization.getData);
+    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 
