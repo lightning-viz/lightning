@@ -239,4 +239,10 @@
 
     @import "pages/editor";
     @import "responsive";
+
+    .feed-item-container {
+        .row {
+            margin-left: 0 !important;
+        }
+    }
 }

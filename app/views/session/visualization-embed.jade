@@ -17,6 +17,7 @@ block scripts
     script.
         window.lightning = window.lightning || {};
         window.lightning.host = window.lightning.host || "#{STATIC_URL}" || 'http://127.0.0.1:3000/';
+        window.lightning.vizCount = (window.lightning.vizCount + 1) || 1;
         window.lightning.requiredVizTypes = window.lightning.requiredVizTypes || [];
         if(window.lightning.requiredVizTypes.indexOf("#{viz.type}") === -1) {
             window.lightning.requiredVizTypes.push("#{viz.type}");
