@@ -172,6 +172,14 @@
         &:not(:first-child) {
             // padding-top: 60px;
         }
+
+        &:after { 
+           content: " ";
+           display: block; 
+           height: 0; 
+           clear: both;
+        }
+
     }
 
 
@@ -251,9 +259,10 @@
       line-height: 1;
       font-weight: bold;
       padding: 6px;
+      padding-bottom: 8px;
       background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      border-radius: 3px;
+      border-radius: 1px;
       pointer-events: none;
       font-family: monospace;
       font-size: 12px;
@@ -292,7 +301,7 @@
     .d3-tip.s:after {
       content: "\25B2";
       margin: 0 0 1px 0;
-      top: -8px;
+      top: 0;
       left: 0;
       text-align: center;
     }
