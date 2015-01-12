@@ -4,6 +4,10 @@ sid = sid.slice(0, sid.indexOf('/'));
 
 var vizs = {};
 
+var pym = require('pym.js');
+var pymChild = new pym.Child();
+
+
 
 var utils = require('../utils');
 
@@ -25,8 +29,6 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
     
     $('.feed-item[data-initialized=false]').each(function() {
 
-        console.log($(this));
-
         var type = $(this).data('type');
         var data = $(this).data('data');
         var images = $(this).data('images');
@@ -44,6 +46,8 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
             vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $this.attr('id'), data, images, options);
             $this.data('initialized', true);
             $this.attr('data-initialized', true);
+
+            pymChild.sendHeight();
         });
     });
 
@@ -51,8 +55,4 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
 
 
 });
-
-
-var pym = require('pym.js');
-new pym.Child();
 
