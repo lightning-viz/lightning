@@ -47,7 +47,7 @@
     "cookie-session": "^1.0.2",
     "csurf": "^1.3.0",
     "d3": "~3.4.9",
-    "d3-multiaxis-zoom": "^1.0.0",
+    "d3-multiaxis-zoom": "^1.0.4",
     "d3-tip": "git://github.com/lightning-viz/d3-tip",
     "datamaps-all-browserify": "^0.3.4",
     "easyimage": "^1.0.1",
