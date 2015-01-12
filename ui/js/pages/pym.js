@@ -48,10 +48,13 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
 
             vizs[vid.slice(vid.indexOf('-') + 1)] = viz;
 
-            viz.on('image:loaded', function() {
-                pymChild.sendHeight();    
-            });
-            
+            if(viz.on) {
+                viz.on('image:loaded', function() {
+                    pymChild.sendHeight();    
+                });                
+            }
+
+
             $this.data('initialized', true);
             $this.attr('data-initialized', true);
 
