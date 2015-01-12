@@ -26,7 +26,7 @@
       "description": "The s3 key. (optional)",
       "required": false
     },
-    "S3_SECRECT": {
+    "S3_SECRET": {
       "description": "The s3 secret. (optional)",
       "required": false
     }

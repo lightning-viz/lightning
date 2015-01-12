@@ -43,11 +43,19 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
             }
 
             var vid = $this.attr('id');
-            vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $this.attr('id'), data, images, options);
+
+            var viz = new Viz('#' + $this.attr('id'), data, images, options);
+
+            vizs[vid.slice(vid.indexOf('-') + 1)] = viz;
+
+            viz.on('image:loaded', function() {
+                pymChild.sendHeight();    
+            });
+            
             $this.data('initialized', true);
             $this.attr('data-initialized', true);
 
-            pymChild.sendHeight();
+            
         });
     });
 
