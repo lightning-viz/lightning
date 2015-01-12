@@ -269,7 +269,7 @@ exports.iframe = function (req, res, next) {
 };
 
 
-exports.iframe = function (req, res, next) {
+exports.pym = function (req, res, next) {
 
     var vizId = req.params.vid;
     var Visualization = models.Visualization;
