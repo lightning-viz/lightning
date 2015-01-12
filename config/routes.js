@@ -64,8 +64,6 @@ module.exports = function (app) {
     
     app.put('/sessions/:sid', authMiddleware, session.update);
     app.put('/visualizations/:vid', authMiddleware, visualization.update);
-    app.put('/visualizations/:vid/settings', authMiddleware, visualization.updateSettings);
-    app.post('/visualizations/:vid/settings', authMiddleware, visualization.updateSettings);
 
     app.post('/sessions', authMiddleware, session.create);
     app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
@@ -82,10 +80,13 @@ module.exports = function (app) {
     app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
     app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
     
-    app.get('/sessions/:sid/visualizations/:vid/data', authMiddleware, visualization.getData);
-    app.get('/sessions/:sid/visualizations/:vid/settings', authMiddleware, visualization.getSettings);
 
 
+    // public / userland stuff
+    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
+    app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
+    app.put('/visualizations/:vid/settings', visualization.updateSettings);
+    app.post('/visualizations/:vid/settings', visualization.updateSettings);
     app.get('/visualizations/:vid/settings', visualization.getSettings);
     app.get('/visualizations/:vid/data', visualization.getData);
     app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
