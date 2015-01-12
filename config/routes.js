@@ -35,6 +35,7 @@ module.exports = function (app) {
     app.get('/visualizations/:vid/public', visualization.publicRead);
     app.get('/sessions/:sid/public', session.publicRead);
     app.get('/visualizations/:vid/iframe', visualization.iframe);
+    app.get('/visualizations/:vid/pym', visualization.pym);
 
     // visualizations
     app.post('/visualizations/types', authMiddleware, visualizationTypes.create);

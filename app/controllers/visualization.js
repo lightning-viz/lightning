@@ -267,3 +267,23 @@ exports.iframe = function (req, res, next) {
             });
     }).fail(next);
 };
+
+
+exports.iframe = function (req, res, next) {
+
+    var vizId = req.params.vid;
+    var Visualization = models.Visualization;
+    var VisualizationType = models.VisualizationType;
+
+    Q.all([
+        Visualization.find(vizId),
+        VisualizationType.findAll()
+    ]).spread(function(viz, vizTypes) {
+            res.render('session/visualization-pym', {
+                viz: viz,
+                vizTypes: _.object(_.map(vizTypes, function(item) {
+                    return [item.name, item];
+                }))
+            });
+    }).fail(next);
+};
