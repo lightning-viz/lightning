@@ -24,7 +24,7 @@ http://lightning-viz.github.io/visualizations/
 
 ## help
 
-+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lightning-viz/lightning?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lightning-viz/lightning?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 We maintain a chatroom on gitter. If there's no response there: file an issue or reach out on twitter (@mathisonian, @thefreemanlab)
 
