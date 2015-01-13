@@ -182,6 +182,12 @@
 
     }
 
+    .feed-item, .feed-item-container, svg, canvas {
+        &:focus {
+            outline:0;
+        }
+    }
+
 
     input {
         color: #545E6B;
