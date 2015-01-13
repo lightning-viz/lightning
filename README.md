@@ -1,6 +1,8 @@
 # Lightning
 
-A notebook server for storing and sharing custom data visualizations
+Lightning is a data-visualization server providing API-based access to reproducible, web-based, interactive visualizations. It includes a core set of visualization types, but is built for extendability and customization. Lightning supports modern libraries like d3.js, three.js, and leaflet, and is designed for interactivity over large data sets and continuously updating data streams.
+
+If you are just getting started, please see the [project page](http://lightning-viz.github.io/), or check out an [IPython demo](http://nbviewer.ipython.org/gist/mathisonian/78cf2471e83480984a95)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
@@ -9,120 +11,20 @@ A notebook server for storing and sharing custom data visualizations
 ## client libraries
 
 Python
-* https://github.com/mathisonian/lightning-python
+* https://github.com/lightning-viz/lightning-python
 
 
-## installation
+## complete documentation
 
-dependencies
+http://lightning-viz.github.io/documentation/
 
-* [node.js](http://nodejs.org/)
-* gulp build system
-    * to install run `npm install --global gulp` once node.js is installed (may need sudo)
-* PostgreSQL ([Install instructions](http://www.postgresql.org/download/))
-    * Create the database by running `npm run createdb`
+## visualizations
 
+http://lightning-viz.github.io/visualizations/
 
-Install libraries by running `npm install`. 
+## help
 
-Compile client side libraries by running `gulp`. This can will continue to watch for changes of client side files.
++[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lightning-viz/lightning?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Run server with `npm start`. Open your browser to [http://localhost:3000](http://localhost:3000)
+We maintain a chatroom on gitter. If there's no response there: file an issue or reach out on twitter (@mathisonian, @thefreemanlab)
 
-
-### database migrations
-
-If a change has been made to the database, you can update using the sequelize cli migration tool.
-
-Simply run `npm run migrate` from the root of the project and sequelize should automatically 
-run any pending migrations.
-
-
-## viz types
-
-With companion code from the [python client](https://github.com/mathisonian/lightning-python)
-
-### scatter
-
-![scatter](http://i.gif.fm/rNhO7.png)
-
-```python
-x = [randrange(100) for _ in xrange(50)]
-y = [randrange(100) for _ in xrange(50)]
-
-lightning.scatter(x, y)
-```
-
-
-### line
-
-![line](http://i.gif.fm/che9k.png)
-
-```python
-lightning.plot(type="line", data=[randrange(100) for x in xrange(50)])
-```
-
-### mix+match and server backed
-
-Simple visualizations can be linked together to create new interactions
-
-![gif](http://i.imgur.com/XWquFgx.gif)
-
-```python
-
-points = [{ 'x': randrange(100), 'y': randrange(100), 'i': i} for i in xrange(50)]
-timeseries = [[uniform(-1, 1) for _ in xrange(1000)] for _ in xrange(50)]
-
-data = {
-    'points': points,
-    'timeseries': timeseries
-}
-
-lightning.plot(data=data, type='roi')
-```
-
-### force directed network
-
-![network](http://i.imgur.com/ftfVOOg.gif)
-
-
-```python
-import numpy as np
-
-mat = np.array([[random.uniform(0, 15) if random.random() > 0.8 else 0 for _ in xrange(15)] for _ in xrange(15)])
-viz = lightning.network(mat)
-```
-
-### maps
-
-US and World Maps
-
-![us map](http://i.gif.fm/cqPbH.png)
-![world map](http://i.gif.fm/43r3E.png)
-
-```python
-countries = ["USA", "MEX", "CAN", "GER", "AUS", "BRA", "ARG", "PER", "SPA", "POR", "FRA", "ITA", "RUS", "CHN", "IND"]
-mapDict = dict((country, random.random()) for country in countries)
-
-viz = lightning.plot('map', data=mapDict)
-```
-
-### matrices
-
-![matrices](http://i.gif.fm/2DO3W.png)
-
-```python
-mat = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
-viz = lightning.matrix(mat)
-```
-
-### bitmaps
-
-![bmp](http://i.gif.fm/yyl7z.png)
-
-```python
-img1 = random.rand(256, 256)
-img2 = random.rand(256, 256)
-
-viz = lightning.image([img1, img2], type='gallery')
-```
