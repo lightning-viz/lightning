@@ -51,8 +51,12 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
             if(viz.on) {
                 
                 viz.on('image:loaded', function() {
-                    pymChild.sendHeight();    
-                });                
+                    pymChild.sendHeight();
+                });
+
+                viz.on('size:updated', function() {
+                    pymChild.sendHeight(); 
+                })
             }
 
 

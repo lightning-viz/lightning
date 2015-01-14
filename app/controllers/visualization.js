@@ -5,8 +5,12 @@ var _ = require('lodash');
 
 exports.getData = function (req, res, next) {
     var vizId = req.params.vid;
-    res.set('Access-Control-Allow-Origin', '*');
-    console.log('setting headers get data');
+
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Headers", "X-Requested-With");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+
     var Visualization = models.Visualization;
 
     Visualization
@@ -21,8 +25,10 @@ exports.getData = function (req, res, next) {
 exports.getSettings = function (req, res, next) {
     var vizId = req.params.vid;
 
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Headers", "X-Requested-With");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
 
     var Visualization = models.Visualization;
 
@@ -40,7 +46,7 @@ exports.getDataWithKeys = function (req, res, next) {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
-    res.set("Access-Control-Allow-Methods", "GET");
+    res.set("Access-Control-Allow-Methods", "GET, OPTIONS");
 
 
     var vizId = req.params[0];
@@ -63,9 +69,10 @@ exports.getDataWithKeys = function (req, res, next) {
 
 exports.getSettingsWithKeys = function (req, res, next) {
     
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Headers", "X-Requested-With");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
 
     var vizId = req.params[0];
     var keys = _.filter(req.params[1].split('/'), function(k) {
@@ -110,6 +117,11 @@ exports.updateSettings = function (req, res, next) {
     var Visualization = models.Visualization;
 
     console.log('updating visualization ' + vid);
+
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Headers", "X-Requested-With");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
 
     Visualization
         .find(vid)
