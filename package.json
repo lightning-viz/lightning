@@ -104,6 +104,7 @@
     "request": "~2.36.0",
     "resumer": "0.0.0",
     "sequelize": "^1.7.10",
+    "sequelize-cli": "^1.0.3",
     "serve-favicon": "^2.1.6",
     "serve-static": "*",
     "should": "*",
