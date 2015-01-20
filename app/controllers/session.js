@@ -490,10 +490,10 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
     var originalS3Path = destPath + uploadName;
     var thumbnailS3Path = destPath + uploadName + '_small';
 
-
     // s3 headers
     var headers = {
       'x-amz-acl': 'public-read',
+      'Access-Control-Allow-Origin': '*',
     };
     if( extension === '.jpg' || extension === '.jpeg' ) {
         headers['Content-Type'] = 'image/jpeg';
