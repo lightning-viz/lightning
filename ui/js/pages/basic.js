@@ -4,19 +4,7 @@ $('.menu-link').bigSlide();
 var hljs = require('highlight.js');
 hljs.initHighlightingOnLoad();
 
-var loading = require('../views/loading');
 
-
-$('.loading').each(function() {
-    var self = $(this);
-    setTimeout(function() {
-        loading(self[0]);
-    });
-    
-});
-
-
-console.log('initializing');
 $('[data-confirm]').click(function(e) {
     if(!confirm($(this).data('confirm'))) {
         e.preventDefault();
