@@ -23,10 +23,23 @@
 
 
         .permalink
-            a(href="/visualizations/#{viz.id}/delete", data-confirm="Are you sure you want to delete this visualization?")
-                | delete
-
-            | | 
-            a(href="/visualizations/#{viz.id}", data-attribute="permalink")
-                | permalink
-            
+            ul(data-dropit).menu
+                li
+                    a(href="#")
+                        | Actions
+                    ul
+                        li
+                            a(href="/visualizations/#{viz.id}", data-attribute="permalink")
+                                | Internal Permalink
+                        li
+                            a(href="/visualizations/#{viz.id}/public", data-attribute="permalink")
+                                | Public Permalink
+                        li
+                            a(href="/visualizations/#{viz.id}/iframe", data-attribute="permalink")
+                                | Iframe Link
+                        li
+                            a(href="/visualizations/#{viz.id}/pym", data-attribute="permalink")
+                                | Pym enabled iframe Link
+                        li
+                            a(href="/visualizations/#{viz.id}/delete", data-confirm="Are you sure you want to delete this visualization?")
+                                | Delete

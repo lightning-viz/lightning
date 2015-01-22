@@ -32,13 +32,11 @@ socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
 
-    console.log('got viz');
     utils.requireOrFetchViz(viz.type, function(err, Viz) {
         if(err) {
             return console.log(err);
         }
 
-        console.log(Viz);
         $('.feed-container').prepend(feedItemHTML({
             sid: sid,
             vid: viz.id
@@ -47,6 +45,7 @@ socket.on('viz', function (viz) {
         vizs[viz.id] = new Viz('.feed-container .feed-item', viz.data, viz.images, viz.opts);
 
         $('.edit-description').unbind().click(editDesctiption);
+        $('[data-dropit]').unbind().dropit();
     });
 
 });
@@ -81,8 +80,6 @@ setTimeout(function() {
 
 
     $('.feed-item[data-initialized=false]').each(function() {
-
-        console.log($(this));
 
         var type = $(this).data('type');
         var data = $(this).data('data');

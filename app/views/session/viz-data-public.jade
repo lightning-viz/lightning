@@ -6,10 +6,3 @@
         .description
             if viz.description
                 | !{marked(viz.description)}
-
-
-    .bottom-container
-        .edit-description
-        .permalink
-            a(href="/visualizations/#{viz.id}", data-attribute="permalink")
-                | permalink

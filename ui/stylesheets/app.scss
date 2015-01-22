@@ -46,6 +46,7 @@
     @import "lib/highlightjs";
     @import "lib/codemirror";
     @import "lib/solarized";
+    @import "lib/dropit";
     
     .CodeMirror {
         height: auto;
@@ -225,6 +226,10 @@
             height: 100%;
         }
         padding-bottom: 25px;
+    }
+
+    .bottom-container {
+        margin-top: 30px;
     }
 
     .saved,
