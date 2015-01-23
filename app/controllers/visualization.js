@@ -317,7 +317,8 @@ exports.screenshot = function(req, res, next) {
         screenSize: {
             width: width,
             height: height
-        }
+        },
+        renderDelay: 500
     };
 
     webshot(url, opts, function(err, renderStream) {
