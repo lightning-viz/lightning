@@ -1,6 +1,7 @@
 var models = require('../models');
 var Q = require('q');
 var _ = require('lodash');
+var webshot = require('webshot');
 
 
 exports.getData = function (req, res, next) {
@@ -299,3 +300,32 @@ exports.pym = function (req, res, next) {
             });
     }).fail(next);
 };
+
+
+
+exports.screenshot = function(req, res, next) {
+
+
+    var vizId = req.params.vid;
+    var host = req.headers.host;
+    var url = 'http://' + host + '/visualizations/' + vizId + '/iframe';
+
+    var width = req.query.width || 1024;
+    var height = req.query.height || 768;
+
+    var opts = {
+        screenSize: {
+            width: width,
+            height: height
+        }
+    };
+
+    webshot(url, opts, function(err, renderStream) {
+        res.setHeader('Content-Type', 'image/png');
+        renderStream.pipe(res);
+    });
+
+}
+
+
+

@@ -41,6 +41,7 @@ module.exports = function (app) {
     app.post('/js/dynamic', staticController.bundleJSForExecution);
     app.post('/css/dynamic', staticController.buildSCSS);
     app.get('/visualizations/:vid/public', visualization.publicRead);
+    app.get('/visualizations/:vid/screenshot', visualization.screenshot);
     app.get('/sessions/:sid/public', session.publicRead);
     app.get('/visualizations/:vid/iframe', visualization.iframe);
     app.get('/visualizations/:vid/pym', visualization.pym);

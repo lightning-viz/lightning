@@ -11,9 +11,5 @@ $('[data-confirm]').click(function(e) {
     }
 });
 
-
 require('../lib/dropit');
-
-console.log('dropit');
-
 $('[data-dropit]').dropit();
