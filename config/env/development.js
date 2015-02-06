@@ -5,8 +5,7 @@
 
 
 module.exports = {
-
-    url: 'localhost:3000',
+    url: process.env.LIGHTNING_URL || process.env.URL,
     s3: {
         key: process.env.S3_KEY,
         secret: process.env.S3_SECRET,
