@@ -39,15 +39,18 @@ var models = require('./app/models');
 models.sequelize.sync({force: false})
     .success(function() {
 
-    models.VisualizationType
-        .findAll()
-        .success(function(vizTypes) {
-            console.log(_.pluck(vizTypes, 'name'));
-            if(vizTypes.length === 0) {
-                tasks.getDefaultVisualizations();
-            }
-        });
-});
+        models.VisualizationType
+            .findAll()
+            .success(function(vizTypes) {
+                console.log(_.pluck(vizTypes, 'name'));
+                if(vizTypes.length === 0) {
+                    tasks.getDefaultVisualizations();
+                }
+            });
+    }).error(function(err) {
+        console.log('Could not connect to the database. Is Postgres running?');
+        throw err;
+    });
 
 var io = require('socket.io')(server);
 
