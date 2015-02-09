@@ -8,31 +8,15 @@ var express = require('express');
 var _ = require('lodash');
 var app = express();
 var server = require('http').Server(app);
+require('colors');
+var env = process.env.NODE_ENV || 'development';
+var dbConfig = require(__dirname + '/config/database')[env];
 
 
 // var cluster = require('cluster');
 // var cpuCount = Math.max(1, require('os').cpus().length);
 
 var port = process.env.PORT || 3000;
-
-// if(cluster.isMaster) {
-//     for( var i = 0; i < cpuCount; i++ ) {
-//       cluster.fork();
-//     }
-
-//     cluster.on('listening', function(worker) {
-//         console.log('Worker ' + worker.process.pid + ' listening');
-//     });
-
-//     cluster.on('exit', function( worker ) {
-//       console.log( 'Worker ' + worker.process.pid + ' died.' );
-//       cluster.fork();
-//     });
-
-//     console.log('Initializing server with ' + cpuCount + ' threads');
-//     return;
-// }   
-
 
 
 var models = require('./app/models');
@@ -42,7 +26,12 @@ models.sequelize.sync({force: false})
         models.VisualizationType
             .findAll()
             .success(function(vizTypes) {
-                console.log(_.pluck(vizTypes, 'name'));
+
+                console.log('\nInstalled visualizations:');
+                console.log('-------------------------');
+                _.each(vizTypes, function(vt) {
+                    console.log('* ' + vt.name);
+                })
                 if(vizTypes.length === 0) {
                     tasks.getDefaultVisualizations();
                 }
@@ -70,4 +59,50 @@ require('./config/express')(app, io);
 require('./config/routes')(app);
 
 server.listen(port);
-console.log('Express app started on port ' + port);
+
+
+
+var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
+logo += " ,`                                ,.\n";
+logo += ",`                                  ,\n";
+logo += ",                                   ,\n";
+logo += ",                      .            ,\n";
+logo += ",                     ,             ,\n";
+logo += ",                    `,             ,\n";
+logo += ",                    ,.             ,\n";
+logo += ",                   ,,              ,\n";
+logo += ",                  ,,,              ,\n";
+logo += ",                 ,,,.              ,\n";
+logo += ",                .,,,               ,\n";
+logo += ",               `,,,,               ,\n";
+logo += ",               ,,,,`               ,\n";
+logo += ",              ,,,,,                ,\n";
+logo += ",             ,,,,,,                ,\n";
+logo += ",            ,,,,,,,,,,,,,,.        ,\n";
+logo += ",           .,,,,,,,,,,,,,,         ,\n";
+logo += ",           ,,,,,,,,,,,,,,          ,\n";
+logo += ",          ,,,,,,,,,,,,,,           ,\n";
+logo += ",         ,,,,,,,,,,,,,,            ,\n";
+logo += ",                 ,,,,,`            ,\n";
+logo += ",                ,,,,,,             ,\n";
+logo += ",                ,,,,,              ,\n";
+logo += ",                ,,,,               ,\n";
+logo += ",               ,,,,                ,\n";
+logo += ",               ,,,`                ,\n";
+logo += ",              `,,.                 ,\n";
+logo += ",              ,,,                  ,\n";
+logo += ",              ,,                   ,\n";
+logo += ",             `,                    ,\n";
+logo += ",             ,                     ,\n";
+logo += ",             `                     ,\n";
+logo += ",            `                      ,\n";
+logo += ",                                   ,\n";
+logo += "`,                                 .,\n";
+logo += " .,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, \n\n\n\n";
+
+
+
+console.log(logo.magenta);
+
+console.log('Lightning started on port: ' + port);
+console.log('Running database: ' + dbConfig.dialect);
