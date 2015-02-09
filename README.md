@@ -13,6 +13,9 @@ If you are just getting started, please see the [project page](http://lightning-
 Python
 * https://github.com/lightning-viz/lightning-python
 
+Node.js
+* https://github.com/lightning-viz/lightning.js
+
 
 ## complete documentation
 
