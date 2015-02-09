@@ -8,3 +8,6 @@ npm-debug.log
 tmp/**
 ui/**/imported/**
 mocks/
+
+*.db
+*.sqlite

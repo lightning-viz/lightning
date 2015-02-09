@@ -1,16 +1,71 @@
 var validator = require('validator');
 var _ = require('lodash');
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../../config/database')[env];
+var isPostgres = config.dialect === 'postgres';
+
+
+
 
 module.exports = function(sequelize, DataTypes) {
-    var Visualization = sequelize.define('Visualization', {
-        data: 'JSON',
-        opts: 'JSON',
-        settings: 'JSON',
-        name: DataTypes.STRING,
-        description: DataTypes.TEXT,
-        type: DataTypes.STRING,
-        images: DataTypes.ARRAY(DataTypes.STRING)
-    }, {
+
+
+    var schema;
+    if(isPostgres) {
+        schema = {
+            data: 'JSON',
+            opts: 'JSON',
+            settings: 'JSON',
+            name: DataTypes.STRING,
+            description: DataTypes.TEXT,
+            type: DataTypes.STRING,
+            images: DataTypes.ARRAY(DataTypes.STRING)
+        };
+    } else {
+        schema = {
+            data: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('data') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('data', JSON.stringify(val));
+                }
+            },
+            opts: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('opts') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('opts', JSON.stringify(val));
+                }
+            },
+            settings: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('settings') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('settings', JSON.stringify(val));
+                }
+            },
+            name: DataTypes.STRING,
+            description: DataTypes.TEXT,
+            type: DataTypes.STRING,
+            images: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('images') || '[]');
+                },
+                set: function(val) {
+                    return this.setDataValue('images', JSON.stringify(val));
+                }
+            }
+        };
+    }
+
+    var Visualization = sequelize.define('Visualization', schema, {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
@@ -18,8 +73,21 @@ module.exports = function(sequelize, DataTypes) {
             },
             getNamedObjectForVisualization: function(vid, name) {
                 name = validator.escape(name);
-                return sequelize
-                    .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+
+
+                if(isPostgres) {
+                    return sequelize
+                        .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+                }
+
+
+                return this.find(vid).then(function(viz) {
+                    var data = JSON.parse(viz.data);
+                    var retObj = {};
+                    retObj[name] = data[name];
+                    return [retObj];
+                });
+
             },
 
             getNamedObjectAtIndexForVisualization: function(vid, name, index) {
@@ -28,8 +96,19 @@ module.exports = function(sequelize, DataTypes) {
                 if(!validator.isNumeric(index)) {
                     throw Error('Must provide numeric index');
                 }
-                return sequelize
-                    .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+
+                if(isPostgres) {
+                    return sequelize
+                        .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+                }
+
+
+                return this.find(vid).then(function(viz) {
+                    var data = JSON.parse(viz.data);
+                    var retObj = {};
+                    retObj[name] = data[name][index];
+                    return [retObj];
+                });
             },
 
             getDataForVisualization: function(vid) {
@@ -38,36 +117,71 @@ module.exports = function(sequelize, DataTypes) {
 
             queryDataForVisualization: function(vid, keys) {
 
-                var qs = _.chain(keys)
-                            .map(validator.escape)
-                            .map(function(key) {
-                                if(!validator.isNumeric(key)) {
-                                    return '\'' + key + '\'';
-                                }
-                                return key;
-                            })
-                            .value()
-                            .join('->');
+                if(isPostgres) {
+                    var qs = _.chain(keys)
+                                .map(validator.escape)
+                                .map(function(key) {
+                                    if(!validator.isNumeric(key)) {
+                                        return '\'' + key + '\'';
+                                    }
+                                    return key;
+                                })
+                                .value()
+                                .join('->');
 
-                return sequelize
-                    .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
+                    return sequelize
+                        .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
+
+                } 
+
+
+                return this.find(vid).then(function(viz) {
+
+                    var data = JSON.parse(viz.data);
+                    _.each(keys, function(key) {
+                        data = data[key];
+                    });
+
+                    return [{
+                        data: data
+                    }];
+                });
+
+
+
             },
 
             querySettingsForVisualization: function(vid, keys) {
 
-                var qs = _.chain(keys)
-                            .map(validator.escape)
-                            .map(function(key) {
-                                if(!validator.isNumeric(key)) {
-                                    return '\'' + key + '\'';
-                                }
-                                return key;
-                            })
-                            .value()
-                            .join('->');
+                if(isPostgres) {
+                    var qs = _.chain(keys)
+                                .map(validator.escape)
+                                .map(function(key) {
+                                    if(!validator.isNumeric(key)) {
+                                        return '\'' + key + '\'';
+                                    }
+                                    return key;
+                                })
+                                .value()
+                                .join('->');
 
-                return sequelize
-                    .query('SELECT settings->' + qs + ' AS settings FROM "Visualizations" WHERE id=' + vid);
+                    return sequelize
+                        .query('SELECT settings->' + qs + ' AS settings FROM "Visualizations" WHERE id=' + vid);
+
+                }
+
+
+                return this.find(vid).then(function(viz) {
+
+                    var settings = JSON.parse(viz.settings);
+                    _.each(keys, function(key) {
+                        settings = settings[key];
+                    });
+
+                    return [{
+                        settings: settings
+                    }];
+                });
             }
         },
 
@@ -95,9 +209,12 @@ module.exports = function(sequelize, DataTypes) {
 
         hooks: {
             beforeValidate: function(visualization, next) {
-                visualization.settings = JSON.stringify(visualization.settings);
-                visualization.data = JSON.stringify(visualization.data);
-                visualization.opts = JSON.stringify(visualization.opts);
+
+                if(isPostgres) {
+                    visualization.settings = JSON.stringify(visualization.settings);
+                    visualization.data = JSON.stringify(visualization.data);
+                    visualization.opts = JSON.stringify(visualization.opts);
+                }
                 next();
             }
         }

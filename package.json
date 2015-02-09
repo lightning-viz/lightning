@@ -110,6 +110,7 @@
     "should": "*",
     "simplify-js": "^1.2.1",
     "socket.io": "~1.0.6",
+    "sqlite3": "~3.0.4",
     "superagent": "^0.18.2",
     "supertest": "*",
     "svg-path-generator": "^1.0.0",
@@ -118,11 +119,11 @@
     "three.js": "git://github.com/mathisonian/three.js",
     "tiny-lr": "0.0.5",
     "topojson": "^1.6.18",
+    "underscore.nest": "git://github.com/mathisonian/underscore.nest",
     "validator": "~3.17.0",
     "view-helpers": "^0.1.5",
     "webshot": "^0.15.3",
     "winston": "^0.7.3",
-    "yargs": "^1.3.3",
-    "underscore.nest": "git://github.com/mathisonian/underscore.nest"
+    "yargs": "^1.3.3"
   }
 }

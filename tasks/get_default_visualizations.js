@@ -8,10 +8,10 @@ module.exports = function(cb) {
         .spread(function() {
             var vizTypes = Array.prototype.slice.call(arguments, 0);
             console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
-            cb();
+            cb && cb();
         }).fail(function(err) {
             console.log(err);
-            cb(err);
+            cb && cb(err);
         });
 
 };

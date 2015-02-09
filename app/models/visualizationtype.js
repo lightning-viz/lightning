@@ -5,10 +5,36 @@ var Q = require('q');
 var uuid = require('node-uuid');
 var glob = require('glob');
 var _ = require('lodash');
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../../config/database')[env];
+var isPostgres = config.dialect === 'postgres';
 
 
 module.exports = function(sequelize, DataTypes) {
-    var VisualizationType = sequelize.define('VisualizationType', {
+
+
+
+    var schema;
+    if(isPostgres) {
+        schema = {
+            name: {type: DataTypes.STRING, unique: true},
+            initialDataField: DataTypes.STRING,
+
+            enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
+            imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+
+            thumbnailLocation: DataTypes.STRING,
+
+            sampleData: 'JSON',
+            sampleOptions: 'JSON',
+            sampleImages: DataTypes.ARRAY(DataTypes.STRING),
+
+            javascript: DataTypes.TEXT,
+            markup: DataTypes.TEXT,
+            styles: DataTypes.TEXT
+        };
+    } else {
+        schema = {
         name: {type: DataTypes.STRING, unique: true},
         initialDataField: DataTypes.STRING,
 
@@ -17,14 +43,41 @@ module.exports = function(sequelize, DataTypes) {
 
         thumbnailLocation: DataTypes.STRING,
 
-        sampleData: 'JSON',
-        sampleOptions: 'JSON',
-        sampleImages: DataTypes.ARRAY(DataTypes.STRING),
-
+        sampleData: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleData') || '{}');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleData', JSON.stringify(val));
+            }
+        },
+        sampleOptions: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleOptions') || '{}');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleOptions', JSON.stringify(val));
+            }
+        },
+        sampleImages: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleImages') || '[]');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleImages', JSON.stringify(val));
+            }
+        },
         javascript: DataTypes.TEXT,
         markup: DataTypes.TEXT,
         styles: DataTypes.TEXT
-    }, {
+    };
+    }
+
+
+    var VisualizationType = sequelize.define('VisualizationType', schema, {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
@@ -42,11 +95,9 @@ module.exports = function(sequelize, DataTypes) {
 
                 return Q.nfcall(fs.remove, repoPath)
                     .then(function() {
-                        console.log('about to clone ' + url);
                         return Q.ninvoke(git, 'clone', url, repoPath);
                     })
                     .then(function() {
-                        console.log(opts)
                         return self.createFromFolder(repoPath + (opts.path ? ('/' + opts.path) : ''), attributes, opts);
                     });
             },
@@ -198,8 +249,11 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {
 
             beforeValidate: function(vizType, next) {
-                vizType.sampleData = JSON.stringify(vizType.sampleData);
-                vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+
+                if(isPostgres) {
+                    vizType.sampleData = JSON.stringify(vizType.sampleData);
+                    vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+                }
                 next();
             }
         }
