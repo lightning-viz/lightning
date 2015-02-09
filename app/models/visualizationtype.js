@@ -43,10 +43,33 @@ module.exports = function(sequelize, DataTypes) {
 
         thumbnailLocation: DataTypes.STRING,
 
-        sampleData: 'JSON',
-        sampleOptions: 'JSON',
-        sampleImages: DataTypes.STRING,
-
+        sampleData: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleData') || '{}');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleData', JSON.stringify(val));
+            }
+        },
+        sampleOptions: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleOptions') || '{}');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleOptions', JSON.stringify(val));
+            }
+        },
+        sampleImages: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('sampleImages') || '[]');
+            },
+            set: function(val) {
+                return this.setDataValue('sampleImages', JSON.stringify(val));
+            }
+        },
         javascript: DataTypes.TEXT,
         markup: DataTypes.TEXT,
         styles: DataTypes.TEXT
@@ -227,11 +250,10 @@ module.exports = function(sequelize, DataTypes) {
 
             beforeValidate: function(vizType, next) {
 
-                if(!isPostgres) {
-                    vizType.sampleImages = JSON.stringify(vizType.sampleImages);
+                if(isPostgres) {
+                    vizType.sampleData = JSON.stringify(vizType.sampleData);
+                    vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
                 }
-                vizType.sampleData = JSON.stringify(vizType.sampleData);
-                vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
                 next();
             }
         }

@@ -23,13 +23,45 @@ module.exports = function(sequelize, DataTypes) {
         };
     } else {
         schema = {
-            data: 'JSON',
-            opts: 'JSON',
-            settings: 'JSON',
+            data: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('data') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('data', JSON.stringify(val));
+                }
+            },
+            opts: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('opts') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('opts', JSON.stringify(val));
+                }
+            },
+            settings: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('settings') || '{}');
+                },
+                set: function(val) {
+                    return this.setDataValue('settings', JSON.stringify(val));
+                }
+            },
             name: DataTypes.STRING,
             description: DataTypes.TEXT,
             type: DataTypes.STRING,
-            images: DataTypes.STRING
+            images: {
+                type: DataTypes.TEXT,
+                get: function() {
+                    return JSON.parse(this.getDataValue('images') || '[]');
+                },
+                set: function(val) {
+                    return this.setDataValue('images', JSON.stringify(val));
+                }
+            }
         };
     }
 
@@ -178,12 +210,11 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {
             beforeValidate: function(visualization, next) {
 
-                if(!isPostgres) {
-                    visualization.images = JSON.stringify(visualization.images);
+                if(isPostgres) {
+                    visualization.settings = JSON.stringify(visualization.settings);
+                    visualization.data = JSON.stringify(visualization.data);
+                    visualization.opts = JSON.stringify(visualization.opts);
                 }
-                visualization.settings = JSON.stringify(visualization.settings);
-                visualization.data = JSON.stringify(visualization.data);
-                visualization.opts = JSON.stringify(visualization.opts);
                 next();
             }
         }
