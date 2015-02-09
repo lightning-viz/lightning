@@ -123,6 +123,7 @@
     "webshot": "^0.15.3",
     "winston": "^0.7.3",
     "yargs": "^1.3.3",
-    "underscore.nest": "git://github.com/mathisonian/underscore.nest"
+    "underscore.nest": "git://github.com/mathisonian/underscore.nest",
+    "sqlite3": "~3.0.4"
   }
 }
