@@ -177,6 +177,10 @@ module.exports = function(sequelize, DataTypes) {
 
         hooks: {
             beforeValidate: function(visualization, next) {
+
+                if(!isPostgres) {
+                    visualization.images = JSON.stringify(visualization.images);
+                }
                 visualization.settings = JSON.stringify(visualization.settings);
                 visualization.data = JSON.stringify(visualization.data);
                 visualization.opts = JSON.stringify(visualization.opts);
