@@ -266,12 +266,13 @@ exports.appendData = function (req, res, next) {
                                 }
                             });
                         } else {
-                            viz.data[fieldName].push(req.body.data);    
+                            var vdata = viz.data;
+                            vdata[fieldName].push(req.body.data);
+                            viz.data = vdata;
                         }
 
 
                     } else if(_.isUndefined(viz.data[fieldName])) {
-                        console.log(fieldName);
                         viz.data[fieldName] = req.body.data;
                     } else {
                         console.log('unknown field');
@@ -290,7 +291,9 @@ exports.appendData = function (req, res, next) {
 
 
                         } else {
-                            viz.data.push(req.body.data);
+                            var vdata = viz.data;
+                            vdata.push(req.body.data);
+                            viz.data = vdata;
                         }
                     } else if(_.isUndefined(viz.data)) {
                         viz.data = req.body.data;
