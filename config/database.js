@@ -18,6 +18,28 @@ module.exports = {
     "sync": {"force": true},
     "storage": 'database.sqlite',
     "logging": false
+  },  
+  "test": {
+    "username": null,
+    "password": null,
+    "database": "lightning-viz",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": 5432,
+    "sync": {"force": true},
+    "storage": 'database.sqlite',
+    "logging": false
+  },
+  "test-sqlite": {
+    "username": null,
+    "password": null,
+    "database": "lightning-viz",
+    "host": "127.0.0.1",
+    "dialect": "sqlite",
+    "port": 5432,
+    "sync": {"force": true},
+    "storage": 'database.sqlite',
+    "logging": false
   },
   "production": {
     database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',

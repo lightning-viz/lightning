@@ -69,15 +69,15 @@ describe('multi repo import tests', function() {
 
 describe('visualization model', function() {
 
-    it('should query json data', function(done) {
+    var data = {
+        key1: ['an', 'array', 'of', 'strings'],
+        key2: {
+            an: 'object'
+        },
+        key3: 'a string'
+    };
 
-        var data = {
-            key1: ['an', 'array', 'of', 'strings'],
-            key2: {
-                an: 'object'
-            },
-            key3: 'a string'
-        };
+    it('should query json data', function(done) {
 
         models.Visualization.create({
             data: data,
@@ -92,6 +92,70 @@ describe('visualization model', function() {
                     expect(results.length).to.be(1);
                     expect(results[0]).to.have.property('data');
                     expect(results[0].data).to.eql(data.key1);
+                    done();
+                });
+
+        });
+    });
+
+    it('should get query a named object', function(done) {
+        
+        models.Visualization.create({
+            data: data,
+            type: 'line'
+        }).then(function(viz) {
+            var vid = viz.id;
+
+            models.Visualization
+                .getNamedObjectForVisualization(vid, 'key2')
+                .then(function(results) {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be(1);
+                    expect(results[0]).to.have.property('key2');
+                    expect(results[0].key2).to.eql(data.key2);
+                    done();
+                });
+
+        });
+    });
+
+    it('should get query a named with index', function(done) {
+        
+        models.Visualization.create({
+            data: data,
+            type: 'line'
+        }).then(function(viz) {
+            var vid = viz.id;
+
+            models.Visualization
+                .getNamedObjectAtIndexForVisualization(vid, 'key1', 2)
+                .then(function(results) {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be(1);
+                    expect(results[0]).to.have.property('key1');
+                    expect(results[0].key1).to.eql(data.key1[2]);
+                    done();
+                });
+
+        });
+    });
+
+    it('should get query settings', function(done) {
+        
+        models.Visualization.create({
+            settings: data,
+            type: 'line'
+        }).then(function(viz) {
+            var vid = viz.id;
+
+
+            models.Visualization
+                .querySettingsForVisualization(vid, ['key1'])
+                .then(function(results) {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be(1);
+                    expect(results[0]).to.have.property('settings');
+                    expect(results[0].settings).to.eql(data.key1);
                     done();
                 });
 

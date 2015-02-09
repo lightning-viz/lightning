@@ -49,6 +49,13 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
+                return this.find(vid).then(function(viz) {
+                    var data = JSON.parse(viz.data);
+                    var retObj = {};
+                    retObj[name] = data[name];
+                    return [retObj];
+                });
+
             },
 
             getNamedObjectAtIndexForVisualization: function(vid, name, index) {
@@ -57,8 +64,19 @@ module.exports = function(sequelize, DataTypes) {
                 if(!validator.isNumeric(index)) {
                     throw Error('Must provide numeric index');
                 }
-                return sequelize
-                    .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+
+                if(isPostgres) {
+                    return sequelize
+                        .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+                }
+
+
+                return this.find(vid).then(function(viz) {
+                    var data = JSON.parse(viz.data);
+                    var retObj = {};
+                    retObj[name] = data[name][index];
+                    return [retObj];
+                });
             },
 
             getDataForVisualization: function(vid) {
@@ -103,19 +121,35 @@ module.exports = function(sequelize, DataTypes) {
 
             querySettingsForVisualization: function(vid, keys) {
 
-                var qs = _.chain(keys)
-                            .map(validator.escape)
-                            .map(function(key) {
-                                if(!validator.isNumeric(key)) {
-                                    return '\'' + key + '\'';
-                                }
-                                return key;
-                            })
-                            .value()
-                            .join('->');
+                if(isPostgres) {
+                    var qs = _.chain(keys)
+                                .map(validator.escape)
+                                .map(function(key) {
+                                    if(!validator.isNumeric(key)) {
+                                        return '\'' + key + '\'';
+                                    }
+                                    return key;
+                                })
+                                .value()
+                                .join('->');
 
-                return sequelize
-                    .query('SELECT settings->' + qs + ' AS settings FROM "Visualizations" WHERE id=' + vid);
+                    return sequelize
+                        .query('SELECT settings->' + qs + ' AS settings FROM "Visualizations" WHERE id=' + vid);
+
+                }
+
+
+                return this.find(vid).then(function(viz) {
+
+                    var settings = JSON.parse(viz.settings);
+                    _.each(keys, function(key) {
+                        settings = settings[key];
+                    });
+
+                    return [{
+                        settings: settings
+                    }];
+                });
             }
         },
 
