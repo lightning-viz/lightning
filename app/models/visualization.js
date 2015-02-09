@@ -1,16 +1,39 @@
 var validator = require('validator');
 var _ = require('lodash');
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../../config/database')[env];
+var isPostgres = config.dialect === 'postgres';
+
+
+
 
 module.exports = function(sequelize, DataTypes) {
-    var Visualization = sequelize.define('Visualization', {
-        data: 'JSON',
-        opts: 'JSON',
-        settings: 'JSON',
-        name: DataTypes.STRING,
-        description: DataTypes.TEXT,
-        type: DataTypes.STRING,
-        images: DataTypes.ARRAY(DataTypes.STRING)
-    }, {
+
+
+    var schema;
+    if(isPostgres) {
+        schema = {
+            data: 'JSON',
+            opts: 'JSON',
+            settings: 'JSON',
+            name: DataTypes.STRING,
+            description: DataTypes.TEXT,
+            type: DataTypes.STRING,
+            images: DataTypes.ARRAY(DataTypes.STRING)
+        };
+    } else {
+        schema = {
+            data: 'JSON',
+            opts: 'JSON',
+            settings: 'JSON',
+            name: DataTypes.STRING,
+            description: DataTypes.TEXT,
+            type: DataTypes.STRING,
+            images: DataTypes.STRING
+        };
+    }
+
+    var Visualization = sequelize.define('Visualization', schema, {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
@@ -18,8 +41,14 @@ module.exports = function(sequelize, DataTypes) {
             },
             getNamedObjectForVisualization: function(vid, name) {
                 name = validator.escape(name);
-                return sequelize
-                    .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+
+
+                if(isPostgres) {
+                    return sequelize
+                        .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
+                }
+
+
             },
 
             getNamedObjectAtIndexForVisualization: function(vid, name, index) {
@@ -38,19 +67,38 @@ module.exports = function(sequelize, DataTypes) {
 
             queryDataForVisualization: function(vid, keys) {
 
-                var qs = _.chain(keys)
-                            .map(validator.escape)
-                            .map(function(key) {
-                                if(!validator.isNumeric(key)) {
-                                    return '\'' + key + '\'';
-                                }
-                                return key;
-                            })
-                            .value()
-                            .join('->');
+                if(isPostgres) {
+                    var qs = _.chain(keys)
+                                .map(validator.escape)
+                                .map(function(key) {
+                                    if(!validator.isNumeric(key)) {
+                                        return '\'' + key + '\'';
+                                    }
+                                    return key;
+                                })
+                                .value()
+                                .join('->');
 
-                return sequelize
-                    .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
+                    return sequelize
+                        .query('SELECT data->' + qs + ' AS data FROM "Visualizations" WHERE id=' + vid);
+
+                } 
+
+
+                return this.find(vid).then(function(viz) {
+
+                    var data = JSON.parse(viz.data);
+                    _.each(keys, function(key) {
+                        data = data[key];
+                    });
+
+                    return [{
+                        data: data
+                    }];
+                });
+
+
+
             },
 
             querySettingsForVisualization: function(vid, keys) {

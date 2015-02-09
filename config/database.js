@@ -13,9 +13,10 @@ module.exports = {
     "password": null,
     "database": "lightning-viz",
     "host": "127.0.0.1",
-    "dialect": "postgres",
+    "dialect": "sqlite",
     "port": 5432,
     "sync": {"force": true},
+    "storage": 'database.sqlite',
     "logging": false
   },
   "production": {

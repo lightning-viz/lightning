@@ -5,10 +5,36 @@ var Q = require('q');
 var uuid = require('node-uuid');
 var glob = require('glob');
 var _ = require('lodash');
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../../config/database')[env];
+var isPostgres = config.dialect === 'postgres';
 
 
 module.exports = function(sequelize, DataTypes) {
-    var VisualizationType = sequelize.define('VisualizationType', {
+
+
+
+    var schema;
+    if(isPostgres) {
+        schema = {
+            name: {type: DataTypes.STRING, unique: true},
+            initialDataField: DataTypes.STRING,
+
+            enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
+            imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+
+            thumbnailLocation: DataTypes.STRING,
+
+            sampleData: 'JSON',
+            sampleOptions: 'JSON',
+            sampleImages: DataTypes.STRING,
+
+            javascript: DataTypes.TEXT,
+            markup: DataTypes.TEXT,
+            styles: DataTypes.TEXT
+        };
+    } else {
+        schema = {
         name: {type: DataTypes.STRING, unique: true},
         initialDataField: DataTypes.STRING,
 
@@ -19,12 +45,16 @@ module.exports = function(sequelize, DataTypes) {
 
         sampleData: 'JSON',
         sampleOptions: 'JSON',
-        sampleImages: DataTypes.ARRAY(DataTypes.STRING),
+        sampleImages: DataTypes.STRING,
 
         javascript: DataTypes.TEXT,
         markup: DataTypes.TEXT,
         styles: DataTypes.TEXT
-    }, {
+    };
+    }
+
+
+    var VisualizationType = sequelize.define('VisualizationType', schema, {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
@@ -42,11 +72,9 @@ module.exports = function(sequelize, DataTypes) {
 
                 return Q.nfcall(fs.remove, repoPath)
                     .then(function() {
-                        console.log('about to clone ' + url);
                         return Q.ninvoke(git, 'clone', url, repoPath);
                     })
                     .then(function() {
-                        console.log(opts)
                         return self.createFromFolder(repoPath + (opts.path ? ('/' + opts.path) : ''), attributes, opts);
                     });
             },
@@ -198,6 +226,10 @@ module.exports = function(sequelize, DataTypes) {
         hooks: {
 
             beforeValidate: function(vizType, next) {
+
+                if(!isPostgres) {
+                    vizType.sampleImages = JSON.stringify(vizType.sampleImages);
+                }
                 vizType.sampleData = JSON.stringify(vizType.sampleData);
                 vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
                 next();
