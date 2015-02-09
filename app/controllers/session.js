@@ -59,7 +59,7 @@ exports.feed = function (req, res, next) {
         }
 
         _.each(visualizations, function(viz) {
-            console.log(viz.images);
+            console.log(viz.type);
         });
 
         res.render('session/feed', {
@@ -317,6 +317,7 @@ exports.appendData = function (req, res, next) {
 
                 form.parse(req, function(err, fields, files) {
                     _.each(files, function(f) {
+
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
                             if(err) {
@@ -327,14 +328,16 @@ exports.appendData = function (req, res, next) {
                             var s3Response = data.response;
 
                             if(viz.images) {
-                                viz.images.push(imgData);
+                                var vimages = viz.images;
+                                vimages.push(imgData);
+                                viz.images = vimages;
                             } else {
                                 viz.images = [imgData];
                             }
+
                             viz
                                 .save()
                                 .then(function() {
-
                                     if(typeof s3Response === 'object') {
                                         res.statusCode = s3Response.statusCode;
                                         s3Response.pipe(res);
