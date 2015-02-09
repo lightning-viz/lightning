@@ -82,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
 
 
                 return this.find(vid).then(function(viz) {
-                    var data = JSON.parse(viz.data);
+                    var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name];
                     return [retObj];
@@ -104,7 +104,7 @@ module.exports = function(sequelize, DataTypes) {
 
 
                 return this.find(vid).then(function(viz) {
-                    var data = JSON.parse(viz.data);
+                    var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name][index];
                     return [retObj];
@@ -137,7 +137,7 @@ module.exports = function(sequelize, DataTypes) {
 
                 return this.find(vid).then(function(viz) {
 
-                    var data = JSON.parse(viz.data);
+                    var data = viz.data;
                     _.each(keys, function(key) {
                         data = data[key];
                     });
@@ -173,7 +173,7 @@ module.exports = function(sequelize, DataTypes) {
 
                 return this.find(vid).then(function(viz) {
 
-                    var settings = JSON.parse(viz.settings);
+                    var settings = viz.settings;
                     _.each(keys, function(key) {
                         settings = settings[key];
                     });
