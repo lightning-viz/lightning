@@ -2,7 +2,7 @@
 
 Lightning is a data-visualization server providing API-based access to reproducible, web-based, interactive visualizations. It includes a core set of visualization types, but is built for extendability and customization. Lightning supports modern libraries like d3.js, three.js, and leaflet, and is designed for interactivity over large data sets and continuously updating data streams.
 
-If you are just getting started, please see the [project page](http://lightning-viz.github.io/), see the [available visualizations](http://lightning-viz.github.io/visualizations/) or check out an [IPython demo](http://nbviewer.ipython.org/gist/mathisonian/78cf2471e83480984a95)
+If you are just getting started, please see the [project page](http://lightning-viz.github.io/), see the [available visualizations](http://lightning-viz.github.io/visualizations/) or check out an [IPython demo](http://nbviewer.ipython.org/github/lightning-viz/lightning-example-notebooks/blob/master/index.ipynb)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
