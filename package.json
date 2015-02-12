@@ -116,7 +116,7 @@
     "svg-path-generator": "^1.0.0",
     "swig": "^1.4.1",
     "three-fly-controls": "^1.1.0",
-    "three.js": "git://github.com/mathisonian/three.js",
+    "three.js": "git://github.com/lightning-viz/three.js",
     "tiny-lr": "0.0.5",
     "topojson": "^1.6.18",
     "underscore.nest": "git://github.com/mathisonian/underscore.nest",
