@@ -62,6 +62,7 @@ module.exports = function (app) {
     app.get('/', authMiddleware, home.index);
     app.get('/sessions', authMiddleware, session.index);
     app.get('/sessions/create/', authMiddleware, session.getCreate);
+    app.get('/status', authMiddleware, home.status);
 
     app.get('/sessions/:sid/delete/', authMiddleware, session.getDelete);
     app.delete('/sessions/:sid/', authMiddleware, session.delete);
