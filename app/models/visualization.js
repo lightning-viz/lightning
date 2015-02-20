@@ -199,8 +199,14 @@ module.exports = function(sequelize, DataTypes) {
                 return Visualization.queryDataForVisualization(this.id, keys);
             },
             getInitialData: function(type) {
-                if(type.initialDataField) {
-                    return this.data[type.initialDataField];
+                if(type.initialDataFields.lenth) {
+                    var ret = {};
+                    _.each(type.initialDataFields, function(field) {
+                        if(!_.isUndefined(this.data[field])) {
+                            ret[field] = this.data[field];
+                        }
+                    }, this);
+                    return ret;
                 } 
 
                 return this.data;

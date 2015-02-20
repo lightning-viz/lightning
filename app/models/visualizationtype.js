@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     if(isPostgres) {
         schema = {
             name: {type: DataTypes.STRING, unique: true},
-            initialDataField: DataTypes.STRING,
+            initialDataFields: DataTypes.ARRAY(DataTypes.STRING),
 
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
@@ -36,8 +36,6 @@ module.exports = function(sequelize, DataTypes) {
     } else {
         schema = {
         name: {type: DataTypes.STRING, unique: true},
-        initialDataField: DataTypes.STRING,
-
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
 
@@ -68,6 +66,15 @@ module.exports = function(sequelize, DataTypes) {
             },
             set: function(val) {
                 return this.setDataValue('sampleImages', JSON.stringify(val));
+            }
+        },
+        initialDataFields: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('initialDataFields') || '[]');
+            },
+            set: function(val) {
+                return this.setDataValue('initialDataFields', JSON.stringify(val));
             }
         },
         javascript: DataTypes.TEXT,
@@ -171,8 +178,9 @@ module.exports = function(sequelize, DataTypes) {
                     Q.nfcall(glob, path + '/*.{html,jade}'),
                     Q.nfcall(glob, path + '/sample-data.json'),
                     Q.nfcall(glob, path + '/sample-images.json'),
+                    Q.nfcall(glob, path + '/package.json'),
                 ])
-                .spread(function(jsFiles, styleFiles, markupFiles, sampleDataFiles, sampleImageFiles) {
+                .spread(function(jsFiles, styleFiles, markupFiles, sampleDataFiles, sampleImageFiles, packageJSONFiles) {
 
                     if(jsFiles.length > 1) {
                         throw new Error('There can\'t be more than one javascript file');
@@ -187,16 +195,23 @@ module.exports = function(sequelize, DataTypes) {
                         (styleFiles.length) ? Q.nfcall(fs.readFile, styleFiles[0]) : '',
                         (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : '',
                         (sampleDataFiles.length) ? Q.nfcall(fs.readFile, sampleDataFiles[0]) : '[]',
-                        (sampleImageFiles.length) ? Q.nfcall(fs.readFile, sampleImageFiles[0]) : '[]'
+                        (sampleImageFiles.length) ? Q.nfcall(fs.readFile, sampleImageFiles[0]) : '[]',
+                        (packageJSONFiles.length) ? Q.nfcall(fs.readFile, packageJSONFiles[0]) : '[]',
                     ];
 
 
-                }).spread(function(javascript, styles, markup, sampleData, sampleImages) {
+                }).spread(function(javascript, styles, markup, sampleData, sampleImages, packageJSON) {
 
 
                     sampleImages = JSON.parse(sampleImages);
                     if(!sampleImages.length) {
                         sampleImages = null;
+                    }
+
+                    try {
+                        packageJSON = JSON.parse(packageJSON);
+                    } catch(e) {
+                        console.warn('Invalid package.json: ' + e.toString());
                     }
 
                     var vizTypeObj = _.extend(attributes, {
@@ -206,6 +221,8 @@ module.exports = function(sequelize, DataTypes) {
                         sampleData: JSON.parse(sampleData.toString('utf8')),
                         sampleImages: sampleImages
                     });
+
+                    vizTypeObj = _.extend(vizTypeObj, packageJSON['lightning-viz'] || {});
 
                     if(opts.preview) {
                         return VisualizationType.build(vizTypeObj);
