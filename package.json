@@ -1,10 +1,13 @@
 {
-  "name": "lightning",
+  "name": "lightning-server",
   "description": "lightning dataviz notebooks",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": {
     "name": "Matthew Conlen",
     "email": "code@mathisonian.com"
+  },
+  "bin": {
+    "lightning-server": "bin/lightning-server.js"
   },
   "engines": {
     "node": "0.10.x"
@@ -13,7 +16,8 @@
     "start": "NODE_ENV=development nodemon --watch app --watch public/js server.js ",
     "test": "mocha --timeout 20000",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
-    "createdb": "psql -c 'create database \"lightning-viz\";'"
+    "createdb": "psql -c 'create database \"lightning-viz\";'",
+    "postinstall": "gulp build"
   },
   "browserify": {
     "transform": [
