@@ -191,21 +191,18 @@ exports.addData = function (req, res, next) {
                 return res.json(viz);
             }).error(next);
     } else {
+
         var form = new multiparty.Form();
 
         form.parse(req, function(err, fields, files) {
 
-            _.each(files, function(f) {
-                utils.thumbnailAndUpload(f, {sessionId: sessionId}, function(err, data) {
+            files = _.map(files, function(v) { return v[0].path;});
 
-                    if(err) {
-                        console.log('error in thumbnailAndUpload');
-                        return res.status(500).send('error creating image thumbnail');
-                    }
-
-                    var imgData = data.imgData;
-
-                    console.log(imgData);
+            utils
+                .thumbnailAndUpload(files, {
+                    sessionId: sessionId
+                })
+                .then(function(images) {
 
                     var type = 'image';
                     if(fields.type) {
@@ -213,22 +210,22 @@ exports.addData = function (req, res, next) {
                             type = fields.type[0];    
                         } else {
                             type = fields.type;
-                        }                        
+                        }
                     }
 
-                    Visualization
+                    return Visualization
                         .create({
                             type:  type,
-                            images: [imgData],
+                            images: images,
                             SessionId: sessionId
-                        }).then(function(viz) {
-                            req.io.of('/sessions/' + sessionId)
-                                .emit('viz', viz);
+                        });
 
-                            return res.json(viz);
-                        }).error(next);
-                });
-            });
+                }).then(function(viz) {
+                    req.io.of('/sessions/' + sessionId)
+                        .emit('viz', viz);
+
+                    return res.json(viz);
+                }).catch(next);
         });
     }
 };
@@ -241,122 +238,73 @@ exports.appendData = function (req, res, next) {
     var vizId = req.params.vid;
     var fieldName = req.params.field;
 
+    var retViz;
 
-    models.Visualization
-        .find(vizId)
-        .then(function(viz) {
-            if(req.is('json')) {
-
-                if(fieldName) {
-
-                    if(_.isArray(viz.data[fieldName])) {
-
-                        if(viz.type.indexOf('streaming') > -1) {
-                            _.each(req.body.data, function(d, i) {
-                                if(i < viz.data[fieldName].length) {
-                                    viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
-                                }
-                            });
-                        } else {
-                            var vdata = viz.data;
-                            vdata[fieldName].push(req.body.data);
-                            viz.data = vdata;
-                        }
-                    } else if(_.isUndefined(viz.data[fieldName])) {
-                        viz.data[fieldName] = req.body.data;
-                    } else {
-                        console.log('unknown field');
-                    }
-                } else {
-                    if(_.isArray(viz.data)) {
-                        if(_.isArray(req.body.data)) {
-
-                            if(viz.type.indexOf('streaming') > -1) {
-                                _.each(req.body.data, function(d, i) {
-
-                                });
-                            } else {
-                                viz.data = viz.data.concat(req.body.data);
-                            }
-
-
-                        } else {
-                            var vdata = viz.data;
-                            vdata.push(req.body.data);
-                            viz.data = vdata;
-                        }
-                    } else if(_.isUndefined(viz.data)) {
-                        viz.data = req.body.data;
-                    } else {
-                        console.log('unknown field');
-                    }
+    if(req.is('json')) {
+        models.Visualization
+            .find(vizId)
+            .then(function(viz) {
+                if(!viz){
+                    throw new Error(404);
                 }
-
-                viz
-                    .save()
-                    .then(function() {
-                        return res.json(viz);
-                    }).error(next);
+                retViz = viz;
 
                 req.io.of('/sessions/' + sessionId)
                     .emit('append', {
-                        vizId: viz.id, 
+                        vizId: viz.id,
                         data: req.body.data
                     });
-            
-            } else if(fieldName === 'images') {
+                return viz.appendData(req.body.data, fieldName);
+            })
+            .then(function() {
+                return res.json(retViz);
+            }).error(next);
+
+    } else if(fieldName === 'images') {
+
+        models.Visualization
+            .find(vizId)
+            .then(function(viz) {
+                if(!viz){
+                    throw new Error(404);
+                }
+                retViz = viz;
 
                 var form = new multiparty.Form();
+                return Q.ninvoke(form, 'parse', req);
 
-                form.parse(req, function(err, fields, files) {
-                    _.each(files, function(f) {
+            })
+            .then(function(results) {
+                var files = [];
+                if(results.length >= 2) {
+                    files = results[1];
+                }
+                files = _.map(files, function(v) { return v[0].path;});
 
-                        utils.thumbnailAndUpload(f, {sessionId: sessionId}, function(err, data) {
-
-                            if(err) {
-                                console.log('error in thumbnailAndUpload');
-                                return res.status(500).send('error creating image thumbnail');
-                            }
-                            var imgData = data.imgData;
-                            var s3Response = data.response;
-
-                            if(viz.images) {
-                                var vimages = viz.images;
-                                vimages.push(imgData);
-                                viz.images = vimages;
-                            } else {
-                                viz.images = [imgData];
-                            }
-
-                            viz
-                                .save()
-                                .then(function() {
-                                    if(typeof s3Response === 'object') {
-                                        res.statusCode = s3Response.statusCode;
-                                        s3Response.pipe(res);
-                                    } else {
-                                        return res.status(data.response).send('');
-                                    }
-                                });
-
-                            req.io.of('/sessions/' + sessionId)
-                                .emit('append', {
-                                    vizId: viz.id, 
-                                    data: imgData
-                                });
-
-                        });
-                    });
+                return utils.thumbnailAndUpload(files, {
+                    sessionId: sessionId
                 });
-            } else {
-                return next(500);
-            }
+            })
+            .then(function(images) {
+                req.io.of('/sessions/' + sessionId)
+                    .emit('append', {
+                        vizId: vizId, 
+                        data: images
+                    });
 
+                return retViz.appendImages(images);
+            })
+            .then(function() {
+                return res.json(retViz);
+            })
+            .error(next);
 
-        }).error(next);
+    } else {
+        return next(500);
+    }
+
 
 };
-
 
 
 exports.updateData = function (req, res, next) {
@@ -364,75 +312,68 @@ exports.updateData = function (req, res, next) {
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
+    var retViz;
 
-
-    models.Visualization
-        .find(vizId)
-        .then(function(viz) {
-            if(req.is('json')) {
-
-                if(fieldName) {
-                    viz.data[fieldName] = req.body.data;
-                } else {
-                    viz.data = req.body.data;
+    if(req.is('json')) {
+        models.Visualization
+            .find(vizId)
+            .then(function(viz) {
+                if(!viz){
+                    throw new Error(404);
                 }
-
-                viz
-                    .save()
-                    .then(function() {
-                        return res.json(viz);
-                    }).error(next);
+                retViz = viz;
 
                 req.io.of('/sessions/' + sessionId)
                     .emit('update', {
-                        vizId: viz.id, 
+                        vizId: viz.id,
                         data: req.body.data
                     });
-            
-            } else if(fieldName === 'images') {
+                return viz.updateData(req.body.data, fieldName);
+            })
+            .then(function() {
+                return res.json(retViz);
+            }).error(next);
+    } else if(fieldName === 'images') {
+
+        models.Visualization
+            .find(vizId)
+            .then(function(viz) {
+                if(!viz){
+                    throw new Error(404);
+                }
+                retViz = viz;
 
                 var form = new multiparty.Form();
+                return Q.ninvoke(form, 'parse', req);
 
-                form.parse(req, function(err, fields, files) {
-                    _.each(files, function(f) {
-                        utils.thumbnailAndUpload(f, {sessionId: sessionId}, function(err, data) {
+            })
+            .then(function(results) {
+                var files = [];
+                if(results.length >= 2) {
+                    files = results[1];
+                }
+                files = _.map(files, function(v) { return v[0].path;});
 
-                            if(err) {
-                                console.log('error in thumbnailAndUpload');
-                                return res.status(500).send('error creating image thumbnail');
-                            }
-                            var imgData = data.imgData;
-                            var s3Response = data.response;
-
-                            viz.images = [imgData];
-                            
-                            viz
-                                .save()
-                                .then(function() {
-
-                                    if(typeof s3Response === 'object') {
-                                        res.statusCode = s3Response.statusCode;
-                                        s3Response.pipe(res);
-                                    } else {
-                                        return res.status(data.response).send('');
-                                    }
-                                });
-
-                            req.io.of('/sessions/' + sessionId)
-                                .emit('update', {
-                                    vizId: viz.id, 
-                                    data: imgData
-                                });
-
-                        });
-                    });
+                return utils.thumbnailAndUpload(files, {
+                    sessionId: sessionId
                 });
-            } else {
-                return next(500);
-            }
+            })
+            .then(function(images) {
+                req.io.of('/sessions/' + sessionId)
+                    .emit('update', {
+                        vizId: vizId, 
+                        data: images
+                    });
 
-
-        }).error(next);
+                return retViz.updateImages(images);
+            })
+            .then(function() {
+                return res.json(retViz);
+            })
+            .error(next);
+    } else {
+        return next(500);
+    }
 
 };
 

@@ -68,47 +68,9 @@ module.exports = function(sequelize, DataTypes) {
     var Visualization = sequelize.define('Visualization', schema, {
         classMethods: {
             associate: function(models) {
-                 // associations can be defined here
                  Visualization.belongsTo(models.Session);
-            },
-            getNamedObjectForVisualization: function(vid, name) {
-                name = validator.escape(name);
-
-
-                if(isPostgres) {
-                    return sequelize
-                        .query('SELECT data->\'' + name + '\'' + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
-                }
-
-
-                return this.find(vid).then(function(viz) {
-                    var data = viz.data;
-                    var retObj = {};
-                    retObj[name] = data[name];
-                    return [retObj];
-                });
-
-            },
-
-            getNamedObjectAtIndexForVisualization: function(vid, name, index) {
-                
-                name = validator.escape(name);
-                if(!validator.isNumeric(index)) {
-                    throw Error('Must provide numeric index');
-                }
-
-                if(isPostgres) {
-                    return sequelize
-                        .query('SELECT data->\'' + name + '\'->' + index + ' AS ' + name + ' FROM "Visualizations" WHERE id=' + vid);
-                }
-
-
-                return this.find(vid).then(function(viz) {
-                    var data = viz.data;
-                    var retObj = {};
-                    retObj[name] = data[name][index];
-                    return [retObj];
-                });
+                 Visualization.belongsTo(models.Dashboard);
+                 Visualization.belongsTo(models.DataSet);
             },
 
             getDataForVisualization: function(vid) {
@@ -186,12 +148,6 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         instanceMethods: {
-            getNamedObjectAtIndex: function(name, index) {
-                return Visualization.getNamedObjectAtIndexForVisualization(this.id, name, index);
-            }, 
-            getNamedObject: function(name) {
-                return Visualization.getNamedObjectForVisualization(this.id, name);
-            },
             getData: function() {
                 return Visualization.getDataForVisualization(this.id);
             },
@@ -210,7 +166,79 @@ module.exports = function(sequelize, DataTypes) {
                 } 
 
                 return this.data;
-            }
+            },
+
+            updateData: function(data, fieldName) {
+                if(fieldName) {
+                    this.data[fieldName] = data;
+                } else {
+                    this.data = data;
+                }
+
+                return this.save();
+            },            
+
+            appendData: function(data, fieldName) {
+
+                var self = this;
+                var vdata;
+                if(fieldName) {
+                    if(_.isArray(self.data[fieldName])) {
+                        if(self.type.indexOf('streaming') > -1) {
+                            _.each(data, function(d, i) {
+                                if(i < self.data[fieldName].length) {
+                                    self.data[fieldName][i] = self.data[fieldName][i].concat(d);
+                                }
+                            });
+                        } else {
+                            vdata = self.data;
+                            vdata[fieldName].push(data);
+                            self.data = vdata;
+                        }
+                    } else if(_.isUndefined(self.data[fieldName])) {
+                        self.data[fieldName] = data;
+                    } else {
+                        console.log('unknown field');
+                    }
+                } else {
+                    if(_.isArray(self.data)) {
+                        if(_.isArray(data)) {
+                            if(self.type.indexOf('streaming') > -1) {
+                                _.each(data, function(d, i) {
+
+                                });
+                            } else {
+                                self.data = self.data.concat(data);
+                            }
+                        } else {
+                            vdata = self.data;
+                            vdata.push(data);
+                            self.data = vdata;
+                        }
+                    } else if(_.isUndefined(self.data)) {
+                        self.data = data;
+                    } else {
+                        console.log('unknown field');
+                    }
+                }
+
+                return this.save();
+            },
+
+            updateImages: function(images) {
+                this.images = images;
+                return this.save();
+            },
+
+            appendImages: function(images) {
+                if(this.images) {
+                    this.images = this.images.concat(images);
+                } else {
+                    this.images = images;
+                }
+                return this.save();
+            },
+
         },
 
         hooks: {
