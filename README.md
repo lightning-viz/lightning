@@ -4,7 +4,7 @@ Lightning is a data-visualization server providing API-based access to reproduci
 
 If you are just getting started, please see the [project page](http://lightning-viz.github.io/), see the [available visualizations](http://lightning-viz.github.io/visualizations/) or check out an [IPython demo](http://nbviewer.ipython.org/github/lightning-viz/lightning-example-notebooks/blob/master/index.ipynb)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/commit/d7b01a25cc29915990c229ab3bc54cf90ab9bb6b)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/tree/d7b01a25cc29915990c229ab3bc54cf90ab9bb6b)
 
 ![session](http://i.gif.fm/KvPpI.png)
 
