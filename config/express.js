@@ -94,10 +94,23 @@ module.exports = function (app, io) {
     app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 
+    var getRequestStaticUrl = function(req) {
+        if(req.query.host) {
+            return req.query.host;
+        }
+
+        if(req.headers.host) {
+            return ((req.connection.encrypted) ? 'https' : 'http') + '://' + req.headers.host;
+        }
+
+        return static_url;
+    };
+
+
     // expose package.json to views
     app.use(function (req, res, next) {
-        
-        var staticUrl = req.query.host || req.headers.host || static_url;
+
+        var staticUrl = getRequestStaticUrl(req);
         if(staticUrl.slice(-1) !== '/') {
             staticUrl += '/';
         }
