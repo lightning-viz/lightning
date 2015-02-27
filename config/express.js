@@ -97,7 +97,7 @@ module.exports = function (app, io) {
     // expose package.json to views
     app.use(function (req, res, next) {
         
-        var staticUrl = req.query.host || static_url;
+        var staticUrl = req.query.host || req.headers.host || static_url;
         if(staticUrl.slice(-1) !== '/') {
             staticUrl += '/';
         }
