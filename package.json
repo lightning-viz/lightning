@@ -12,6 +12,11 @@
   "engines": {
     "node": "0.10.x"
   },
+  "homepage": "http://lightning-viz.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lightning/lightning"
+  },
   "scripts": {
     "start": "NODE_ENV=development nodemon --watch app --watch public/js server.js ",
     "test": "mocha --timeout 20000",
