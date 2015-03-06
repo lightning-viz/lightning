@@ -100,7 +100,7 @@ module.exports = function (app, io) {
         }
 
         if(req.headers.host) {
-            return ((req.connection.encrypted) ? 'https' : 'http') + '://' + req.headers.host;
+            return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host;
         }
 
         return static_url;
