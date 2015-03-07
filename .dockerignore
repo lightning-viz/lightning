@@ -1,0 +1,19 @@
+# Standard ignore file for Docker builds.
+# Here we include the Dockerfile and fig.yml
+# as they are not helpful within the app.
+
+node_modules
+.keys
+public
+
+npm-debug.log
+*ipynb*
+tmp/**
+ui/**/imported/**
+mocks/
+
+*.db
+*.sqlite
+
+logs/
+fig*.yml
