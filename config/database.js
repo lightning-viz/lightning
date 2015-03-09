@@ -9,9 +9,9 @@ if(process.env.DATABASE_URL) {
 
 module.exports = {
   "development": {
-    "username": null,
-    "password": null,
-    "database": "lightning-viz",
+    database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',
+    username: (dbUrl) ? (dbUrl.auth.split(':') || [false])[0] : null,
+    password: (dbUrl) ? (dbUrl.auth.split(':') || [false])[1] : null,
     "host": "127.0.0.1",
     "dialect": "sqlite",
     "port": 5432,
@@ -20,9 +20,9 @@ module.exports = {
     "logging": false
   },  
   "test": {
-    "username": null,
-    "password": null,
-    "database": "lightning-viz",
+    database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',
+    username: (dbUrl) ? (dbUrl.auth.split(':') || [false])[0] : null,
+    password: (dbUrl) ? (dbUrl.auth.split(':') || [false])[1] : null,
     "host": "127.0.0.1",
     "dialect": "postgres",
     "port": 5432,
@@ -31,9 +31,9 @@ module.exports = {
     "logging": false
   },
   "test-sqlite": {
-    "username": null,
-    "password": null,
-    "database": "lightning-viz",
+    database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',
+    username: (dbUrl) ? (dbUrl.auth.split(':') || [false])[0] : null,
+    password: (dbUrl) ? (dbUrl.auth.split(':') || [false])[1] : null,
     "host": "127.0.0.1",
     "dialect": "sqlite",
     "port": 5432,
