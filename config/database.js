@@ -52,4 +52,4 @@ module.exports = {
         ssl: true,
         'dialect': 'postgres'
     }
-}
+};
