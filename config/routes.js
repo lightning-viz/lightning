@@ -5,6 +5,7 @@ var home = require('../app/controllers/home');
 var session = require('../app/controllers/session');
 var visualizationTypes = require('../app/controllers/visualizationTypes');
 var visualization = require('../app/controllers/visualization');
+var dashboard = require('../app/controllers/dashboard');
 var staticController = require('../app/controllers/static');
 var basicAuth = require('basic-auth-connect');
 var config = require('./config');
@@ -61,11 +62,15 @@ module.exports = function (app) {
     
     app.get('/', authMiddleware, home.index);
     app.get('/sessions', authMiddleware, session.index);
+    app.get('/dashboards', authMiddleware, dashboard.index);
     app.get('/sessions/create/', authMiddleware, session.getCreate);
+    app.get('/dashboards/create/', authMiddleware, dashboard.getCreate);
     app.get('/status', authMiddleware, home.status);
 
     app.get('/sessions/:sid/delete/', authMiddleware, session.getDelete);
+    app.get('/dashboards/:did/delete/', authMiddleware, dashboard.getDelete);
     app.delete('/sessions/:sid/', authMiddleware, session.delete);
+    app.delete('/dashboards/:did/', authMiddleware, dashboard.delete);
     app.delete('/visualization-types/:vid/', authMiddleware, visualizationTypes.delete);
     app.get('/visualization-types/:vid/delete', authMiddleware, visualizationTypes.getDelete);
 
@@ -73,10 +78,13 @@ module.exports = function (app) {
     app.get('/sessions/:sid/feed', authMiddleware, session.feed);
     
     app.put('/sessions/:sid', authMiddleware, session.update);
+    app.put('/dashboards/:did', authMiddleware, dashboard.update);
     app.put('/visualizations/:vid', authMiddleware, visualization.update);
 
     app.post('/sessions', authMiddleware, session.create);
-    app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
+    app.post('/dashboards', authMiddleware, dashboard.create);
+    app.post('/sessions/:did/datasets', authMiddleware, session.addData);
+    app.post('/dashboards/:did/datasets', authMiddleware, dashboard.addData);
     app.get('/visualizations/:vid', authMiddleware, visualization.read);
     app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
     app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
@@ -85,11 +93,13 @@ module.exports = function (app) {
 
     app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
     app.post('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.appendData);
-
+    app.post('/dashboards/:did/datasets/:dsid/data', authMiddleware, dashboard.appendData);
+    app.post('/dashboards/:did/datasets/:dsid/data/:field', authMiddleware, dashboard.appendData);
 
     app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
     app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
-    
+    app.put('/dashboards/:did/datasets/:dsid/data', authMiddleware, dashboard.updateData);
+    app.put('/dashboards/:did/datasets/:dsid/data/:field', authMiddleware, dashboard.updateData);    
 
 
     // public / userland stuff

@@ -1,0 +1,28 @@
+extends ../layout
+
+
+block content
+    .row
+        .one-third.column
+            h2
+                | Saved Dashboards
+
+    .row
+        .two-thirds.column
+            ul
+                for dashboard in dashboards
+                    li
+                        a(href="/dashboards/#{dashboard.id}/feed")
+                            | #{dashboard.getDisplayName()}
+
+                        small.session-details
+                                //- |  #{session.visualizations.length} visualizations 
+                                //- | |
+                                |  Created #{moment(session.createdAt).fromNow()}
+
+    .row
+        .four.columns
+            a(href="/dashboards/create")
+                .button
+                    | Create New Dashboard
+
