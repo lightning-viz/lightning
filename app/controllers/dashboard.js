@@ -84,6 +84,41 @@ exports.getDelete = function(req, res, next) {
         }).error(next);
 };
 
+exports.addVisualization = function(req, res, next) {
+    var dashboardId = req.params.did;
+    var dataSetId = req.params.dsid;
+
+    models.Visualization
+        .create({
+            DashboardId: dashboardId,
+            DataSetId: dataSetId,
+            type: req.body.type
+        }).then(function(viz) {
+            req.io.of('/dashboards/' + dashboardId)
+                .emit('viz', viz);  
+            return res.json(viz);
+        });
+
+};
+
+exports.deleteVisualization = function (req, res, next) {
+    var dashboardId = req.params.did;
+    var vizId = req.params.vid;
+
+    models.Visualization
+        .find(vizId)
+        .then(function(viz) {
+            if(!viz) {
+                return res.status(404).send();
+            }            
+            viz.destroy().success(function() {                
+                req.io.of('/dashboards/' + dashboardId)
+                    .emit('viz:delete', vizId);
+                return res.json(viz);                
+            }).error(next);
+        }).error(next);
+};
+
 
 
 exports.addData = function (req, res, next) {
@@ -94,6 +129,7 @@ exports.addData = function (req, res, next) {
         models.DataSet
             .create({
                 data: req.body.data,
+                name: req.body.name,
                 DashboardId: dashboardId
             }).then(function(dataset) {
                 req.io.of('/dashboards/' + dashboardId)

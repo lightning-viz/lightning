@@ -85,6 +85,8 @@ module.exports = function (app) {
     app.post('/dashboards', authMiddleware, dashboard.create);
     app.post('/sessions/:did/datasets', authMiddleware, session.addData);
     app.post('/dashboards/:did/datasets', authMiddleware, dashboard.addData);
+    app.post('/dashboards/:did/datasets/:dsid/visualizations', authMiddleware, dashboard.addVisualization);
+    app.delete('/dashboards/:did/datasets/:dsid/visualizations', authMiddleware, dashboard.deleteVisualization);
     app.get('/visualizations/:vid', authMiddleware, visualization.read);
     app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
     app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
