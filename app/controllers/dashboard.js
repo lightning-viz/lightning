@@ -87,20 +87,18 @@ exports.getDelete = function(req, res, next) {
 
 
 exports.addData = function (req, res, next) {
-    var sessionId = req.params.sid;
-
-    var Visualization = models.Visualization;
+    
+    var dashboardId = req.params.did;
 
     if(req.is('json')) {
-        Visualization
+        models.DataSet
             .create({
                 data: req.body.data,
-                type: req.body.type,
-                SessionId: sessionId
-            }).then(function(viz) {
-                req.io.of('/sessions/' + sessionId)
-                    .emit('viz', viz);  
-                return res.json(viz);
+                DashboardId: dashboardId
+            }).then(function(dataset) {
+                req.io.of('/dashboards/' + dashboardId)
+                    .emit('dataset', dataset);
+                return res.json(dataset);
             }).error(next);
     } else {
 
@@ -112,10 +110,9 @@ exports.addData = function (req, res, next) {
 
             utils
                 .thumbnailAndUpload(files, {
-                    sessionId: sessionId
+                    dashboardId: dashboardId
                 })
                 .then(function(images) {
-
                     var type = 'image';
                     if(fields.type) {
                         if(_.isArray(fields.type) || _.isObject(fields.type)) {
@@ -125,18 +122,18 @@ exports.addData = function (req, res, next) {
                         }
                     }
 
-                    return Visualization
+                    return models.DataSet
                         .create({
                             type:  type,
                             images: images,
-                            SessionId: sessionId
+                            DashboardId: dashboardId
                         });
 
-                }).then(function(viz) {
-                    req.io.of('/sessions/' + sessionId)
-                        .emit('viz', viz);
+                }).then(function(dataset) {
+                    req.io.of('/dashboards/' + dashboardId)
+                        .emit('dataset', dataset);
 
-                    return res.json(viz);
+                    return res.json(dataset);
                 }).catch(next);
         });
     }
@@ -146,41 +143,41 @@ exports.addData = function (req, res, next) {
 
 exports.appendData = function (req, res, next) {
 
-    var sessionId = req.params.sid;
-    var vizId = req.params.vid;
+    var dashboardId = req.params.did;
+    var dataSetId = req.params.dsid;
     var fieldName = req.params.field;
 
-    var retViz;
+    var retDataset;
 
     if(req.is('json')) {
-        models.Visualization
-            .find(vizId)
-            .then(function(viz) {
-                if(!viz){
+        models.DataSet
+            .find(dataSetId)
+            .then(function(dataset) {
+                if(!dataset){
                     throw new Error(404);
                 }
-                retViz = viz;
+                retDataset = dataset;
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of('/dashboards/' + dashboardId)
                     .emit('append', {
-                        vizId: viz.id,
+                        dataSetId: dataset.id,
                         data: req.body.data
                     });
-                return viz.appendData(req.body.data, fieldName);
+                return dataSetId.appendData(req.body.data, fieldName);
             })
             .then(function() {
-                return res.json(retViz);
+                return res.json(retDataset);
             }).error(next);
 
     } else if(fieldName === 'images') {
 
-        models.Visualization
-            .find(vizId)
-            .then(function(viz) {
-                if(!viz){
+        models.DataSet
+            .find(dataSetId)
+            .then(function(dataset) {
+                if(!dataset){
                     throw new Error(404);
                 }
-                retViz = viz;
+                retDataset = dataset;
 
                 var form = new multiparty.Form();
                 return Q.ninvoke(form, 'parse', req);
@@ -194,20 +191,20 @@ exports.appendData = function (req, res, next) {
                 files = _.map(files, function(v) { return v[0].path;});
 
                 return utils.thumbnailAndUpload(files, {
-                    sessionId: sessionId
+                    dashboardId: dashboardId
                 });
             })
             .then(function(images) {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of('/dashboards/' + dashboardId)
                     .emit('append', {
-                        vizId: vizId, 
+                        dataSetId: dataset.id, 
                         data: images
                     });
 
-                return retViz.appendImages(images);
+                return retDataset.appendImages(images);
             })
             .then(function() {
-                return res.json(retViz);
+                return res.json(retDataset);
             })
             .error(next);
 
@@ -221,39 +218,39 @@ exports.appendData = function (req, res, next) {
 
 exports.updateData = function (req, res, next) {
 
-    var sessionId = req.params.sid;
-    var vizId = req.params.vid;
+    var dashboardId = req.params.did;
+    var dataSetId = req.params.dsid;
     var fieldName = req.params.field;
-    var retViz;
+    var retDataset;
 
     if(req.is('json')) {
-        models.Visualization
-            .find(vizId)
-            .then(function(viz) {
-                if(!viz){
+        models.DataSet
+            .find(dataSetId)
+            .then(function(dataset) {
+                if(!dataset){
                     throw new Error(404);
                 }
-                retViz = viz;
+                retDataset = dataset;
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of('/dashboards/' + dashboardId)
                     .emit('update', {
-                        vizId: viz.id,
+                        dataSetId: dataset.id,
                         data: req.body.data
                     });
-                return viz.updateData(req.body.data, fieldName);
+                return dataset.updateData(req.body.data, fieldName);
             })
             .then(function() {
-                return res.json(retViz);
+                return res.json(retDataset);
             }).error(next);
     } else if(fieldName === 'images') {
 
-        models.Visualization
-            .find(vizId)
-            .then(function(viz) {
-                if(!viz){
+        models.DataSet
+            .find(dataSetId)
+            .then(function(dataset) {
+                if(!dataset){
                     throw new Error(404);
                 }
-                retViz = viz;
+                retDataset = dataset;
 
                 var form = new multiparty.Form();
                 return Q.ninvoke(form, 'parse', req);
@@ -267,20 +264,20 @@ exports.updateData = function (req, res, next) {
                 files = _.map(files, function(v) { return v[0].path;});
 
                 return utils.thumbnailAndUpload(files, {
-                    sessionId: sessionId
+                    dashboardId: dashboardId
                 });
             })
             .then(function(images) {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of('/dashboards/' + dashboardId)
                     .emit('update', {
-                        vizId: vizId, 
+                        dataSetId: dataSetId,
                         data: images
                     });
 
-                return retViz.updateImages(images);
+                return retDataset.updateImages(images);
             })
             .then(function() {
-                return res.json(retViz);
+                return res.json(retDataset);
             })
             .error(next);
     } else {
