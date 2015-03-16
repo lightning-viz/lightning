@@ -1,0 +1,87 @@
+extends ../layout
+
+block dynamic-css
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
+
+    
+block content
+
+
+    .row
+        .six.columns
+            h2(data-editable, data-model="dashboard", data-model-id="#{dashboard.id}", data-key="name")
+                | #{dashboard.getDisplayName()}
+            .subheader
+                p
+                    | Created #{moment(dashboard.createdAt).fromNow()}
+                p
+                    small
+                        a(href="/sessions/#{dashboard.id}/delete", data-confirm="Are you sure you want to delete this dashboard?")
+                            | Delete Dashboard
+
+                p
+                    small
+                        a(href="#add-data-modal", rel="modal:open")
+                            | Create Visualization
+                p
+                    small
+                        a(href="../public")
+                            | Public Link
+
+
+
+    .row.dashboard-container
+        .sixteen.columns
+            .feed-container
+
+                .gridster
+                    ul
+                        li(data-row='1', data-col='1', data-sizex='1', data-sizey='1')
+                        li(data-row='2', data-col='1', data-sizex='1', data-sizey='1')
+                        li(data-row='3', data-col='1', data-sizex='1', data-sizey='1')
+                        li(data-row='1', data-col='2', data-sizex='2', data-sizey='1')
+                        li(data-row='2', data-col='2', data-sizex='2', data-sizey='2')
+                        li(data-row='1', data-col='4', data-sizex='1', data-sizey='1')
+                        li(data-row='2', data-col='4', data-sizex='2', data-sizey='1')
+                        li(data-row='3', data-col='4', data-sizex='1', data-sizey='1')
+                        li(data-row='1', data-col='5', data-sizex='1', data-sizey='1')
+                        li(data-row='3', data-col='5', data-sizex='1', data-sizey='1')
+                        li(data-row='1', data-col='6', data-sizex='1', data-sizey='1')
+                        li(data-row='2', data-col='6', data-sizex='1', data-sizey='2')
+
+
+                if visualizations.length
+                    for viz in visualizations.reverse()
+                        .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
+                            .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}", data-initialized="false")
+                        hr
+
+
+
+    .modal#add-data-modal
+        form#data-input-form(method="post", action="../visualizations")
+            h3
+                | Manually Create Visualization
+            select(name="type")
+                each type, typeName in vizTypes
+                    if typeName === 'line'
+                        option(value="#{typeName}", selected="selected")
+                            | #{typeName}
+                    else
+                        option(value="#{typeName}")
+                            | #{typeName}
+
+            textarea(name="data", placeholder='e.g. {"series": [1, 3, 5, 2, 4, 5, 7, 9]}')
+
+            input(type="submit", value="Submit")
+
+
+
+
+block scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="/socket.io/socket.io.js")
+    script(src='#{STATIC_URL}js/basic.js')
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
+    //- script(src='#{STATIC_URL}js/gridster.js')
+    script(src='#{STATIC_URL}js/dashboard.js')

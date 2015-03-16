@@ -75,6 +75,7 @@ module.exports = function (app) {
     app.get('/visualization-types/:vid/delete', authMiddleware, visualizationTypes.getDelete);
 
     app.get('/sessions/:sid', authMiddleware, session.feed);
+    app.get('/dashboards/:did', authMiddleware, dashboard.show);
     app.get('/sessions/:sid/feed', authMiddleware, session.feed);
     
     app.put('/sessions/:sid', authMiddleware, session.update);

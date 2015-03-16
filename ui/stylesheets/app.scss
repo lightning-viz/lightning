@@ -4,6 +4,7 @@
 
     @import "lib/skeleton";
     @import "lib/modal";
+    @import "lib/gridster";
     @import "sidebar";
 
     $purple: #9175f0;
@@ -35,6 +36,7 @@
             left: 0;
         }
     }
+
     .full-width {
         width: 100%;
     }
@@ -257,6 +259,7 @@
 
 
     @import "pages/editor";
+    @import "pages/dashboard";
     @import "responsive";
 
     .feed-item-container {

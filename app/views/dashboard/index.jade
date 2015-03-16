@@ -12,13 +12,13 @@ block content
             ul
                 for dashboard in dashboards
                     li
-                        a(href="/dashboards/#{dashboard.id}/feed")
+                        a(href="/dashboards/#{dashboard.id}")
                             | #{dashboard.getDisplayName()}
 
                         small.session-details
                                 //- |  #{session.visualizations.length} visualizations 
                                 //- | |
-                                |  Created #{moment(session.createdAt).fromNow()}
+                                |  Created #{moment(dashboard.createdAt).fromNow()}
 
     .row
         .four.columns

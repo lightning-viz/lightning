@@ -21,6 +21,50 @@ exports.index = function (req, res, next) {
 };
 
 
+exports.show = function (req, res, next) {
+
+    var dashboardId = req.params.did;
+
+    Q.all([
+        models.Dashboard
+            .find({
+                where: {
+                    id: dashboardId
+                }
+            }),
+        models.Visualization
+            .findAll({
+                where: {
+                    DashboardId: dashboardId
+                }
+            }),
+        models.DataSet
+            .findAll({
+                where: {
+                    DashboardId: dashboardId
+                }
+            }),
+        models.VisualizationType.findAll({
+            order: '"name" ASC'
+        })
+    ]).spread(function(dashboard, visualizations, dataSets, vizTypes) {
+
+        if(!dashboard) {
+            return res.status(404).send('Dashboard not found');
+        }
+
+        res.render('dashboard/show', {
+            dashboard: dashboard,
+            visualizations: visualizations,
+            dataSets: dataSets,
+            vizTypes: _.object(_.map(vizTypes, function(item) {
+                return [item.name, item];
+            }))
+        });
+    }).fail(next);
+};
+
+
 
 exports.create = function(req, res, next) {
 
