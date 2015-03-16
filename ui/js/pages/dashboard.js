@@ -11,6 +11,11 @@ did = (window.lightning || {}).did || did;
 var request = require('superagent');
 var marked = require('marked');
 
+var Dashboard = require('../models/dashboard');
+var dashboard = new Dashboard({
+    id: did
+});
+
 var utils = require('../utils');
 
 require('../lib/gridster')($);
@@ -21,17 +26,26 @@ var gridster = $('.gridster ul').gridster({
     resize: {
         enabled: true,
         stop: function(e, ui, $widget) {
+            dashboard.save({
+                layout: this.serialize()
+            });
             var s = this.serialize();
             console.log(JSON.stringify(s));
         }
     },
     draggable: {
         stop: function(e, ui, $widget) {
+            dashboard.save({
+                layout: this.serialize()
+            });
             var s = this.serialize();
             console.log(JSON.stringify(s));
         }
     }
 }).data('gridster');
+
+
+
 
 var socket;
 io = window.io || false
