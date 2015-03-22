@@ -2,17 +2,21 @@
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
+var _ = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
     var schema = {
         identifier: DataTypes.STRING,
-        layout: 'JSON',
+        layout: {
+            type: 'JSON',
+            defaultValue: [],
+        }
     };
     if(!isPostgres) {
         schema.layout = {
             type: DataTypes.TEXT,
             get: function() {
-                return JSON.parse(this.getDataValue('layout') || '{}');
+                return JSON.parse(this.getDataValue('layout') || '[]');
             },
             set: function(val) {
                 return this.setDataValue('layout', JSON.stringify(val));
@@ -31,6 +35,12 @@ module.exports = function(sequelize, DataTypes) {
         instanceMethods: {
             getDisplayName: function() {
                 return this.name || ('Dashboard ' + this.id);
+            },
+
+            getNextOpenRow: function() {
+                return _.max(this.layout, function(layoutItem) {
+                    return layoutItem.row;
+                }) + 1;
             }
         },
 

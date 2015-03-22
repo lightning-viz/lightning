@@ -1,9 +1,17 @@
 
 
+
+
 .dashboard-container {
     .gridster {
         li {
             background: rebeccapurple;
         }
+    }
+}
+
+.dashboard {
+    &.container {
+        width: 90%;
     }
 }

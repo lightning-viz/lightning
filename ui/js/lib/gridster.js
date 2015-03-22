@@ -1637,7 +1637,7 @@ module.exports = function($) {
         fn.serialize = function($widgets) {
             $widgets || ($widgets = this.$widgets);
 
-            return $widgets.map($.proxy(function(i, widget) {
+            return $widgets.not('.add-visualization').map($.proxy(function(i, widget) {
                 var $w = $(widget);
                 return this.options.serialize_params($w, $w.coords().grid);
             }, this)).get();

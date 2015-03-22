@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
 
     var schema = {
         identifier: DataTypes.STRING,
+        name: DataTypes.STRING,
         data: 'JSON',
     };
 

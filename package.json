@@ -121,6 +121,7 @@
     "yargs": "^1.3.3"
   },
   "devDependencies": {
-    "ampersand-model": "^4.1.0"
+    "ampersand-model": "^4.1.0",
+    "ampersand-view": "^7.2.0"
   }
 }
