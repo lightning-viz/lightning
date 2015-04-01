@@ -13,5 +13,15 @@
 .dashboard {
     &.container {
         width: 90%;
+
+
+        .dashboard-layout-item {
+            padding: 15px;
+        }
+
+        .dashboard-item-container {
+            height: 100%;
+        }
     }
+    
 }

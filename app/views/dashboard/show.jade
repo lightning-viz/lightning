@@ -22,7 +22,7 @@ block container
                     p
                         small
                             a(href="#add-data-modal", rel="modal:open")
-                                | Create Visualization
+                                | Add Visualization
                     p
                         small
                             a(href="../public")
@@ -35,20 +35,17 @@ block container
 
                 .gridster
                     ul
-                        for item in dashboard.layout
-                            li(data-row='#{item.row}', data-col='#{item.col}', data-sizex='#{item.size_x}', data-sizey='#{item.size_y}')
-
-                        li(data-row='#{dashboard.getNextOpenRow()}', data-col='0', , data-sizex='3', data-sizey='1').add-visualization
-                            a(href="#add-data-modal", rel="modal:open")
-                                | add visualization
-
+                        for viz, i in visualizations
+                            - layoutItem = dashboard.layout[i]
+                            li.dashboard-layout-item(data-row='#{layoutItem.row}', data-col='#{layoutItem.col}', data-sizex='#{layoutItem.size_x}', data-sizey='#{layoutItem.size_y}')
+                                .dashboard-item-container(data-model="visualization", data-model-id="#{viz.id}")
+                                    .visualization.dashboard-item(data-type="#{viz.type}", data-dataset-id="#{viz.DataSetId}", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}", data-initialized="false")
 
 
-                    //- if visualizations.length
-                        for viz in visualizations.reverse()
-                            .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
-                                .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}", data-initialized="false")
-                            hr
+
+        .row.datasets
+            for dataSet in dataSets
+                .dataset(data-data="#{JSON.stringify(dataSet.data)}", data-model-id="#{dataSet.id}")
 
 
 
