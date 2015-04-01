@@ -132,17 +132,19 @@ exports.addVisualization = function(req, res, next) {
     var dashboardId = req.params.did;
     var dataSetId = req.params.dsid;
 
-    models.Visualization
-        .create({
-            DashboardId: dashboardId,
-            DataSetId: dataSetId,
-            type: req.body.type
+    models.Dashboard
+        .find(dashboardId)
+        .then(function(dashboard) {
+            return dashboard.addVisualization({
+                DashboardId: dashboardId,
+                DataSetId: dataSetId,
+                type: req.body.type
+            });
         }).then(function(viz) {
             req.io.of('/dashboards/' + dashboardId)
                 .emit('viz', viz);  
             return res.json(viz);
-        });
-
+        }).error(next);
 };
 
 exports.deleteVisualization = function (req, res, next) {

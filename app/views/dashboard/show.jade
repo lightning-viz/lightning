@@ -38,7 +38,7 @@ block container
                         for item in dashboard.layout
                             li(data-row='#{item.row}', data-col='#{item.col}', data-sizex='#{item.size_x}', data-sizey='#{item.size_y}')
 
-                        li(data-row='0', data-col='0', , data-sizex='3', data-sizey='1').add-visualization
+                        li(data-row='#{dashboard.getNextOpenRow()}', data-col='0', , data-sizex='3', data-sizey='1').add-visualization
                             a(href="#add-data-modal", rel="modal:open")
                                 | add visualization
 
@@ -53,7 +53,7 @@ block container
 
 
         .modal#add-data-modal
-            form#data-input-form(method="post", action="../visualizations")
+            form#add-visualization(method="post", action="./visualizations")
                 h3
                     | Create Visualization
 

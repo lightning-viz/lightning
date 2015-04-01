@@ -11,7 +11,7 @@ require('../lib/gridster')($);
 
 var DashboardView = AmpersandView.extend({
     events: {
-
+        "submit form#add-visualization": "handleAddVisulization"
     },
 
     initialize: function() {
@@ -45,6 +45,26 @@ var DashboardView = AmpersandView.extend({
                 }
             }
         }).data('gridster');
+    },
+
+    handleAddVisulization: function(e) {
+        
+        e.preventDefault();
+
+        var datasetId = $(e.target).find('select[name=dataset]').val();
+        var vizType = $(e.target).find('select[name=type]').val();
+
+        request
+          .post('./datasets/' + datasetId + '/visualizations')
+          .send({ type: vizType })
+          .set('Accept', 'application/json')
+          .end(function(err, res){
+            console.log(err, res);
+          });
+
+
+
+        console.log('submit form');
     }
 });
 
