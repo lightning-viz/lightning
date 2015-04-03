@@ -86,7 +86,7 @@
     "jadeify": "^2.7.0",
     "knox": "^0.9.0",
     "leaflet": "^0.7.3",
-    "leaflet.freedraw-browserify": "~1.2.1",
+    "leaflet.freedraw-browserify": "~1.2.2",
     "lightning-client-utils": "^0.5.0",
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
