@@ -8,7 +8,6 @@ var visualization = require('../app/controllers/visualization');
 var staticController = require('../app/controllers/static');
 var basicAuth = require('basic-auth-connect');
 var config = require('./config');
-var cors = require('cors');
 
 /**
  * Expose
@@ -24,6 +23,7 @@ module.exports = function (app) {
     if(auth.username && auth.password) {
         authMiddleware = basicAuth(auth.username, auth.password);
     }
+
 
     app.options('*', function (req, res) {
         res.set("Access-Control-Allow-Origin", "*");
@@ -93,16 +93,16 @@ module.exports = function (app) {
 
 
     // public / userland stuff
-    app.get('/sessions/:sid/visualizations/:vid/data', cors(), visualization.getData);
-    app.get('/sessions/:sid/visualizations/:vid/settings', cors(), visualization.getSettings);
-    app.put('/visualizations/:vid/settings', cors(), visualization.updateSettings);
-    app.post('/visualizations/:vid/settings', cors(), visualization.updateSettings);
-    app.get('/visualizations/:vid/settings', cors(), visualization.getSettings);
-    app.get('/visualizations/:vid/data', cors(), visualization.getData);
-    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, cors(), visualization.getDataWithKeys);
-    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, cors(), visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, cors(), visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, cors(), visualization.getSettingsWithKeys);
+    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
+    app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
+    app.put('/visualizations/:vid/settings', visualization.updateSettings);
+    app.post('/visualizations/:vid/settings', visualization.updateSettings);
+    app.get('/visualizations/:vid/settings', visualization.getSettings);
+    app.get('/visualizations/:vid/data', visualization.getData);
+    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
+    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 

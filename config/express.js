@@ -23,6 +23,7 @@ var config = require('./config');
 var pkg = require('../package.json');
 var moment = require('moment');
 var path = require('path');
+var cors = require('cors');
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -59,6 +60,7 @@ module.exports = function (app, io) {
     // Logging middleware
     // if (env !== 'test') app.use(morgan(log));
 
+    app.use(cors());
     app.use(slashes());
 
 
