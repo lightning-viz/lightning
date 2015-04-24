@@ -59,7 +59,7 @@ module.exports = function (app, io) {
     // Don't log during tests
     // Logging middleware
     // if (env !== 'test') app.use(morgan(log));
-
+    app.set('trust proxy', 'loopback');
     app.use(cors());
     app.use(slashes());
 
