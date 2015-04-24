@@ -102,9 +102,6 @@ module.exports = function (app, io) {
         }
 
         if(req.headers.host) {
-            console.log('req.headers.host');
-            console.log(req.headers.host);
-            console.log(req.secure);
             return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host;
         }
 
