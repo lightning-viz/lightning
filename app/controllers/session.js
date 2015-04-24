@@ -192,6 +192,7 @@ exports.addData = function (req, res, next) {
             .create({
                 data: req.body.data,
                 type: req.body.type,
+                opts: req.body.opts,
                 SessionId: sessionId
             }).then(function(viz) {
                 req.io.of('/sessions/' + sessionId)
@@ -228,6 +229,7 @@ exports.addData = function (req, res, next) {
                         .create({
                             type:  type,
                             images: [imgData],
+                            opts: req.body.opts,
                             SessionId: sessionId
                         }).then(function(viz) {
                             req.io.of('/sessions/' + sessionId)
