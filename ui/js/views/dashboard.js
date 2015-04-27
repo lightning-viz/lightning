@@ -5,7 +5,6 @@ var request = require('superagent');
 var marked = require('marked');
 var _ = require('lodash');
 
-
 var AmpersandView = require('ampersand-view');
 require('../lib/gridster')($);
 
@@ -23,6 +22,29 @@ var DashboardView = AmpersandView.extend({
         var $el = $(this.el);
         var width = $el.width();
         var self = this;
+
+
+        var socket;
+        io = window.io || false
+
+        if(io) {
+            socket = io.connect('/dashboards/' + this.id);
+        } else {
+            socket = {
+                on: function(){}
+            }
+        }
+
+
+        socket.on('viz', this.handleSocketAddVisualization);
+        socket.on('viz:delete', this.handleSocketDeleteVisualization);
+        socket.on('append', this.handleSocketAppendData);
+        socket.on('update', this.handleSocketUpdateData);
+        socket.on('dataset', this.handleSocketAddDataset);
+
+
+        console.log(this.model);
+
 
         this.gridster = $el.find('.gridster ul').gridster({
             widget_margins: [40, 40],
@@ -110,11 +132,40 @@ var DashboardView = AmpersandView.extend({
           .end(function(err, res){
             console.log(err, res);
           });
+    },
 
+    handleSocketAppendData: function(message) {
+        var vizId = message.vizId;
+        var data = message.data;
 
+        if(this.vizs[vizId].appendData) {
+            this.vizs[vizId].appendData(data);
+        }
+    },
 
-        console.log('submit form');
+    handleSocketUpdateData: function(message) {
+
+        var vizId = message.vizId;
+        var data = message.data;
+
+        if(this.vizs[vizId].updateData) {
+            this.vizs[vizId].updateData(data);    
+        }
+    },
+
+    handleSocketAddDataset: function(message) {
+
+    },
+
+    handleSocketAddVisualization: function(message) {
+
+    },
+
+    handleSocketDeleteVisualization: function(message) {
+
     }
+
+
 });
 
 module.exports = DashboardView;
