@@ -21,9 +21,11 @@ block scripts
         if(window.lightning.requiredVizTypes.indexOf("#{viz.type}") === -1) {
             window.lightning.requiredVizTypes.push("#{viz.type}");
         }
+        window.lightning.sid = #{viz.SessionId};
         window._require = window.require;
         window.require = undefined;
         window._define = window.define;
         window.define = undefined;
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/pym.js')
