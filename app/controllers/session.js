@@ -73,6 +73,24 @@ exports.feed = function (req, res, next) {
 };
 
 
+exports.listVisualizations = function (req, res, next) {
+
+    var sessionId = req.params.sid;
+    var Visualization = models.Visualization;
+
+    Visualization
+        .findAll({
+            where: {
+                SessionId: sessionId
+            }
+        })
+        .then(function(visualizations) {
+            return res.json(visualizations)
+        })
+        .error(next);
+};
+
+
 exports.publicRead = function (req, res, next) {
 
     var sessionId = req.params.sid;
