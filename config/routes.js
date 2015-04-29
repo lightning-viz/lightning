@@ -115,8 +115,6 @@ module.exports = function (app) {
     
     // dynamic fields
     var safeBaseURL = baseURL.replace(/\//g, '\\/');
-    console.log(safeBaseURL)
-    console.log('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/data\\/([^ ]+)')
     var visualizationDataWithKeysRegex = new RegExp('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/data\\/([^ ]+)');
     var visualizationSettingsWithKeysRegex = new RegExp('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/settings\\/([^ ]+)');
     var sessionDataWithKeysRegex = new RegExp('^' + safeBaseURL + 'sessions\\/\\d+\\/visualizations(\\d+)\\/data\\/([^ ]+)');
