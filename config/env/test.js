@@ -6,6 +6,7 @@
 module.exports = {
 
     url: 'localhost:3000',
+    baseURL: process.env.LIGHTNING_BASE_URL || '/',
     s3: {
         key: process.env.S3_KEY,
         secret: process.env.S3_SECRET,

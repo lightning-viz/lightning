@@ -16,6 +16,17 @@ var config = require('./config');
 module.exports = function (app) {
 
     var auth = config.auth || {};
+    var baseURL = config.baseURL || '/';
+    if(baseURL.slice(-1) !== '/') {
+        baseURL += '/';
+    }
+
+    if(baseURL.slice(0) !== '/') {
+        baseURL = '/' + baseURL;
+    }
+
+
+
 
     var authMiddleware = function(req, res, next) {next()};
 
@@ -34,76 +45,87 @@ module.exports = function (app) {
     })
 
 
-    app.get('/playground', home.playground);
+    app.get(baseURL + 'playground', home.playground);
 
-    app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
-    app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
-    app.post('/js/dynamic', staticController.bundleJSForExecution);
-    app.post('/css/dynamic', staticController.buildSCSS);
-    app.get('/visualizations/:vid/public', visualization.publicRead);
-    app.get('/visualizations/:vid/screenshot', visualization.screenshot);
-    app.get('/sessions/:sid/public', session.publicRead);
-    app.get('/visualizations/:vid/iframe', visualization.iframe);
-    app.get('/visualizations/:vid/pym', visualization.pym);
+    app.get(baseURL + 'js/dynamic/viz', staticController.getDynamicVizBundle);
+    app.get(baseURL + 'css/dynamic/viz', staticController.getDynamicVizStyles);
+    app.post(baseURL + 'js/dynamic', staticController.bundleJSForExecution);
+    app.post(baseURL + 'css/dynamic', staticController.buildSCSS);
+    app.get(baseURL + 'visualizations/:vid/public', visualization.publicRead);
+    app.get(baseURL + 'visualizations/:vid/screenshot', visualization.screenshot);
+    app.get(baseURL + 'sessions/:sid/public', session.publicRead);
+    app.get(baseURL + 'visualizations/:vid/iframe', visualization.iframe);
+    app.get(baseURL + 'visualizations/:vid/pym', visualization.pym);
 
     // visualizations
-    app.post('/visualizations/types', authMiddleware, visualizationTypes.create);
-    app.put('/visualizations/types/:vid', authMiddleware, visualizationTypes.edit);
-    app.get('/visualizations/types', authMiddleware, visualizationTypes.index);
+    app.post(baseURL + 'visualizations/types', authMiddleware, visualizationTypes.create);
+    app.put(baseURL + 'visualizations/types/:vid', authMiddleware, visualizationTypes.edit);
+    app.get(baseURL + 'visualizations/types', authMiddleware, visualizationTypes.index);
 
-    app.get('/visualization-types', authMiddleware, visualizationTypes.show);
-    app.get('/visualization-types/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
-    app.get('/visualization-types/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
-    app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
-    app.get('/visualization-types/preview', authMiddleware, visualizationTypes.preview);
-    app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
-    app.get('/visualization-types/:vid', authMiddleware, visualizationTypes.editor);
+    app.get(baseURL + 'visualization-types', authMiddleware, visualizationTypes.show);
+    app.get(baseURL + 'visualization-types/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
+    app.get(baseURL + 'visualization-types/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
+    app.post(baseURL + 'visualization-types', authMiddleware, visualizationTypes.importViz);
+    app.get(baseURL + 'visualization-types/preview', authMiddleware, visualizationTypes.preview);
+    app.get(baseURL + 'visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
+    app.get(baseURL + 'visualization-types/:vid', authMiddleware, visualizationTypes.editor);
     
-    app.get('/', authMiddleware, home.index);
-    app.get('/sessions', authMiddleware, session.index);
-    app.get('/sessions/create/', authMiddleware, session.getCreate);
-    app.get('/status', authMiddleware, home.status);
+    app.get(baseURL, authMiddleware, home.index);
+    app.get(baseURL + 'sessions', authMiddleware, session.index);
+    app.get(baseURL + 'sessions/create/', authMiddleware, session.getCreate);
+    app.get(baseURL + 'status', authMiddleware, home.status);
 
-    app.get('/sessions/:sid/delete/', authMiddleware, session.getDelete);
-    app.delete('/sessions/:sid/', authMiddleware, session.delete);
-    app.delete('/visualization-types/:vid/', authMiddleware, visualizationTypes.delete);
-    app.get('/visualization-types/:vid/delete', authMiddleware, visualizationTypes.getDelete);
+    app.get(baseURL + 'sessions/:sid/delete/', authMiddleware, session.getDelete);
+    app.delete(baseURL + 'sessions/:sid/', authMiddleware, session.delete);
+    app.delete(baseURL + 'visualization-types/:vid/', authMiddleware, visualizationTypes.delete);
+    app.get(baseURL + 'visualization-types/:vid/delete', authMiddleware, visualizationTypes.getDelete);
 
-    app.get('/sessions/:sid', authMiddleware, session.feed);
-    app.get('/sessions/:sid/feed', authMiddleware, session.feed);
+    app.get(baseURL + 'sessions/:sid', authMiddleware, session.feed);
+    app.get(baseURL + 'sessions/:sid/feed', authMiddleware, session.feed);
     
-    app.put('/sessions/:sid', authMiddleware, session.update);
-    app.put('/visualizations/:vid', authMiddleware, visualization.update);
+    app.put(baseURL + 'sessions/:sid', authMiddleware, session.update);
+    app.put(baseURL + 'visualizations/:vid', authMiddleware, visualization.update);
 
-    app.post('/sessions', authMiddleware, session.create);
-    app.post('/sessions/:sid/visualizations', authMiddleware, session.addData);
-    app.get('/visualizations/:vid', authMiddleware, visualization.read);
-    app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
-    app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
-    app.get('/visualizations/:vid/embed', authMiddleware, visualization.embed);
-    app.get('/sessions/:sid/visualizations', authMiddleware, session.listVisualizations);
-
-
-    app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
-    app.post('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.appendData);
+    app.post(baseURL + 'sessions', authMiddleware, session.create);
+    app.post(baseURL + 'sessions/:sid/visualizations', authMiddleware, session.addData);
+    app.get(baseURL + 'visualizations/:vid', authMiddleware, visualization.read);
+    app.delete(baseURL + 'visualizations/:vid', authMiddleware, visualization.delete);
+    app.get(baseURL + 'visualizations/:vid/delete', authMiddleware, visualization.getDelete);
+    app.get(baseURL + 'visualizations/:vid/embed', authMiddleware, visualization.embed);
+    app.get(baseURL + 'sessions/:sid/visualizations', authMiddleware, session.listVisualizations);
 
 
-    app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
-    app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
+    app.post(baseURL + 'sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
+    app.post(baseURL + 'sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.appendData);
+
+
+    app.put(baseURL + 'sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
+    app.put(baseURL + 'sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
     
 
 
     // public / userland stuff
-    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
-    app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
-    app.put('/visualizations/:vid/settings', visualization.updateSettings);
-    app.post('/visualizations/:vid/settings', visualization.updateSettings);
-    app.get('/visualizations/:vid/settings', visualization.getSettings);
-    app.get('/visualizations/:vid/data', visualization.getData);
-    app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
-    app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
+    app.get(baseURL + 'sessions/:sid/visualizations/:vid/data', visualization.getData);
+    app.get(baseURL + 'sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
+    app.put(baseURL + 'visualizations/:vid/settings', visualization.updateSettings);
+    app.post(baseURL + 'visualizations/:vid/settings', visualization.updateSettings);
+    app.get(baseURL + 'visualizations/:vid/settings', visualization.getSettings);
+    app.get(baseURL + 'visualizations/:vid/data', visualization.getData);
+
+    
+    // dynamic fields
+    var safeBaseURL = baseURL.replace(/\//g, '\\/');
+    console.log(safeBaseURL)
+    console.log('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/data\\/([^ ]+)')
+    var visualizationDataWithKeysRegex = new RegExp('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/data\\/([^ ]+)');
+    var visualizationSettingsWithKeysRegex = new RegExp('^' + safeBaseURL + 'visualizations\\/(\\d+)\\/settings\\/([^ ]+)');
+    var sessionDataWithKeysRegex = new RegExp('^' + safeBaseURL + 'sessions\\/\\d+\\/visualizations(\\d+)\\/data\\/([^ ]+)');
+    var sessionSettingsWithKeysRegex = new RegExp('^' + safeBaseURL + 'sessions\\/\\d+\\/visualizations\\/(\\d+)\\/settings\\/([^ ]+)');
+
+    app.get(visualizationDataWithKeysRegex, visualization.getDataWithKeys);
+    app.get(visualizationSettingsWithKeysRegex, visualization.getSettingsWithKeys);
+    app.get(sessionDataWithKeysRegex, visualization.getDataWithKeys);
+    app.get(sessionSettingsWithKeysRegex, visualization.getSettingsWithKeys);
     // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
 
