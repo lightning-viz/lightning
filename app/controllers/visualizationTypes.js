@@ -161,12 +161,17 @@ exports.preview = function(req, res, next) {
         if(req.query.path) {
             name += '/' + req.query.path;
         }
+
+        name = /[^/]*$/.exec(name)[0];
+
         vizTypePromise = models.VisualizationType
             .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
     } else if(req.query.path && process.env.NODE_ENV !== 'production') {
         var p = path.resolve(req.query.path);
+        var name = /[^/]*$/.exec(p)[0];
+
         vizTypePromise = models.VisualizationType
-            .createFromFolder(p, { name: p}, {preview: true});
+            .createFromFolder(p, { name: name}, {preview: true});
     }
 
     vizTypePromise
