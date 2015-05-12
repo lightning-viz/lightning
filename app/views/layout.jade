@@ -19,24 +19,24 @@ body
                 .button-container
                     ul
                         li
-                            a(href="/")
+                            a(href="#{BASE_URL}")
                                 | Home
                         li
-                            a(href="/sessions/create")
+                            a(href="#{BASE_URL}sessions/create")
                                 | New Session
                         li
-                            a(href="/sessions")
+                            a(href="#{BASE_URL}sessions")
                                 | All Sessions
                         li
-                            a(href="/visualization-types")
+                            a(href="#{BASE_URL}visualization-types")
                                 | Visualization Types
                         li
-                            a(href="https://github.com/mathisonian/lightning", target="_blank")
+                            a(href="https://github.com/lightning-viz/lightning", target="_blank")
                                 | Github
 
                 .side-color.menu-link
                     .logo
-                        img(src="/images/lightning.svg")
+                        img(src="#{STATIC_URL}images/lightning.svg")
 
         block container
             .container.content.wrap.push
@@ -44,6 +44,12 @@ body
 
     block absolute
 
+    script.
+        window.lightning = window.lightning || {};
+        window.lightning.baseURL = "#{BASE_URL}";
+
     block scripts
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
         script(src='#{STATIC_URL}js/basic.js')
+
+            

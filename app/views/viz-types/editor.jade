@@ -16,7 +16,7 @@ block container
                         | &larr; back
 
                 .action-container
-                    a(href="/visualization-types/#{vizType.id}/delete", data-confirm="Are you sure you want to delete the #{vizType.name} visualization?")
+                    a(href="#{BASE_URL}visualization-types/#{vizType.id}/delete", data-confirm="Are you sure you want to delete the #{vizType.name} visualization?")
                         .button.danger
                             | Delete Visualization
 

@@ -82,10 +82,12 @@ module.exports = function (app, io) {
     });
 
 
-    var static_url = '/';
+    var baseUrl = config.baseURL;
+    var static_url = baseUrl;
     if(config.url) {
-        static_url = 'http://' + config.url + '/';
+        static_url = 'http://' + config.url + baseUrl;
     }
+
 
 
     // cookieParser should be above session
@@ -102,10 +104,10 @@ module.exports = function (app, io) {
         }
 
         if(req.headers.host) {
-            return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host;
+            return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
         }
 
-        return static_url;
+        return static_url + baseUrl;
     };
 
 
@@ -123,6 +125,7 @@ module.exports = function (app, io) {
         res.locals._ = require('lodash');
         res.locals.marked = require('marked');
         res.locals.STATIC_URL =  staticUrl;
+        res.locals.BASE_URL = baseUrl;
         next();
     });
 

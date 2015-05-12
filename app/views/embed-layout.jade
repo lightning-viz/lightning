@@ -15,21 +15,21 @@ block sidebar
         .button-container
             ul
                 li
-                    a(href="/")
+                    a(href="#{BASE_URL}")
                         | Home
                 li
-                    a(href="/sessions/create")
+                    a(href="#{BASE_URL}sessions/create")
                         | New Session
                 li
-                    a(href="/sessions")
+                    a(href="#{BASE_URL}sessions")
                         | All Sessions
                 li
-                    a(href="https://github.com/mathisonian/lightning", target="_blank")
+                    a(href="https://github.com/lightning-viz/lightning", target="_blank")
                         | Github
 
         .side-color.menu-link
             .logo
-                img(src="/images/lightning.svg")
+                img(src="#{STATIC_URL}images/lightning.svg")
 
 .container.content.wrap.push#lightning-body
     block content

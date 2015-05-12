@@ -12,7 +12,7 @@ block content
             ul
                 for session in sessions
                     li
-                        a(href="/sessions/#{session.id}/feed")
+                        a(href="#{BASE_URL}sessions/#{session.id}/feed")
                             | #{session.getDisplayName()}
 
                         small.session-details
@@ -22,7 +22,7 @@ block content
 
     .row
         .four.columns
-            a(href="/sessions/create")
+            a(href="#{BASE_URL}sessions/create")
                 .button
                     | Create New Session
 
