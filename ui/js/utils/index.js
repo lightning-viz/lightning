@@ -1,5 +1,6 @@
 var request = require('superagent');
-
+var baseURL = window.lightning.baseURL || '/';
+console.log(baseURL);
 
 module.exports = {
 
@@ -16,9 +17,9 @@ module.exports = {
 
             cb(null, Viz);
         } catch(e) {
-            self.addStylesheet('/css/dynamic/viz/?visualizations[]=' + vizName);
+            self.addStylesheet(baseURL + 'css/dynamic/viz/?visualizations[]=' + vizName);
 
-            request('/js/dynamic/viz/?visualizations[]=' + vizName, function(err, res) {
+            request(baseURL + 'js/dynamic/viz/?visualizations[]=' + vizName, function(err, res) {
                 if(err) {
                     return cb(err);
                 }
