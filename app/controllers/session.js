@@ -167,7 +167,7 @@ exports.getCreate = function(req, res, next) {
     models.Session
         .create()
         .then(function(session) {
-            return res.redirect('/sessions/' + session.id + '/feed/');    
+            return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
         }).error(next);
 };
 
@@ -193,7 +193,7 @@ exports.getDelete = function(req, res, next) {
         .find(sessionId)
         .then(function(session) {
             session.destroy().success(function() {
-                return res.redirect('/sessions/');
+                return res.redirect(config.baseURL + 'sessions/');
             }).error(next);
         }).error(next);
 };
