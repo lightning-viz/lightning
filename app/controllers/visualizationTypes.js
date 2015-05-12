@@ -57,7 +57,7 @@ exports.resetDefaults = function(req, res, next) {
             console.log('successfully deleted current visualizations');
             
             tasks.getDefaultVisualizations(function() {
-                return res.redirect('/visualization-types');
+                return res.redirect(config.baseURL + 'visualization-types');
             });
 
         }).error(function(err) {
@@ -69,7 +69,7 @@ exports.resetDefaults = function(req, res, next) {
 exports.fetchDefaults = function (req, res, next) {
 
     tasks.getDefaultVisualizations(function() {
-        return res.redirect('/visualization-types');
+        return res.redirect(config.baseURL + 'visualization-types');
     });
 };
 
@@ -132,7 +132,7 @@ exports.getDelete = function(req, res, next) {
         .find(vizTypeId)
         .then(function(vizType) {
             vizType.destroy().success(function() {
-                return res.redirect('/visualization-types/');
+                return res.redirect(config.baseURL + 'visualization-types/');
             }).error(next);
         }).error(next);
 };

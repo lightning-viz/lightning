@@ -15,7 +15,7 @@ block content
                     | Created #{moment(session.createdAt).fromNow()}
                 p
                     small
-                        a(href="/sessions/#{session.id}/delete", data-confirm="Are you sure you want to delete this session?")
+                        a(href="#{BASE_URL}sessions/#{session.id}/delete", data-confirm="Are you sure you want to delete this session?")
                             | Delete Session
 
                 p
@@ -42,7 +42,7 @@ block content
                     p.empty
                         | No data found. Post data to  
                         span.code
-                            | /sessions/#{session.id}/visualizations
+                            | #{BASE_URL}sessions/#{session.id}/visualizations
 
 
 

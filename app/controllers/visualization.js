@@ -235,7 +235,7 @@ exports.getDelete = function(req, res, next) {
             viz.destroy().success(function() {
                 req.io.of('/sessions/' + sessionId)
                     .emit('viz:delete', vizId);
-                return res.redirect('/sessions/' + sessionId);
+                return res.redirect(config.baseURL + 'sessions/' + sessionId);
             }).error(next);
         }).error(next);
 };

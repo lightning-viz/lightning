@@ -21,12 +21,39 @@ var defaults = {
 };
 
 
+var formatBaseUrl = function(baseUrl) {
+    baseUrl = baseUrl || '/';
+    if(baseUrl.slice(-1) !== '/') {
+        baseUrl += '/';
+    }
+
+    if(baseUrl.slice(0, 1) !== '/') {
+        baseUrl = '/' + baseUrl;
+    }
+
+    if(baseUrl === '//') {
+        baseUrl = '/';
+    }
+    return baseUrl;
+}
+
 /**
  * Expose
  */
 
-module.exports = {
+var config = {
   development: extend(development, defaults),
   test: extend(test, defaults),
   production: extend(production, defaults)
 }[process.env.NODE_ENV || 'development'];
+
+config.baseURL = formatBaseUrl(config.baseURL);
+
+module.exports = config;
+
+
+
+
+
+
+
