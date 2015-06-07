@@ -2,6 +2,7 @@ var models = require('../models');
 var Q = require('q');
 var _ = require('lodash');
 var webshot = require('webshot');
+var config = require('../../config/config');
 
 
 exports.getData = function (req, res, next) {

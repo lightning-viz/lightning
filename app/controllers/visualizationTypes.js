@@ -7,6 +7,7 @@ var path = require('path');
 var uuid = require('node-uuid');
 var resumer = require('resumer');
 var tasks = require('../../tasks');
+var config = require('../../config/config');
 
 
 // function protectRequire(str) {
