@@ -63,13 +63,17 @@ exports.getDynamicVizBundle = function (req, res, next) {
             Q.all(funcs).spread(function() {
 
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
-
-                    var stream = resumer().queue(vizType.javascript).end();
-                    b.require(stream, {
-                        basedir: tmpPath,
-                        expose: 'viz/' + vizType.name
-                    });
-
+                    if(vizType.isModule) {
+                        b.require(vizType.name, {
+                            expose: 'viz/' + vizType.name
+                        });
+                    } else {
+                        var stream = resumer().queue(vizType.javascript).end();
+                        b.require(stream, {
+                            basedir: tmpPath,
+                            expose: 'viz/' + vizType.name
+                        });
+                    }
                 });
 
                 b.bundle(function(err, buf) {

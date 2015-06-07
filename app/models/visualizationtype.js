@@ -22,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
 
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+            isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
 
             thumbnailLocation: DataTypes.STRING,
 
@@ -38,6 +39,7 @@ module.exports = function(sequelize, DataTypes) {
         name: {type: DataTypes.STRING, unique: true},
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+        isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
 
         thumbnailLocation: DataTypes.STRING,
 

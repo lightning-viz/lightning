@@ -8,6 +8,10 @@ var uuid = require('node-uuid');
 var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
+var npm = require('npm');
+npm.load({}, function() {
+    console.log('ready');
+});
 
 
 // function protectRequire(str) {
@@ -36,6 +40,14 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
+
+    npm.commands.search(['lightning-visualization'], function(packages) {
+        _.each(packages, function(p, packageName) {
+            console.log(packageName);
+            console.log(p);
+        });
+    });
+
     models.VisualizationType.findAll({
             order: '"name" ASC'
         })
