@@ -44,6 +44,32 @@ block content
                     .three.columns
                         input(type="submit", value="preview")
 
+    .row
+        .sixteen.columns
+            h4
+                | Install from npm
+            
+            form(method="get", action="./npm-install")
+                .row
+                    .six.columns
+                        input(type="text", name="moduleName", placeholder="module name").full-width
+                .row
+                    .three.columns
+                        input(type="submit", value="npm-install")
+
+    .row
+        .sixteen.columns
+            h4
+                | Link local module (must run `npm link` first in the module directory)
+            
+            form(method="get", action="./link")
+                .row
+                    .six.columns
+                        input(type="text", name="moduleName", placeholder="module name").full-width
+                .row
+                    .three.columns
+                        input(type="submit", value="link")
+
 
 
     .row

@@ -56,6 +56,8 @@ module.exports = function (app) {
     app.get('/visualization-types/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
     app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
     app.get('/visualization-types/preview', authMiddleware, visualizationTypes.preview);
+    app.get('/visualization-types/npm-install', authMiddleware, visualizationTypes.npmInstall);
+    app.get('/visualization-types/link', authMiddleware, visualizationTypes.link);
     app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
     app.get('/visualization-types/:vid', authMiddleware, visualizationTypes.editor);
     

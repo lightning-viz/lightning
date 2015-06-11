@@ -13,7 +13,7 @@ module.exports = {
         var self = this;
 
         try {
-            var Viz = require('viz/' + vizName);
+            var Viz = require(vizName);
 
             cb(null, Viz);
         } catch(e) {
@@ -26,7 +26,7 @@ module.exports = {
 
                 eval(res.text);
 
-                var Viz = require('viz/' + vizName);
+                var Viz = require(vizName);
                 cb(null, Viz);
             });
 

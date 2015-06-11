@@ -214,7 +214,7 @@ var options = $feedItem.data('options');
 
 setTimeout(function() {
 
-    Viz =  require('viz/' + type);
+    Viz =  require(type);
 
     var vid = $(this).attr('id');
     new Viz('.feed-item', data, images, options);

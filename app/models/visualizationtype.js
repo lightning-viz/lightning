@@ -8,6 +8,7 @@ var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
+var npm = require('npm');
 
 
 module.exports = function(sequelize, DataTypes) {
@@ -90,6 +91,55 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
+            },
+
+            _buildFromNPM: function(name, preview) {
+                var viz = require(name);
+                var p = require(name + '/package.json');
+
+                var vizTypeObj = {
+                    name: name,
+                    isModule: true,
+                    sampleData: p.sampleData,
+                    sampleImages: p.sampleImages
+                }
+
+                if(preview) {
+                    return VisualizationType.build(vizTypeObj);
+                }
+
+                return VisualizationType.create(vizTypeObj);
+            },
+
+            createFromNPM: function(name) {
+
+                console.log('Fetching "' + name + '" from NPM registry...');
+                var self = this;
+
+                return Q.nfcall(npm.commands.install, [name])
+                        .then(function() {
+                            console.log(('Successfully installed ' + name).green);
+                            return self._buildFromNPM(name, false);
+                        })
+                        .catch(function(e) {
+                            console.log(e);
+                        });
+
+            },
+
+            linkFromLocalModule: function(name) {
+
+                var self = this;
+
+                return Q.nfcall(npm.commands.link, [name])
+                        .then(function() {
+                            console.log(('Successfully linked ' + name).green);
+                            return self._buildFromNPM(name, true);
+                        })
+                        .catch(function(e) {
+                            console.log(e);
+                        });
+
             },
 
             createFromRepoURL: function(url, attributes, opts) {

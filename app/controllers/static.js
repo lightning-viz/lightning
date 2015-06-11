@@ -65,13 +65,13 @@ exports.getDynamicVizBundle = function (req, res, next) {
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
                         b.require(vizType.name, {
-                            expose: 'viz/' + vizType.name
+                            expose: vizType.name
                         });
                     } else {
                         var stream = resumer().queue(vizType.javascript).end();
                         b.require(stream, {
                             basedir: tmpPath,
-                            expose: 'viz/' + vizType.name
+                            expose: vizType.name
                         });
                     }
                 });

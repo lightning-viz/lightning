@@ -86,7 +86,7 @@ setTimeout(function() {
         var images = $(this).data('images');
         var options = $(this).data('opts');
 
-        var Viz =  require('viz/' + type);
+        var Viz =  require(type);
 
         var vid = $(this).attr('id');
         vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);

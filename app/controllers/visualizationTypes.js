@@ -9,9 +9,7 @@ var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
 var npm = require('npm');
-npm.load({}, function() {
-    console.log('ready');
-});
+
 
 
 // function protectRequire(str) {
@@ -198,7 +196,7 @@ exports.preview = function(req, res, next) {
                     var stream = resumer().queue(vizType.javascript).end();
                     b.require(stream, {
                         basedir: tmpPath,
-                        expose: 'viz/' + vizType.name
+                        expose: vizType.name
                     });
 
                     b.bundle(function(err, buf) {
@@ -232,7 +230,6 @@ exports.preview = function(req, res, next) {
                                         javascript: javascript,
                                         css: css
                                     });
-
                                     
                                 }
                             });
@@ -260,6 +257,62 @@ exports.preview = function(req, res, next) {
         }).fail(function(err) {
             next(err);
         });
+
+};
+
+
+exports.npmInstall = function(req, res, next) {
+
+    var name = req.query.moduleName;
+
+    models.VisualizationType
+        .installFromNPM(name)
+        .then(function(vizType) {
+
+            var b = browserify();
+
+            b.require(name);
+            b.bundle(function(err, buf) {
+                var javascript = buf.toString('utf8');
+
+                return res.render('viz-types/full-preview', {
+                    vizType: vizType,
+                    javascript: javascript,
+                    css: ''
+                });
+            })
+
+        })
+};
+
+
+exports.link = function(req, res, next) {
+
+
+    var name = req.query.moduleName;
+    console.log('requested to link module: ' + name);
+
+
+    models.VisualizationType
+        .linkFromLocalModule(name)
+        .then(function(vizType) {
+
+            var b = browserify();
+
+            b.require(name);
+
+            b.bundle(function(err, buf) {
+                var javascript = buf.toString('utf8');
+
+                return res.render('viz-types/full-preview', {
+                    vizType: vizType,
+                    javascript: javascript,
+                    css: ''
+                });
+            })
+
+        })
+
 
 };
 
