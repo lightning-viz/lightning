@@ -6,6 +6,16 @@
     "name": "Matthew Conlen",
     "email": "code@mathisonian.com"
   },
+  "keywords": [
+    "lightning",
+    "data visualization",
+    "dataviz",
+    "d3",
+    "three.js",
+    "data viz",
+    "lightning-viz",
+    "data server"
+  ],
   "bin": {
     "lightning-server": "bin/lightning-server.js"
   },
