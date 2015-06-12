@@ -39,7 +39,16 @@ var getVizTypeValues = function() {
         }
     });
 
-    // todo the sampleData
+    var sampleData = [];
+
+    $('.data-container .data-button').each(function() {
+        sampleData.push({
+            name: $(this).text(),
+            data: $(this).data('data')
+        });
+    });
+
+    params.sampleData = sampleData;
 
     return params;
 
@@ -53,7 +62,7 @@ var importViz = function() {
     var name = prompt("Please enter the name for this Visualization Type");
 
     if(name) {
-        request.post(url, _.extend(params, {name: name, sampleData: []}), function(err, res) {
+        request.post(url, _.extend(params, {name: name}), function(err, res) {
             if(err) {
                 alert('problem saving!');
             } else {
