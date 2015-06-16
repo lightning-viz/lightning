@@ -5,11 +5,44 @@ var jQueryURL = '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js';
 
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
+sid = (window.lightning || {}).sid || sid;
 
 var vizs = {};
 
 
 var utils = require('../utils');
+
+var socket;
+io = window.io || false
+
+if(io) {
+    socket = io.connect('/sessions/' + sid);
+} else {
+    socket = {
+        on: function(){}
+    }
+}
+
+
+socket.on('append', function(message) {
+
+    var vizId = message.vizId;
+    var data = message.data;
+
+    if(vizs[vizId].appendData) {
+        vizs[vizId].appendData(data);
+    }
+});
+
+socket.on('update', function(message) {
+    var vizId = message.vizId;
+    var data = message.data;
+
+    if(vizs[vizId].updateData) {
+        vizs[vizId].updateData(data);    
+    }
+});
+
 
 function loadJS(src, callback) {
     var s = document.createElement('script');
@@ -32,8 +65,6 @@ function init() {
     loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.lightning.requiredVizTypes.join('&visualizations[]='), function() { 
         
         $('.feed-item[data-initialized=false]').each(function() {
-
-            console.log($(this));
 
             var type = $(this).data('type');
             var data = $(this).data('data');

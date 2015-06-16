@@ -15,7 +15,7 @@ block content
 
 block scripts
     script.
-        window.lightning = window.lightning || {};
+        window.lightning = window.lightning || {sid: #{viz.SessionId}};
         window.lightning.host = window.lightning.host || "#{STATIC_URL}" || 'http://127.0.0.1:3000/';
         window.lightning.requiredVizTypes = window.lightning.requiredVizTypes || [];
         if(window.lightning.requiredVizTypes.indexOf("#{viz.type}") === -1) {
@@ -26,4 +26,5 @@ block scripts
         window._define = window.define;
         window.define = undefined;
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/embed.js')

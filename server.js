@@ -46,6 +46,8 @@ models.sequelize.sync({force: false})
 
 var io = require('socket.io')(server);
 
+io.set('origins', '*:*');
+
 io.on('connection', function(){
   console.log('a user connected');
 });
