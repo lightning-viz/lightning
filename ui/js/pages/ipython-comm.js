@@ -10,7 +10,7 @@ var readCommData = function(commData, field) {
 };
 
 
-if(IPython) {
+if(IPython.notebook.kernel) {
     IPython.notebook.kernel.comm_manager.register_target('lightning', function(comm, data) {
         var id = readCommData(data, 'id');
         lightningCommMap[id] = comm;
