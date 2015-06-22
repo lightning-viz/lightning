@@ -302,6 +302,12 @@ exports.link = function(req, res, next) {
             b.require(name);
 
             b.bundle(function(err, buf) {
+
+                if(err) {
+                    console.log(err);
+                    return res.status(500).end();
+                }
+
                 var javascript = buf.toString('utf8');
 
                 return res.render('viz-types/full-preview', {
