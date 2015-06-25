@@ -323,6 +323,12 @@ exports.screenshot = function(req, res, next) {
     };
 
     webshot(url, opts, function(err, renderStream) {
+
+        if(err) {
+            console.warn(err);
+            return res.status(500).send();
+        }
+        
         res.setHeader('Content-Type', 'image/png');
         renderStream.pipe(res);
     });
