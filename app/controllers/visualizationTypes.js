@@ -266,7 +266,7 @@ exports.npmInstall = function(req, res, next) {
     var name = req.query.moduleName;
 
     models.VisualizationType
-        .installFromNPM(name)
+        .createFromNPM(name)
         .then(function(vizType) {
 
             var b = browserify();
