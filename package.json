@@ -1,7 +1,7 @@
 {
   "name": "lightning-server",
   "description": "lightning dataviz notebooks",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "author": {
     "name": "Matthew Conlen",
     "email": "code@mathisonian.com"
