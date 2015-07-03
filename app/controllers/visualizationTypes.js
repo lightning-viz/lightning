@@ -282,7 +282,9 @@ exports.npmInstall = function(req, res, next) {
                 });
             })
 
-        })
+        }).catch(function(err) {
+            return res.status(500).send('error compiling module').end();
+        });
 };
 
 
@@ -298,7 +300,6 @@ exports.link = function(req, res, next) {
         .then(function(vizType) {
 
             var b = browserify();
-
             b.require(name);
 
             b.bundle(function(err, buf) {
@@ -317,8 +318,9 @@ exports.link = function(req, res, next) {
                 });
             })
 
-        })
-
+        }).catch(function(err) {
+            return res.status(500).send('error compiling module').end();
+        });
 
 };
 

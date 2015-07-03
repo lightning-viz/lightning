@@ -107,6 +107,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
                 if(preview) {
+                    console.log('preview')
                     return VisualizationType.build(vizTypeObj);
                 }
 
@@ -122,9 +123,6 @@ module.exports = function(sequelize, DataTypes) {
                         .then(function() {
                             console.log(('Successfully installed ' + name).green);
                             return self._buildFromNPM(name, false);
-                        })
-                        .catch(function(e) {
-                            console.log(e);
                         });
 
             },
@@ -137,9 +135,6 @@ module.exports = function(sequelize, DataTypes) {
                         .then(function() {
                             console.log(('Successfully linked ' + name).green);
                             return self._buildFromNPM(name, true);
-                        })
-                        .catch(function(e) {
-                            console.log(e);
                         });
 
             },
