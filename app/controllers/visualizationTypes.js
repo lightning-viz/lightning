@@ -319,6 +319,7 @@ exports.link = function(req, res, next) {
             })
 
         }).catch(function(err) {
+            console.log(err);
             return res.status(500).send('error compiling module').end();
         });
 

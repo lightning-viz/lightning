@@ -96,14 +96,26 @@ module.exports = function(sequelize, DataTypes) {
             _buildFromNPM: function(name, preview) {
                 var viz = require(name);
                 var lightningConfig = require(name + '/package.json').lightning || {};
+                var sampleData = lightningConfig.sampleData;
 
-                console.log(lightningConfig);
+                try {
+                    sampleData = require(name + '/lightning-sample-data.json');
+                } catch(e) {
+                    sampleData = sampleData || [];
+                }
+
+                var sampleImages = lightningConfig.sampleImages;
+                try {
+                    sampleImages = require(name + '/lightning-sample-images.json');
+                } catch(e) {
+                    sampleImages = sampleImages || [];
+                }
 
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
                     isModule: true,
-                    sampleData: lightningConfig.sampleData,
-                    sampleImages: lightningConfig.sampleImages
+                    sampleData: sampleData,
+                    sampleImages: sampleImages
                 }
 
                 if(preview) {
