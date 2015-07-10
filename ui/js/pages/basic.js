@@ -11,6 +11,10 @@ $('[data-confirm]').click(function(e) {
     }
 });
 
+$('[data-link]').click(function(e) {
+    window.location.href = $(this).data('link');
+});
+
 
 var $vizPreview = $('.viz-preview');
 $vizPreview.css('height', $vizPreview.width());

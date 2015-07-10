@@ -1,5 +1,5 @@
 
-$bg-color: $blue;
+$bg-color: #eee;
 $stops: 100;
 $time: 20s;
 $hue-range: 35;
@@ -13,15 +13,31 @@ $hue-range: 35;
 }
 
 
+.preview-container {
+    display: block;
+    padding-bottom: 17px;
+    margin-bottom: 20px;
+
+    cursor: pointer;
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
+
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
 .viz-preview {  
     display: block;
     width: 100%;
     background-position: 50% 50%;
     @include bg-size(cover);
     
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: $gray 2px solid;
+
 
     &.noimg {
         background-color: $bg-color;
@@ -30,10 +46,11 @@ $hue-range: 35;
 
     }
 
-    &:hover {
-        opacity: 0.6;
-    }
+}
 
+.title-container {
+    text-align: center;
+    color: $gray;
 }
 
 

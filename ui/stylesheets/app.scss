@@ -2,12 +2,14 @@
 
 #lightning-body {
 
+    $purple: #9175f0;
+    $blue: #68a1e5;
+    $gray: #626c7c;
+    $darkGrayText: #545E6B;
+
     @import "lib/skeleton";
     @import "lib/modal";
     @import "sidebar";
-
-    $purple: #9175f0;
-    $blue: #68a1e5;
 
     max-width: 100%;
 

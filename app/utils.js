@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('lodash');
+var titleCase = require('title-case');
 
 
 module.exports = {
@@ -23,6 +24,10 @@ module.exports = {
         }
 
         return arrays;
+    },
+
+    titleCase: function(str) {
+        return titleCase(str)
     }
 
 

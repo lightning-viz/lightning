@@ -12,15 +12,16 @@ block content
         .row
             for vizType in vizTypeGroup
                 .four.columns
-                    .preview-container
-                        a(href="./#{vizType.id}")
+
+                    a(href="./#{vizType.id}").preview-container
+                        .image-container
                             if vizType.image
                                 .viz-preview()
                             else
                                 .viz-preview.noimg
 
-                    a(href="./#{vizType.id}")
-                        | #{vizType.name}
+                        .title-container
+                            | #{utils.titleCase(vizType.name)}
 
     .row
         .sixteen.columns

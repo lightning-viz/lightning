@@ -119,6 +119,7 @@
     "three-fly-controls": "^1.1.0",
     "three.js": "git://github.com/lightning-viz/three.js",
     "tiny-lr": "0.0.5",
+    "title-case": "^1.1.1",
     "topojson": "^1.6.18",
     "underscore.nest": "git://github.com/mathisonian/underscore.nest",
     "validator": "~3.17.0",
