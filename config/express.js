@@ -124,6 +124,7 @@ module.exports = function (app, io) {
         res.locals.moment = moment;
         res.locals._ = require('lodash');
         res.locals.marked = require('marked');
+        res.locals.utils = require('../app/utils');
         res.locals.STATIC_URL =  staticUrl;
         res.locals.BASE_URL = baseUrl;
         next();

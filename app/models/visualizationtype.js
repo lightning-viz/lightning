@@ -95,6 +95,7 @@ module.exports = function(sequelize, DataTypes) {
 
             _buildFromNPM: function(name, preview) {
                 var viz = require(name);
+
                 var lightningConfig = require(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
 
@@ -119,7 +120,6 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
                 if(preview) {
-                    console.log('preview')
                     return VisualizationType.build(vizTypeObj);
                 }
 

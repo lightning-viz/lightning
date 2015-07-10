@@ -1,0 +1,59 @@
+
+$bg-color: $blue;
+$stops: 100;
+$time: 20s;
+$hue-range: 35;
+
+@mixin bg-size($bg-size) {
+  -webkit-background-size: $bg-size;
+     -moz-background-size: $bg-size;
+      -ms-background-size: $bg-size;
+       -o-background-size: $bg-size;
+          background-size: $bg-size;
+}
+
+
+.viz-preview {  
+    display: block;
+    width: 100%;
+    background-position: 50% 50%;
+    @include bg-size(cover);
+    
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
+
+    &.noimg {
+        background-color: $bg-color;
+        -webkit-animation: colorChange $time linear 0s infinite;
+                animation: colorChange $time linear 0s infinite;
+
+    }
+
+    &:hover {
+        opacity: 0.6;
+    }
+
+}
+
+
+@-webkit-keyframes colorChange{
+  @for $i from 0 through $stops{
+    $old-color: adjust-hue($bg-color, (360/$stops)*$i);
+    $new-color: adjust-hue($bg-color, (360/$stops)*$i + $hue-range);
+    #{$i}% {
+      background: -webkit-linear-gradient(left, $old-color, $new-color);
+      background: linear-gradient(to right, $old-color, $new-color);
+    }
+  } 
+}
+
+@keyframes colorChange{
+  @for $i from 0 through $stops{
+    $old-color: adjust-hue($bg-color, (360/$stops)*$i);
+    $new-color: adjust-hue($bg-color, (360/$stops)*$i + $hue-range);
+    #{$i}% {
+      background: linear-gradient(to right, $old-color, $new-color);
+    }
+  } 
+}

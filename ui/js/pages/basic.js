@@ -11,5 +11,9 @@ $('[data-confirm]').click(function(e) {
     }
 });
 
+
+var $vizPreview = $('.viz-preview');
+$vizPreview.css('height', $vizPreview.width());
+
 require('../lib/dropit');
 $('[data-dropit]').dropit();

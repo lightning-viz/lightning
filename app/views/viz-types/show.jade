@@ -8,13 +8,19 @@ block content
             h2
                 | Visualization Types
 
-    .row
-        .sixteen.columns
-            ul
-                for vizType in vizTypes
-                    li
+    for vizTypeGroup in utils.groupByN(vizTypes, 4)
+        .row
+            for vizType in vizTypeGroup
+                .four.columns
+                    .preview-container
                         a(href="./#{vizType.id}")
-                            | #{vizType.name}
+                            if vizType.image
+                                .viz-preview()
+                            else
+                                .viz-preview.noimg
+
+                    a(href="./#{vizType.id}")
+                        | #{vizType.name}
 
     .row
         .sixteen.columns

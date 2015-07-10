@@ -298,7 +298,6 @@ exports.link = function(req, res, next) {
     models.VisualizationType
         .linkFromLocalModule(name)
         .then(function(vizType) {
-
             var b = browserify();
             b.require(name);
 
