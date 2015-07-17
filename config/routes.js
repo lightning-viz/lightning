@@ -59,7 +59,8 @@ module.exports = function (app) {
     app.get('/visualization-types/npm-install', authMiddleware, visualizationTypes.npmInstall);
     app.get('/visualization-types/link', authMiddleware, visualizationTypes.link);
     app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
-    app.get('/visualization-types/:vid', authMiddleware, visualizationTypes.editor);
+    app.get('/visualization-types/edit/:vid', authMiddleware, visualizationTypes.editor);
+    app.get('/visualization-types/:vid/thumbnail', authMiddleware, visualizationTypes.thumbnail);
     
     app.get('/', authMiddleware, home.index);
     app.get('/sessions', authMiddleware, session.index);

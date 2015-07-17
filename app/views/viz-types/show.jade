@@ -8,12 +8,21 @@ block content
             h2
                 | Visualization Types
 
+            h4
+                a(href="#import-visualization-modal", rel="modal:open")
+                    | Import Visualization
+
+    .row
+        .six.columns
+            h4
+                | Installed Visualizations
+                
     for vizTypeGroup in utils.groupByN(vizTypes, 4)
         .row
             for vizType in vizTypeGroup
                 .four.columns
 
-                    a(href="./#{vizType.id}").preview-container
+                    a(href="./edit/#{vizType.id}").preview-container
                         .image-container
                             if vizType.image
                                 .viz-preview()
@@ -101,3 +110,12 @@ block content
                 .button
                     | Reset Default Visualizations
 
+
+    .modal#import-visualization-modal
+        #visualization-importer
+
+
+block append scripts
+    script(src='#{STATIC_URL}js/visualization-types.js')
+
+        

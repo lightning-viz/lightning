@@ -18,7 +18,7 @@
     "url": "https://github.com/lightning-viz/lightning"
   },
   "scripts": {
-    "start": "NODE_ENV=development nodemon --watch app --watch public/js server.js ",
+    "start": "NODE_ENV=development nodemon --watch app server.js ",
     "test": "mocha --timeout 20000",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
     "createdb": "psql -c 'create database \"lightning-viz\";'",
@@ -26,8 +26,8 @@
   },
   "browserify": {
     "transform": [
-      "jadeify",
-      "bulkify"
+      "reactify",
+      "jadeify"
     ]
   },
   "licenses": [
@@ -104,6 +104,8 @@
     "pym.js": "^0.4.1",
     "q": "~1.0.1",
     "randomstring": "^1.0.3",
+    "react": "^0.13.3",
+    "reactify": "^1.1.1",
     "request": "~2.36.0",
     "resumer": "0.0.0",
     "sequelize": "^1.7.10",

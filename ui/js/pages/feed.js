@@ -124,8 +124,6 @@ setTimeout(function() {
                 request.put(url, params, function(error, res){
                     if(error) {
                         return console.log(error);
-                    } else {
-                        return console.log('success');
                     }
                 });
             });
@@ -167,7 +165,6 @@ var editDesctiption = function(e) {
             if(error) {
                 return console.log(error);
             } else {
-                return console.log('success');
                   $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                   });
@@ -182,7 +179,6 @@ $('#data-input-form').submit(function(e) {
     e.preventDefault();
 
     var url = $(this).attr('action');
-    console.log(url);
 
     var params = {};
     var inputs = $(this).serializeArray();
@@ -191,9 +187,6 @@ $('#data-input-form').submit(function(e) {
     });
 
     params.data = JSON.parse(params.data);
-
-    console.log(params);
-
 
     request.post(url, params, function(error, res){
         if(error) {

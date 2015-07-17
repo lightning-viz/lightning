@@ -59,11 +59,11 @@ io.on('connection', function(){
 // Bootstrap application settings
 require('./config/express')(app, io);
 
-// Bootstrap routes
-require('./config/routes')(app);
 
 console.log('Initializing npm...');
-npm.load({}, function() {
+// npm.load({}, function() {
+    // Bootstrap routes
+    require('./config/routes')(app);
 
     var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
     logo += " ,`                                ,.\n";
@@ -112,5 +112,5 @@ npm.load({}, function() {
 
 
     server.listen(port);
-});
+// });
 

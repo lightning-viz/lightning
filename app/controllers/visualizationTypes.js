@@ -11,6 +11,14 @@ var config = require('../../config/config');
 var npm = require('npm');
 
 
+var matchedPackages = [];
+console.log('searching');
+// npm.commands.search(['lightning-visualization'], function(packages) {
+//     _.each(packages, function(p, packageName) {
+//         console.log(packageName);
+//         console.log(p);
+//     });
+// });
 
 // function protectRequire(str) {
 //     var protectedVars = ['define', 'require'];
@@ -39,12 +47,6 @@ exports.index = function (req, res, next) {
 
 exports.show = function (req, res, next) {
 
-    // npm.commands.search(['lightning-visualization'], function(packages) {
-    //     _.each(packages, function(p, packageName) {
-    //         console.log(packageName);
-    //         console.log(p);
-    //     });
-    // });
 
     models.VisualizationType.findAll({
             order: '"name" ASC'
@@ -193,11 +195,19 @@ exports.preview = function(req, res, next) {
             vizType.exportToFS(tmpPath)
                 .spread(function() {
                     var b = browserify();
-                    var stream = resumer().queue(vizType.javascript).end();
-                    b.require(stream, {
-                        basedir: tmpPath,
-                        expose: vizType.name
-                    });
+                    if(vizType.isModule) {
+                        console.log(isModule);
+                        b.require(vizType.name, {
+                            expose: vizType.name
+                        });
+                    } else {
+                        var stream = resumer().queue(vizType.javascript).end();
+                        b.require(stream, {
+                            basedir: tmpPath,
+                            expose: vizType.name
+                        });
+                    }
+
 
                     b.bundle(function(err, buf) {
 
@@ -321,7 +331,6 @@ exports.link = function(req, res, next) {
             console.log(err);
             return res.status(500).send('error compiling module').end();
         });
-
 };
 
 
@@ -355,4 +364,21 @@ exports.editor = function (req, res, next) {
 
         }).error(next);
 };
+
+
+exports.thumbnail = function (req, res, next) {
+
+    models.VisualizationType.find(req.params.vid)
+        .then(function(type) {
+
+            if(type.thumbnailLocation) {
+                return res.sendFile(type.thumbnailLocation);
+            }
+            
+            return res.status(404).send('no thumbnail found').end();
+
+        }).error(next);
+};
+
+
 
