@@ -14,6 +14,7 @@ var _ = require('lodash');
 
 var Viz;
 
+var IS_EDITING = $('.feed-item-container.full').length === 0;
 
 setTimeout(function() {
     var $container = $('.feed-item-container').not('.full').addClass('fixed');
@@ -57,8 +58,10 @@ var getVizTypeValues = function() {
 var importViz = function() {
     console.log('IMPORT VIZ');
     var url = '/visualizations/types/';
-    var params = getVizTypeValues();
-
+    var params = {};
+    if(IS_EDITING) {
+        params = getVizTypeValues();
+    }
     var name = prompt("Please enter the name for this Visualization Type");
 
     if(name) {
