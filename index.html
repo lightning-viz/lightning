@@ -1,9 +1,64 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
+	  <style type="text/css">
+
+	  	body {
+	  		background-color: rgb(240,240,240);
+	  	}
+
+	    .icon {
+	    	position: relative; 
+	    	left: 0px;
+	    	width: 48px;
+	    	padding-right: 10px;
+	    }
+
+	    .info {
+	    	font-size: 20px; 
+	    	font-family: Helvetica;
+	    	max-width: 150px;
+	    	display: inline-block;
+	    	font-weight: 100;
+	    }
+
+	    .container {
+	    	max-width:400px; 
+	    	position: absolute; 
+	    	padding-top: 10px; 
+	    	padding-bottom: 10px;
+	    	cursor: default;
+			-moz-user-select: none; 
+			-webkit-user-select: none; 
+			-ms-user-select:none; 
+			user-select:none;
+			-o-user-select:none;
+	    }
+
+	    .btn {
+	    	border: 2px solid rgb(132,119,183);
+	    	background-color: rgb(240,240,240);
+	    	border-radius: 10px;
+	    	position: relative;
+	    	font-size: 16px;
+	    	right: 0px;
+	    	top: -2px;
+	    	cursor: pointer;
+	    	color: rgb(132,119,183);
+	    }
+
+	    .btn:hover{
+	    	background-color: rgb(132,119,183);
+	    	color: white;
+	    }
+
+	  </style>
   </head>
   <body>
-    Starting Lightning...
+  	<div class='container'>
+	  	<img class='icon' src='Menu.svg' width='48px'></img>
+	    <span class='info'>Lightning server running at <b>localhost:3000</b></span>
+	    <button class='btn'>stop</button>
+    </div>
   </body>
 </html>
