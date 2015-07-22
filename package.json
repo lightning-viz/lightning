@@ -7,6 +7,9 @@
     "email": "code@mathisonian.com"
   },
   "node-main": "server.js",
+  "window": {
+    "toolbar": true
+  },
   "main": "index.html",
   "keywords": [
     "lightning",
@@ -34,7 +37,10 @@
     "test": "mocha --timeout 20000",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
     "createdb": "psql -c 'create database \"lightning-viz\";'",
-    "postinstall": "gulp build"
+    "postinstall": "gulp build;",
+    "electron-rebuild": "npm run rebuild-sqlite3; npm run rebuild-node-sass",
+    "rebuild-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v44-darwin-x64 && node-gyp rebuild --target=0.30.0 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v44-darwin-x64",
+    "rebuild-node-sass": "cd node_modules/node-sass && set HOME=~/.electron-gyp && node-gyp rebuild --target=0.30.0 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sass --module_path=../vendor/darwin-x64-44"
   },
   "browserify": {
     "transform": [
@@ -102,12 +108,13 @@
     "lightning-client-utils": "^0.6.3",
     "lodash": "^3.8.0",
     "marked": "~0.3.2",
+    "menubar": "^2.0.16",
     "method-override": "^2.1.1",
     "mocha": "^1.21.5",
     "moment": "~2.6.0",
     "morgan": "^1.2.0",
     "multiparty": "^3.3.1",
-    "node-sass": "^0.9.6",
+    "node-sass": "^2.1.1",
     "node-uuid": "^1.4.1",
     "nodemon": "*",
     "path": "~0.4.9",
