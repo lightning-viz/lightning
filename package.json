@@ -6,11 +6,10 @@
     "name": "Matthew Conlen",
     "email": "code@mathisonian.com"
   },
-  "node-main": "menu.js",
   "window": {
     "toolbar": true
   },
-  "main": "index.html",
+  "main": "menu.js",
   "keywords": [
     "lightning",
     "data visualization",
