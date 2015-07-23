@@ -6,7 +6,7 @@
     "name": "Matthew Conlen",
     "email": "code@mathisonian.com"
   },
-  "node-main": "server.js",
+  "node-main": "menu.js",
   "window": {
     "toolbar": true
   },
