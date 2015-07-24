@@ -152,8 +152,6 @@ exports.getDelete = function(req, res, next) {
 
 
 
-
-
 exports.preview = function(req, res, next) {
 
     console.log('requested url: ' + req.url);
@@ -161,7 +159,7 @@ exports.preview = function(req, res, next) {
     var url = req.query.url;
     var file = req.query.file;
 
-    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
+    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
     
@@ -270,43 +268,25 @@ exports.preview = function(req, res, next) {
 
 };
 
-
-exports.npmInstall = function(req, res, next) {
-
-    var name = req.query.moduleName;
-
-    models.VisualizationType
-        .createFromNPM(name)
-        .then(function(vizType) {
-
-            var b = browserify();
-
-            b.require(name);
-            b.bundle(function(err, buf) {
-                var javascript = buf.toString('utf8');
-
-                return res.render('viz-types/full-preview', {
-                    vizType: vizType,
-                    javascript: javascript,
-                    css: ''
-                });
-            })
-
-        }).catch(function(err) {
-            return res.status(500).send('error compiling module').end();
-        });
-};
+exports.previewNPM = function(req, res, next) {
 
 
-exports.link = function(req, res, next) {
+    var location = req.params.location;
+    var name = req.query.name;
 
-
-    var name = req.query.moduleName;
     console.log('requested to link module: ' + name);
 
+    var linker;
+    if(location === 'registry') {
+        linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
+    } else if(location === 'local') {
+        linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    models.VisualizationType
-        .linkFromLocalModule(name)
+
+    linker(name)
         .then(function(vizType) {
             var b = browserify();
             b.require(name);
@@ -333,12 +313,50 @@ exports.link = function(req, res, next) {
         });
 };
 
+exports.importNPM = function(req, res, next) {
+
+    var location = req.params.location;
+    var name = req.query.name;
+
+    console.log('requested to link module: ' + name);
+
+    var creator;
+    if(location === 'registry') {
+        creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
+    } else if(location === 'local') {
+        creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
+    console.log(creator);
+
+    creator(name)
+        .then(function(vizType) {
+
+            var b = browserify();
+
+            b.require(name);
+            b.bundle(function(err, buf) {
+                var javascript = buf.toString('utf8');
+
+                return res.render('viz-types/full-preview', {
+                    vizType: vizType,
+                    javascript: javascript,
+                    css: ''
+                });
+            })
+
+        }).catch(function(err) {
+            return res.status(500).send('error compiling module').end();
+        });
+};
+
 
 exports.importViz = function(req, res, next) {
 
     var backURL = req.header('Referer');
-    var name = req.body.name;
-    var url = req.body.url;
+    var name = req.body.name  || req.query.name;
+    var url = req.body.url || req.query.url;
 
     console.log(name);
     console.log(url);
@@ -350,6 +368,10 @@ exports.importViz = function(req, res, next) {
         }).fail(function(err) {
             next(err);
         });
+};
+
+exports.advanced = function (req, res, next) {
+    return res.render('viz-types/advanced', {});
 };
 
 
@@ -382,3 +404,25 @@ exports.thumbnail = function (req, res, next) {
 
 
 
+
+exports.importPreviewHandler = function(req, res, next) {
+    var method = req.params.method;
+    var importPreview = req.params.importPreview;
+
+    if(method === 'npm') {
+        if(importPreview === 'import') {
+            return exports.importNPM(req, res, next);
+        } else {
+            return exports.previewNPM(req, res, next);
+        }
+    } else if(method === 'git') {
+        if(importPreview === 'import') {
+            return exports.importViz(req, res, next);
+        } else {
+            return exports.preview(req, res, next);
+        }
+    } else {
+        return exports.preview(req, res, next);
+    }
+
+}

@@ -42,7 +42,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
     }
 
     console.log('building viz bundle with ' + visualizationTypes);
-    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
+    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
 

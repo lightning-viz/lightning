@@ -11,6 +11,9 @@ block content
             h4
                 a(href="#import-visualization-modal", rel="modal:open")
                     | Import Visualization
+            h4
+                a(href="./advanced")
+                    | Advanced Settings
 
     .row
         .six.columns
@@ -31,84 +34,6 @@ block content
 
                         .title-container
                             | #{utils.titleCase(vizType.name)}
-
-    .row
-        .sixteen.columns
-            h4
-                | Import Remote Viz
-            form(method="post", action=".")
-                .row
-                    .six.columns
-                        input(type="text", name="name", placeholder="name").full-width
-                .row
-                    .six.columns
-                        input(type="text", name="url", placeholder="git url").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="import")
-
-    .row
-        .sixteen.columns
-            h4
-                | Preview Remote Viz
-            
-            form(method="get", action="./preview")
-                .row
-                    .six.columns
-                        input(type="text", name="url", placeholder="git url").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="preview")
-
-    .row
-        .sixteen.columns
-            h4
-                | Install from npm
-            
-            form(method="get", action="./npm-install")
-                .row
-                    .six.columns
-                        input(type="text", name="moduleName", placeholder="module name").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="npm-install")
-
-    .row
-        .sixteen.columns
-            h4
-                | Link local module (must run `npm link` first in the module directory)
-            
-            form(method="get", action="./link")
-                .row
-                    .six.columns
-                        input(type="text", name="moduleName", placeholder="module name").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="link")
-
-
-
-    .row
-        .six.columns
-            h4
-                | Fetch Default Visualizations 
-                br
-                small
-                    | (will not overwrite existing)
-            a(href="./fetch-defaults")
-                .button
-                    | Fetch Default Visualizations
-
-    .row
-        .six.columns
-            h4
-                | Reset Default Visualizations 
-                br
-                small
-                    | (will overwrite existing)
-            a(href="./reset-defaults", data-confirm="Warning this will delete all local visualization types. Are you sure?")
-                .button
-                    | Reset Default Visualizations
 
 
     .modal#import-visualization-modal

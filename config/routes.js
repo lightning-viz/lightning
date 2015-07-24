@@ -52,16 +52,18 @@ module.exports = function (app) {
     app.get('/visualizations/types', authMiddleware, visualizationTypes.index);
 
     app.get('/visualization-types', authMiddleware, visualizationTypes.show);
-    app.get('/visualization-types/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
-    app.get('/visualization-types/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
     app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
-    app.get('/visualization-types/preview', authMiddleware, visualizationTypes.preview);
-    app.get('/visualization-types/npm-install', authMiddleware, visualizationTypes.npmInstall);
-    app.get('/visualization-types/link', authMiddleware, visualizationTypes.link);
+    app.get('/visualization-types/advanced/', authMiddleware, visualizationTypes.advanced);
+    app.get('/visualization-types/advanced/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
+    app.get('/visualization-types/advanced/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
+    
     app.get('/visualization-types/preview/full', authMiddleware, visualizationTypes.preview);
     app.get('/visualization-types/edit/:vid', authMiddleware, visualizationTypes.editor);
+    app.get('/visualization-types/load/:importPreview/:method', authMiddleware, visualizationTypes.importPreviewHandler);
+    app.get('/visualization-types/load/:importPreview/:method/:location', authMiddleware, visualizationTypes.importPreviewHandler);
+
     app.get('/visualization-types/:vid/thumbnail', authMiddleware, visualizationTypes.thumbnail);
-    
+
     app.get('/', authMiddleware, home.index);
     app.get('/sessions', authMiddleware, session.index);
     app.get('/sessions/create/', authMiddleware, session.getCreate);

@@ -137,29 +137,31 @@ module.exports = function(sequelize, DataTypes) {
                 return VisualizationType.create(vizTypeObj);
             },
 
-            createFromNPM: function(name) {
-
-                console.log('Fetching "' + name + '" from NPM registry...');
+            _createLinkNPM: function(command, name, preview) {
                 var self = this;
 
-                return Q.nfcall(npm.commands.install, [name])
+                return Q.nfcall(command, [name])
                         .then(function() {
                             console.log(('Successfully installed ' + name).green);
-                            return self._buildFromNPM(name, false);
+                            return self._buildFromNPM(name, preview);
                         });
+            },
 
+            createFromNPM: function(name) {
+                return this._createLinkNPM(npm.commands.install, name, false);
+            },
+
+            linkFromNPM: function(name) {
+                return this._createLinkNPM(npm.commands.install, name, true);
             },
 
             linkFromLocalModule: function(name) {
+                return this._createLinkNPM(npm.commands.link, name, true);
+            },
 
-                var self = this;
 
-                return Q.nfcall(npm.commands.link, [name])
-                        .then(function() {
-                            console.log(('Successfully linked ' + name).green);
-                            return self._buildFromNPM(name, true);
-                        });
-
+            createFromLocalModule: function(name) {
+                return this._createLinkNPM(npm.commands.link, name, false);
             },
 
             createFromRepoURL: function(url, attributes, opts) {

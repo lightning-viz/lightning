@@ -63,7 +63,7 @@ require('./config/express')(app, io);
 
 
 console.log('Initializing npm...');
-// npm.load({}, function() {
+npm.load({}, function() {
     // Bootstrap routes
     require('./config/routes')(app);
 
@@ -114,5 +114,5 @@ console.log('Initializing npm...');
 
 
     server.listen(port);
-// });
+});
 
