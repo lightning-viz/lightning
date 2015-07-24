@@ -59,7 +59,14 @@
   	<div class='container'>
 	  	<img class='icon' src='Menu.svg' width='48px'></img>
 	    <span class='info'>Lightning server running at <b>localhost:3000</b></span>
-	    <button class='btn'>stop</button>
+	    <button class='btn' onclick='quit()'>stop</button>
     </div>
   </body>
 </html>
+
+<script>
+	var ipc = require('ipc');
+	function quit() {
+		ipc.send('terminate');
+	}
+</script>
