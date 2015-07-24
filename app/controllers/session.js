@@ -507,7 +507,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
     if(process.env.NODE_ENV === 'production') {
         thumbnailPath = path.resolve(__dirname + '/../../' + './tmp/' + filenameWithoutExtension + '_thumbnail' + extension);
     } else {
-        thumbnailPath = path.dirname(imgPath) + filenameWithoutExtension + '_thumbnail' + extension;
+        thumbnailPath = path.dirname(imgPath) + '/' + filenameWithoutExtension + '_thumbnail' + extension;
     }
 
     // Upload paths for s3

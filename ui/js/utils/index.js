@@ -1,5 +1,5 @@
 var request = require('superagent');
-var baseURL = window.lightning.baseURL || '/';
+var baseURL = window.lightning.baseURL || window.lightning.host || '/';
 console.log(baseURL);
 
 module.exports = {

@@ -16,7 +16,6 @@ var Viz;
 
 var IS_EDITING = $('.feed-item-container.full').length === 0;
 
-
 setTimeout(function() {
     var $container = $('.feed-item-container').not('.full').addClass('fixed');
     if($(window).height() < 900) {
@@ -41,34 +40,44 @@ var getVizTypeValues = function() {
         }
     });
 
-    // todo the sampleData
+    var sampleData = [];
+
+    $('.data-container .data-button').each(function() {
+        sampleData.push({
+            name: $(this).text(),
+            data: $(this).data('data')
+        });
+    });
+
+    params.sampleData = sampleData;
 
     return params;
 
 };
 
 var importViz = function() {
+    console.log('IMPORT VIZ');
     var url = '/visualizations/types/';
-
     var params = {};
     if(IS_EDITING) {
         params = getVizTypeValues();
     }
-
     var name = prompt("Please enter the name for this Visualization Type");
 
     if(name) {
-        request.post(url, _.extend(params, {name: name, sampleData: []}), function(err, res) {
+        request.post(url, _.extend(params, {name: name}), function(err, res) {
             if(err) {
                 alert('problem saving!');
             } else {
-                window.location.href = '/edit/visualization-types/' + res.body.id;
+                window.location.href = '/visualization-types/' + res.body.id;
             }
         });
     }   
 };
 
 var saveVis = function() {
+    console.log('SAVE VIZ');
+
     var url = '/visualizations/types/' + $('.visualization-type').data('id');
     var params = getVizTypeValues();
 
@@ -143,7 +152,7 @@ var updateData = function() {
         new Viz('.feed-item', data, images, options);
         $('.feed-item-container').addClass('fixed');
     } catch(e) {
-        console.log('failed to update data');
+        console.log('fail');
     } 
 };
 
@@ -202,6 +211,7 @@ $('.section-header').click(function() {
 })
 
 $('.data-button').click(function() {
+    console.log($(this).data('data'));
     dataEditor.setValue(JSON.stringify($(this).data('data')));
     updateData();
 });
@@ -210,12 +220,13 @@ var $feedItem = $('.feed-item');
 var type = $feedItem.data('type');
 var data = $feedItem.data('data');
 
+console.log(data);
 var images = $feedItem.data('images');
 var options = $feedItem.data('options');
 
 setTimeout(function() {
 
-    Viz =  require(type);
+    Viz =  require('viz/' + type);
 
     var vid = $(this).attr('id');
     new Viz('.feed-item', data, images, options);
@@ -223,4 +234,3 @@ setTimeout(function() {
     $feedItem.data('initialized', true);
     $feedItem.attr('data-initialized', true);
 }, 0);
-
