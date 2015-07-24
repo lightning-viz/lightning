@@ -103,11 +103,16 @@ module.exports = function(sequelize, DataTypes) {
                     sampleData = require(name + '/lightning-sample-data.json');
                 } catch(e) {
                     sampleData = sampleData || [];
+                }                
+                try {
+                    sampleData = require(name + '/data/sample-data.json');
+                } catch(e) {
+                    sampleData = sampleData || [];
                 }
 
-                var sampleImages = lightningConfig.sampleImages;
+                sampleImages = lightningConfig.sampleImages;
                 try {
-                    sampleImages = require(name + '/lightning-sample-images.json');
+                    sampleImages = require(name + '/data/images.json');
                 } catch(e) {
                     sampleImages = sampleImages || [];
                 }
