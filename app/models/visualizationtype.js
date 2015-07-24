@@ -110,9 +110,15 @@ module.exports = function(sequelize, DataTypes) {
                     sampleData = sampleData || [];
                 }
 
-                sampleImages = lightningConfig.sampleImages;
+                var sampleImages = lightningConfig.sampleImages;
                 try {
-                    sampleImages = require(name + '/data/images.json');
+                    sampleImages = require(name + '/lightning-sample-images.json');
+                } catch(e) {
+                    sampleImages = sampleImages || [];
+                }
+
+                try {
+                    sampleImages = require(name + '/data/sampel-images.json');
                 } catch(e) {
                     sampleImages = sampleImages || [];
                 }

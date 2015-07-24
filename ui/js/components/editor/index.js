@@ -1,23 +1,35 @@
-
 var React = require('react');
+var _ = require('lodash');
+// var RadioGroup = require('react-radio-group');
+// var Sources = require('./sources');
 
-var Editor = require('../components/editor');
-React.render(<Editor /> , document.getElementById('data-component'));
+var Data = require('./data');
+
+var styles = {
+};
+
+var Editor = React.createClass({
+
+    getDefaultProps: function() {
+        return {
+            datasets: window.lightning.datasets || []
+        }
+    },
+
+    render: function() {
+        return (
+            <div>
+                <Data datasets={this.props.datasets} />
+            </div>
+        );
+    },
+});
+
+module.exports = Editor;
 
 
-// var request = require('superagent');
 
-// var jsEditorEl = document.getElementById('js-editor');
-// var styleEditorEl = document.getElementById('style-editor');
-// var markupEditorEl = document.getElementById('markup-editor');
-// var dataEditorEl = document.getElementById('data-editor');
 
-// var CodeMirror = require('../lib/codemirror/codemirror');
-// require('../lib/codemirror/javascript.js');
-// require('../lib/codemirror/sass.js');
-// require('../lib/codemirror/jade.js');
-
-// var _ = require('lodash');
 
 // var Viz;
 

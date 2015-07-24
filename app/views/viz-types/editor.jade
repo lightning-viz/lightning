@@ -32,36 +32,31 @@ block container
             
             .visualization-type(data-id="#{vizType.id}", data-collapse)
 
-                .section-header
-                    h3
-                        | javascript
-                textarea#js-editor
-                    | #{vizType.javascript}
+                //- .section-header
+                //-     h3
+                //-         | javascript
+                //- textarea#js-editor
+                //-     | #{vizType.javascript}
             
             
-                .section-header
-                    h3
-                        | styles
-                textarea#style-editor
-                    if vizType.styles
-                        | #{vizType.styles}
-                    else
-                        | .#{vizType.name} {
-                        |       
-                        | }
+                //- .section-header
+                //-     h3
+                //-         | styles
+                //- textarea#style-editor
+                //-     if vizType.styles
+                //-         | #{vizType.styles}
+                //-     else
+                //-         | .#{vizType.name} {
+                //-         |       
+                //-         | }
 
                 .section-header
                     h3
                         | data
 
-                .data-container
-                    for sampleData in vizType.sampleData
-                        button(data-data="#{JSON.stringify(sampleData.data)}").data-button
-                            | #{sampleData.name}
 
-                textarea#data-editor
-                    if vizType.sampleData.length
-                        | #{JSON.stringify(vizType.sampleData[0].data)}
+                #data-component
+
 
 
                 //- if vizType.markup            
@@ -86,5 +81,8 @@ block container
 block scripts
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='#{STATIC_URL}js/basic.js')
-    script(src="#{STATIC_URL}js/dynamic/viz/?cachemiss=true&visualizations[]=#{vizType.name}")
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{vizType.name}")
+    script.
+        window.lightning = window.lightning || {};
+        window.lightning.datasets = !{JSON.stringify(vizType.sampleData)}
     script(src='#{STATIC_URL}js/editor.js')
