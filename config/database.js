@@ -27,7 +27,7 @@ module.exports = {
         'dialect': 'postgres',
         'port': 5432,
         'sync': {'force': true},
-        'storage': config.root + 'database.sqlite',
+        'storage': config.root + '/database.sqlite',
         'logging': false
     },
     'test-sqlite': {
@@ -38,7 +38,7 @@ module.exports = {
         'dialect': 'sqlite',
         'port': 5432,
         'sync': {'force': true},
-        'storage': config.root + 'database.sqlite',
+        'storage': config.root + '/database.sqlite',
         'logging': false
     },
     'production': {
