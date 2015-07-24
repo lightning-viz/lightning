@@ -66,8 +66,10 @@ var importViz = function() {
 
     if(name) {
         request.post(url, _.extend(params, {name: name}), function(err, res) {
-            if(err) {
-                alert('problem saving!');
+            console.log(err);
+            console.log(res);
+            if(err || res.status === 500) {
+                alert('There was a problem saving! Make sure the the name you provided is unique.');
             } else {
                 window.location.href = '/visualization-types/' + res.body.id;
             }
