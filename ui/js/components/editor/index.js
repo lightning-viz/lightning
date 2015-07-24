@@ -3,7 +3,8 @@ var _ = require('lodash');
 // var RadioGroup = require('react-radio-group');
 // var Sources = require('./sources');
 
-var Data = require('./data');
+var DataComponent = require('./data');
+var VizComponent = require('./viz');
 
 var styles = {
 };
@@ -12,244 +13,39 @@ var Editor = React.createClass({
 
     getDefaultProps: function() {
         return {
-            datasets: window.lightning.datasets || []
-        }
+            datasets: window.lightning.editor.datasets || [],
+            name: window.lightning.editor.name || ''
+        };
     },
 
+    getInitialState: function() {
+        return {
+            data: this.props.datasets.length ? this.props.datasets[0].data : null
+        };
+    },
+
+    handleDataChange: function(data) {
+        this.setState({
+            data: data
+        });
+    },
     render: function() {
         return (
             <div>
-                <Data datasets={this.props.datasets} />
+                <div className={'editor-code-container'}>
+                    <div className={'visualization-type'}>
+                        <div className={'section-header'}>
+                            <h3>Data</h3>
+                        </div>
+                        <DataComponent datasets={this.props.datasets} selectedData={this.state.data} onDataChange={this.handleDataChange} />
+                    </div>
+                </div>
+                <div className={'editor-viz-container'}>
+                    <VizComponent data={this.state.data} name={this.props.name} />
+                </div>
             </div>
         );
     },
 });
 
 module.exports = Editor;
-
-
-
-
-
-// var Viz;
-
-// var IS_EDITING = $('.feed-item-container.full').length === 0;
-
-// setTimeout(function() {
-//     var $container = $('.feed-item-container').not('.full').addClass('fixed');
-//     if($(window).height() < 900) {
-//         $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
-//     }
-// }, 500);
-
-
-// var getVizTypeValues = function() {
-
-//     var params = {};
-
-//     var fieldMap = {
-//         javascript: jsEditor,
-//         styles: styleEditor
-//     };
-//     _.each(fieldMap, function(val, key) {
-
-//         var editorText = val.getValue();
-//         if(editorText.trim()) {
-//             params[key] = editorText;
-//         }
-//     });
-
-//     var sampleData = [];
-
-//     $('.data-container .data-button').each(function() {
-//         sampleData.push({
-//             name: $(this).text(),
-//             data: $(this).data('data')
-//         });
-//     });
-
-//     params.sampleData = sampleData;
-
-//     return params;
-
-// };
-
-// var importViz = function() {
-//     console.log('IMPORT VIZ');
-//     var url = '/visualizations/types/';
-//     var params = {};
-//     if(IS_EDITING) {
-//         params = getVizTypeValues();
-//     }
-//     var name = prompt("Please enter the name for this Visualization Type");
-
-//     if(name) {
-//         request.post(url, _.extend(params, {name: name}), function(err, res) {
-//             if(err) {
-//                 alert('problem saving!');
-//             } else {
-//                 window.location.href = '/visualization-types/' + res.body.id;
-//             }
-//         });
-//     }   
-// };
-
-// var saveVis = function() {
-//     console.log('SAVE VIZ');
-
-//     var url = '/visualizations/types/' + $('.visualization-type').data('id');
-//     var params = getVizTypeValues();
-
-//     request.put(url, params, function(error, res){
-//         if(error) {
-            
-//             $('.problem-saving').slideDown(function() {
-//                 var $self = $(this);
-//                 setTimeout(function() {
-//                     $self.slideUp('slow');    
-//                 }, 2000);        
-//             });
-//         } else {
-//             $('.saved').slideDown(function() {
-//                 var $self = $(this);
-//                 setTimeout(function() {
-//                     $self.slideUp('slow');    
-//                 }, 2000);        
-//             });
-//         }
-//     });
-
-// };
-
-// $('#save-button').click(saveVis);
-// $('#import-button').click(importViz);
-
-
-// var updateJS = function () {
-
-//     var dynamicBundleName = 'dynamicallyBundledJavascript';
-
-//     var jsVal = jsEditor.getValue();
-
-//     request.post('/js/dynamic', {javascript: jsVal}, function(err, res) {
-        
-//         if(err) {
-//             return console.log('Error bundling javascript!');
-//         }
-
-//         try {
-//             eval(res.text);
-//             $('.feed-item-container').removeClass('fixed');
-//             Viz = require(dynamicBundleName);
-//             $('.feed-item').html('');
-//             new Viz('.feed-item', data, images, options);
-//             $('.feed-item-container').not('.full').addClass('fixed');
-//         } catch (e) {
-//             console.log('error evaluating js');
-//         }
-//     }); 
-// };
-
-// var updateStyles = function() {
-    
-//     var stylesVal = styleEditor.getValue();
-
-//     request.post('/css/dynamic', {styles: stylesVal}, function(error, res) {
-//         $('#viz-styles').removeAttr('href').replaceWith('<style id="viz-styles">');
-//         $('#viz-styles').html(res.text);
-//     });
-// };
-
-// var updateMarkup = function() {
-
-// };
-// var updateData = function() {
-//     try {
-//         data = JSON.parse(dataEditor.getValue());
-//         $('.feed-item-container').removeClass('fixed');
-//         $('.feed-item').html('');
-//         new Viz('.feed-item', data, images, options);
-//         $('.feed-item-container').addClass('fixed');
-//     } catch(e) {
-//         console.log('fail');
-//     } 
-// };
-
-
-// var jsEditor, styleEditor, markupEditor, dataEditor;
-
-// if(jsEditorEl) {
-//     jsEditor = CodeMirror.fromTextArea(jsEditorEl, {
-//         mode: 'text/javascript',
-//         theme : 'solarized light',
-//         extraKeys: {
-//             'Ctrl-Enter': updateJS,
-//             'Ctrl-S': saveVis
-//         },
-//         indentUnit: 4
-//     });
-// }
-// if(styleEditorEl) {
-//     styleEditor = CodeMirror.fromTextArea(styleEditorEl, {
-//         mode: 'text/x-sass',
-//         theme : 'solarized light',
-//         extraKeys: {
-//             'Ctrl-Enter': updateStyles,
-//             'Ctrl-S': saveVis
-//         },
-//         indentUnit: 4
-//     });
-// }
-
-// if(markupEditorEl) {
-//     markupEditor = CodeMirror.fromTextArea(markupEditorEl, {
-//         mode: 'text/x-jade',
-//         theme : 'solarized light',
-//         extraKeys: {
-//             'Ctrl-Enter': updateMarkup,
-//             'Ctrl-S': saveVis
-//         },
-//         indentUnit: 4
-//     });
-// }
-// if(dataEditorEl) {
-//     dataEditor = CodeMirror.fromTextArea(dataEditorEl, {
-//         mode: 'text/x-jade',
-//         theme : 'solarized light',
-//         extraKeys: {
-//             'Ctrl-Enter': updateData,
-//             'Ctrl-S': saveVis
-//         },
-//         indentUnit: 4
-//     });
-// }
-
-
-// $('.section-header').click(function() {
-//     $(this).nextAll('.CodeMirror').first().slideToggle();
-// })
-
-// $('.data-button').click(function() {
-//     console.log($(this).data('data'));
-//     dataEditor.setValue(JSON.stringify($(this).data('data')));
-//     updateData();
-// });
-
-// var $feedItem = $('.feed-item');
-// var type = $feedItem.data('type');
-// var data = $feedItem.data('data');
-
-// console.log(data);
-// var images = $feedItem.data('images');
-// var options = $feedItem.data('options');
-
-// setTimeout(function() {
-
-//     Viz =  require(type);
-
-//     var vid = $(this).attr('id');
-//     new Viz('.feed-item', data, images, options);
-
-//     $feedItem.data('initialized', true);
-//     $feedItem.attr('data-initialized', true);
-// }, 0);

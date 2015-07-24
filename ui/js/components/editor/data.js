@@ -10,16 +10,8 @@ var styles = {
 
 var Editor = React.createClass({
 
-    getInitialState: function() {
-        return {
-            selectedData: this.props.datasets.length ? this.props.datasets[0] : null
-        };
-    },
-
     handleSelectDataset: function(i) {
-        this.setState({
-            selectedData: this.props.datasets[i]
-        });
+        this.props.onDataChange(this.props.datasets[i].data);
     },
 
     renderDataset: function(dataset, i) {
@@ -34,9 +26,8 @@ var Editor = React.createClass({
         return _.map(this.props.datasets, this.renderDataset, this);
     },
 
-    componentDidUpdate: function() {
-        console.log('highlighting')
-        setTimeout(hljs.initHighlighting, 450);
+    componentDidUpdate: function(prevProps, prevState) {
+        // hljs.initHighlighting();
     },
 
     render: function() {
@@ -48,7 +39,7 @@ var Editor = React.createClass({
                 <div>
                     <pre>
                         <code className={''}>
-                            {JSON.stringify(this.state.selectedData, null, 2)}
+                            {JSON.stringify(this.props.selectedData, null, 2)}
                         </code>
                     </pre>
                 </div>

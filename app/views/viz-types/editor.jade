@@ -27,51 +27,10 @@ block container
 
 
 
+
+        #editor-component
+                    
             
-        .editor-code-container
-            
-            .visualization-type(data-id="#{vizType.id}", data-collapse)
-
-                //- .section-header
-                //-     h3
-                //-         | javascript
-                //- textarea#js-editor
-                //-     | #{vizType.javascript}
-            
-            
-                //- .section-header
-                //-     h3
-                //-         | styles
-                //- textarea#style-editor
-                //-     if vizType.styles
-                //-         | #{vizType.styles}
-                //-     else
-                //-         | .#{vizType.name} {
-                //-         |       
-                //-         | }
-
-                .section-header
-                    h3
-                        | data
-
-
-                #data-component
-
-
-
-                //- if vizType.markup            
-                //-     .section-header
-                //-         h3
-                //-             | markup
-                //-     textarea#markup-editor
-                //-         | #{vizType.markup}
-            
-            
-        .editor-viz-container
-            .feed-item-container
-                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
-
-
     .saved
         | Saved!
     .problem-saving
@@ -84,5 +43,8 @@ block scripts
     script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{vizType.name}")
     script.
         window.lightning = window.lightning || {};
-        window.lightning.datasets = !{JSON.stringify(vizType.sampleData)}
+        window.lightning.editor = {
+            datasets: !{JSON.stringify(vizType.sampleData)},
+            name: "#{vizType.name}"
+        };
     script(src='#{STATIC_URL}js/editor.js')
