@@ -206,22 +206,19 @@ exports.preview = function(req, res, next) {
                             scssData += '\n}';
                             sass.render({
                                 data: scssData,
-                                success: function(css) {
-
+                                success: function(err, sassResults) {
                                     if(req.url.indexOf('/preview/full') > -1) {
                                         return res.render('viz-types/full-preview', {
                                             vizType: vizType,
                                             javascript: javascript,
-                                            css: css
+                                            css: sassResults.css
                                         });
                                     }
                                     return res.render('viz-types/preview-editor', {
                                         vizType: vizType,
                                         javascript: javascript,
-                                        css: css
+                                        css: sassResults.css
                                     });
-
-                                    
                                 }
                             });
                         } else {

@@ -1,11 +1,11 @@
 
 var url = require('url');
+var config = require('./config');
 
 var dbUrl = null;
 if(process.env.DATABASE_URL) {
         dbUrl = url.parse(process.env.DATABASE_URL);
 }
-
 
 module.exports = {
     'development': {
@@ -16,7 +16,7 @@ module.exports = {
         'dialect': 'sqlite',
         'port': 5432,
         'sync': {'force': true},
-        'storage': 'database.sqlite',
+        'storage': config.root + '/database.sqlite',
         'logging': false
     },  
     'test': {
@@ -27,7 +27,7 @@ module.exports = {
         'dialect': 'postgres',
         'port': 5432,
         'sync': {'force': true},
-        'storage': 'database.sqlite',
+        'storage': config.root + '/database.sqlite',
         'logging': false
     },
     'test-sqlite': {
@@ -38,7 +38,7 @@ module.exports = {
         'dialect': 'sqlite',
         'port': 5432,
         'sync': {'force': true},
-        'storage': 'database.sqlite',
+        'storage': config.root + '/database.sqlite',
         'logging': false
     },
     'production': {

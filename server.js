@@ -111,3 +111,8 @@ console.log(logo.magenta);
 
 console.log('Lightning started on port: ' + port);
 console.log('Running database: ' + dbConfig.dialect);
+
+
+module.exports = server;
+
+

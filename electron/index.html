@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	  <style type="text/css">
+
+	  	body {
+	  		background: linear-gradient( to bottom, rgb(245,245,245), rgb(225,225,225) ) fixed;
+	  	}
+
+	    .icon {
+	    	position: relative; 
+	    	top: 5px;
+	    	left: 8px;
+	    	width: 33px;
+	    	padding-right: 20px;
+	    	cursor: pointer;
+	    }
+
+	    .info {
+	    	font-size: 16px; 
+	    	font-family: Helvetica;
+	    	max-width: 135px;
+	    	display: inline-block;
+	    	font-weight: 100;
+	    }
+
+	    .buttons {
+	    	max-width: 40px;
+	    	display: inline-block;
+	    	left: -5px;
+	    }
+
+	    .container {
+	    	max-width:400px; 
+	    	position: absolute; 
+	    	padding-top: 5px; 
+	    	padding-bottom: 10px;
+	    	cursor: default;
+			-moz-user-select: none; 
+			-webkit-user-select: none; 
+			-ms-user-select:none; 
+			user-select:none;
+			-o-user-select:none;
+	    }
+
+	    .host {
+	    	line-height: 1.5em;
+	    	font-weight: 800;
+	    }
+
+	    .btn {
+	    	border-radius: 10px;
+	    	position: relative;
+	    	font-size: 12px;
+	    	font-weight: 100;
+	    	right: 0px;
+	    	top: -6px;
+	    	cursor: pointer;
+	    	margin-top: 5px;
+	    	margin-left: 2px;
+	    }
+
+	    .btn.quit {
+	    	background-color: transparent;
+	    	color: rgb(239,105,131);
+	    	border: 2px solid rgb(239,105,131);
+	    }
+
+	    .btn.quit:hover {
+	    	background-color: rgb(239,105,131);
+	    	color: white;
+	    }
+
+	    .btn.browser {
+	    	background-color: transparent;
+	    	color: rgb(112,204,118);
+	    	border: 2px solid rgb(112,204,118);
+	    }
+
+	    .btn.browser:hover {
+	    	background-color: rgb(112,204,118);
+	    	color: white;
+	    }
+
+	    .btn:focus {
+	    	outline:0;
+	    }
+
+	  </style>
+  </head>
+  <body>
+  	<div class='container'>
+	  	<img class='icon' onclick='homepage()' src='Menu.svg' width='48px'></img>
+	    <span class='info'>Lightning server running at <span class='host'>localhost:3000</span></span>
+	    <span class='buttons'>
+		    <button class='btn browser' onclick='browser()'>OPEN</button>
+		    <button class='btn quit' onclick='quit()'>QUIT</button>
+	    </span>
+    </div>
+  </body>
+</html>
+
+<script>
+	var ipc = require('ipc')
+	function quit() {
+		ipc.send('terminate')
+	}
+	function browser() {
+		ipc.send('browser')
+	}
+	function homepage() {
+		ipc.send('homepage')
+	}
+</script>
