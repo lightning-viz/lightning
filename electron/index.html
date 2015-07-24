@@ -35,22 +35,31 @@
 			-o-user-select:none;
 	    }
 
+	    .host {
+	    	line-height: 1.5em;
+	    	font-weight: 800;
+	    }
+
 	    .btn {
-	    	border: 2px solid rgb(146,119,239);
+	    	border: 2px solid rgb(239,69,102);
 	    	background-color: rgb(232,232,232);
 	    	border-radius: 10px;
 	    	position: relative;
-	    	font-size: 16px;
+	    	font-size: 13px;
 	    	font-weight: 100;
 	    	right: 0px;
 	    	top: -2px;
 	    	cursor: pointer;
-	    	color: rgb(146,119,239);
+	    	color: rgb(239,69,102);
 	    }
 
 	    .btn:hover{
-	    	background-color: rgb(146,119,239);
+	    	background-color: rgb(239,69,102);
 	    	color: white;
+	    }
+
+	    .btn:focus {
+	    	outline:0;
 	    }
 
 	  </style>
@@ -58,8 +67,8 @@
   <body>
   	<div class='container'>
 	  	<img class='icon' src='Menu.svg' width='48px'></img>
-	    <span class='info'>Lightning server running at <b>localhost:3000</b></span>
-	    <button class='btn' onclick='quit()'>stop</button>
+	    <span class='info'>Lightning server running at <span class='host'>localhost:3000</span></span>
+	    <button class='btn' onclick='quit()'>QUIT</button>
     </div>
   </body>
 </html>
