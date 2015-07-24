@@ -9,15 +9,17 @@
 
 	    .icon {
 	    	position: relative; 
-	    	left: 0px;
-	    	width: 48px;
-	    	padding-right: 10px;
+	    	top: 5px;
+	    	left: 8px;
+	    	width: 33px;
+	    	padding-right: 20px;
+	    	cursor: pointer;
 	    }
 
 	    .info {
-	    	font-size: 20px; 
+	    	font-size: 16px; 
 	    	font-family: Helvetica;
-	    	max-width: 150px;
+	    	max-width: 135px;
 	    	display: inline-block;
 	    	font-weight: 100;
 	    }
@@ -25,12 +27,13 @@
 	    .buttons {
 	    	max-width: 40px;
 	    	display: inline-block;
+	    	left: -5px;
 	    }
 
 	    .container {
 	    	max-width:400px; 
 	    	position: absolute; 
-	    	padding-top: 10px; 
+	    	padding-top: 5px; 
 	    	padding-bottom: 10px;
 	    	cursor: default;
 			-moz-user-select: none; 
@@ -48,17 +51,17 @@
 	    .btn {
 	    	border-radius: 10px;
 	    	position: relative;
-	    	font-size: 13px;
+	    	font-size: 12px;
 	    	font-weight: 100;
 	    	right: 0px;
-	    	top: -10px;
+	    	top: -6px;
 	    	cursor: pointer;
 	    	margin-top: 5px;
-	    	margin-left: 10px;
+	    	margin-left: 2px;
 	    }
 
 	    .btn.quit {
-	    	background-color: rgb(232,232,232);
+	    	background-color: transparent;
 	    	color: rgb(239,105,131);
 	    	border: 2px solid rgb(239,105,131);
 	    }
@@ -69,7 +72,7 @@
 	    }
 
 	    .btn.browser {
-	    	background-color: rgb(242,242,242);
+	    	background-color: transparent;
 	    	color: rgb(112,204,118);
 	    	border: 2px solid rgb(112,204,118);
 	    }
@@ -87,7 +90,7 @@
   </head>
   <body>
   	<div class='container'>
-	  	<img class='icon' src='Menu.svg' width='48px'></img>
+	  	<img class='icon' onclick='homepage()' src='Menu.svg' width='48px'></img>
 	    <span class='info'>Lightning server running at <span class='host'>localhost:3000</span></span>
 	    <span class='buttons'>
 		    <button class='btn browser' onclick='browser()'>OPEN</button>
@@ -104,5 +107,8 @@
 	}
 	function browser() {
 		ipc.send('browser')
+	}
+	function homepage() {
+		ipc.send('homepage')
 	}
 </script>
