@@ -33,6 +33,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development nodemon --watch app --watch public/js server.js ",
+    "electron": "electron electron/",
     "test": "mocha --timeout 20000",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
     "createdb": "psql -c 'create database \"lightning-viz\";'",
@@ -143,5 +144,8 @@
     "webshot": "^0.15.3",
     "winston": "^0.7.3",
     "yargs": "^1.3.3"
+  },
+  "devDependencies": {
+    "electron": "^0.4.1"
   }
 }
