@@ -1,17 +1,21 @@
 var models = require('../app/models');
+var Q = require('q');
 var _ = require('lodash');
-
+var config = require('../config/config');
+var defaultVisualizations = config.defaultVisualizations || [];
 
 module.exports = function(cb) {
-    models.VisualizationType
-        .createManyFromRepoURL('https://github.com/mathisonian/lightning-default-visualizations')
-        .spread(function() {
-            var vizTypes = Array.prototype.slice.call(arguments, 0);
-            console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
-            cb && cb();
-        }).fail(function(err) {
-            console.log(err);
-            cb && cb(err);
-        });
+
+    Q.all(_.map(defaultVisualizations, function(moduleName) {
+        return models.VisualizationType.createFromNPM(moduleName);
+    }))
+    .spread(function() {
+        var vizTypes = Array.prototype.slice.call(arguments, 0);
+        console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
+        cb && cb();
+    }).fail(function(err) {
+        console.log(err);
+        cb && cb(err);
+    });
 
 };

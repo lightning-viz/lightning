@@ -12,12 +12,23 @@ var test = require('./env/test');
 var production = require('./env/production');
 
 
+var defaultVisualizations = argv.default_visualizations ? argv.default_visualizations : process.env.LIGHTNING_DEFAULT_VISUALIZATIONS;
+if(defaultVisualizations) {
+  defaultVisualizations = defaultVisualizations.join(',');
+} else {
+  defaultVisualizations = [
+    'lightning-graph'
+  ];
+}
+
+
 var defaults = {
   root: path.normalize(__dirname + '/..'),
   auth: {
     username: argv.username ? '' + argv.username : process.env.LIGHTNING_USERNAME,
     password: argv.password ? '' + argv.password : process.env.LIGHTNING_PASSWORD,
-  }
+  },
+  defaultVisualizations: defaultVisualizations
 };
 
 
