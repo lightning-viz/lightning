@@ -70,7 +70,7 @@
     "datamaps-all-browserify": "^0.3.4",
     "easyimage": "^1.0.1",
     "expect.js": "^0.3.1",
-    "express": "~4.0.0",
+    "express": "^4.13.1",
     "forever": "^0.11.1",
     "fs-extra": "^0.11.1",
     "geojson-validation": "^0.1.5",

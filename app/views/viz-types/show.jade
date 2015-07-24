@@ -27,8 +27,8 @@ block content
 
                     a(href="./edit/#{vizType.id}").preview-container
                         .image-container
-                            if vizType.image
-                                .viz-preview()
+                            if vizType.thumbnailLocation
+                                .viz-preview(style="background-image:url(/visualization-types/#{vizType.id}/thumbnail);")
                             else
                                 .viz-preview.noimg
 

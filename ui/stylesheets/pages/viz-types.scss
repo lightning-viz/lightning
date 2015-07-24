@@ -32,6 +32,8 @@ $hue-range: 35;
     display: block;
     width: 100%;
     background-position: 50% 50%;
+    background-size: 100%;
+
     @include bg-size(cover);
     
     margin-top: 10px;

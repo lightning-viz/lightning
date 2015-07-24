@@ -392,7 +392,6 @@ exports.thumbnail = function (req, res, next) {
 
     models.VisualizationType.find(req.params.vid)
         .then(function(type) {
-
             if(type.thumbnailLocation) {
                 return res.sendFile(type.thumbnailLocation);
             }
