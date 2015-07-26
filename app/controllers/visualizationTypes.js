@@ -20,22 +20,6 @@ console.log('searching');
 //     });
 // });
 
-// function protectRequire(str) {
-//     var protectedVars = ['define', 'require'];
-//     var initialCode = ';';
-//     var postCode = ';';
-//     _.each(protectedVars, function(v) {
-//         initialCode += 'window._' + v + ' = window.' + v + ';';
-//         initialCode += 'window.' + v + ' = undefined;';
-
-//         postCode += 'window.' + v + ' = window._' + v + ';';
-//     });
-
-//     return initialCode + str;// + postCode;
-
-// }
-
-
 exports.index = function (req, res, next) {
 
     models.VisualizationType.findAll()
@@ -162,7 +146,6 @@ exports.preview = function(req, res, next) {
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
-    
 
     var vizTypePromise;
 
@@ -206,60 +189,40 @@ exports.preview = function(req, res, next) {
                         });
                     }
 
-
                     b.bundle(function(err, buf) {
 
                         if(err) {
                             return next(err);
                         }               
 
-                        
-                        // var javascript = protectRequire(buf.toString('utf8'));
                         var javascript = buf.toString('utf8');
 
-
+                        var scssData = '';
                         if(vizType.styles) {
-                            var scssData = '#lightning-body {\n';
+                            scssData = '#lightning-body {\n';
                             scssData += vizType.styles + '\n';
                             scssData += '\n}';
-                            sass.render({
-                                data: scssData,
-                                success: function(css) {
+                        }
+                        sass.render({
+                            data: scssData,
+                            success: function(css) {
 
-                                    if(req.url.indexOf('/preview/full') > -1) {
-                                        return res.render('viz-types/full-preview', {
-                                            vizType: vizType,
-                                            javascript: javascript,
-                                            css: css
-                                        });
-                                    }
-                                    return res.render('viz-types/preview-editor', {
+                                if(req.url.indexOf('/preview/full') > -1) {
+                                    return res.render('viz-types/full-preview', {
                                         vizType: vizType,
                                         javascript: javascript,
                                         css: css
                                     });
-                                    
                                 }
-                            });
-                        } else {
-
-                            if(req.url.indexOf('/preview/full') > -1) {
-                                return res.render('viz-types/full-preview', {
+                                return res.render('viz-types/preview-editor', {
                                     vizType: vizType,
                                     javascript: javascript,
-                                    css: ''
+                                    css: css
                                 });
+                                
                             }
-                            return res.render('viz-types/preview-editor', {
-                                vizType: vizType,
-                                javascript: javascript,
-                                css: ''
-                            });                            
-                        }
-
+                        });
                     });
-
-
                 });
 
         }).fail(function(err) {
@@ -337,6 +300,11 @@ exports.importNPM = function(req, res, next) {
 
             b.require(name);
             b.bundle(function(err, buf) {
+
+                if(err) {
+                    console.log(err);
+                    return res.status(500).send('error compiling module').end();
+                }
                 var javascript = buf.toString('utf8');
 
                 return res.render('viz-types/full-preview', {
