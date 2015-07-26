@@ -150,12 +150,13 @@ module.exports = function(sequelize, DataTypes) {
 
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
-
-                return Q.nfcall(command, [name])
-                        .then(function() {
-                            console.log(('Successfully installed ' + name).green);
-                            return self._buildFromNPM(name, preview);
-                        });
+                return Q.nfcall(npm.commands.uninstall, [name])
+                    .then(function() {
+                        return Q.nfcall(command, [name])
+                    }).then(function() {
+                        console.log(('Successfully installed ' + name).green);
+                        return self._buildFromNPM(name, preview);
+                    });
             },
 
             createFromNPM: function(name) {
