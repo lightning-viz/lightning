@@ -156,13 +156,13 @@ exports.preview = function(req, res, next) {
             name += '/' + req.query.path;
         }
 
-        name = /[^/]*$/.exec(name)[0];
+        name = req.query.name || /[^/]*$/.exec(name)[0];
 
         vizTypePromise = models.VisualizationType
             .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
     } else if(req.query.path && process.env.NODE_ENV !== 'production') {
         var p = path.resolve(req.query.path);
-        var name = /[^/]*$/.exec(p)[0];
+        var name = req.query.name || /[^/]*$/.exec(p)[0];
 
         vizTypePromise = models.VisualizationType
             .createFromFolder(p, { name: name}, {preview: true});
@@ -196,30 +196,32 @@ exports.preview = function(req, res, next) {
                         }               
 
                         var javascript = buf.toString('utf8');
-
-                        var scssData = '';
+                        var scssData = '#lightning-body {\n';
                         if(vizType.styles) {
-                            scssData = '#lightning-body {\n';
                             scssData += vizType.styles + '\n';
-                            scssData += '\n}';
                         }
+                        scssData += '\n}';
                         sass.render({
                             data: scssData,
                             success: function(css) {
-
                                 if(req.url.indexOf('/preview/full') > -1) {
                                     return res.render('viz-types/full-preview', {
                                         vizType: vizType,
                                         javascript: javascript,
-                                        css: css
+                                        css: css,
+                                        path: path.resolve(req.query.path || ''),
+                                        url: req.query.url,
+                                        source: req.query.url ? 'gitRepo' : 'localFolder'
                                     });
                                 }
                                 return res.render('viz-types/preview-editor', {
                                     vizType: vizType,
                                     javascript: javascript,
-                                    css: css
+                                    css: css,
+                                    path: path.resolve(req.query.path || ''),
+                                    url: req.query.url,
+                                    source: req.query.url ? 'gitRepo' : 'localFolder'
                                 });
-                                
                             }
                         });
                     });
@@ -264,7 +266,9 @@ exports.previewNPM = function(req, res, next) {
                 return res.render('viz-types/preview-editor', {
                     vizType: vizType,
                     javascript: javascript,
-                    css: ''
+                    css: '',
+                    location: location,
+                    source: 'npm'
                 });
             });
         }).catch(function(err) {
@@ -304,14 +308,20 @@ exports.importViz = function(req, res, next) {
     var backURL = req.header('Referer');
     var name = req.body.name  || req.query.name;
     var url = req.body.url || req.query.url;
+    var path = req.body.path || req.query.path;
 
-    console.log(name);
-    console.log(url);
+    var createPromise;
+    if(url) {
+        createPromise = models.VisualizationType.createFromRepoURL(url, {name: name});
+    } else if(path) {
+        createPromise = models.VisualizationType.createFromFolder(path, {name: name}, {preview: false});
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    models.VisualizationType
-        .createFromRepoURL(url, { name: name})
-        .then(function() {
-            return res.redirect(backURL);
+    createPromise
+        .then(function(viz) {
+            return res.redirect('/visualization-types/edit/' + viz.id);
         }).fail(function(err) {
             next(err);
         });
@@ -361,14 +371,12 @@ exports.importPreviewHandler = function(req, res, next) {
         } else {
             return exports.previewNPM(req, res, next);
         }
-    } else if(method === 'git') {
+    } else if(method === 'git' || method === 'local') {
         if(importPreview === 'import') {
             return exports.importViz(req, res, next);
         } else {
             return exports.preview(req, res, next);
         }
-    } else {
-        return exports.preview(req, res, next);
     }
 
 }

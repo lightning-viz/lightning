@@ -19,11 +19,19 @@ var isEmpty = function(str) {
 
 var Git = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            initialImportPreview: 'import',
+            initialName: '',
+            initialUrl: ''
+        }
+    },
+
     getInitialState: function() {
         return {
-            importPreview: 'import',
-            name: '',
-            url: ''
+            importPreview: this.props.initialImportPreview,
+            name: this.props.initialName,
+            url: this.props.initialUrl
         }
     },
 
@@ -108,11 +116,11 @@ var Git = React.createClass({
                 </div>
                 <div>
                     Repo URL: 
-                    <input type={'text'} onChange={this.handleChangeURL} />
+                    <input type={'text'} onChange={this.handleChangeURL} value={this.state.url} />
                 </div>
                 <div>
                     Visualization Name:
-                    <input type={'text'} onChange={this.handleChangeName} />
+                    <input type={'text'} onChange={this.handleChangeName} value={this.state.name} />
                 </div>
                 <div className={'button'} onClick={this.handleSubmit}>
                     Submit

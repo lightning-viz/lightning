@@ -19,10 +19,19 @@ var isEmpty = function(str) {
 
 var Local = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            initialImportPreview: 'import',
+            initialName: '',
+            initialPath: ''
+        }
+    },
+
     getInitialState: function() {
         return {
-            name: '',
-            path: ''
+            importPreview: this.props.initialImportPreview,            
+            name: this.props.initialName,
+            path: this.props.initialPath
         }
     },
 
@@ -46,12 +55,18 @@ var Local = React.createClass({
         });  
     },
 
+    handleSelectImportPreview: function(importPreview) {
+        this.setState({
+            importPreview: importPreview
+        });
+    },
+
     handleSubmit: function() {
         if(isEmpty(this.state.path) || isEmpty(this.state.name)) {
             return;
         }
 
-        var url = '/visualization-types/load/preview/local/';
+        var url = '/visualization-types/load/' + this.state.importPreview + '/local/';
         url += '?' + this.serialize({
             path: this.state.path,
             name: this.state.name
@@ -92,14 +107,20 @@ var Local = React.createClass({
     render: function() {
 
         return (
-            <div>
+            <div>                
+                <div>
+                    Preview or Import?
+                    <RadioGroup selectedValue={this.state.importPreview} onChange={this.handleSelectImportPreview}>
+                        {this.renderImportPreviewRadioGroup}
+                    </RadioGroup>
+                </div>
                 <div>
                     Folder Path: 
-                    <input type={'text'} onChange={this.handleChangePath} />
+                    <input type={'text'} onChange={this.handleChangePath} value={this.state.path} />
                 </div>
                 <div>
                     Visualization Name:
-                    <input type={'text'} onChange={this.handleChangeName} />
+                    <input type={'text'} onChange={this.handleChangeName} value={this.state.name} />
                 </div>
                 <div className={'button'} onClick={this.handleSubmit}>
                     Submit

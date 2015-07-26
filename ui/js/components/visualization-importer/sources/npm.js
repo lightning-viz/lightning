@@ -19,12 +19,20 @@ var isEmpty = function(str) {
 
 var NPM = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            initialLocation: 'registry',
+            initialImportPreview: 'import',
+            initialName: ''
+        };
+    },
+
     getInitialState: function() {
         return {
-            location: 'registry',
-            importPreview: 'import',
-            name: 'name'
-        }
+            location: this.props.initialLocation,
+            importPreview: this.props.initialImportPreview,
+            name: this.props.initialName
+        };
     },
 
     serialize: function(obj) {
@@ -143,7 +151,7 @@ var NPM = React.createClass({
                 </div>
                 <div>
                     Module Name: 
-                    <input type={'text'} onChange={this.handleNameChange} />
+                    <input type={'text'} onChange={this.handleNameChange} value={this.state.name} />
                 </div>
                 <div className={'button'} onClick={this.handleSubmit}>
                     Submit

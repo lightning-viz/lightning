@@ -16,17 +16,20 @@ block container
                         | &larr; back
 
                 .action-container
-                    a(href="#")#import-button
+                    a(href="#import-visualization-modal", rel="modal:open")
                         .button
                             | Import
 
         #editor-component
-                    
-            
+
     .saved
         | Saved!
     .problem-saving
         | Problem Saving...
+
+
+    .modal#import-visualization-modal
+        #visualization-importer
 
 
 
@@ -39,7 +42,11 @@ block scripts
         window.lightning = window.lightning || {};
         window.lightning.editor = {
             datasets: !{JSON.stringify(vizType.sampleData)},
-            name: "#{vizType.name}"
+            name: "#{vizType.name}",
+            location: "#{location}",
+            source: "#{source}",
+            url: "#{url}",
+            path: "#{path}"
         };
-    script(src='#{STATIC_URL}js/editor.js')
+    script(src='#{STATIC_URL}js/preview.js')
 

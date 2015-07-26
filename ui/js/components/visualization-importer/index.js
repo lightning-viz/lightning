@@ -18,9 +18,15 @@ var styles = {
 
 var Importer = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            initialSource: 'npm',
+        };
+    },
+
     getInitialState: function() {
         return {
-            source: 'npm'
+            source: this.props.initialSource
         }
     },
 
@@ -72,7 +78,13 @@ var Importer = React.createClass({
                     <RadioGroup selectedValue={this.state.source} onChange={this.handleSelectSource}>
                         {this.renderRadioGroup}
                     </RadioGroup>
-                    <Source />
+                    <Source
+                        initialUrl={this.props.url}
+                        initialPath={this.props.path}
+                        initialName={this.props.name}
+                        initialLocation={this.props.location}
+                        initialImportPreview={this.props.importPreview}
+                         />
                 </div>
             </div>
         );

@@ -330,11 +330,9 @@ module.exports = function(sequelize, DataTypes) {
                     funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
                 }
                 if(self.styles) {
-                    console.log(stylePath + '/' + self.name + '.scss');
                     funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
                 }
                 if(self.markup) {
-                    console.log(markupPath + '/' + self.name + '.jade');
                     funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
                 }
                 return Q.all(funcs);
