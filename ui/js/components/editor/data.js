@@ -1,8 +1,7 @@
                 
 var React = require('react');
 var _ = require('lodash');
-var hljs = require('highlight.js');
-
+var Highlight = require('react-highlight');
 
 var styles = {
 };
@@ -10,8 +9,25 @@ var styles = {
 
 var Editor = React.createClass({
 
+    getDefaultProps: function() {
+        return {
+            initialSelectedData: {},
+            datasets: [],
+        }
+    },
+
+    getInitialState: function() {
+        return {
+            selectedData: this.props.initialSelectedData
+        };
+    },
+
     handleSelectDataset: function(i) {
-        this.props.onDataChange(this.props.datasets[i].data);
+        var selectedData = this.props.datasets[i].data;
+        this.props.onDataChange(selectedData);
+        this.setState({
+            selectedData: selectedData
+        });
     },
 
     renderDataset: function(dataset, i) {
@@ -27,7 +43,6 @@ var Editor = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        // hljs.initHighlighting();
     },
 
     render: function() {
@@ -37,11 +52,9 @@ var Editor = React.createClass({
                     {this.renderDatasets()}
                 </div>
                 <div>
-                    <pre>
-                        <code className={''}>
-                            {JSON.stringify(this.props.selectedData, null, 2)}
-                        </code>
-                    </pre>
+                    <Highlight className='json'>
+                        {JSON.stringify(this.state.selectedData, null, 2)}
+                    </Highlight>
                 </div>
             </div>
         );

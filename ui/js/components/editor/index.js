@@ -37,7 +37,7 @@ var Editor = React.createClass({
                         <div className={'section-header'}>
                             <h3>Data</h3>
                         </div>
-                        <DataComponent datasets={this.props.datasets} selectedData={this.state.data} onDataChange={this.handleDataChange} />
+                        <DataComponent datasets={this.props.datasets} initialSelectedData={this.state.data} onDataChange={this.handleDataChange} />
                     </div>
                 </div>
                 <div className={'editor-viz-container'}>

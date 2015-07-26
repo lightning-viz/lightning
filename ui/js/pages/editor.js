@@ -1,3 +1,5 @@
+require('../lib/bigSlide');
+$('.menu-link').bigSlide();
 
 var React = require('react');
 

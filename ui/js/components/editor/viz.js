@@ -15,14 +15,22 @@ var Editor = React.createClass({
         // initialize the viz
         var Viz = require(this.props.name);
         this.setState({
-            viz: new Viz('#live-visualization-in-editor', this.props.data)
+            viz: new Viz('#live-visualization-in-editor', _.clone(this.props.data))
         });
+
+        setTimeout(function() {
+            console.log('timout')
+            var $container = $('#live-visualization-in-editor').addClass('fixed');
+            if($(window).height() < 900) {
+                $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
+            }
+        }, 500);
+
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        prevState.viz && 
-        prevState.viz.updateData && 
-        prevState.viz.updateData(prevProps.data);
+        var viz = this.state.viz;
+        viz && viz.updateData && viz.updateData(_.clone(prevProps.data));
     },
 
     render: function() {
