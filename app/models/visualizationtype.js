@@ -117,7 +117,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
                 try {
-                    sampleImages = require(name + '/data/sampel-images.json');
+                    sampleImages = require(name + '/data/sample-images.json');
                 } catch(e) {
                     sampleImages = sampleImages || [];
                 }
