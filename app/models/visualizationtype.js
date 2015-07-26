@@ -142,10 +142,13 @@ module.exports = function(sequelize, DataTypes) {
 
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
+                var loglevel = npm.config.get('loglevel');
                 return Q.nfcall(npm.commands.uninstall, [name])
-                    .then(function() {
+                    .then(function(results) {
+                        npm.config.set('loglevel', 'silent');
                         return Q.nfcall(command, [name])
                     }).then(function() {
+                        npm.config.set('loglevel');
                         console.log(('Successfully installed ' + name).green);
                         return self._buildFromNPM(name, preview);
                     });

@@ -233,7 +233,6 @@ exports.preview = function(req, res, next) {
 
 exports.previewNPM = function(req, res, next) {
 
-
     var location = req.params.location;
     var name = req.query.name;
 
@@ -247,7 +246,6 @@ exports.previewNPM = function(req, res, next) {
     } else {
         return res.status(500).send('Invalid location.').end();
     }
-
 
     linker(name)
         .then(function(vizType) {
@@ -263,13 +261,12 @@ exports.previewNPM = function(req, res, next) {
 
                 var javascript = buf.toString('utf8');
 
-                return res.render('viz-types/full-preview', {
+                return res.render('viz-types/preview-editor', {
                     vizType: vizType,
                     javascript: javascript,
                     css: ''
                 });
-            })
-
+            });
         }).catch(function(err) {
             console.log(err);
             return res.status(500).send('error compiling module').end();
@@ -291,7 +288,6 @@ exports.importNPM = function(req, res, next) {
     } else {
         return res.status(500).send('Invalid location.').end();
     }
-    console.log(creator);
 
     creator(name)
         .then(function(vizType) {

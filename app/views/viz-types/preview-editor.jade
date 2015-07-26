@@ -20,57 +20,14 @@ block container
                         .button
                             | Import
 
+        #editor-component
+                    
             
-        .editor-code-container
-            
-            .visualization-type(data-id="#{vizType.id}", data-collapse)
-                .section-header
-                    h3
-                        | javascript
-                textarea#js-editor
-                    | #{vizType.javascript}
-            
-            
-                .section-header
-                    h3
-                        | styles
-                textarea#style-editor
-                    if vizType.styles
-                        | #{vizType.styles}
-                    else
-                        | .feed-item-container {
-                        |       
-                        | }
-
-
-                .section-header
-                    h3
-                        | data
-
-                .data-container
-                    for sampleData in vizType.sampleData
-                        button(data-data="#{JSON.stringify(sampleData.data)}").data-button
-                            | #{sampleData.name}
-
-                textarea#data-editor
-                    if vizType.sampleData.length
-                        | #{JSON.stringify(vizType.sampleData[0].data)}
-                //- .section-header
-                //-     h3
-                //-         | markup
-                //- textarea#markup-editor
-                //-     | #{vizType.markup}
-            
-            
-        .editor-viz-container
-            .feed-item-container
-                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
-
-
     .saved
         | Saved!
     .problem-saving
         | Problem Saving...
+
 
 
 block scripts
@@ -78,4 +35,11 @@ block scripts
     script(src='#{STATIC_URL}js/basic.js')
     script.
         !{javascript}
+    script.
+        window.lightning = window.lightning || {};
+        window.lightning.editor = {
+            datasets: !{JSON.stringify(vizType.sampleData)},
+            name: "#{vizType.name}"
+        };
     script(src='#{STATIC_URL}js/editor.js')
+
