@@ -34,7 +34,7 @@ var Editor = React.createClass({
 
     render: function() {
         return (
-            <div id="live-visualization-in-editor">
+            <div id="live-visualization-in-editor" style={{outline: 'none'}}>
             </div>
         );
     },
