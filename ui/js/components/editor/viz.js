@@ -19,7 +19,6 @@ var Editor = React.createClass({
         });
 
         setTimeout(function() {
-            console.log('timout')
             var $container = $('#live-visualization-in-editor').addClass('fixed');
             if($(window).height() < 900) {
                 $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
