@@ -206,7 +206,7 @@ exports.preview = function(req, res, next) {
                             scssData += '\n}';
                             sass.render({
                                 data: scssData,
-                                success: function(err, sassResults) {
+                                success: function(sassResults) {
                                     if(req.url.indexOf('/preview/full') > -1) {
                                         return res.render('viz-types/full-preview', {
                                             vizType: vizType,
