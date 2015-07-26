@@ -45,15 +45,21 @@ var Editor = React.createClass({
     componentDidUpdate: function(prevProps, prevState) {
     },
 
+    formatData: function(data) {
+        return '{\n' + _.map(data, function(val, key) {
+            return '\t\"' + key + "\": " + JSON.stringify(val).split(',').join(', ') + ',';
+        }).join('\n') + '\n}';
+    },
+
     render: function() {
         return (
             <div>
                 <div className='data-container'>
                     {this.renderDatasets()}
                 </div>
-                <div>
+                <div contentEditable={true}>
                     <Highlight className='json'>
-                        {JSON.stringify(this.state.selectedData, null, 2)}
+                        {this.formatData(this.state.selectedData)}
                     </Highlight>
                 </div>
             </div>
