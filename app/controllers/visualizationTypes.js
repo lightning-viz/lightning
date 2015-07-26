@@ -295,25 +295,7 @@ exports.importNPM = function(req, res, next) {
 
     creator(name)
         .then(function(vizType) {
-
-            var b = browserify();
-
-            b.require(name);
-            b.bundle(function(err, buf) {
-
-                if(err) {
-                    console.log(err);
-                    return res.status(500).send('error compiling module').end();
-                }
-                var javascript = buf.toString('utf8');
-
-                return res.render('viz-types/full-preview', {
-                    vizType: vizType,
-                    javascript: javascript,
-                    css: ''
-                });
-            })
-
+            return res.redirect('/visualization-types/edit/' + vizType.id);
         }).catch(function(err) {
             console.log(err);
             return res.status(500).send('error compiling module').end();

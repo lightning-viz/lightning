@@ -12,9 +12,6 @@ var npm = require('npm');
 
 
 module.exports = function(sequelize, DataTypes) {
-
-
-
     var schema;
     if(isPostgres) {
         schema = {
@@ -282,8 +279,6 @@ module.exports = function(sequelize, DataTypes) {
 
 
                 }).spread(function(javascript, styles, markup, sampleData, sampleImages, packageJSON) {
-
-
                     sampleImages = JSON.parse(sampleImages);
                     if(!sampleImages.length) {
                         sampleImages = null;

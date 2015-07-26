@@ -57,17 +57,21 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
             var funcs = [];
             _.each(vizTypes, function(vizType) {
-                funcs.push(vizType.exportToFS(tmpPath));
+                if(!vizType.isModule) {
+                    funcs.push(vizType.exportToFS(tmpPath));
+                }
             });
 
             Q.all(funcs).spread(function() {
 
+                var shouldCache = false;
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
                         b.require(vizType.name, {
                             expose: vizType.name
                         });
                     } else {
+                        shouldCache = true;
                         var stream = resumer().queue(vizType.javascript).end();
                         b.require(stream, {
                             basedir: tmpPath,
@@ -84,7 +88,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
                     // var out = protectRequire(buf.toString('utf8'));
                     var out = buf.toString('utf8');
-                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
+                    if(shouldCache) {
+                        cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
+                    }
                     res.send(out); 
                 });
             });
