@@ -5,6 +5,7 @@ var _ = require('lodash');
 
 var DataComponent = require('./data');
 var VizComponent = require('./viz');
+require('../../lib/bigSlide');
 
 var styles = {
 };
@@ -22,6 +23,10 @@ var Editor = React.createClass({
         return {
             data: this.props.datasets.length ? this.props.datasets[0].data : null
         };
+    },
+
+    componentDidMount: function() {
+        $('.menu-link').bigSlide();
     },
 
     handleDataChange: function(data) {
