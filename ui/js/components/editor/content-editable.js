@@ -16,6 +16,8 @@ var ContentEditable = React.createClass({
     },
 
     componentDidUpdate: function() {
+        console.log('this.props.valueProp');
+        console.log(this.props.valueProp);
         if ( this.props.html !== this.getDOMNode().innerHTML ) {
            this.getDOMNode().innerHTML = this.props.html;
         }

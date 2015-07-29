@@ -59,11 +59,8 @@ var Data = React.createClass({
         return _.map(this.props.datasets, this.renderDataset, this);
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
-    },
-
     formatData: function(data) {
-        var d;
+        var d = data;
         if(data instanceof Immutable.Map) {
             d = data.toObject();
         } else if (data instanceof Immutable.List) {
@@ -81,7 +78,7 @@ var Data = React.createClass({
                     {this.renderDatasets()}
                 </div>
                 <div style={{width: '78%', float: 'left', marginLeft: '2%'}}>
-                    <Editor className='json' initialValue={this.formatData(this.state.selectedData)} onChange={this.handleEdit} />
+                    <Editor className='json' value={this.formatData(this.state.selectedData)} onChange={this.handleEdit} />
                 </div>
             </div>
         );

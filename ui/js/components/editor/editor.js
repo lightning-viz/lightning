@@ -12,13 +12,12 @@ var Editor = React.createClass({
 
     getDefaultProps: function() {
         return {
-            initialValue: ''
+            value: ''
         };
     },
 
     getInitialState: function() {
         return {
-            value: this.props.initialValue,
             isEditing: false,
             onChange: _.debounce(this.props.onChange, 500)
         };
@@ -26,7 +25,6 @@ var Editor = React.createClass({
 
     handleChange: function(evt){
         var val = $(evt.target.value).text();
-        this.setState({value: val});
         this.state.onChange(val);
     },
 
@@ -45,11 +43,12 @@ var Editor = React.createClass({
     renderInnerComponent: function() {
         if(this.state.isEditing) {
             var html = $('#inner-editor pre').parent().html();
-            return <ContentEditable html={html} onChange={this.handleChange}/>;
+            return <ContentEditable html={html} onChange={this.handleChange} valueProp={this.props.value} />;
         }
+
         return (
             <Highlight className={'json'}>
-                {this.state.value}
+                {this.props.value}
             </Highlight>
         );
     },
