@@ -6,31 +6,31 @@ block dynamic-css
 
 block container
 
-    .editor-container.push.wrap
-        .top-matter           
-            .meta
-                h2
-                    | #{vizType.name}
-                .subheader
+    .editor-outer-section.wrap.push
+        .editor-inner-section
+            .top-matter
+                .info-container
                     a(href="#{BASE_URL}visualization-types/")
                         | &larr; back
+
+                .title-container
+                    h1
+                        | #{utils.titleCase(vizType.name)}
 
                 .action-container
                     a(href="#import-visualization-modal", rel="modal:open")
                         .button
                             | Import
 
-        #editor-component
 
+
+    #editor-component
+                    
+            
     .saved
         | Saved!
     .problem-saving
         | Problem Saving...
-
-
-    .modal#import-visualization-modal
-        #visualization-importer
-
 
 
 block scripts

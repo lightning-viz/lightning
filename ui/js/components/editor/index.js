@@ -32,16 +32,21 @@ var Editor = React.createClass({
     render: function() {
         return (
             <div>
-                <div className={'editor-code-container'}>
-                    <div className={'visualization-type'}>
-                        <div className={'section-header'}>
-                            <h3>Data</h3>
+                <div className={'editor-outer-section wrap push'}>
+                    <div className={'row editor-inner-section'}>
+                        <div className={'editor-viz-container'}>
+                            <VizComponent data={this.state.data} name={this.props.name} />
                         </div>
-                        <DataComponent datasets={this.props.datasets} initialSelectedData={this.state.data} onDataChange={this.handleDataChange} />
                     </div>
                 </div>
-                <div className={'editor-viz-container'}>
-                    <VizComponent data={this.state.data} name={this.props.name} />
+                <div className={'editor-outer-section wrap push data-component'}>
+                    <div className={'row editor-inner-section'}>
+                        <div className={'editor-code-container'}>
+                            <div className={'visualization-type'}>
+                                <DataComponent datasets={this.props.datasets} initialSelectedData={this.state.data} onDataChange={this.handleDataChange} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

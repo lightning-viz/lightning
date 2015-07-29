@@ -32,9 +32,11 @@ var Editor = React.createClass({
 
     renderDataset: function(dataset, i) {
         return (
-            <button className={'data-button'} onClick={this.handleSelectDataset.bind(this, i)} key={i}>
-                {dataset.name}
-            </button>
+            <div>
+                <button className={'data-button'} onClick={this.handleSelectDataset.bind(this, i)} key={i}>
+                    {dataset.name}
+                </button>
+            </div>
         );
     },
 
@@ -53,11 +55,11 @@ var Editor = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <div className='data-container'>
+            <div style={{width: '65%', margin: '0 auto'}}>
+                <div className='data-container' style={{width: '20%', float: 'left'}}>
                     {this.renderDatasets()}
                 </div>
-                <div contentEditable={true}>
+                <div style={{width: '78%', float: 'left', marginLeft: '2%'}}>
                     <Highlight className='json'>
                         {this.formatData(this.state.selectedData)}
                     </Highlight>

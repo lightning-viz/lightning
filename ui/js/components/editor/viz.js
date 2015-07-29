@@ -18,12 +18,12 @@ var Editor = React.createClass({
             viz: new Viz('#live-visualization-in-editor', _.clone(this.props.data))
         });
 
-        setTimeout(function() {
-            var $container = $('#live-visualization-in-editor').addClass('fixed');
-            if($(window).height() < 900) {
-                $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
-            }
-        }, 500);
+        // setTimeout(function() {
+        //     var $container = $('#live-visualization-in-editor').addClass('fixed');
+        //     if($(window).height() < 900) {
+        //         $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
+        //     }
+        // }, 500);
 
     },
 

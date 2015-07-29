@@ -1,89 +1,144 @@
 
 
-.editor-container {
+
+.editor-outer-section {
     width: 100%;
-    padding-left: 100px;
+    border-size: 'border-box';
+    clear: both;
 
-    textarea {
-        opacity: 0;        
-    }
+    .editor-inner-section {
+        padding-left: 4em;
 
-    .section-header {
-        width: 100%;
-        cursor: pointer;
-        padding: 7px 10px;
-        border-bottom: solid 2px #626c7c;
-        margin-bottom: 20px;
-        h3 {
-            padding: 0;
-            margin: 0;
-        }
-        &:hover {
-            background-color: lighten(#626c7c, 50%);
-        }
 
-    }
+        .top-matter {
 
-    .top-matter {
-        width: 33%;
-        margin-bottom: 30px;
-        .action-container {
-
-            margin-top: 15px;
-
-            .button {
-                width: 45%;
-                display: inline-block;
-
-                &.pad-left {
-                    margin-left: 7.5%;
+            clear: both;
+            padding-left: 20px;
+            padding-top: 20px;
+            .info-container {
+                float: left;
+                width: 20%;
+                a {
+                    display: inline-block;
+                    position: relative;
+                    top: -7px;
+                    padding-left: 10px;
                 }
             }
 
-        }
-    }
+            .title-container {
+                text-align: center;
+                width: 60%;
+                float: left;
+                h1 {
+                    display: inline-block;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    margin-left: 20px;
 
-    .data-container {
-        margin-bottom: 30px;
+                }
+            }
+            .action-container {
+                // margin-top: 15px;
+                float: left;
+                width: 18%;
+                text-align: right;
+                box-sizing: 'border-box';
+                margin-right: 2%;
+                .button {
+                    width: 45%;
+                    display: inline-block;
 
-        button {
-            &:not(:first-child) {
-                margin-left: 2.5%;
+                    &.pad-left {
+                        margin-left: 7.5%;
+                    }
+                }
+
             }
         }
     }
 
-    .CodeMirror {
-        padding-bottom: 30px;
-        margin-bottom: 30px;
+    &.data-component {
+        background: #f0f0f0;
+        min-height: 400px;
+
+        .editor-inner-section {
+            padding-top: 30px;
+        }
     }
 
-    .save-container {
-        width: 33%;
-        float: left;
-        text-align: right;
+    pre {
+        padding: 0;
+        border: none;
     }
 
-    .editor-code-container {
-        width: 33%;
-        float: left;
-    }
 
     .editor-viz-container {
-        margin-left: 7%;
-        width: 50%;
-        float: left;
+        width: 65%;
+        margin: 0 auto;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        // margin-top: 80px;
 
         &.full {
             width: 60%;
             margin-bottom: 30px;
         }
-        // .feed-item-container {
-        //     position: fixed;
-        // }
     }
 
-    .feed-item-container {
-        top: 5%;
+    .data-button {
+        width: 100%;
+        display: block;
+        float: right;
+        margin-top: 10px;
+        background-color: $blue;
+        color: #fff;
+
     }
 }
+
+        // textarea {
+        //     opacity: 0;        
+        // }
+
+        // .section-header {
+        //     width: 100%;
+        //     cursor: pointer;
+        //     padding: 7px 10px;
+        //     border-bottom: solid 2px #626c7c;
+        //     margin-bottom: 20px;
+        //     h3 {
+        //         padding: 0;
+        //         margin: 0;
+        //     }
+        //     &:hover {
+        //         background-color: lighten(#626c7c, 50%);
+        //     }
+
+        // }
+
+        // .data-container {
+        //     margin-bottom: 30px;
+
+        //     button {
+        //         &:not(:first-child) {
+        //             margin-left: 2.5%;
+        //         }
+        //     }
+        // }
+
+        // .CodeMirror {
+        //     padding-bottom: 30px;
+        //     margin-bottom: 30px;
+        // }
+
+        // .save-container {
+        //     width: 33%;
+        //     float: left;
+        //     text-align: right;
+        // }
+
+
+        // .feed-item-container {
+        //     top: 5%;
+        // }

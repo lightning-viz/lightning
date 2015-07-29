@@ -5,15 +5,16 @@ block dynamic-css
 
 block container
 
-    .editor-container.push.wrap
-        .top-matter
-
-            .meta
-                h2
-                    | #{vizType.name}
-                .subheader
+    .editor-outer-section.wrap.push
+        .editor-inner-section
+            .top-matter
+                .info-container
                     a(href="#{BASE_URL}visualization-types/")
                         | &larr; back
+
+                .title-container
+                    h1
+                        | #{utils.titleCase(vizType.name)}
 
                 .action-container
                     a(href="#{BASE_URL}visualization-types/#{vizType.id}/delete", data-confirm="Are you sure you want to delete the #{vizType.name} visualization?")
@@ -26,7 +27,7 @@ block container
                             | Save
 
 
-        #editor-component
+    #editor-component
                     
             
     .saved
