@@ -2,12 +2,14 @@
 var React = require('react');
 var _ = require('lodash');
 var Highlight = require('react-highlight');
+var Editor = require('./editor');
+var Immutable = require('immutable');
 
 var styles = {
 };
 
 
-var Editor = React.createClass({
+var Data = React.createClass({
 
     getDefaultProps: function() {
         return {
@@ -22,6 +24,19 @@ var Editor = React.createClass({
         };
     },
 
+    handleEdit: function(val) {
+        try {
+            var selectedData = JSON.parse(val);
+        } catch(e) {
+            console.log(e);
+            return;
+        }
+        this.setState({
+            selectedData: selectedData
+        });
+        this.props.onDataChange(selectedData);
+    },
+
     handleSelectDataset: function(i) {
         var selectedData = this.props.datasets[i].data;
         this.props.onDataChange(selectedData);
@@ -32,8 +47,8 @@ var Editor = React.createClass({
 
     renderDataset: function(dataset, i) {
         return (
-            <div>
-                <button className={'data-button'} onClick={this.handleSelectDataset.bind(this, i)} key={i}>
+            <div key={i}>
+                <button className={'data-button'} onClick={this.handleSelectDataset.bind(this, i)} >
                     {dataset.name}
                 </button>
             </div>
@@ -48,9 +63,15 @@ var Editor = React.createClass({
     },
 
     formatData: function(data) {
-        return '{\n' + _.map(data, function(val, key) {
-            return '\t\"' + key + "\": " + JSON.stringify(val).split(',').join(', ') + ',';
-        }).join('\n') + '\n}';
+        var d;
+        if(data instanceof Immutable.Map) {
+            d = data.toObject();
+        } else if (data instanceof Immutable.List) {
+            d = data.toArray();
+        }
+        return '{\n' + _.map(d, function(val, key) {
+            return '\t\"' + key + "\": " + JSON.stringify(val).split(',').join(', ');
+        }).join(',\n') + '\n}';
     },
 
     render: function() {
@@ -60,15 +81,13 @@ var Editor = React.createClass({
                     {this.renderDatasets()}
                 </div>
                 <div style={{width: '78%', float: 'left', marginLeft: '2%'}}>
-                    <Highlight className='json'>
-                        {this.formatData(this.state.selectedData)}
-                    </Highlight>
+                    <Editor className='json' initialValue={this.formatData(this.state.selectedData)} onChange={this.handleEdit} />
                 </div>
             </div>
         );
     },
 });
 
-module.exports = Editor;
+module.exports = Data;
 
 

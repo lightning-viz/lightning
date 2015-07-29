@@ -1,5 +1,6 @@
 var React = require('react');
 var _ = require('lodash');
+var Immutable = require('immutable');
 // var RadioGroup = require('react-radio-group');
 // var Sources = require('./sources');
 
@@ -9,6 +10,15 @@ require('../../lib/bigSlide');
 
 var styles = {
 };
+
+var parseData = function(d) {
+    if(_.isArray(d)) {
+        d = Immutable.List(d);
+    } else if(_.isObject(d)) {
+        d = Immutable.Map(d);
+    }
+    return d;
+}
 
 var Editor = React.createClass({
 
@@ -21,7 +31,7 @@ var Editor = React.createClass({
 
     getInitialState: function() {
         return {
-            data: this.props.datasets.length ? this.props.datasets[0].data : null
+            data: parseData(this.props.datasets.length ? this.props.datasets[0].data : [])
         };
     },
 
@@ -31,7 +41,7 @@ var Editor = React.createClass({
 
     handleDataChange: function(data) {
         this.setState({
-            data: data
+            data: parseData(data)
         });
     },
     render: function() {

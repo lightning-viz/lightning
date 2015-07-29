@@ -11,25 +11,26 @@ var Editor = React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        // initialize the viz
+    createViz: function() {
         var Viz = require(this.props.name);
         this.setState({
-            viz: new Viz('#live-visualization-in-editor', _.clone(this.props.data))
+            viz: new Viz('#live-visualization-in-editor', this.props.data.toJS())
         });
+    },
 
-        // setTimeout(function() {
-        //     var $container = $('#live-visualization-in-editor').addClass('fixed');
-        //     if($(window).height() < 900) {
-        //         $container.css('max-height', $(window).height() * 0.95).css('overflow-y', 'scroll');
-        //     }
-        // }, 500);
-
+    componentDidMount: function() {
+        // initialize the viz
+        this.createViz();
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        var viz = this.state.viz;
-        viz && viz.updateData && viz.updateData(_.clone(prevProps.data));
+        if(prevState.viz) {
+            if(prevProps.data !== this.props.data) {
+                var vizEl = $('#live-visualization-in-editor');
+                vizEl.css('min-height', vizEl.height()).html('');
+                this.createViz();
+            }
+        }
     },
 
     render: function() {
