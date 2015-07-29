@@ -41,13 +41,16 @@
             .action-container {
                 // margin-top: 15px;
                 float: left;
-                width: 21%;
+                width: 20%;
                 text-align: right;
                 box-sizing: 'border-box';
-                margin-right: 2%;
+                margin-right: 3%;
+                margin-top: 1%;
                 .button {
-                    width: 45%;
-                    display: inline-block;
+                    width: 70%;
+                    display: inline;
+                    padding-left: 3%;
+                    padding-right: 3%;
 
                     &.pad-left {
                         margin-left: 7.5%;
@@ -60,7 +63,7 @@
 
     &.data-component {
         background: #f0f0f0;
-        min-height: 400px;
+        min-height: 300px;
 
         .editor-inner-section {
             padding-top: 30px;
@@ -74,7 +77,7 @@
 
 
     .editor-viz-container {
-        width: 65%;
+        width: 60%;
         margin: 0 auto;
         margin-top: 60px;
         margin-bottom: 60px;
