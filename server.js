@@ -61,7 +61,6 @@ io.on('connection', function(){
 // Bootstrap application settings
 require('./config/express')(app, io);
 
-
 console.log('Initializing npm...');
 npm.load({}, function() {
     // Bootstrap routes
@@ -116,3 +115,4 @@ npm.load({}, function() {
     server.listen(port);
 });
 
+module.exports = server;

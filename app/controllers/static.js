@@ -135,8 +135,8 @@ exports.buildSCSS = function(req, res) {
 
     sass.render({
         data: scssData,
-        success: function(css) {
-            res.send(css);
+        success: function(sassResultss) {
+            res.send(sassResultss.css);
         }
     });
 };
@@ -178,9 +178,9 @@ exports.getDynamicVizStyles = function (req, res, next) {
 
             sass.render({
                 data: scssData,
-                success: function(css) {
-                    cache.put('css/' + visualizationTypes.toString(), css, 1000 * 60 * 60);
-                    res.send(css);
+                success: function(sassResults) {
+                    cache.put('css/' + visualizationTypes.toString(), sassResults.css, 1000 * 60 * 60);
+                    res.send(sassResults.css);
                 }
             });
         }).error(next);

@@ -203,12 +203,12 @@ exports.preview = function(req, res, next) {
                         scssData += '\n}';
                         sass.render({
                             data: scssData,
-                            success: function(css) {
+                            success: function(sassResults) {
                                 if(req.url.indexOf('/preview/full') > -1) {
                                     return res.render('viz-types/full-preview', {
                                         vizType: vizType,
                                         javascript: javascript,
-                                        css: css,
+                                        css: sassResults.css,
                                         path: path.resolve(req.query.path || ''),
                                         url: req.query.url,
                                         source: req.query.url ? 'gitRepo' : 'localFolder'
@@ -217,7 +217,7 @@ exports.preview = function(req, res, next) {
                                 return res.render('viz-types/preview-editor', {
                                     vizType: vizType,
                                     javascript: javascript,
-                                    css: css,
+                                    css: sassResults.css,
                                     path: path.resolve(req.query.path || ''),
                                     url: req.query.url,
                                     source: req.query.url ? 'gitRepo' : 'localFolder'
