@@ -45,8 +45,6 @@ exports.getDynamicVizBundle = function (req, res, next) {
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
-
-
     var b = browserify();
 
     models.VisualizationType
@@ -67,8 +65,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
                 var shouldCache = false;
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
-                        b.require(vizType.name, {
-                            expose: vizType.name
+                        console.log(vizType.moduleName);
+                        b.require(vizType.moduleName, {
+                            expose: vizType.moduleName
                         });
                     } else {
                         shouldCache = true;

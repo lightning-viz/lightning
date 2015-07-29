@@ -43,6 +43,7 @@ block scripts
         window.lightning = window.lightning || {};
         window.lightning.editor = {
             datasets: !{JSON.stringify(vizType.sampleData)},
-            name: "#{vizType.name}"
+            name: "#{vizType.name}",
+            moduleName: "#{vizType.moduleName}"
         };
     script(src='#{STATIC_URL}js/editor.js')

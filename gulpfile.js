@@ -77,7 +77,6 @@ gulp.task('browserify', function() {
 gulp.task('css', function() {
     return gulp
             .src(srcDir + 'stylesheets/app.scss')
-            .pipe(bulkSass())
             .pipe(
                 sass({
                     includePaths: ['src/stylesheets'],

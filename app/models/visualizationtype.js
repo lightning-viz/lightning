@@ -21,6 +21,7 @@ module.exports = function(sequelize, DataTypes) {
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
             isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+            moduleName: {type: DataTypes.STRING},
 
             thumbnailLocation: DataTypes.STRING,
 
@@ -38,6 +39,7 @@ module.exports = function(sequelize, DataTypes) {
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
         isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+        moduleName: {type: DataTypes.STRING},
 
         thumbnailLocation: DataTypes.STRING,
 
@@ -122,6 +124,7 @@ module.exports = function(sequelize, DataTypes) {
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
                     isModule: true,
+                    moduleName: name,
                     sampleData: sampleData,
                     sampleImages: sampleImages
                 }
@@ -136,7 +139,6 @@ module.exports = function(sequelize, DataTypes) {
                 if(preview) {
                     return VisualizationType.build(vizTypeObj);
                 }
-
                 return VisualizationType.create(vizTypeObj);
             },
 

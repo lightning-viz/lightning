@@ -12,7 +12,7 @@ var Editor = React.createClass({
     },
 
     createViz: function() {
-        var Viz = require(this.props.name);
+        var Viz = require(this.props.moduleName);
         this.setState({
             viz: new Viz('#live-visualization-in-editor', this.props.data.toJS())
         });

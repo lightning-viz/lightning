@@ -178,8 +178,8 @@ exports.preview = function(req, res, next) {
                     var b = browserify();
                     if(vizType.isModule) {
                         console.log(isModule);
-                        b.require(vizType.name, {
-                            expose: vizType.name
+                        b.require(vizType.moduleName, {
+                            expose: vizType.moduleName
                         });
                     } else {
                         var stream = resumer().queue(vizType.javascript).end();
@@ -337,6 +337,7 @@ exports.editor = function (req, res, next) {
     models.VisualizationType.find(req.params.vid)
         .then(function(type) {
             
+            console.log(type);
             return res.render('viz-types/editor', {
                 vizType: type
             });
