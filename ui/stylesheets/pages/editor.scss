@@ -93,10 +93,15 @@
         width: 100%;
         display: block;
         float: right;
-        margin-top: 10px;
+        margin-top: 13px;
         background-color: $blue;
         color: #fff;
 
+    }
+
+    code {
+        border-radius: 4px;
+        padding: 1.2em;
     }
 }
 
