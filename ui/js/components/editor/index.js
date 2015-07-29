@@ -25,6 +25,7 @@ var Editor = React.createClass({
     getDefaultProps: function() {
         return {
             datasets: window.lightning.editor.datasets || [],
+            images: window.lightning.editor.sampleImages || [],
             moduleName: window.lightning.editor.moduleName || '',
         };
     },
@@ -50,7 +51,7 @@ var Editor = React.createClass({
                 <div className={'editor-outer-section wrap push'}>
                     <div className={'row editor-inner-section'}>
                         <div className={'editor-viz-container'}>
-                            <VizComponent data={this.state.data} moduleName={this.props.moduleName} />
+                            <VizComponent data={this.state.data} moduleName={this.props.moduleName} images={this.props.images} />
                         </div>
                     </div>
                 </div>

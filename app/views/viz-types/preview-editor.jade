@@ -43,7 +43,9 @@ block scripts
         window.lightning = window.lightning || {};
         window.lightning.editor = {
             datasets: !{JSON.stringify(vizType.sampleData)},
+            sampleImages: !{JSON.stringify(vizType.sampleImages)},
             name: "#{vizType.name}",
+            moduleName: "#{vizType.moduleName}",
             location: "#{location}",
             source: "#{source}",
             url: "#{url}",
