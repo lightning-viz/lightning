@@ -33,9 +33,6 @@ module.exports = function (app) {
         res.status(200).send();
     })
 
-
-    app.get('/playground', home.playground);
-
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
     app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
     app.post('/js/dynamic', staticController.bundleJSForExecution);
