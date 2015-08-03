@@ -17,7 +17,19 @@ if(defaultVisualizations) {
   defaultVisualizations = defaultVisualizations.join(',');
 } else {
   defaultVisualizations = [
-    'lightning-graph'
+    'lightning-adjacency',
+    'lightning-force',
+    'lightning-gallery',
+    'lightning-graph',
+    'lightning-graph-bundled',
+    'lightning-image',
+    'lightning-image-poly',
+    'lightning-line',
+    'lightning-map',
+    'lightning-matrix',
+    'lightning-scatter',
+    'lightning-scatter-3',
+    'lightning-volume'
   ];
 }
 

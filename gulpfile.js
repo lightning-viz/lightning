@@ -2,7 +2,6 @@
 
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
-var browserifyProtect = require('gulp-browserify-protect');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var livereload = require('gulp-livereload');
@@ -16,7 +15,6 @@ var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var s3 = require('gulp-s3');
-var d3 = require('d3');
 var gzip = require('gulp-gzip');
 var colors = require('colors');
 var rename = require('gulp-rename');
@@ -57,7 +55,6 @@ gulp.task('browserify', function() {
         .on('error', gutil.log)
         .on('error', gutil.beep)
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
-        // .pipe(browserifyProtect())
         .pipe(gulp.dest('./public/js/'))
         .pipe( livereload( server ));
 
@@ -68,7 +65,6 @@ gulp.task('browserify', function() {
         .on('error', gutil.log)
         .on('error', gutil.beep)
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
-        // .pipe(browserifyProtect())
         .pipe(gulp.dest('./public/js/'))
         .pipe( livereload( server ));
 });
@@ -116,7 +112,6 @@ gulp.task('jade', function() {
                     pretty: !PRODUCTION_MODE,
                     locals: {
                         // utils: utils,
-                        d3: d3,
                         STATIC_URL: host,
                         _: _
                     }
