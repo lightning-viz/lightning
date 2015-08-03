@@ -249,7 +249,7 @@ exports.addData = function (req, res, next) {
 
                     models.VisualizationType.find({
                         where: {
-                            name: req.body.type
+                            name: type
                         }
                     }).then(function(vizType) {
                         if(!vizType) {
