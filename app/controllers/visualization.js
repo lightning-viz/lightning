@@ -162,46 +162,40 @@ exports.updateData = function (req, res, next) {
         }).error(next);
 };
 
-
-exports.read = function (req, res, next) {
-
+var readWithTemplate = function(template, req, res, next) {
     var vizId = req.params.vid;
     var Visualization = models.Visualization;
-    var VisualizationType = models.VisualizationType;
+    Visualization.find({
+        where: {
+            id: vizId
+        }, 
+        include: [VisualizationType]
+    }).then(function(viz) {
+        res.render(template, {
+            viz: viz,
+        });
+    });
+}
 
-    Q.all([
-        Visualization.find(vizId),
-        VisualizationType.findAll()
-    ]).spread(function(viz, vizTypes) {
-            res.render('session/visualization', {
-                viz: viz,
-                vizTypes: _.object(_.map(vizTypes, function(item) {
-                    return [item.name, item];
-                }))
-            });
-    }).fail(next);
+exports.read = function (req, res, next) {
+    return readWithTemplate('session/visualization', req, res, next);
 };
 
 exports.publicRead = function (req, res, next) {
-
-    var vizId = req.params.vid;
-    var Visualization = models.Visualization;
-    var VisualizationType = models.VisualizationType;
-
-    Q.all([
-        Visualization.find(vizId),
-        VisualizationType.findAll()
-    ]).spread(function(viz, vizTypes) {
-            res.render('session/visualization-public', {
-                viz: viz,
-                vizTypes: _.object(_.map(vizTypes, function(item) {
-                    return [item.name, item];
-                }))
-            });
-    }).fail(next);
+    return readWithTemplate('session/visualization-public', req, res, next);
 };
 
+exports.embed = function (req, res, next) {
+    return readWithTemplate('session/visualization-embed', req, res, next);
+};
 
+exports.pym = function (req, res, next) {
+    return readWithTemplate('session/visualization-pym', req, res, next);
+};
+
+exports.iframe = function (req, res, next) {
+    return readWithTemplate('session/visualization-iframe', req, res, next);
+};
 
 exports.delete = function (req, res, next) {
 
@@ -223,7 +217,6 @@ exports.delete = function (req, res, next) {
 };
 
 exports.getDelete = function(req, res, next) {
-    
     var vizId = req.params.vid;
 
     models.Visualization
@@ -241,72 +234,7 @@ exports.getDelete = function(req, res, next) {
         }).error(next);
 };
 
-
-
-exports.embed = function (req, res, next) {
-
-    var vizId = req.params.vid;
-    var Visualization = models.Visualization;
-    var VisualizationType = models.VisualizationType;
-
-    Q.all([
-        Visualization.find(vizId),
-        VisualizationType.findAll()
-    ]).spread(function(viz, vizTypes) {
-            res.render('session/visualization-embed', {
-                viz: viz,
-                vizTypes: _.object(_.map(vizTypes, function(item) {
-                    return [item.name, item];
-                }))
-            });
-    }).fail(next);
-};
-
-
-exports.iframe = function (req, res, next) {
-
-    var vizId = req.params.vid;
-    var Visualization = models.Visualization;
-    var VisualizationType = models.VisualizationType;
-
-    Q.all([
-        Visualization.find(vizId),
-        VisualizationType.findAll()
-    ]).spread(function(viz, vizTypes) {
-            res.render('session/visualization-iframe', {
-                viz: viz,
-                vizTypes: _.object(_.map(vizTypes, function(item) {
-                    return [item.name, item];
-                }))
-            });
-    }).fail(next);
-};
-
-
-exports.pym = function (req, res, next) {
-
-    var vizId = req.params.vid;
-    var Visualization = models.Visualization;
-    var VisualizationType = models.VisualizationType;
-
-    Q.all([
-        Visualization.find(vizId),
-        VisualizationType.findAll()
-    ]).spread(function(viz, vizTypes) {
-            res.render('session/visualization-pym', {
-                viz: viz,
-                vizTypes: _.object(_.map(vizTypes, function(item) {
-                    return [item.name, item];
-                }))
-            });
-    }).fail(next);
-};
-
-
-
 exports.screenshot = function(req, res, next) {
-
-
     var vizId = req.params.vid;
     var host = req.headers.host;
     var url = 'http://' + host + '/visualizations/' + vizId + '/iframe';
@@ -332,8 +260,4 @@ exports.screenshot = function(req, res, next) {
         res.setHeader('Content-Type', 'image/png');
         renderStream.pipe(res);
     });
-
 }
-
-
-

@@ -177,7 +177,6 @@ exports.preview = function(req, res, next) {
                 .spread(function() {
                     var b = browserify();
                     if(vizType.isModule) {
-                        console.log(isModule);
                         b.require(vizType.moduleName, {
                             expose: vizType.moduleName
                         });

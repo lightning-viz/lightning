@@ -1,6 +1,6 @@
 
 .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
-    .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", id="viz-#{viz.id}", data-initialized="false")
+    include ./includes/viz
 
     .description-container
         .description

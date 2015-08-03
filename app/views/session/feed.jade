@@ -1,7 +1,7 @@
 extends ../layout
 
 block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(_.pluck(visualizations, 'visualizationType'), 'name').join('&visualizations[]=')}")
 
     
 block content
@@ -70,5 +70,5 @@ block scripts
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src="/socket.io/socket.io.js")
     script(src='#{STATIC_URL}js/basic.js')
-    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{_.pluck(visualizations, 'type').join('&visualizations[]=')}")
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{_.pluck(_.pluck(visualizations, 'visualizationType'), 'name').join('&visualizations[]=')}")
     script(src='#{STATIC_URL}js/feed.js')

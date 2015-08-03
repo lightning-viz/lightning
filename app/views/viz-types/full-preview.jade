@@ -23,7 +23,7 @@ block container
         #editor-component 
         .editor-viz-container.full
             .feed-item-container.full
-                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
+                .feed-item(data-type="#{viz.moduleName || vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
 
 
     .saved

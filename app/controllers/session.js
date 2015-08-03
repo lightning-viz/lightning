@@ -47,7 +47,8 @@ exports.feed = function (req, res, next) {
             .findAll({
                 where: {
                     SessionId: sessionId
-                }
+                },
+                include: [VisualizationType]
             }),
         VisualizationType.findAll({
             order: '"name" ASC'
@@ -57,11 +58,6 @@ exports.feed = function (req, res, next) {
         if(!session) {
             return res.status(404).send('Session not found');
         }
-
-        _.each(visualizations, function(viz) {
-            console.log(viz.type);
-        });
-
         res.render('session/feed', {
             session: session,
             visualizations: visualizations,
@@ -119,10 +115,6 @@ exports.publicRead = function (req, res, next) {
         if(!session) {
             return res.status(404).send('Session not found');
         }
-
-        _.each(visualizations, function(viz) {
-            console.log(viz.images);
-        });
 
         res.render('session/feed-public', {
             session: session,
@@ -204,19 +196,31 @@ exports.addData = function (req, res, next) {
     var sessionId = req.params.sid;
 
     var Visualization = models.Visualization;
+    var vt;
 
     if(req.is('json')) {
-        Visualization
-            .create({
+        models.VisualizationType.find({
+            where: {
+                name: req.body.type
+            }
+        }).then(function(vizType) {
+            if(!vizType) {
+                throw new Error('Could not find viz type ' + req.body.type);
+            }
+            vt = vizType;
+            return Visualization.create({
                 data: req.body.data,
-                type: req.body.type,
                 opts: req.body.opts,
-                SessionId: sessionId
-            }).then(function(viz) {
-                req.io.of('/sessions/' + sessionId)
-                    .emit('viz', viz);  
-                return res.json(viz);
-            }).error(next);
+                SessionId: sessionId,
+                VisualizationTypeId: vizType.id
+            });
+        }).then(function(viz) {
+            var jsonViz = viz.toJSON();
+            jsonViz.visualizationType = vt;
+            req.io.of('/sessions/' + sessionId)
+                .emit('viz', jsonViz);  
+            return res.json(jsonViz);
+        }).error(next);
     } else {
         var form = new multiparty.Form();
 
@@ -244,15 +248,13 @@ exports.addData = function (req, res, next) {
                     }
 
                     Visualization
-                        .create({
-                            type:  type,
+                        .createWithType(type, {
                             images: [imgData],
                             opts: req.body.opts,
                             SessionId: sessionId
                         }).then(function(viz) {
                             req.io.of('/sessions/' + sessionId)
                                 .emit('viz', viz);
-
                             return res.json(viz);
                         }).error(next);
                 });
@@ -264,11 +266,9 @@ exports.addData = function (req, res, next) {
 
 
 exports.appendData = function (req, res, next) {
-
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
-
 
     models.Visualization
         .find(vizId)
@@ -381,10 +381,7 @@ exports.appendData = function (req, res, next) {
             } else {
                 return next(500);
             }
-
-
         }).error(next);
-
 };
 
 

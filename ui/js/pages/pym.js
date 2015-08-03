@@ -47,7 +47,7 @@ loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.ligh
         var $this = $(this);
 
 
-        utils.requireOrFetchViz(type, function(err, Viz) {
+        utils.requireOrFetchViz({name: type}, function(err, Viz) {
             if(err) {
                 return console.log(err);
             }

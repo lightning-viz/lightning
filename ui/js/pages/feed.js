@@ -31,8 +31,7 @@ var vizs = {};
 socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
-
-    utils.requireOrFetchViz(viz.type, function(err, Viz) {
+    utils.requireOrFetchViz(viz.visualizationType, function(err, Viz) {
         if(err) {
             return console.log(err);
         }
@@ -85,7 +84,6 @@ setTimeout(function() {
         var data = $(this).data('data');
         var images = $(this).data('images');
         var options = $(this).data('opts');
-
         var Viz =  require(type);
 
         var vid = $(this).attr('id');
