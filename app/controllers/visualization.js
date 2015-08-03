@@ -165,6 +165,8 @@ exports.updateData = function (req, res, next) {
 var readWithTemplate = function(template, req, res, next) {
     var vizId = req.params.vid;
     var Visualization = models.Visualization;
+    var VisualizationType = models.VisualizationType;
+
     Visualization.find({
         where: {
             id: vizId
