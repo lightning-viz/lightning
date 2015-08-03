@@ -4,9 +4,6 @@ var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
 
-
-
-
 module.exports = function(sequelize, DataTypes) {
 
 
@@ -69,22 +66,6 @@ module.exports = function(sequelize, DataTypes) {
                  // associations can be defined here
                  Visualization.belongsTo(models.Session);
                  Visualization.belongsTo(models.VisualizationType);
-            },
-
-            createWithType: function(type, obj) {
-                models.VisualizationType
-                    .find({
-                        where: {
-                            name: type
-                        }
-                    }).then(function(vizType) {
-                        if(!vizType) {
-                            throw new Error('Viz type ' + type + ' does not exist!');
-                        }
-                        return Visualization.create(_.extend(obj, {
-                            VisualizationTypeId: vizType.id
-                        }));
-                    })
             },
 
             getNamedObjectForVisualization: function(vid, name) {

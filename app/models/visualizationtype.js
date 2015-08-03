@@ -21,6 +21,7 @@ module.exports = function(sequelize, DataTypes) {
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
             isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+            isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
             moduleName: {type: DataTypes.STRING},
 
             thumbnailLocation: DataTypes.STRING,
@@ -39,6 +40,7 @@ module.exports = function(sequelize, DataTypes) {
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
         isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+        isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
         moduleName: {type: DataTypes.STRING},
 
         thumbnailLocation: DataTypes.STRING,
@@ -123,6 +125,7 @@ module.exports = function(sequelize, DataTypes) {
 
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
+                    isStreaming: lightningConfig.isStreaming || false,
                     isModule: true,
                     moduleName: name,
                     sampleData: sampleData,
@@ -150,7 +153,7 @@ module.exports = function(sequelize, DataTypes) {
                         npm.config.set('loglevel', 'silent');
                         return Q.nfcall(command, [name])
                     }).then(function() {
-                        npm.config.set('loglevel');
+                        npm.config.set('loglevel', loglevel);
                         console.log(('Successfully installed ' + name).green);
                         return self._buildFromNPM(name, preview);
                     });
@@ -338,6 +341,15 @@ module.exports = function(sequelize, DataTypes) {
                     funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
                 }
                 return Q.all(funcs);
+            },
+
+            deleteAndUninstall: function() {
+                var destroy = this.destroy;
+                var funcs = [];
+                if(this.isModule) {
+                    funcs.push(Q.nfcall(npm.commands.uninstall, [name]));
+                }
+                return destroy();
             }
 
         },

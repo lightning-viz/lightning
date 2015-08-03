@@ -247,16 +247,28 @@ exports.addData = function (req, res, next) {
                         }                        
                     }
 
-                    Visualization
-                        .createWithType(type, {
+                    models.VisualizationType.find({
+                        where: {
+                            name: req.body.type
+                        }
+                    }).then(function(vizType) {
+                        if(!vizType) {
+                            throw new Error('Could not find viz type ' + req.body.type);
+                        }
+                        vt = vizType;
+                        return Visualization.create({
                             images: [imgData],
                             opts: req.body.opts,
-                            SessionId: sessionId
-                        }).then(function(viz) {
-                            req.io.of('/sessions/' + sessionId)
-                                .emit('viz', viz);
-                            return res.json(viz);
-                        }).error(next);
+                            SessionId: sessionId,
+                            VisualizationTypeId: vizType.id
+                        });
+                    }).then(function(viz) {
+                        var jsonViz = viz.toJSON();
+                        jsonViz.visualizationType = vt;
+                        req.io.of('/sessions/' + sessionId)
+                            .emit('viz', jsonViz);  
+                        return res.json(jsonViz);
+                    }).error(next);
                 });
             });
         });
@@ -269,17 +281,21 @@ exports.appendData = function (req, res, next) {
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
+    var VisualizationType = models.VisualizationType;
 
     models.Visualization
-        .find(vizId)
-        .then(function(viz) {
+        .find({
+            where: {
+                id: vizId
+            }, 
+            include: [VisualizationType]
+        }).then(function(viz) {
             if(req.is('json')) {
 
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
-
-                        if(viz.type.indexOf('streaming') > -1) {
+                        if(viz.visualizationType.isStreaming) {
                             _.each(req.body.data, function(d, i) {
                                 if(i < viz.data[fieldName].length) {
                                     viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
@@ -301,7 +317,7 @@ exports.appendData = function (req, res, next) {
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
 
-                            if(viz.type.indexOf('streaming') > -1) {
+                            if(viz.visualizationType.isStreaming) {
                                 _.each(req.body.data, function(d, i) {
 
                                 });

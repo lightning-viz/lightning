@@ -73,7 +73,7 @@ exports.fetchDefaults = function (req, res, next) {
 exports.create = function (req, res, next) {
     
     models.VisualizationType
-        .create(_.pick(req.body, 'name', 'initialDataFields', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
+        .create(_.pick(req.body, 'name', 'initialDataFields', 'isStreaming', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
         .then(function(type) {
             return res.json(type);
         }).error(function(err) {
@@ -84,12 +84,10 @@ exports.create = function (req, res, next) {
 
 exports.edit = function (req, res, next) {
 
-    console.log('editing');
-    
     models.VisualizationType
         .find(req.params.vid)
         .success(function(vizType) {
-            return vizType.updateAttributes(_.pick(req.body, 'name', 'initialDataFields', 'javascript', 'styles', 'markup'));
+            return vizType.updateAttributes(_.pick(req.body, 'name', 'isStreaming', 'initialDataFields', 'javascript', 'styles', 'markup'));
         })
         .success(function(vizType) {
             setTimeout(function() {
