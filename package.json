@@ -50,11 +50,7 @@
       "jadeify"
     ]
   },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
+  "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
     "basic-auth-connect": "^1.0.0",
@@ -105,7 +101,6 @@
     "multiparty": "^3.3.1",
     "node-sass": "^2.1.1",
     "node-uuid": "^1.4.1",
-    "nodemon": "*",
     "npm": "^2.12.1",
     "path": "~0.4.9",
     "pg": "~3.4.1",
@@ -135,6 +130,7 @@
     "yargs": "^1.3.3"
   },
   "devDependencies": {
-    "electron": "^0.4.1"
+    "electron": "^0.4.1",
+    "nodemon": "*"
   }
 }
