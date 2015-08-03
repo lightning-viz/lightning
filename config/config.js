@@ -28,6 +28,7 @@ if(defaultVisualizations) {
     'lightning-map',
     'lightning-matrix',
     'lightning-scatter',
+    'lightning-scatter-streaming',
     'lightning-scatter-3',
     'lightning-volume'
   ];
