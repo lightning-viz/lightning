@@ -11,20 +11,27 @@
 # host.
 #
 # To add authentication to the server, or leverage Amazon S3 storage,
-# fill in the environment variables with the appropraite values.
+# fill in the environment variables with the appropriate values.
+#
+# Run with:
+#
+# docker-compose -f production.yml
 #
 # Notes:
+#
 # - Log management, database persistence, and monitoring are
 #   intentionally left out of this orchestration so you can use
 #   your favorite solutions.
+#
 # - To add ssl to the above proxy, replace the %%SSL_CERTIFICATE_PATH%%
 #   value with the path to the directory containing your SSL certs
-#   and set SSL:TRUE in the proxy environment section
+#   and set SSL: TRUE in the proxy environment section
 #   ssl cert folder SSL add a proxy server such as.
+#
 # - To scale the lightning server, use fig to start up more web
 #   containers. The following command should be sufficient.
 #
-#   fig -f fig.production.yml scale web=2
+#   docker-compose -f production.yml scale web=2
 #
 ###################################################################
 proxy:
@@ -46,7 +53,7 @@ web:
   environment:
     VIRTUAL_PORT: 3000
     VIRTUAL_HOST: docker.example.com
-    NODE_ENV: development
+    NODE_ENV: production
     DATABASE_URL: lightning:changeit@db:5432/postgres
     LIGHTNING_USERNAME:
     LIGHTNING_PASSWORD:

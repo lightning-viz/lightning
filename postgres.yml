@@ -10,6 +10,10 @@
 # leverage Amazon S3 storage, fill in the environment variables
 # with the appropraite values.
 #
+# Run with
+#
+# docker-compose -f postgres.yml up
+#
 ###################################################################
 web:
   extends:
