@@ -1,37 +1,35 @@
 ##################################################################
 #
-# fig.postgres.yml
+# postgres.yml
 #
 # author: Rion Dooley <dooley@tacc.utexas.edu>
 #
-# This is the "production" Fig file to running the Lightning data
-# Vizualization Server with a PostgreSQL db. It will run on your
+# This is a docker compose file to run the Lightning data
+# vizualization server with a PostgreSQL db. It will run on your
 # Docker host, port 3000. To add authentication to the server, or
 # leverage Amazon S3 storage, fill in the environment variables
 # with the appropraite values.
 #
 ###################################################################
 web:
-  image: deardooley/lightning-viz
-  # build: .
-  command: npm run migrate && npm start
-  ports:
-    - 3000:3000
+  extends:
+    file: common.yml
+    service: web
+  command: bash -c "node server.js"
   links:
-    - postgres
+    - db
   environment:
+    DATABASE_URL: lightning:changeit@db:5432/postgres
     NODE_ENV: production
-    DATABASE_URL: lightning:changeit@postgres:5432/lightning-viz
     LIGHTNING_USERNAME:
     LIGHTNING_PASSWORD:
     S3_KEY:
     S3_BUCKET:
     S3_SECRET:
-postgres:
-  image: orchardup/postgresql:9.3
+db:
+  image: postgres
   environment:
-    POSTGRESQL_PASS: changeit
-    POSTGRESQL_USER: lightning
-    POSTGRESQL_DB: lightning-viz
+    POSTGRES_USER: lightning
+    POSTGRES_PASSWORD: changeit
   ports:
     - 5432

@@ -1,11 +1,11 @@
 ##################################################################
 #
-# fig.postgres.yml
+# production.yml
 #
 # author: Rion Dooley <dooley@tacc.utexas.edu>
 #
-# This is a Fig file sufficient for running the Lightning data
-# Vizualization Server in moderate production outside of Heroku
+# This is a docker compose file for running the Lightning data
+# vizualization server in moderate production outside of Heroku
 # using a PostgreSQL database, reverse proxy, and horizontal scaling.
 # The server will be available on ports 80 and 443 on your Docker
 # host.
@@ -31,35 +31,32 @@ proxy:
   image: jwilder/nginx-proxy
   volumes:
     - "/var/run/docker.sock:/tmp/docker.sock"
-    # - %%SSL_CERTIFICATE_PATH%%:/certs
   ports:
-    - 80:80
-    - 443:443
+    - "80:80"
+    - "443:443"
   environment:
-    SSL:FALSE
+    SSL: FALSE
 web:
-  image: deardooley/lightning-viz
-  # build: .
-  command: npm run migrate && npm start
-  ports:
-    - 3000
+  extends: 
+    file: common.yml
+    service: web
+  command: bash -c "node server.js"
   links:
-    - postgres
+    - db
   environment:
     VIRTUAL_PORT: 3000
     VIRTUAL_HOST: docker.example.com
-    NODE_ENV: production
-    DATABASE_URL: lightning:changeit@postgres:5432/lightning-viz
+    NODE_ENV: development
+    DATABASE_URL: lightning:changeit@db:5432/postgres
     LIGHTNING_USERNAME:
     LIGHTNING_PASSWORD:
     S3_KEY:
     S3_BUCKET:
     S3_SECRET:
-postgres:
-  image: orchardup/postgresql:9.3
+db:
+  image: postgres
   environment:
-    POSTGRESQL_PASS: changeit
-    POSTGRESQL_USER: lightning
-    POSTGRESQL_DB: lightning-viz
+    POSTGRES_USER: lightning
+    POSTGRES_PASSWORD: changeit
   ports:
     - 5432
