@@ -8,7 +8,7 @@
 # vizualization server with a PostgreSQL db. It will run on your
 # Docker host, port 3000. To add authentication to the server, or
 # leverage Amazon S3 storage, fill in the environment variables
-# with the appropraite values.
+# with the appropriate values.
 #
 # Run with
 #
