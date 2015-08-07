@@ -11,3 +11,5 @@ mocks/
 
 *.db
 *.sqlite
+
+.idea
