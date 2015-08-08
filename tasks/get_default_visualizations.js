@@ -6,7 +6,7 @@ var defaultVisualizations = config.defaultVisualizations || [];
 require('colors');
 var npm = require('npm');
 
-module.exports = function(cb) {
+var getDefaultVisualizations = function(cb) {
 
     console.log('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
     var loglevel = npm.config.get('loglevel');
@@ -27,3 +27,17 @@ module.exports = function(cb) {
     });
 
 };
+
+
+if (require.main === module) {
+    // code run only if this file is called
+    // directly from the command line
+    npm.load({}, function() {
+        getDefaultVisualizations();
+    });
+}
+else {
+    // expose functions if this file has been
+    // required from elsewhere
+    module.exports = getDefaultVisualizations;
+}
