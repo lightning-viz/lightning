@@ -115,7 +115,7 @@
     "request": "~2.36.0",
     "resumer": "0.0.0",
     "sequelize": "^1.7.10",
-    "sequelize-cli": "^0.3.3",
+    "sequelize-cli": "^1.7.4",
     "serve-favicon": "^2.1.6",
     "serve-static": "*",
     "socket.io": "~1.0.6",
