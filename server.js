@@ -62,7 +62,9 @@ io.on('connection', function(){
 require('./config/express')(app, io);
 
 console.log('Initializing npm...');
-npm.load({}, function() {
+npm.load({
+    loglevel: 'error'
+}, function() {
     // Bootstrap routes
     require('./config/routes')(app);
 

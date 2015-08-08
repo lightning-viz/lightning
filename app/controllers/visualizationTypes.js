@@ -39,9 +39,7 @@ exports.resetDefaults = function(req, res, next) {
 
     models.VisualizationType
         .destroy({}, {truncate: true}).success(function() {
-
             console.log('successfully deleted current visualizations');
-            
             tasks.getDefaultVisualizations(function() {
                 return res.redirect(config.baseURL + 'visualization-types');
             });
@@ -66,7 +64,7 @@ exports.create = function (req, res, next) {
         .then(function(type) {
             return res.json(type);
         }).error(function(err) {
-            return res.status(500).send();
+            return res.status(500).send(err);
         });
         
 };
@@ -102,7 +100,7 @@ exports.delete = function (req, res, next) {
     models.VisualizationType
         .find(vizTypeId)
         .then(function(vizType) {
-            vizType.destroy().success(function() {
+            vizType.deleteAndUninstall().then(function() {
                 return res.json(vizType);                
             }).error(next);
         }).error(next);
@@ -115,30 +113,26 @@ exports.getDelete = function(req, res, next) {
     models.VisualizationType
         .find(vizTypeId)
         .then(function(vizType) {
-            vizType.destroy().success(function() {
-                return res.redirect(config.baseURL + 'visualization-types/');
-            }).error(next);
-        }).error(next);
+            vizType
+                .deleteAndUninstall()
+                .then(function() {
+                    return res.redirect(config.baseURL + 'visualization-types/');
+                }).catch(next);
+        }).catch(next);
 };
 
 
 
 exports.preview = function(req, res, next) {
 
-    console.log('requested url: ' + req.url);
-
-    var url = req.query.url;
-    var file = req.query.file;
-
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
-
     req.session.lastBundlePath = tmpPath;
 
-    var vizTypePromise;
+    var vizTypePromise, name;
 
     if(req.query.url) {
         var url = req.query.url;
-        var name = url;
+        name = url;
         if(req.query.path) {
             name += '/' + req.query.path;
         }
@@ -149,7 +143,7 @@ exports.preview = function(req, res, next) {
             .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
     } else if(req.query.path && process.env.NODE_ENV !== 'production') {
         var p = path.resolve(req.query.path);
-        var name = req.query.name || /[^/]*$/.exec(p)[0];
+        name = req.query.name || /[^/]*$/.exec(p)[0];
 
         vizTypePromise = models.VisualizationType
             .createFromFolder(p, { name: name}, {preview: true});
@@ -291,7 +285,6 @@ exports.importNPM = function(req, res, next) {
 
 exports.importViz = function(req, res, next) {
 
-    var backURL = req.header('Referer');
     var name = req.body.name  || req.query.name;
     var url = req.body.url || req.query.url;
     var path = req.body.path || req.query.path;
@@ -364,4 +357,4 @@ exports.importPreviewHandler = function(req, res, next) {
         }
     }
 
-}
+};

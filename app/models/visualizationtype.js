@@ -151,10 +151,10 @@ module.exports = function(sequelize, DataTypes) {
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
+                npm.config.set('loglevel', 'silent');
                 return Q.nfcall(npm.commands.uninstall, [name])
                     .then(function(results) {
-                        npm.config.set('loglevel', 'silent');
-                        return Q.nfcall(command, [name])
+                        return Q.nfcall(command, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
                         console.log(('Successfully installed ' + name).green);
@@ -345,22 +345,21 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 return Q.all(funcs);
             },
-
             deleteAndUninstall: function() {
-                var destroy = this.destroy;
-                var funcs = [];
+                var self = this;
                 if(this.isModule) {
-                    funcs.push(Q.nfcall(npm.commands.uninstall, [name]));
+                    return Q.nfcall(npm.commands.uninstall, [this.moduleName])
+                        .then(function() {
+                            return self.destroy();
+                        });
                 }
-                return destroy();
+                return self.destroy();
             }
-
         },
 
         hooks: {
 
             beforeValidate: function(vizType, next) {
-
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);

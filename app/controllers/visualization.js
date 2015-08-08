@@ -210,7 +210,7 @@ exports.delete = function (req, res, next) {
             }            
 
             var sessionId = viz.SessionId;
-            viz.deleteAndUninstall().then(function() {                
+            viz.destroy().then(function() {
                 req.io.of('/sessions/' + sessionId)
                     .emit('viz:delete', vizId);
                 return res.json(viz);                
@@ -228,7 +228,7 @@ exports.getDelete = function(req, res, next) {
                 return res.status(404).send();
             }
             var sessionId = viz.SessionId;
-            viz.deleteAndUninstall().then(function() {
+            viz.destroy().then(function() {
                 req.io.of('/sessions/' + sessionId)
                     .emit('viz:delete', vizId);
                 return res.redirect(config.baseURL + 'sessions/' + sessionId);

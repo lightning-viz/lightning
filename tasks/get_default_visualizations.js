@@ -39,7 +39,9 @@ if (require.main === module) {
                 .findAll()
                 .success(function(vizTypes) {
                     if(vizTypes.length === 0) {
-                        npm.load({}, function() {
+                        npm.load({
+                            loglevel: 'error'
+                        }, function() {
                             getDefaultVisualizations();
                         });
                     }
