@@ -25,6 +25,7 @@ if(defaultVisualizations) {
     'lightning-image',
     'lightning-image-poly',
     'lightning-line',
+    'lightning-line-streaming',
     'lightning-map',
     'lightning-matrix',
     'lightning-scatter',
@@ -33,7 +34,6 @@ if(defaultVisualizations) {
     'lightning-volume'
   ];
 }
-
 
 var defaults = {
   root: path.normalize(__dirname + '/..'),
