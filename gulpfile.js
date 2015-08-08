@@ -7,7 +7,6 @@ var csso = require('gulp-csso');
 var livereload = require('gulp-livereload');
 var tinylr = require('tiny-lr');
 var server = tinylr();
-var jade = require('gulp-jade');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -98,30 +97,6 @@ gulp.task('images', function() {
             .pipe( livereload( server ));
 });
 
-gulp.task('jade', function() {
-
-    // delete require.cache[require.resolve('./' + srcDir + 'js/utils')];
-    // var utils = require('./' + srcDir + '/js/utils');
-
-    if(!PRODUCTION_MODE) {
-        host = '/';
-    }
-    
-    return gulp.src(srcDir + '**/index.jade')
-               .pipe(jade({
-                    pretty: !PRODUCTION_MODE,
-                    locals: {
-                        // utils: utils,
-                        STATIC_URL: host,
-                        _: _
-                    }
-               }))
-               .on('error', gutil.log)
-               .on('error', gutil.beep)
-               .pipe(gulp.dest('./public/'))
-               .pipe( livereload( server ));
-});
-
 gulp.task('templates', ['static']);
 
 
@@ -143,7 +118,6 @@ gulp.task('watch', function () {
  
     gulp.watch(srcDir + 'stylesheets/**/*.{scss,css}',['css']);
     gulp.watch(srcDir + 'js/**/*.js',['js']);
-    // gulp.watch(srcDir + 'templates/**/*.jade',['jade', 'js']);
   });
 });
 
