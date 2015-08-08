@@ -8,17 +8,6 @@ var uuid = require('node-uuid');
 var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
-var npm = require('npm');
-
-
-var matchedPackages = [];
-console.log('searching');
-// npm.commands.search(['lightning-visualization'], function(packages) {
-//     _.each(packages, function(p, packageName) {
-//         console.log(packageName);
-//         console.log(p);
-//     });
-// });
 
 exports.index = function (req, res, next) {
 
