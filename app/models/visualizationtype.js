@@ -133,11 +133,16 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
                 // check if example image exists
-                var thumbnailPath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/thumbnail.png');
-                var thumbnailExists = fs.existsSync(thumbnailPath);
-                if(thumbnailExists) {                    
-                    vizTypeObj.thumbnailLocation = thumbnailPath;
-                }
+                var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+                _.find(thumbnailExtensions, function(extension) {
+                    var thumbnailPath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/thumbnail.' + extension);
+                    var thumbnailExists = fs.existsSync(thumbnailPath);
+                    if(thumbnailExists) {
+                        vizTypeObj.thumbnailLocation = thumbnailPath;
+                    }
+                    return thumbnailExists;
+                });
+
 
                 if(preview) {
                     return VisualizationType.build(vizTypeObj);
