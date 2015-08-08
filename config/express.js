@@ -2,21 +2,15 @@
 /**
  * Module dependencies.
  */
-
-var express = require('express');
 var session = require('cookie-session');
 var compression = require('compression');
-var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var csrf = require('csurf');
-var swig = require('swig');
 var serveStatic = require('serve-static');
 var slashes = require('connect-slashes');
 var favicon = require('serve-favicon');
 
-var flash = require('connect-flash');
 var winston = require('winston');
 var helpers = require('view-helpers');
 var config = require('./config');
@@ -58,21 +52,11 @@ module.exports = function (app, io) {
 
     // Don't log during tests
     // Logging middleware
-    // if (env !== 'test') app.use(morgan(log));
     app.set('trust proxy', 'loopback');
     app.use(cors());
     app.use(slashes());
 
-
-    // Swig templating engine settings
-    if (env === 'development' || env === 'test') {
-        swig.setDefaults({
-            cache: false
-        });
-    }
-
     // set views path, template engine and default layout
-    // app.engine('html', swig.renderFile);
     app.set('views', config.root + '/app/views');
     app.set('view engine', 'jade');
 
@@ -151,13 +135,6 @@ module.exports = function (app, io) {
             maxAge: 1000*60*60
         }
     }));
-
-    // use passport session
-    // app.use(passport.initialize());
-    // app.use(passport.session());
-
-    // connect flash for flash messages - should be declared after sessions
-    app.use(flash());
 
     // should be declared after session and flash
     app.use(helpers(pkg.name));
