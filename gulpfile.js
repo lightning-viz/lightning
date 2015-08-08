@@ -7,41 +7,19 @@ var csso = require('gulp-csso');
 var livereload = require('gulp-livereload');
 var tinylr = require('tiny-lr');
 var server = tinylr();
-var path = require('path');
-var express = require('express');
-var app = express();
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
-var s3 = require('gulp-s3');
-var gzip = require('gulp-gzip');
-var colors = require('colors');
 var rename = require('gulp-rename');
-var bulkSass = require('gulp-sass-bulk-import');
-var _ = require('lodash');
-
 var srcDir = 'ui/';
-var appServer;
-
 
 var PRODUCTION_MODE = gutil.env.production;
-var projectName = require('./package').name;
-
 
 gulp.task('js-lib', function() {
     return gulp.src(srcDir + 'js/lib/**/*.js')
             .pipe(gulpif(PRODUCTION_MODE, uglify()))
             .pipe(gulp.dest('./public/js/lib/'))
             .pipe( livereload( server ));
-});
-
-gulp.task('gzip', ['build'], function() {
-    return gulp.src('public/**/*.{js,css}')
-                .pipe(gzip())
-                .pipe(rename(function(path) {
-                    path.extname = '';
-                }))
-                .pipe(gulp.dest('./public/'));
 });
 
 gulp.task('browserify', function() {
@@ -97,19 +75,6 @@ gulp.task('images', function() {
             .pipe( livereload( server ));
 });
 
-gulp.task('templates', ['static']);
-
-
-gulp.task('express', function() {
-    if(appServer) {
-        try {
-            appServer.close();
-        } catch(e) {}
-    }
-    delete require.cache[require.resolve('./server')];
-    appServer = require('./server');
-});
- 
 gulp.task('watch', function () {
   server.listen(35729, function (err) {
     if (err) {
@@ -122,20 +87,10 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('gzip', ['build'], function() {
-    return gulp.src('public/**/*.{js,css}')
-                .pipe(gzip())
-                .pipe(rename(function(path) {
-                    path.extname = '';
-                }))
-                .pipe(gulp.dest('./public/'));
-});
-
-
 gulp.task('js', ['browserify','js-lib']);
 gulp.task('static', ['js', 'css', 'fonts', 'images']);
-gulp.task('default', ['templates','watch']);
-gulp.task('build', ['templates']);
-gulp.task('heroku:production', ['templates']);
+gulp.task('default', ['static','watch']);
+gulp.task('build', ['static']);
+gulp.task('heroku:production', ['static']);
 
 

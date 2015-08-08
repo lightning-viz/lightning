@@ -10,7 +10,6 @@ var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
 var npm = require('npm');
 
-
 module.exports = function(sequelize, DataTypes) {
     var schema;
     if(isPostgres) {
@@ -142,7 +141,6 @@ module.exports = function(sequelize, DataTypes) {
                     }
                     return thumbnailExists;
                 });
-
 
                 if(preview) {
                     return VisualizationType.build(vizTypeObj);
