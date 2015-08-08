@@ -10,7 +10,6 @@ var server = tinylr();
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
 var srcDir = 'ui/';
 
 var PRODUCTION_MODE = gutil.env.production;

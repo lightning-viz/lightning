@@ -32,9 +32,19 @@ var getDefaultVisualizations = function(cb) {
 if (require.main === module) {
     // code run only if this file is called
     // directly from the command line
-    npm.load({}, function() {
-        getDefaultVisualizations();
-    });
+    var models = require('../app/models');
+    models.sequelize.sync({force: false})
+        .success(function() {
+            models.VisualizationType
+                .findAll()
+                .success(function(vizTypes) {
+                    if(vizTypes.length === 0) {
+                        npm.load({}, function() {
+                            getDefaultVisualizations();
+                        });
+                    }
+                });
+        });
 }
 else {
     // expose functions if this file has been
