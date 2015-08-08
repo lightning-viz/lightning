@@ -270,7 +270,7 @@ exports.addData = function (req, res, next) {
                         return res.json(jsonViz);
                     }).catch(function(err) {
                         if(err.message && err.message === 'Unknown Viztype') {
-                            return res.status(404).send('Could not find viz type ' + req.body.type);    
+                            return res.status(404).send('Could not find viz type ' + type);    
                         }
                         return next(err);
                     });
