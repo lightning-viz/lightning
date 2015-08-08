@@ -1,13 +1,18 @@
 
 
+body {
+    margin: 0;
+}
 #lightning-body {
+
+    $purple: #9175f0;
+    $blue: #68a1e5;
+    $gray: #626c7c;
+    $darkGrayText: #545E6B;
 
     @import "lib/skeleton";
     @import "lib/modal";
     @import "sidebar";
-
-    $purple: #9175f0;
-    $blue: #68a1e5;
 
     max-width: 100%;
 
@@ -70,6 +75,7 @@
         background-image: none;
         border: 1px solid #ccc;
         border-radius: 4px;
+        box-sizing: border-box;
     }
 
     .button,
@@ -257,6 +263,7 @@
 
 
     @import "pages/editor";
+    @import "pages/viz-types";
     @import "responsive";
 
     .feed-item-container {

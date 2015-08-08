@@ -31,8 +31,7 @@ var vizs = {};
 socket.on('viz', function (viz) {
 
     $('.feed-container .empty').remove();
-
-    utils.requireOrFetchViz(viz.type, function(err, Viz) {
+    utils.requireOrFetchViz(viz.visualizationType, function(err, Viz) {
         if(err) {
             return console.log(err);
         }
@@ -85,8 +84,7 @@ setTimeout(function() {
         var data = $(this).data('data');
         var images = $(this).data('images');
         var options = $(this).data('opts');
-
-        var Viz =  require('viz/' + type);
+        var Viz =  require(type);
 
         var vid = $(this).attr('id');
         vizs[vid.slice(vid.indexOf('-') + 1)] = new Viz('#' + $(this).attr('id'), data, images, options);
@@ -124,8 +122,6 @@ setTimeout(function() {
                 request.put(url, params, function(error, res){
                     if(error) {
                         return console.log(error);
-                    } else {
-                        return console.log('success');
                     }
                 });
             });
@@ -167,7 +163,6 @@ var editDesctiption = function(e) {
             if(error) {
                 return console.log(error);
             } else {
-                return console.log('success');
                   $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                   });
@@ -182,7 +177,6 @@ $('#data-input-form').submit(function(e) {
     e.preventDefault();
 
     var url = $(this).attr('action');
-    console.log(url);
 
     var params = {};
     var inputs = $(this).serializeArray();
@@ -191,9 +185,6 @@ $('#data-input-form').submit(function(e) {
     });
 
     params.data = JSON.parse(params.data);
-
-    console.log(params);
-
 
     request.post(url, params, function(error, res){
         if(error) {

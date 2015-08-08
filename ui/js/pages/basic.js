@@ -11,5 +11,10 @@ $('[data-confirm]').click(function(e) {
     }
 });
 
+$('[data-link]').click(function(e) {
+    window.location.href = $(this).data('link');
+});
+
+
 require('../lib/dropit');
 $('[data-dropit]').dropit();

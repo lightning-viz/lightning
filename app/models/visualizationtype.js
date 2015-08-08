@@ -8,12 +8,9 @@ var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
-
+var npm = require('npm');
 
 module.exports = function(sequelize, DataTypes) {
-
-
-
     var schema;
     if(isPostgres) {
         schema = {
@@ -22,6 +19,9 @@ module.exports = function(sequelize, DataTypes) {
 
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+            isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+            isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
+            moduleName: {type: DataTypes.STRING},
 
             thumbnailLocation: DataTypes.STRING,
 
@@ -38,6 +38,9 @@ module.exports = function(sequelize, DataTypes) {
         name: {type: DataTypes.STRING, unique: true},
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+        isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
+        isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
+        moduleName: {type: DataTypes.STRING},
 
         thumbnailLocation: DataTypes.STRING,
 
@@ -88,6 +91,92 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                  // associations can be defined here
+            },
+
+            _buildFromNPM: function(name, preview) {
+
+                var lightningConfig = require(name + '/package.json').lightning || {};
+                var sampleData = lightningConfig.sampleData;
+
+                try {
+                    sampleData = require(name + '/lightning-sample-data.json');
+                } catch(e) {
+                    sampleData = sampleData || [];
+                }                
+                try {
+                    sampleData = require(name + '/data/sample-data.json');
+                } catch(e) {
+                    sampleData = sampleData || [];
+                }
+
+                var sampleImages = lightningConfig.sampleImages;
+                try {
+                    sampleImages = require(name + '/lightning-sample-images.json');
+                } catch(e) {
+                    sampleImages = sampleImages || [];
+                }
+
+                try {
+                    sampleImages = require(name + '/data/sample-images.json');
+                } catch(e) {
+                    sampleImages = sampleImages || [];
+                }
+
+                var vizTypeObj = {
+                    name: lightningConfig.name || name,
+                    isStreaming: lightningConfig.isStreaming || false,
+                    isModule: true,
+                    moduleName: name,
+                    sampleData: sampleData,
+                    sampleImages: sampleImages
+                }
+
+                // check if example image exists
+                var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+                _.find(thumbnailExtensions, function(extension) {
+                    var thumbnailPath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/thumbnail.' + extension);
+                    var thumbnailExists = fs.existsSync(thumbnailPath);
+                    if(thumbnailExists) {
+                        vizTypeObj.thumbnailLocation = thumbnailPath;
+                    }
+                    return thumbnailExists;
+                });
+
+                if(preview) {
+                    return VisualizationType.build(vizTypeObj);
+                }
+                return VisualizationType.create(vizTypeObj);
+            },
+
+            _createLinkNPM: function(command, name, preview) {
+                var self = this;
+                var loglevel = npm.config.get('loglevel');
+                npm.config.set('loglevel', 'silent');
+                return Q.nfcall(npm.commands.uninstall, [name])
+                    .then(function(results) {
+                        return Q.nfcall(command, [name]);
+                    }).then(function() {
+                        npm.config.set('loglevel', loglevel);
+                        console.log(('Successfully installed ' + name).green);
+                        return self._buildFromNPM(name, preview);
+                    });
+            },
+
+            createFromNPM: function(name) {
+                return this._createLinkNPM(npm.commands.install, name, false);
+            },
+
+            linkFromNPM: function(name) {
+                return this._createLinkNPM(npm.commands.install, name, true);
+            },
+
+            linkFromLocalModule: function(name) {
+                return this._createLinkNPM(npm.commands.link, name, true);
+            },
+
+
+            createFromLocalModule: function(name) {
+                return this._createLinkNPM(npm.commands.link, name, false);
             },
 
             createFromRepoURL: function(url, attributes, opts) {
@@ -201,8 +290,6 @@ module.exports = function(sequelize, DataTypes) {
 
 
                 }).spread(function(javascript, styles, markup, sampleData, sampleImages, packageJSON) {
-
-
                     sampleImages = JSON.parse(sampleImages);
                     if(!sampleImages.length) {
                         sampleImages = null;
@@ -251,22 +338,28 @@ module.exports = function(sequelize, DataTypes) {
                     funcs.push(Q.nfcall(fs.outputFile, jsPath + '/' + self.name + '.js', self.javascript));
                 }
                 if(self.styles) {
-                    console.log(stylePath + '/' + self.name + '.scss');
                     funcs.push(Q.nfcall(fs.outputFile, stylePath + '/' + self.name + '.scss', self.styles));
                 }
                 if(self.markup) {
-                    console.log(markupPath + '/' + self.name + '.jade');
                     funcs.push(Q.nfcall(fs.outputFile, markupPath + '/' + self.name + '.jade', self.markup));
                 }
                 return Q.all(funcs);
+            },
+            deleteAndUninstall: function() {
+                var self = this;
+                if(this.isModule) {
+                    return Q.nfcall(npm.commands.uninstall, [this.moduleName])
+                        .then(function() {
+                            return self.destroy();
+                        });
+                }
+                return self.destroy();
             }
-
         },
 
         hooks: {
 
             beforeValidate: function(vizType, next) {
-
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);

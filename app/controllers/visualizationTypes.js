@@ -9,23 +9,6 @@ var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
 
-
-// function protectRequire(str) {
-//     var protectedVars = ['define', 'require'];
-//     var initialCode = ';';
-//     var postCode = ';';
-//     _.each(protectedVars, function(v) {
-//         initialCode += 'window._' + v + ' = window.' + v + ';';
-//         initialCode += 'window.' + v + ' = undefined;';
-
-//         postCode += 'window.' + v + ' = window._' + v + ';';
-//     });
-
-//     return initialCode + str;// + postCode;
-
-// }
-
-
 exports.index = function (req, res, next) {
 
     models.VisualizationType.findAll()
@@ -36,6 +19,8 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
+
+
     models.VisualizationType.findAll({
             order: '"name" ASC'
         })
@@ -54,9 +39,7 @@ exports.resetDefaults = function(req, res, next) {
 
     models.VisualizationType
         .destroy({}, {truncate: true}).success(function() {
-
             console.log('successfully deleted current visualizations');
-            
             tasks.getDefaultVisualizations(function() {
                 return res.redirect(config.baseURL + 'visualization-types');
             });
@@ -77,23 +60,21 @@ exports.fetchDefaults = function (req, res, next) {
 exports.create = function (req, res, next) {
     
     models.VisualizationType
-        .create(_.pick(req.body, 'name', 'initialDataFields', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
+        .create(_.pick(req.body, 'name', 'initialDataFields', 'isStreaming', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
         .then(function(type) {
             return res.json(type);
         }).error(function(err) {
-            return res.status(500).send();
+            return res.status(500).send(err);
         });
         
 };
 
 exports.edit = function (req, res, next) {
 
-    console.log('editing');
-    
     models.VisualizationType
         .find(req.params.vid)
         .success(function(vizType) {
-            return vizType.updateAttributes(_.pick(req.body, 'name', 'initialDataFields', 'javascript', 'styles', 'markup'));
+            return vizType.updateAttributes(_.pick(req.body, 'name', 'isStreaming', 'initialDataFields', 'javascript', 'styles', 'markup'));
         })
         .success(function(vizType) {
             setTimeout(function() {
@@ -119,7 +100,7 @@ exports.delete = function (req, res, next) {
     models.VisualizationType
         .find(vizTypeId)
         .then(function(vizType) {
-            vizType.destroy().success(function() {
+            vizType.deleteAndUninstall().then(function() {
                 return res.json(vizType);                
             }).error(next);
         }).error(next);
@@ -132,44 +113,37 @@ exports.getDelete = function(req, res, next) {
     models.VisualizationType
         .find(vizTypeId)
         .then(function(vizType) {
-            vizType.destroy().success(function() {
-                return res.redirect(config.baseURL + 'visualization-types/');
-            }).error(next);
-        }).error(next);
+            vizType
+                .deleteAndUninstall()
+                .then(function() {
+                    return res.redirect(config.baseURL + 'visualization-types/');
+                }).catch(next);
+        }).catch(next);
 };
-
-
 
 
 
 exports.preview = function(req, res, next) {
 
-    console.log('requested url: ' + req.url);
-
-    var url = req.query.url;
-    var file = req.query.file;
-
-    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
-
+    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
     req.session.lastBundlePath = tmpPath;
-    
 
-    var vizTypePromise;
+    var vizTypePromise, name;
 
     if(req.query.url) {
         var url = req.query.url;
-        var name = url;
+        name = url;
         if(req.query.path) {
             name += '/' + req.query.path;
         }
 
-        name = /[^/]*$/.exec(name)[0];
+        name = req.query.name || /[^/]*$/.exec(name)[0];
 
         vizTypePromise = models.VisualizationType
             .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
     } else if(req.query.path && process.env.NODE_ENV !== 'production') {
         var p = path.resolve(req.query.path);
-        var name = /[^/]*$/.exec(p)[0];
+        name = req.query.name || /[^/]*$/.exec(p)[0];
 
         vizTypePromise = models.VisualizationType
             .createFromFolder(p, { name: name}, {preview: true});
@@ -183,11 +157,17 @@ exports.preview = function(req, res, next) {
             vizType.exportToFS(tmpPath)
                 .spread(function() {
                     var b = browserify();
-                    var stream = resumer().queue(vizType.javascript).end();
-                    b.require(stream, {
-                        basedir: tmpPath,
-                        expose: 'viz/' + vizType.name
-                    });
+                    if(vizType.isModule) {
+                        b.require(vizType.moduleName, {
+                            expose: vizType.moduleName
+                        });
+                    } else {
+                        var stream = resumer().queue(vizType.javascript).end();
+                        b.require(stream, {
+                            basedir: tmpPath,
+                            expose: vizType.name
+                        });
+                    }
 
                     b.bundle(function(err, buf) {
 
@@ -195,51 +175,36 @@ exports.preview = function(req, res, next) {
                             return next(err);
                         }               
 
-                        
-                        // var javascript = protectRequire(buf.toString('utf8'));
                         var javascript = buf.toString('utf8');
-
-
+                        var scssData = '#lightning-body {\n';
                         if(vizType.styles) {
-                            var scssData = '#lightning-body {\n';
                             scssData += vizType.styles + '\n';
-                            scssData += '\n}';
-                            sass.render({
-                                data: scssData,
-                                success: function(sassResults) {
-                                    if(req.url.indexOf('/preview/full') > -1) {
-                                        return res.render('viz-types/full-preview', {
-                                            vizType: vizType,
-                                            javascript: javascript,
-                                            css: sassResults.css
-                                        });
-                                    }
-                                    return res.render('viz-types/preview-editor', {
+                        }
+                        scssData += '\n}';
+                        sass.render({
+                            data: scssData,
+                            success: function(sassResults) {
+                                if(req.url.indexOf('/preview/full') > -1) {
+                                    return res.render('viz-types/full-preview', {
                                         vizType: vizType,
                                         javascript: javascript,
-                                        css: sassResults.css
+                                        css: sassResults.css,
+                                        path: path.resolve(req.query.path || ''),
+                                        url: req.query.url,
+                                        source: req.query.url ? 'gitRepo' : 'localFolder'
                                     });
                                 }
-                            });
-                        } else {
-
-                            if(req.url.indexOf('/preview/full') > -1) {
-                                return res.render('viz-types/full-preview', {
+                                return res.render('viz-types/preview-editor', {
                                     vizType: vizType,
                                     javascript: javascript,
-                                    css: ''
+                                    css: sassResults.css,
+                                    path: path.resolve(req.query.path || ''),
+                                    url: req.query.url,
+                                    source: req.query.url ? 'gitRepo' : 'localFolder'
                                 });
                             }
-                            return res.render('viz-types/preview-editor', {
-                                vizType: vizType,
-                                javascript: javascript,
-                                css: ''
-                            });                            
-                        }
-
+                        });
                     });
-
-
                 });
 
         }).fail(function(err) {
@@ -248,23 +213,101 @@ exports.preview = function(req, res, next) {
 
 };
 
+exports.previewNPM = function(req, res, next) {
+
+    var location = req.params.location;
+    var name = req.query.name;
+
+    console.log('requested to link module: ' + name);
+
+    var linker;
+    if(location === 'registry') {
+        linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
+    } else if(location === 'local') {
+        linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
+
+    linker(name)
+        .then(function(vizType) {
+            var b = browserify();
+            b.require(name);
+
+            b.bundle(function(err, buf) {
+
+                if(err) {
+                    console.log(err);
+                    return res.status(500).end();
+                }
+
+                var javascript = buf.toString('utf8');
+
+                return res.render('viz-types/preview-editor', {
+                    vizType: vizType,
+                    javascript: javascript,
+                    css: '',
+                    location: location,
+                    source: 'npm'
+                });
+            });
+        }).catch(function(err) {
+            console.log(err);
+            return res.status(500).send('error compiling module').end();
+        });
+};
+
+exports.importNPM = function(req, res, next) {
+
+    var location = req.params.location;
+    var name = req.query.name;
+
+    console.log('requested to link module: ' + name);
+
+    var creator;
+    if(location === 'registry') {
+        creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
+    } else if(location === 'local') {
+        creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
+
+    creator(name)
+        .then(function(vizType) {
+            return res.redirect('/visualization-types/edit/' + vizType.id);
+        }).catch(function(err) {
+            console.log(err);
+            return res.status(500).send('error compiling module').end();
+        });
+};
+
 
 exports.importViz = function(req, res, next) {
 
-    var backURL = req.header('Referer');
-    var name = req.body.name;
-    var url = req.body.url;
+    var name = req.body.name  || req.query.name;
+    var url = req.body.url || req.query.url;
+    var path = req.body.path || req.query.path;
 
-    console.log(name);
-    console.log(url);
+    var createPromise;
+    if(url) {
+        createPromise = models.VisualizationType.createFromRepoURL(url, {name: name});
+    } else if(path) {
+        createPromise = models.VisualizationType.createFromFolder(path, {name: name}, {preview: false});
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    models.VisualizationType
-        .createFromRepoURL(url, { name: name})
-        .then(function() {
-            return res.redirect(backURL);
+    createPromise
+        .then(function(viz) {
+            return res.redirect('/visualization-types/edit/' + viz.id);
         }).fail(function(err) {
             next(err);
         });
+};
+
+exports.advanced = function (req, res, next) {
+    return res.render('viz-types/advanced', {});
 };
 
 
@@ -272,7 +315,6 @@ exports.editor = function (req, res, next) {
 
     models.VisualizationType.find(req.params.vid)
         .then(function(type) {
-            
             return res.render('viz-types/editor', {
                 vizType: type
             });
@@ -280,3 +322,39 @@ exports.editor = function (req, res, next) {
         }).error(next);
 };
 
+
+exports.thumbnail = function (req, res, next) {
+
+    models.VisualizationType.find(req.params.vid)
+        .then(function(type) {
+            if(type.thumbnailLocation) {
+                return res.sendFile(type.thumbnailLocation);
+            }
+            
+            return res.status(404).send('no thumbnail found').end();
+
+        }).error(next);
+};
+
+
+
+
+exports.importPreviewHandler = function(req, res, next) {
+    var method = req.params.method;
+    var importPreview = req.params.importPreview;
+
+    if(method === 'npm') {
+        if(importPreview === 'import') {
+            return exports.importNPM(req, res, next);
+        } else {
+            return exports.previewNPM(req, res, next);
+        }
+    } else if(method === 'git' || method === 'local') {
+        if(importPreview === 'import') {
+            return exports.importViz(req, res, next);
+        } else {
+            return exports.preview(req, res, next);
+        }
+    }
+
+};

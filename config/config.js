@@ -12,12 +12,36 @@ var test = require('./env/test');
 var production = require('./env/production');
 
 
+var defaultVisualizations = argv.default_visualizations ? argv.default_visualizations : process.env.LIGHTNING_DEFAULT_VISUALIZATIONS;
+if(defaultVisualizations) {
+  defaultVisualizations = defaultVisualizations.join(',');
+} else {
+  defaultVisualizations = [
+    'lightning-adjacency',
+    'lightning-force',
+    'lightning-gallery',
+    'lightning-graph',
+    'lightning-graph-bundled',
+    'lightning-image',
+    'lightning-image-poly',
+    'lightning-line',
+    'lightning-line-streaming',
+    'lightning-map',
+    'lightning-matrix',
+    'lightning-scatter',
+    'lightning-scatter-streaming',
+    'lightning-scatter-3',
+    'lightning-volume'
+  ];
+}
+
 var defaults = {
   root: path.normalize(__dirname + '/..'),
   auth: {
     username: argv.username ? '' + argv.username : process.env.LIGHTNING_USERNAME,
     password: argv.password ? '' + argv.password : process.env.LIGHTNING_PASSWORD,
-  }
+  },
+  defaultVisualizations: defaultVisualizations
 };
 
 

@@ -33,55 +33,61 @@ exports.getDynamicVizBundle = function (req, res, next) {
     // Get all vizTypes in array
     var visualizationTypes = _.uniq(req.query.visualizations).sort();
 
+    var cacheHit = false;
+
     if(!req.query.cachemiss) {
         var bundle = cache.get('js/' + visualizationTypes.toString());
 
         if(bundle) {
-            return res.send(bundle);
+            cacheHit = true;
+            res.send(bundle);
         }
     }
 
     console.log('building viz bundle with ' + visualizationTypes);
-    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/viz/');
+    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
-
-
     var b = browserify();
 
     models.VisualizationType
         .findAll().success(function(vizTypes) {
-
             console.log(_.pluck(vizTypes, 'name'));
-
-
             var funcs = [];
             _.each(vizTypes, function(vizType) {
-                funcs.push(vizType.exportToFS(tmpPath));
+                if(!vizType.isModule) {
+                    funcs.push(vizType.exportToFS(tmpPath));
+                }
             });
 
             Q.all(funcs).spread(function() {
 
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
-
-                    var stream = resumer().queue(vizType.javascript).end();
-                    b.require(stream, {
-                        basedir: tmpPath,
-                        expose: 'viz/' + vizType.name
-                    });
-
+                    if(vizType.isModule) {
+                        console.log(vizType.moduleName);
+                        b.require(vizType.moduleName, {
+                            expose: vizType.moduleName
+                        });
+                    } else {
+                        var stream = resumer().queue(vizType.javascript).end();
+                        b.require(stream, {
+                            basedir: tmpPath,
+                            expose: vizType.name
+                        });
+                    }
                 });
 
                 b.bundle(function(err, buf) {
-
                     if(err) {
                         return next(err);
                     }               
 
                     // var out = protectRequire(buf.toString('utf8'));
                     var out = buf.toString('utf8');
-                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 60);
-                    res.send(out); 
+                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
+                    if(!cacheHit) {
+                        res.send(out);
+                    }
                 });
             });
         }).error(next);

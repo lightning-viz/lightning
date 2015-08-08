@@ -4,9 +4,6 @@ var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
 
-
-
-
 module.exports = function(sequelize, DataTypes) {
 
 
@@ -18,7 +15,6 @@ module.exports = function(sequelize, DataTypes) {
             settings: 'JSON',
             name: DataTypes.STRING,
             description: DataTypes.TEXT,
-            type: DataTypes.STRING,
             images: DataTypes.ARRAY(DataTypes.STRING)
         };
     } else {
@@ -52,7 +48,6 @@ module.exports = function(sequelize, DataTypes) {
             },
             name: DataTypes.STRING,
             description: DataTypes.TEXT,
-            type: DataTypes.STRING,
             images: {
                 type: DataTypes.TEXT,
                 get: function() {
@@ -70,7 +65,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                  // associations can be defined here
                  Visualization.belongsTo(models.Session);
+                 Visualization.belongsTo(models.VisualizationType);
             },
+
             getNamedObjectForVisualization: function(vid, name) {
                 name = validator.escape(name);
 

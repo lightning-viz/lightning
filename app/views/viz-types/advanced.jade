@@ -1,0 +1,43 @@
+extends ../layout
+
+
+block content
+
+    .row
+        .six.columns
+            h2
+                | Visualization Types
+
+            h4
+                a(href="#import-visualization-modal", rel="modal:open")
+                    | Import Visualization
+
+
+    .row
+        .six.columns
+            h4
+                | Fetch Default Visualizations 
+                br
+                small
+                    | (will not overwrite existing)
+            a(href="./fetch-defaults")
+                .button
+                    | Fetch Default Visualizations
+
+    .row
+        .six.columns
+            h4
+                | Reset Default Visualizations 
+                br
+                small
+                    | (will overwrite existing)
+            a(href="./reset-defaults", data-confirm="Warning this will delete all local visualization types. Are you sure?")
+                .button
+                    | Reset Default Visualizations
+
+
+
+block append scripts
+    script(src='#{STATIC_URL}js/visualization-types.js')
+
+        

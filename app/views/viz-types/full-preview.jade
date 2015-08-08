@@ -12,7 +12,7 @@ block container
                 h2
                     | #{vizType.name}
                 .subheader
-                    a(href="..")
+                    a(href="#{BASE_URL}visualization-types/")
                         | &larr; back
 
                 .action-container
@@ -20,10 +20,10 @@ block container
                         .button
                             | Import
 
-            
+        #editor-component 
         .editor-viz-container.full
             .feed-item-container.full
-                .feed-item(data-type="#{vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
+                .feed-item(data-type="#{viz.moduleName || vizType.name}", data-data="#{(vizType.sampleData.length) ? JSON.stringify(vizType.sampleData[0].data) : []}", data-images="#{JSON.stringify(vizType.sampleImages)}", data-initialized="false")
 
 
     .saved
@@ -37,5 +37,11 @@ block scripts
     script(src='#{STATIC_URL}js/basic.js')
     script.
         !{javascript}
+    script.
+        window.lightning = window.lightning || {};
+        window.lightning.editor = {
+            datasets: !{JSON.stringify(vizType.sampleData)},
+            name: "#{vizType.name}"
+        };
     script(src='#{STATIC_URL}js/editor.js')
 

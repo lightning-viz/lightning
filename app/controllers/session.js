@@ -47,7 +47,8 @@ exports.feed = function (req, res, next) {
             .findAll({
                 where: {
                     SessionId: sessionId
-                }
+                },
+                include: [VisualizationType]
             }),
         VisualizationType.findAll({
             order: '"name" ASC'
@@ -57,11 +58,6 @@ exports.feed = function (req, res, next) {
         if(!session) {
             return res.status(404).send('Session not found');
         }
-
-        _.each(visualizations, function(viz) {
-            console.log(viz.type);
-        });
-
         res.render('session/feed', {
             session: session,
             visualizations: visualizations,
@@ -119,10 +115,6 @@ exports.publicRead = function (req, res, next) {
         if(!session) {
             return res.status(404).send('Session not found');
         }
-
-        _.each(visualizations, function(viz) {
-            console.log(viz.images);
-        });
 
         res.render('session/feed-public', {
             session: session,
@@ -204,19 +196,36 @@ exports.addData = function (req, res, next) {
     var sessionId = req.params.sid;
 
     var Visualization = models.Visualization;
+    var vt;
 
     if(req.is('json')) {
-        Visualization
-            .create({
+        models.VisualizationType.find({
+            where: {
+                name: req.body.type
+            }
+        }).then(function(vizType) {
+            if(!vizType) {
+                throw new Error('Unknown Viztype');
+            }
+            vt = vizType;
+            return Visualization.create({
                 data: req.body.data,
-                type: req.body.type,
                 opts: req.body.opts,
-                SessionId: sessionId
-            }).then(function(viz) {
-                req.io.of('/sessions/' + sessionId)
-                    .emit('viz', viz);  
-                return res.json(viz);
-            }).error(next);
+                SessionId: sessionId,
+                VisualizationTypeId: vizType.id
+            });
+        }).then(function(viz) {
+            var jsonViz = viz.toJSON();
+            jsonViz.visualizationType = vt;
+            req.io.of('/sessions/' + sessionId)
+                .emit('viz', jsonViz);  
+            return res.json(jsonViz);
+        }).catch(function(err) {
+            if(err.message && err.message === 'Unknown Viztype') {
+                return res.status(404).send('Could not find viz type ' + req.body.type);    
+            }
+            return next(err);
+        });
     } else {
         var form = new multiparty.Form();
 
@@ -229,11 +238,7 @@ exports.addData = function (req, res, next) {
                         console.log('error in thumbnailAndUpload');
                         return res.status(500).send('error creating image thumbnail');
                     }
-
                     var imgData = data.imgData;
-
-                    console.log(imgData);
-
                     var type = 'image';
                     if(fields.type) {
                         if(_.isArray(fields.type) || _.isObject(fields.type)) {
@@ -242,19 +247,33 @@ exports.addData = function (req, res, next) {
                             type = fields.type;
                         }                        
                     }
-
-                    Visualization
-                        .create({
-                            type:  type,
+                    models.VisualizationType.find({
+                        where: {
+                            name: type
+                        }
+                    }).then(function(vizType) {
+                        if(!vizType) {
+                            throw new Error('Unknown Viztype');
+                        }
+                        vt = vizType;
+                        return Visualization.create({
                             images: [imgData],
                             opts: req.body.opts,
-                            SessionId: sessionId
-                        }).then(function(viz) {
-                            req.io.of('/sessions/' + sessionId)
-                                .emit('viz', viz);
-
-                            return res.json(viz);
-                        }).error(next);
+                            SessionId: sessionId,
+                            VisualizationTypeId: vizType.id
+                        });
+                    }).then(function(viz) {
+                        var jsonViz = viz.toJSON();
+                        jsonViz.visualizationType = vt;
+                        req.io.of('/sessions/' + sessionId)
+                            .emit('viz', jsonViz);  
+                        return res.json(jsonViz);
+                    }).catch(function(err) {
+                        if(err.message && err.message === 'Unknown Viztype') {
+                            return res.status(404).send('Could not find viz type ' + type);    
+                        }
+                        return next(err);
+                    });
                 });
             });
         });
@@ -264,22 +283,24 @@ exports.addData = function (req, res, next) {
 
 
 exports.appendData = function (req, res, next) {
-
     var sessionId = req.params.sid;
     var vizId = req.params.vid;
     var fieldName = req.params.field;
-
+    var VisualizationType = models.VisualizationType;
 
     models.Visualization
-        .find(vizId)
-        .then(function(viz) {
+        .find({
+            where: {
+                id: vizId
+            }, 
+            include: [VisualizationType]
+        }).then(function(viz) {
             if(req.is('json')) {
 
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
-
-                        if(viz.type.indexOf('streaming') > -1) {
+                        if(viz.visualizationType.isStreaming) {
                             _.each(req.body.data, function(d, i) {
                                 if(i < viz.data[fieldName].length) {
                                     viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
@@ -301,7 +322,7 @@ exports.appendData = function (req, res, next) {
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
 
-                            if(viz.type.indexOf('streaming') > -1) {
+                            if(viz.visualizationType.isStreaming) {
                                 _.each(req.body.data, function(d, i) {
 
                                 });
@@ -381,10 +402,7 @@ exports.appendData = function (req, res, next) {
             } else {
                 return next(500);
             }
-
-
         }).error(next);
-
 };
 
 

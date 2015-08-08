@@ -8,63 +8,39 @@ block content
             h2
                 | Visualization Types
 
-    .row
-        .sixteen.columns
-            ul
-                for vizType in vizTypes
-                    li
-                        a(href="./#{vizType.id}")
-                            | #{vizType.name}
-
-    .row
-        .sixteen.columns
             h4
-                | Import Remote Viz
-            form(method="post", action=".")
-                .row
-                    .six.columns
-                        input(type="text", name="name", placeholder="name").full-width
-                .row
-                    .six.columns
-                        input(type="text", name="url", placeholder="git url").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="import")
-
-    .row
-        .sixteen.columns
+                a(href="#import-visualization-modal", rel="modal:open")
+                    | Import Visualization
             h4
-                | Preview Remote Viz
-            
-            form(method="get", action="./preview")
-                .row
-                    .six.columns
-                        input(type="text", name="url", placeholder="git url").full-width
-                .row
-                    .three.columns
-                        input(type="submit", value="preview")
-
-
+                a(href="./advanced")
+                    | Advanced Settings
 
     .row
         .six.columns
             h4
-                | Fetch Default Visualizations 
-                br
-                small
-                    | (will not overwrite existing)
-            a(href="./fetch-defaults")
-                .button
-                    | Fetch Default Visualizations
+                | Installed Visualizations
+                
+    for vizTypeGroup in utils.groupByN(vizTypes, 4)
+        .row
+            for vizType in vizTypeGroup
+                .four.columns
 
-    .row
-        .six.columns
-            h4
-                | Reset Default Visualizations 
-                br
-                small
-                    | (will overwrite existing)
-            a(href="./reset-defaults", data-confirm="Warning this will delete all local visualization types. Are you sure?")
-                .button
-                    | Reset Default Visualizations
+                    a(href="./edit/#{vizType.id}").preview-container
+                        .image-container
+                            if vizType.thumbnailLocation
+                                .viz-preview(style="background-image:url(/visualization-types/#{vizType.id}/thumbnail);")
+                            else
+                                .viz-preview.noimg
 
+                        .title-container
+                            | #{utils.titleCase(vizType.name)}
+
+
+    .modal#import-visualization-modal
+        #visualization-importer
+
+
+block append scripts
+    script(src='#{STATIC_URL}js/visualization-types.js')
+
+        

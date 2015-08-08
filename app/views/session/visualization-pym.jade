@@ -1,7 +1,7 @@
 extends ../embed-layout
 
 block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.type}")
+    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.visualizationType.name}")
 
 
 block sidebar
@@ -9,7 +9,7 @@ block sidebar
 block content
 
     .feed-item-container(data-model="visualization", data-model-id="#{viz.id}")
-        .feed-item(data-type="#{viz.type}", data-data="#{ JSON.stringify(viz.getInitialData(vizTypes[viz.type])) }", data-images="#{JSON.stringify(viz.images)}", data-options="#{JSON.stringify(viz.opts)}" id="viz-#{viz.id}", data-initialized="false")
+        include ./includes/viz
 
 
 
@@ -18,8 +18,8 @@ block scripts
         window.lightning = window.lightning || {};
         window.lightning.host = window.lightning.host || "#{STATIC_URL}" || 'http://127.0.0.1:3000/';
         window.lightning.requiredVizTypes = window.lightning.requiredVizTypes || [];
-        if(window.lightning.requiredVizTypes.indexOf("#{viz.type}") === -1) {
-            window.lightning.requiredVizTypes.push("#{viz.type}");
+        if(window.lightning.requiredVizTypes.indexOf("#{viz.visualizationType.name}") === -1) {
+            window.lightning.requiredVizTypes.push("#{viz.visualizationType.name}");
         }
         window.lightning.sid = #{viz.SessionId};
         window._require = window.require;

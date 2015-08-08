@@ -14,6 +14,7 @@ var server = require('http').Server(baseApp);
 require('colors');
 var env = process.env.NODE_ENV || 'development';
 var dbConfig = require(__dirname + '/config/database')[env];
+var npm = require('npm');
 
 
 // var cluster = require('cluster');
@@ -60,59 +61,60 @@ io.on('connection', function(){
 // Bootstrap application settings
 require('./config/express')(app, io);
 
-// Bootstrap routes
-require('./config/routes')(app);
+console.log('Initializing npm...');
+npm.load({
+    loglevel: 'error'
+}, function() {
+    // Bootstrap routes
+    require('./config/routes')(app);
 
-server.listen(port);
+    var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
+    logo += " ,`                                ,.\n";
+    logo += ",`                                  ,\n";
+    logo += ",                                   ,\n";
+    logo += ",                      .            ,\n";
+    logo += ",                     ,             ,\n";
+    logo += ",                    `,             ,\n";
+    logo += ",                    ,.             ,\n";
+    logo += ",                   ,,              ,\n";
+    logo += ",                  ,,,              ,\n";
+    logo += ",                 ,,,.              ,\n";
+    logo += ",                .,,,               ,\n";
+    logo += ",               `,,,,               ,\n";
+    logo += ",               ,,,,`               ,\n";
+    logo += ",              ,,,,,                ,\n";
+    logo += ",             ,,,,,,                ,\n";
+    logo += ",            ,,,,,,,,,,,,,,.        ,\n";
+    logo += ",           .,,,,,,,,,,,,,,         ,\n";
+    logo += ",           ,,,,,,,,,,,,,,          ,\n";
+    logo += ",          ,,,,,,,,,,,,,,           ,\n";
+    logo += ",         ,,,,,,,,,,,,,,            ,\n";
+    logo += ",                 ,,,,,`            ,\n";
+    logo += ",                ,,,,,,             ,\n";
+    logo += ",                ,,,,,              ,\n";
+    logo += ",                ,,,,               ,\n";
+    logo += ",               ,,,,                ,\n";
+    logo += ",               ,,,`                ,\n";
+    logo += ",              `,,.                 ,\n";
+    logo += ",              ,,,                  ,\n";
+    logo += ",              ,,                   ,\n";
+    logo += ",             `,                    ,\n";
+    logo += ",             ,                     ,\n";
+    logo += ",             `                     ,\n";
+    logo += ",            `                      ,\n";
+    logo += ",                                   ,\n";
+    logo += "`,                                 .,\n";
+    logo += " .,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, \n\n\n\n";
 
 
 
-var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
-logo += " ,`                                ,.\n";
-logo += ",`                                  ,\n";
-logo += ",                                   ,\n";
-logo += ",                      .            ,\n";
-logo += ",                     ,             ,\n";
-logo += ",                    `,             ,\n";
-logo += ",                    ,.             ,\n";
-logo += ",                   ,,              ,\n";
-logo += ",                  ,,,              ,\n";
-logo += ",                 ,,,.              ,\n";
-logo += ",                .,,,               ,\n";
-logo += ",               `,,,,               ,\n";
-logo += ",               ,,,,`               ,\n";
-logo += ",              ,,,,,                ,\n";
-logo += ",             ,,,,,,                ,\n";
-logo += ",            ,,,,,,,,,,,,,,.        ,\n";
-logo += ",           .,,,,,,,,,,,,,,         ,\n";
-logo += ",           ,,,,,,,,,,,,,,          ,\n";
-logo += ",          ,,,,,,,,,,,,,,           ,\n";
-logo += ",         ,,,,,,,,,,,,,,            ,\n";
-logo += ",                 ,,,,,`            ,\n";
-logo += ",                ,,,,,,             ,\n";
-logo += ",                ,,,,,              ,\n";
-logo += ",                ,,,,               ,\n";
-logo += ",               ,,,,                ,\n";
-logo += ",               ,,,`                ,\n";
-logo += ",              `,,.                 ,\n";
-logo += ",              ,,,                  ,\n";
-logo += ",              ,,                   ,\n";
-logo += ",             `,                    ,\n";
-logo += ",             ,                     ,\n";
-logo += ",             `                     ,\n";
-logo += ",            `                      ,\n";
-logo += ",                                   ,\n";
-logo += "`,                                 .,\n";
-logo += " .,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, \n\n\n\n";
+    console.log(logo.magenta);
+
+    console.log('Lightning started on port: ' + port);
+    console.log('Running database: ' + dbConfig.dialect);
 
 
-
-console.log(logo.magenta);
-
-console.log('Lightning started on port: ' + port);
-console.log('Running database: ' + dbConfig.dialect);
-
+    server.listen(port);
+});
 
 module.exports = server;
-
-
