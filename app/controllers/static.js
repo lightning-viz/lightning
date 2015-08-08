@@ -33,11 +33,14 @@ exports.getDynamicVizBundle = function (req, res, next) {
     // Get all vizTypes in array
     var visualizationTypes = _.uniq(req.query.visualizations).sort();
 
+    var cacheHit = false;
+
     if(!req.query.cachemiss) {
         var bundle = cache.get('js/' + visualizationTypes.toString());
 
         if(bundle) {
-            return res.send(bundle);
+            cacheHit = true;
+            res.send(bundle);
         }
     }
 
@@ -59,7 +62,6 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
             Q.all(funcs).spread(function() {
 
-                var shouldCache = true;
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
                         console.log(vizType.moduleName);
@@ -76,17 +78,16 @@ exports.getDynamicVizBundle = function (req, res, next) {
                 });
 
                 b.bundle(function(err, buf) {
-
                     if(err) {
                         return next(err);
                     }               
 
                     // var out = protectRequire(buf.toString('utf8'));
                     var out = buf.toString('utf8');
-                    if(shouldCache) {
-                        cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
+                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
+                    if(!cacheHit) {
+                        res.send(out);
                     }
-                    res.send(out); 
                 });
             });
         }).error(next);
