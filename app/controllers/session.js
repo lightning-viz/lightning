@@ -205,7 +205,7 @@ exports.addData = function (req, res, next) {
             }
         }).then(function(vizType) {
             if(!vizType) {
-                throw new Error('Could not find viz type ' + req.body.type);
+                throw new Error('Unknown Viztype');
             }
             vt = vizType;
             return Visualization.create({
@@ -220,7 +220,12 @@ exports.addData = function (req, res, next) {
             req.io.of('/sessions/' + sessionId)
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
-        }).error(next);
+        }).catch(function(err) {
+            if(err.message && err.message === 'Unknown Viztype') {
+                return res.status(404).send('Could not find viz type ' + req.body.type);    
+            }
+            return next(err);
+        });
     } else {
         var form = new multiparty.Form();
 
@@ -233,11 +238,7 @@ exports.addData = function (req, res, next) {
                         console.log('error in thumbnailAndUpload');
                         return res.status(500).send('error creating image thumbnail');
                     }
-
                     var imgData = data.imgData;
-
-                    console.log(imgData);
-
                     var type = 'image';
                     if(fields.type) {
                         if(_.isArray(fields.type) || _.isObject(fields.type)) {
@@ -246,14 +247,13 @@ exports.addData = function (req, res, next) {
                             type = fields.type;
                         }                        
                     }
-
                     models.VisualizationType.find({
                         where: {
                             name: type
                         }
                     }).then(function(vizType) {
                         if(!vizType) {
-                            throw new Error('Could not find viz type ' + req.body.type);
+                            throw new Error('Unknown Viztype');
                         }
                         vt = vizType;
                         return Visualization.create({
@@ -268,7 +268,12 @@ exports.addData = function (req, res, next) {
                         req.io.of('/sessions/' + sessionId)
                             .emit('viz', jsonViz);  
                         return res.json(jsonViz);
-                    }).error(next);
+                    }).catch(function(err) {
+                        if(err.message && err.message === 'Unknown Viztype') {
+                            return res.status(404).send('Could not find viz type ' + req.body.type);    
+                        }
+                        return next(err);
+                    });
                 });
             });
         });
