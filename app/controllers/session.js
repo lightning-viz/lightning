@@ -231,7 +231,6 @@ exports.addData = function (req, res, next) {
         var form = new multiparty.Form();
 
         form.parse(req, function(err, fields, files) {
-
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
@@ -248,6 +247,7 @@ exports.addData = function (req, res, next) {
                             type = fields.type;
                         }                        
                     }
+
                     models.VisualizationType.find({
                         where: {
                             name: type
@@ -259,7 +259,7 @@ exports.addData = function (req, res, next) {
                         vt = vizType;
                         return Visualization.create({
                             images: [imgData],
-                            opts: req.body.options,
+                            opts: JSON.parse(fields.options || '{}'),
                             SessionId: sessionId,
                             VisualizationTypeId: vizType.id
                         });
