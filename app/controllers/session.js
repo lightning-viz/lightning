@@ -208,9 +208,10 @@ exports.addData = function (req, res, next) {
                 throw new Error('Unknown Viztype');
             }
             vt = vizType;
+
             return Visualization.create({
                 data: req.body.data,
-                opts: req.body.opts,
+                opts: req.body.options,
                 SessionId: sessionId,
                 VisualizationTypeId: vizType.id
             });
@@ -258,7 +259,7 @@ exports.addData = function (req, res, next) {
                         vt = vizType;
                         return Visualization.create({
                             images: [imgData],
-                            opts: req.body.opts,
+                            opts: req.body.options,
                             SessionId: sessionId,
                             VisualizationTypeId: vizType.id
                         });
