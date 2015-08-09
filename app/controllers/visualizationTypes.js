@@ -63,7 +63,7 @@ exports.create = function (req, res, next) {
         .create(_.pick(req.body, 'name', 'initialDataFields', 'isStreaming', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
         .then(function(type) {
             return res.json(type);
-        }).error(function(err) {
+        }).catch(function(err) {
             return res.status(500).send(err);
         });
         
@@ -220,17 +220,27 @@ exports.previewNPM = function(req, res, next) {
 
     console.log('requested to link module: ' + name);
 
-    var linker;
-    if(location === 'registry') {
-        linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
-    } else if(location === 'local') {
-        linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
-    } else {
-        return res.status(500).send('Invalid location.').end();
-    }
+    models.VisualizationType
+        .findAll({
+            where: {
+                moduleName: name
+            }
+        }).then(function(visualizations) {
+            if(visualizations && visualizations.length) {
+                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to preview ' + name);
+            }
 
-    linker(name)
-        .then(function(vizType) {
+            var linker;
+            if(location === 'registry') {
+                linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
+            } else if(location === 'local') {
+                linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
+            } else {
+                return res.status(500).send('Invalid location.').end();
+            }
+
+            return linker(name);
+        }).then(function(vizType) {
             var b = browserify();
             b.require(name);
 
@@ -252,8 +262,7 @@ exports.previewNPM = function(req, res, next) {
                 });
             });
         }).catch(function(err) {
-            console.log(err);
-            return res.status(500).send('error compiling module').end();
+            return res.status(500).send(err.message).end();
         });
 };
 
@@ -264,24 +273,31 @@ exports.importNPM = function(req, res, next) {
 
     console.log('requested to link module: ' + name);
 
-    var creator;
-    if(location === 'registry') {
-        creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
-    } else if(location === 'local') {
-        creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
-    } else {
-        return res.status(500).send('Invalid location.').end();
-    }
+    models.VisualizationType
+        .findAll({
+            where: {
+                moduleName: name
+            }
+        }).then(function(visualizations) {
+            if(visualizations && visualizations.length) {
+                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to install ' + name);
+            }
+            var creator;
+            if(location === 'registry') {
+                creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
+            } else if(location === 'local') {
+                creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
+            } else {
+                return res.status(500).send('Invalid location.').end();
+            }
 
-    creator(name)
-        .then(function(vizType) {
+            return creator(name);
+        }).then(function(vizType) {
             return res.redirect('/visualization-types/edit/' + vizType.id);
         }).catch(function(err) {
-            console.log(err);
-            return res.status(500).send('error compiling module').end();
+            return res.status(500).send(err.message).end();
         });
 };
-
 
 exports.importViz = function(req, res, next) {
 
