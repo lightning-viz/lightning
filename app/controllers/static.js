@@ -21,7 +21,6 @@ function protectRequire(str) {
     });
 
     return initialCode + str;// + postCode;
-
 }
 
 
@@ -138,7 +137,6 @@ exports.buildSCSS = function(req, res) {
 };
 
 
-
 exports.getDynamicVizStyles = function (req, res, next) {
 
     res.set('Content-Type', 'text/css');
@@ -180,6 +178,4 @@ exports.getDynamicVizStyles = function (req, res, next) {
                 }
             });
         }).error(next);
-
 };
-

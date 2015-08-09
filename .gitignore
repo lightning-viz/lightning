@@ -13,3 +13,5 @@ mocks/
 *.sqlite
 
 .idea
+jupyter-standalone.js
+

@@ -1,5 +1,3 @@
-
-
 var jQueryURL = '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js';
 
 
@@ -59,7 +57,6 @@ function loadJS(src, callback) {
 }
 
 
-
 function init() {
 
     loadJS(window.lightning.host + 'js/dynamic/viz/?visualizations[]=' + window.lightning.requiredVizTypes.join('&visualizations[]='), function() { 
@@ -87,8 +84,6 @@ function init() {
         });
 
         $('.feed-container').animate({opacity: 1});
-
-
     });
 
 

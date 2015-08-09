@@ -11,6 +11,8 @@ var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var srcDir = 'ui/';
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 
 var PRODUCTION_MODE = gutil.env.production;
 
@@ -43,6 +45,22 @@ gulp.task('browserify', function() {
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
         .pipe(gulp.dest('./public/js/'))
         .pipe( livereload( server ));
+});
+
+gulp.task('jupyter-standalone', function() {
+    var browserify = require('browserify');
+    var b = browserify({
+        entries: srcDir + 'js/etc/jupyter-standalone.js',
+        debug: false
+    });
+
+    return b.bundle()
+        .pipe(source('jupyter-standalone.js'))
+        // .pipe(buffer())
+        // .pipe(uglify())
+        // .on('error', gutil.log)
+        .pipe(gulp.dest('.'));
+
 });
 
 
