@@ -83,7 +83,7 @@ setTimeout(function() {
         var type = $(this).data('type');
         var data = $(this).data('data');
         var images = $(this).data('images');
-        var options = $(this).data('opts');
+        var options = $(this).data('options');
         var Viz =  require(type);
 
         var vid = $(this).attr('id');

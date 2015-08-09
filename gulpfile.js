@@ -13,6 +13,7 @@ var uglify = require('gulp-uglify');
 var srcDir = 'ui/';
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var browserifyProtect = require('gulp-browserify-protect');
 
 var PRODUCTION_MODE = gutil.env.production;
 
@@ -56,7 +57,8 @@ gulp.task('jupyter-standalone', function() {
 
     return b.bundle()
         .pipe(source('jupyter-standalone.js'))
-        // .pipe(buffer())
+        .pipe(buffer())
+        .pipe(browserifyProtect())
         // .pipe(uglify())
         // .on('error', gutil.log)
         .pipe(gulp.dest('.'));
