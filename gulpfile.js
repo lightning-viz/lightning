@@ -48,15 +48,15 @@ gulp.task('browserify', function() {
         .pipe( livereload( server ));
 });
 
-gulp.task('jupyter-standalone', function() {
+gulp.task('standalone-js', function() {
     var browserify = require('browserify');
     var b = browserify({
-        entries: srcDir + 'js/etc/jupyter-standalone.js',
+        entries: srcDir + 'js/etc/standalone.js',
         debug: false
     });
 
     return b.bundle()
-        .pipe(source('jupyter-standalone.js'))
+        .pipe(source('standalone.js'))
         .pipe(buffer())
         .pipe(browserifyProtect())
         // .pipe(uglify())
