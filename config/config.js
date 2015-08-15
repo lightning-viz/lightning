@@ -18,6 +18,7 @@ if(defaultVisualizations) {
 } else {
   defaultVisualizations = [
     'lightning-adjacency',
+    'lightning-circle',
     'lightning-force',
     'lightning-gallery',
     'lightning-graph',

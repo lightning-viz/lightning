@@ -13,5 +13,5 @@ mocks/
 *.sqlite
 
 .idea
-./standalone.js
+/standalone.js
 
