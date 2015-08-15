@@ -93,31 +93,35 @@ module.exports = function(sequelize, DataTypes) {
                  // associations can be defined here
             },
 
-            _buildFromNPM: function(name, preview) {
+            _bustRequire: function(name) {
+                delete require.cache[require.resolve(name)];
+                return require(name);
+            },
 
-                var lightningConfig = require(name + '/package.json').lightning || {};
+            _buildFromNPM: function(name, preview) {
+                var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
 
                 try {
-                    sampleData = require(name + '/lightning-sample-data.json');
+                    sampleData = this._bustRequire(name + '/lightning-sample-data.json');
                 } catch(e) {
                     sampleData = sampleData || [];
                 }                
                 try {
-                    sampleData = require(name + '/data/sample-data.json');
+                    sampleData = this._bustRequire(name + '/data/sample-data.json');
                 } catch(e) {
                     sampleData = sampleData || [];
                 }
 
                 var sampleImages = lightningConfig.sampleImages;
                 try {
-                    sampleImages = require(name + '/lightning-sample-images.json');
+                    sampleImages = this._bustRequire(name + '/lightning-sample-images.json');
                 } catch(e) {
                     sampleImages = sampleImages || [];
                 }
 
                 try {
-                    sampleImages = require(name + '/data/sample-images.json');
+                    sampleImages = this._bustRequire(name + '/data/sample-images.json');
                 } catch(e) {
                     sampleImages = sampleImages || [];
                 }
