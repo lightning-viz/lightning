@@ -3,7 +3,7 @@ var jQueryURL = '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js';
 
 // require all the default viz's
 require('lightning-adjacency');
-require('lightning-circle');
+// require('lightning-circle');
 require('lightning-force');
 require('lightning-gallery');
 require('lightning-graph');
@@ -40,6 +40,7 @@ function init() {
         var data = $this.data('data');
         var images = $this.data('images');
         var options = $this.data('options');
+        var vid = $this.attr('id');
 
         var Viz;
         try {
@@ -48,7 +49,7 @@ function init() {
             Viz = require('lightning-' + type);
         }
 
-        new Viz($this[0], data, images, options);
+        new Viz('#' + vid, data, images, options);
         $this.data('initialized', true);
         $this.attr('data-initialized', true);
 
