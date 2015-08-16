@@ -20,6 +20,6 @@ block scripts
     script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.visualizationType.name}")
     script.
         window.lightning = window.lightning || {
-            sid: #{viz.SessionId}
+            sid: "#{viz.SessionId}"
         }
     script(src='#{STATIC_URL}js/feed.js')
