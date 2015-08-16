@@ -33,7 +33,7 @@ block container
 
 block scripts
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{vizType.name}")
+    script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{vizType.name}&cachemiss=true")
     script.
         window.lightning = window.lightning || {};
         window.lightning.editor = {
