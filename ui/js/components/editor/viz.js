@@ -1,9 +1,9 @@
-                
+'use strict';
 var React = require('react');
 var _ = require('lodash');
 
 
-var Editor = React.createClass({
+var Viz = React.createClass({
 
     getInitialState: function() {
         return {
@@ -14,7 +14,7 @@ var Editor = React.createClass({
     createViz: function() {
         var Viz = require(this.props.moduleName);
         this.setState({
-            viz: new Viz('#live-visualization-in-editor', this.props.data.toJS(), this.props.images)
+            viz: new Viz('#live-visualization-in-editor', this.props.data.toJS(), this.props.images, this.props.options.toJS())
         });
     },
 
@@ -24,8 +24,9 @@ var Editor = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
+        console.log('componentDidUpdate');
         if(prevState.viz) {
-            if(prevProps.data !== this.props.data) {
+            if(prevProps.data !== this.props.data || prevProps.options !== this.props.options) {
                 var vizEl = $('#live-visualization-in-editor');
                 vizEl.css('min-height', vizEl.height()).html('');
                 this.createViz();
@@ -41,6 +42,6 @@ var Editor = React.createClass({
     },
 });
 
-module.exports = Editor;
+module.exports = Viz;
 
 

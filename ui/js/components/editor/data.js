@@ -1,4 +1,4 @@
-                
+'use strict';                
 var React = require('react');
 var _ = require('lodash');
 var Highlight = require('react-highlight');
@@ -15,12 +15,13 @@ var Data = React.createClass({
         return {
             initialSelectedData: {},
             datasets: [],
-        }
+        };
     },
 
     getInitialState: function() {
         return {
-            selectedData: this.props.initialSelectedData
+            selectedData: this.props.initialSelectedData,
+            selectedIndex: 0
         };
     },
 
@@ -34,21 +35,22 @@ var Data = React.createClass({
         this.setState({
             selectedData: selectedData
         });
-        this.props.onDataChange(selectedData);
+        this.props.onChange(selectedData);
     },
 
     handleSelectDataset: function(i) {
         var selectedData = this.props.datasets[i].data;
-        this.props.onDataChange(selectedData);
+        this.props.onChange(selectedData);
         this.setState({
+            selectedIndex: i,
             selectedData: selectedData
         });
     },
 
     renderDataset: function(dataset, i) {
         return (
-            <div key={i}>
-                <button className={'data-button'} onClick={this.handleSelectDataset.bind(this, i)} >
+            <div key={i} style={{display: 'inline-block'}}>
+                <button className={'data-button ' + (i === this.state.selectedIndex ? 'active' : '')} onClick={this.handleSelectDataset.bind(this, i)} >
                     {dataset.name}
                 </button>
             </div>
@@ -56,7 +58,10 @@ var Data = React.createClass({
     },
 
     renderDatasets: function() {
-        return _.map(this.props.datasets, this.renderDataset, this);
+        if(this.props.datasets.length > 1) {
+            return _.map(this.props.datasets, this.renderDataset, this);
+        }
+        return null;
     },
 
     formatData: function(data) {
@@ -67,18 +72,18 @@ var Data = React.createClass({
             d = data.toArray();
         }
         return '{\n' + _.map(d, function(val, key) {
-            return '\t\"' + key + "\": " + JSON.stringify(val).split(',').join(', ');
+            return '    \"' + key + "\": " + JSON.stringify(val).split(',').join(', ');
         }).join(',\n') + '\n}';
     },
 
     render: function() {
         return (
-            <div style={{width: '65%', margin: '0 auto'}}>
-                <div className='data-container' style={{width: '20%', float: 'left'}}>
-                    {this.renderDatasets()}
-                </div>
-                <div style={{width: '78%', float: 'left', marginLeft: '2%'}}>
+            <div style={{width: '100%', margin: '0 auto'}}>
+                <div>
                     <Editor className='json' value={this.formatData(this.state.selectedData)} onChange={this.handleEdit} />
+                </div>
+                <div style={{width: '100%'}}>
+                    {this.renderDatasets()}
                 </div>
             </div>
         );
