@@ -40,7 +40,9 @@ block scripts
             datasets: !{JSON.stringify(vizType.sampleData)},
             name: "#{vizType.name}",
             moduleName: "#{vizType.moduleName}",
-            sampleImages: !{JSON.stringify(vizType.sampleImages)}
+            sampleImages: !{JSON.stringify(vizType.sampleImages)},
+            sampleOptions: !{JSON.stringify(vizType.sampleOptions)},
+            codeExamples: !{JSON.stringify(vizType.codeExamples)}
         };
     script(src='#{STATIC_URL}js/editor.js')
 
