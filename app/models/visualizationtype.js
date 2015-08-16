@@ -121,12 +121,10 @@ module.exports = function(sequelize, DataTypes) {
                 };
 
                 _.each(codeExampleMap, function(extension, language) {
-                    console.log('checking language ' + language);
                     var examplePath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/example.' + extension);
                     var exampleExists = fs.existsSync(examplePath);
                     if(exampleExists) {
                         codeExamples[language] = fs.readFileSync(examplePath).toString('utf8');
-                        console.log('found example for ' + language);
                     }
                 });
 
