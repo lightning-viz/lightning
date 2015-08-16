@@ -33,6 +33,19 @@ exports.show = function (req, res, next) {
         }).error(next);
 };
 
+exports.json = function (req, res, next) {
+
+    var name = req.params.vizName;
+    models.VisualizationType.find({
+            where: {
+                moduleName: name
+            }
+        })
+        .then(function(vizType) {
+            return res.json(vizType);
+        }).catch(next);
+};
+
 exports.resetDefaults = function(req, res, next) {
 
     console.log('resetting visualization defaults');

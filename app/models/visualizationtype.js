@@ -27,6 +27,7 @@ module.exports = function(sequelize, DataTypes) {
 
             sampleData: 'JSON',
             sampleOptions: 'JSON',
+            codeExamples: 'JSON',
             sampleImages: DataTypes.ARRAY(DataTypes.STRING),
 
             javascript: DataTypes.TEXT,
@@ -60,6 +61,15 @@ module.exports = function(sequelize, DataTypes) {
             },
             set: function(val) {
                 return this.setDataValue('sampleOptions', JSON.stringify(val));
+            }
+        },
+        codeExamples: {
+            type: DataTypes.TEXT,
+            get: function() {
+                return JSON.parse(this.getDataValue('codeExamples') || '{}');
+            },
+            set: function(val) {
+                return this.setDataValue('codeExamples', JSON.stringify(val));
             }
         },
         sampleImages: {
@@ -101,6 +111,24 @@ module.exports = function(sequelize, DataTypes) {
             _buildFromNPM: function(name, preview) {
                 var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
+                var sampleOptions = lightningConfig.sampleOptions;
+
+                var codeExamples = {};
+                var codeExampleMap = {
+                    'python': 'py',
+                    'scala': 'scala',
+                    'javascript': 'js'
+                };
+
+                _.each(codeExampleMap, function(extension, language) {
+                    console.log('checking language ' + language);
+                    var examplePath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/example.' + extension);
+                    var exampleExists = fs.existsSync(examplePath);
+                    if(exampleExists) {
+                        codeExamples[language] = fs.readFileSync(examplePath).toString('utf8');
+                        console.log('found example for ' + language);
+                    }
+                });
 
                 try {
                     sampleData = this._bustRequire(name + '/lightning-sample-data.json');
@@ -111,6 +139,16 @@ module.exports = function(sequelize, DataTypes) {
                     sampleData = this._bustRequire(name + '/data/sample-data.json');
                 } catch(e) {
                     sampleData = sampleData || [];
+                }
+                try {
+                    sampleOptions = this._bustRequire(name + '/lightning-sample-options.json');
+                } catch(e) {
+                    sampleOptions = sampleOptions || {};
+                }                
+                try {
+                    sampleOptions = this._bustRequire(name + '/data/sample-options.json');
+                } catch(e) {
+                    sampleOptions = sampleOptions || {};
                 }
 
                 var sampleImages = lightningConfig.sampleImages;
@@ -132,8 +170,10 @@ module.exports = function(sequelize, DataTypes) {
                     isModule: true,
                     moduleName: name,
                     sampleData: sampleData,
-                    sampleImages: sampleImages
-                }
+                    sampleOptions: sampleOptions,
+                    sampleImages: sampleImages,
+                    codeExamples: codeExamples
+                };
 
                 // check if example image exists
                 var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
@@ -362,11 +402,11 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         hooks: {
-
             beforeValidate: function(vizType, next) {
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+                    vizType.codeExamples = JSON.stringify(vizType.codeExamples);
                 }
                 next();
             }
