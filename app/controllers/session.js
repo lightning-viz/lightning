@@ -212,6 +212,7 @@ exports.addData = function (req, res, next) {
             return Visualization.create({
                 data: req.body.data,
                 opts: req.body.options,
+                description: req.body.description,
                 SessionId: sessionId,
                 VisualizationTypeId: vizType.id
             });
@@ -261,6 +262,7 @@ exports.addData = function (req, res, next) {
                             images: [imgData],
                             opts: JSON.parse(fields.options || '{}'),
                             SessionId: sessionId,
+                            description: req.body.description,
                             VisualizationTypeId: vizType.id
                         });
                     }).then(function(viz) {
