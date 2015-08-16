@@ -17,7 +17,8 @@ module.exports = function(sequelize, DataTypes) {
 
         instanceMethods: {
             getDisplayName: function() {
-                return this.name || ('Session ' + this.id);
+                var identifier = '' + this.id;
+                return this.name || ('Session ' + identifier.substring(0, 5));
             }
         },
 
