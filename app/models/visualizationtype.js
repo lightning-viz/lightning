@@ -14,6 +14,11 @@ module.exports = function(sequelize, DataTypes) {
     var schema;
     if(isPostgres) {
         schema = {
+            'id': {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
+            },
             name: {type: DataTypes.STRING, unique: true},
             initialDataFields: DataTypes.ARRAY(DataTypes.STRING),
 
@@ -36,6 +41,11 @@ module.exports = function(sequelize, DataTypes) {
         };
     } else {
         schema = {
+        'id': {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+        },
         name: {type: DataTypes.STRING, unique: true},
         enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
         imported: {type: DataTypes.BOOLEAN, defaultValue: false},
