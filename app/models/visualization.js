@@ -10,6 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     var schema;
     if(isPostgres) {
         schema = {
+            'id': {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
+            },
             data: 'JSON',
             opts: 'JSON',
             settings: 'JSON',
@@ -48,6 +53,11 @@ module.exports = function(sequelize, DataTypes) {
             },
             name: DataTypes.STRING,
             description: DataTypes.TEXT,
+            'id': {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
+            },
             images: {
                 type: DataTypes.TEXT,
                 get: function() {

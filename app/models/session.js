@@ -1,10 +1,13 @@
-var uuid = require('node-uuid');
 
 module.exports = function(sequelize, DataTypes) {
 
     var Session = sequelize.define('Session', {
         name: DataTypes.STRING,
-        identifier: DataTypes.STRING
+        'id': {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+        },
     }, {
         classMethods: {
             associate: function(models) {
@@ -20,7 +23,6 @@ module.exports = function(sequelize, DataTypes) {
 
         hooks: {
             beforeCreate: function(session, next) {
-                session.identifier = uuid.v4();
                 next();
             }
         }
