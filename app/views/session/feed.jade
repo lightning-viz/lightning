@@ -8,12 +8,12 @@ block content
 
     .row
         .six.columns
-            h2(data-editable, data-model="session", data-model-id="#{session.id}", data-key="name")
+            h2
                 | #{session.getDisplayName()}
             .subheader
                 p
                     | Created #{moment(session.createdAt).fromNow()}
-                p
+                //- p
                     small
                         a(href="#{BASE_URL}sessions/#{session.id}/delete", data-confirm="Are you sure you want to delete this session?")
                             | Delete Session
@@ -22,7 +22,7 @@ block content
                     small
                         a(href="#add-data-modal", rel="modal:open")
                             | Create Visualization
-                p
+                //- p
                     small
                         a(href="../public")
                             | Public Link
