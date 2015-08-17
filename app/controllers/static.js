@@ -9,21 +9,6 @@ var uuid = require('node-uuid');
 var Q = require('q');
 
 
-function protectRequire(str) {
-    var protectedVars = ['define', 'require'];
-    var initialCode = ';';
-    var postCode = ';';
-    _.each(protectedVars, function(v) {
-        initialCode += 'window._' + v + ' = window.' + v + ';';
-        initialCode += 'window.' + v + ' = undefined;';
-
-        postCode += 'window.' + v + ' = window._' + v + ';';
-    });
-
-    return initialCode + str;// + postCode;
-}
-
-
 exports.getDynamicVizBundle = function (req, res, next) {
 
     res.set('Content-Type', 'application/javascript');
@@ -81,7 +66,6 @@ exports.getDynamicVizBundle = function (req, res, next) {
                         return next(err);
                     }               
 
-                    // var out = protectRequire(buf.toString('utf8'));
                     var out = buf.toString('utf8');
                     cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
                     if(!cacheHit) {

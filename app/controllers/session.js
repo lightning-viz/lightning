@@ -208,7 +208,6 @@ exports.addData = function (req, res, next) {
                 throw new Error('Unknown Viztype');
             }
             vt = vizType;
-
             return Visualization.create({
                 data: req.body.data,
                 opts: req.body.options,
@@ -232,6 +231,7 @@ exports.addData = function (req, res, next) {
         var form = new multiparty.Form();
 
         form.parse(req, function(err, fields, files) {
+
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
