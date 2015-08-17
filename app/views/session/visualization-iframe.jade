@@ -15,7 +15,7 @@ block content
 
 block scripts
     script.
-        window.lightning = window.lightning || {sid: #{viz.SessionId}};
+        window.lightning = window.lightning || {sid: "#{viz.SessionId}"};
         window.lightning.host = window.lightning.host || "#{STATIC_URL}" || 'http://127.0.0.1:3000/';
         window.lightning.requiredVizTypes = window.lightning.requiredVizTypes || [];
         if(window.lightning.requiredVizTypes.indexOf("#{viz.visualizationType.name}") === -1) {

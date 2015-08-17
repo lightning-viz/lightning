@@ -8,6 +8,7 @@ var uuid = require('node-uuid');
 var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
+var Q = require('q');
 
 exports.index = function (req, res, next) {
 
@@ -44,6 +45,31 @@ exports.json = function (req, res, next) {
         .then(function(vizType) {
             return res.json(vizType);
         }).catch(next);
+};
+
+exports.refreshNPM = function(req, res, next) {
+    console.log('refreshing npm-based visualizations');
+
+    models.VisualizationType
+        .findAll({
+            where: {
+                isModule: true
+            }
+        }).then(function(vizTypes) {
+            Q.all(_.map(vizTypes, function(vizType) {
+                return vizType.refreshFromNPM();
+            })).spread(function() {
+                console.log("Successfully updated from npm.");
+            }).catch(function(err) {
+                console.log("Error refreshing from npm:");
+                console.log(err);
+            });
+
+            return res.redirect(config.baseURL + 'visualization-types');
+        }).catch(function(err) {
+            console.log(err);
+            return res.status(500).send();
+        });
 };
 
 exports.resetDefaults = function(req, res, next) {

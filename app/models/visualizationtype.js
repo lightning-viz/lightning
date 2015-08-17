@@ -397,6 +397,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 return Q.all(funcs);
             },
+            
             deleteAndUninstall: function() {
                 var self = this;
                 if(this.isModule) {
@@ -406,7 +407,22 @@ module.exports = function(sequelize, DataTypes) {
                         });
                 }
                 return self.destroy();
+            },
+
+            refreshFromNPM: function() {
+                var self = this;
+                var name = this.moduleName;
+                var loglevel = npm.config.get('loglevel');
+                npm.config.set('loglevel', 'silent');
+                return Q.nfcall(npm.commands.uninstall, [name])
+                    .then(function(results) {
+                        return Q.nfcall(npm.commands.install, [name]);
+                    }).then(function() {
+                        npm.config.set('loglevel', loglevel);
+                        console.log(('Successfully updated ' + name).green);
+                    });
             }
+
         },
 
         hooks: {
