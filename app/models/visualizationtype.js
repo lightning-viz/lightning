@@ -138,48 +138,40 @@ module.exports = function(sequelize, DataTypes) {
                     }
                 });
 
-                try {
-                    sampleData = this._bustRequire(name + '/lightning-sample-data.json');
-                } catch(e) {
-                    sampleData = sampleData || [];
-                }                
-                try {
-                    sampleData = this._bustRequire(name + '/data/sample-data.json');
-                } catch(e) {
-                    sampleData = sampleData || [];
-                }
-                try {
-                    sampleOptions = this._bustRequire(name + '/lightning-sample-options.json');
-                } catch(e) {
-                    sampleOptions = sampleOptions || {};
-                }                
-                try {
-                    sampleOptions = this._bustRequire(name + '/data/sample-options.json');
-                } catch(e) {
-                    sampleOptions = sampleOptions || {};
-                }
+                var samplesInput = {
+                    data: {
+                        filepaths: ['lightning-sample-data.json', 'data/sample-data.json'],
+                        defaultValue: []
+                    },
+                    options: {
+                        filepaths: ['lightning-sample-options.json', 'data/sample-options.json'],
+                        defaultValue: {}
+                    },
+                    images: {
+                        filepaths: ['lightning-sample-images.json', 'data/sample-images.json'],
+                        defaultValue: []
+                    }
+                };
 
-                var sampleImages = lightningConfig.sampleImages;
-                try {
-                    sampleImages = this._bustRequire(name + '/lightning-sample-images.json');
-                } catch(e) {
-                    sampleImages = sampleImages || [];
-                }
-
-                try {
-                    sampleImages = this._bustRequire(name + '/data/sample-images.json');
-                } catch(e) {
-                    sampleImages = sampleImages || [];
-                }
+                var samples = {};
+                _.each(samplesInput, function(val, key) {
+                    _.each(val.filepaths, function(samplePath) {
+                        try {
+                            samples[key] = this._bustRequire(name + '/' + samplePath);
+                        } catch(e) {
+                            samples[key] = samples[key] || val.defaultValue
+                        };
+                    });
+                });
 
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
                     isStreaming: lightningConfig.isStreaming || false,
                     isModule: true,
                     moduleName: name,
-                    sampleData: sampleData,
-                    sampleOptions: sampleOptions,
-                    sampleImages: sampleImages,
+                    sampleData: samples.data,
+                    sampleOptions: samples.options,
+                    sampleImages: samples.images,
                     codeExamples: codeExamples
                 };
 
