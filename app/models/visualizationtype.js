@@ -153,11 +153,12 @@ module.exports = function(sequelize, DataTypes) {
                     }
                 };
 
+                var self = this;
                 var samples = {};
                 _.each(samplesInput, function(val, key) {
                     _.each(val.filepaths, function(samplePath) {
                         try {
-                            samples[key] = this._bustRequire(name + '/' + samplePath);
+                            samples[key] = self._bustRequire(name + '/' + samplePath);
                         } catch(e) {
                             samples[key] = samples[key] || val.defaultValue
                         };
