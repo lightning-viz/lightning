@@ -73,7 +73,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
                     }
                 });
             });
-        }).error(next);
+        }).catch(function(err) {
+            return res.status(500).send(err.message).end();
+        });
 
 };
 
