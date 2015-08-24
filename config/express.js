@@ -82,15 +82,14 @@ module.exports = function (app, io) {
 
     var getRequestStaticUrl = function(req) {
         if(req.query.host) {
-            console.log('req.query.host');
             return req.query.host;
         }
 
         if(req.headers.host) {
             console.log('req.headers.host');
-            console.log(req.secure);
-            console.log(req.headers.host);
-            return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
+            var reqType = req.headers['x-forwarded-proto'];
+            console.log(reqType);
+            return ((req.secure || reqType === 'https') ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
         }
 
         return static_url + baseUrl;
