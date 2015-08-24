@@ -5,8 +5,6 @@ var browserify = require('gulp-browserify');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var livereload = require('gulp-livereload');
-var tinylr = require('tiny-lr');
-var server = tinylr();
 var gutil = require('gulp-util');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
@@ -95,6 +93,8 @@ gulp.task('images', function() {
 });
 
 gulp.task('watch', function () {
+  var tinylr = require('tiny-lr');
+  var server = tinylr();
   server.listen(35729, function (err) {
     if (err) {
       return console.log(err);
