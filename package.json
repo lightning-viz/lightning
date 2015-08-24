@@ -112,6 +112,7 @@
     "socket.io": "~1.0.6",
     "sqlite3": "~3.0.4",
     "superagent": "^0.18.2",
+    "tiny-lr": "^0.1.6",
     "title-case": "^1.1.1",
     "validator": "~3.17.0",
     "view-helpers": "^0.1.5",
@@ -124,7 +125,6 @@
   "devDependencies": {
     "electron": "^0.4.1",
     "menubar": "^2.0.16",
-    "tiny-lr": "0.0.5",
     "nodemon": "*",
     "mocha": "^1.21.5",
     "expect.js": "^0.3.1"
