@@ -69,10 +69,8 @@ module.exports = function (app, io) {
     var baseUrl = config.baseURL;
     var static_url = baseUrl;
     if(config.url) {
-        static_url = 'http://' + config.url + baseUrl;
+        static_url = config.url + baseUrl;
     }
-
-
 
     // cookieParser should be above session
     app.use(cookieParser());
@@ -84,10 +82,14 @@ module.exports = function (app, io) {
 
     var getRequestStaticUrl = function(req) {
         if(req.query.host) {
+            console.log('req.query.host');
             return req.query.host;
         }
 
         if(req.headers.host) {
+            console.log('req.headers.host');
+            console.log(req.secure);
+            console.log(req.headers.host);
             return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
         }
 
