@@ -86,9 +86,7 @@ module.exports = function (app, io) {
         }
 
         if(req.headers.host) {
-            console.log('req.headers.host');
             var reqType = req.headers['x-forwarded-proto'];
-            console.log(reqType);
             return ((req.secure || reqType === 'https') ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
         }
 
