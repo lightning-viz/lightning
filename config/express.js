@@ -69,10 +69,8 @@ module.exports = function (app, io) {
     var baseUrl = config.baseURL;
     var static_url = baseUrl;
     if(config.url) {
-        static_url = 'http://' + config.url + baseUrl;
+        static_url = config.url + baseUrl;
     }
-
-
 
     // cookieParser should be above session
     app.use(cookieParser());
@@ -88,7 +86,8 @@ module.exports = function (app, io) {
         }
 
         if(req.headers.host) {
-            return ((req.secure) ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
+            var reqType = req.headers['x-forwarded-proto'];
+            return ((req.secure || reqType === 'https') ? 'https' : 'http') + '://' + req.headers.host + baseUrl;
         }
 
         return static_url + baseUrl;
