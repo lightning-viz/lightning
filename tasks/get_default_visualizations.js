@@ -16,12 +16,12 @@ var getDefaultVisualizations = function(cb) {
         return models.VisualizationType.createFromNPM(moduleName);
     }))
     .spread(function() {
+        console.log()
         var vizTypes = Array.prototype.slice.call(arguments, 0);
         npm.config.set('loglevel', loglevel);
         console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
         cb && cb();
     }).catch(function(err) {
-        console.log('catttch');
         console.log(err);
         npm.config.set('loglevel', loglevel);
         cb && cb(err);
