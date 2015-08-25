@@ -85,7 +85,7 @@ module.exports = function(sequelize, DataTypes) {
         sampleImages: {
             type: DataTypes.TEXT,
             get: function() {
-                return JSON.parse(this.getDataValue('sampleImages') || '{}');
+                return JSON.parse(this.getDataValue('sampleImages') || '[]');
             },
             set: function(val) {
                 return this.setDataValue('sampleImages', JSON.stringify(val));
@@ -423,6 +423,7 @@ module.exports = function(sequelize, DataTypes) {
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+                    vizType.sampleImages = JSON.stringify(vizType.sampleImages);
                     vizType.codeExamples = JSON.stringify(vizType.codeExamples);
                 }
                 next();
