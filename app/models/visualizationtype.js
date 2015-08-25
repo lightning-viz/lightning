@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
             sampleData: 'JSON',
             sampleOptions: 'JSON',
             codeExamples: 'JSON',
-            sampleImages: 'JSON',
+            sampleImages: DataTypes.ARRAY(DataTypes.STRING),
 
             javascript: DataTypes.TEXT,
             markup: DataTypes.TEXT,
