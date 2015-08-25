@@ -14,8 +14,6 @@ If you are just getting started, please see the [project page](http://lightning-
 
 ```
 $ npm install -g lightning-server
-```
-```
 $ lightning-server
 ```
 
@@ -23,14 +21,8 @@ $ lightning-server
 
 ```
 $ git clone git@github.com:lightning-viz/lightning.git
-```
-```
 $ cd lightning
-```
-```
 $ npm install
-```
-```
 $ npm start
 ```
 
