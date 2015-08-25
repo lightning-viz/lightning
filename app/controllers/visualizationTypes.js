@@ -15,7 +15,7 @@ exports.index = function (req, res, next) {
     models.VisualizationType.findAll()
         .then(function(types) {
             return res.json(types);
-        }).error(next);
+        }).catch(next);
 };
 
 
@@ -31,7 +31,7 @@ exports.show = function (req, res, next) {
                 vizTypes: types
             });
 
-        }).error(next);
+        }).catch(next);
 };
 
 exports.json = function (req, res, next) {
@@ -77,13 +77,13 @@ exports.resetDefaults = function(req, res, next) {
     console.log('resetting visualization defaults');
 
     models.VisualizationType
-        .destroy({}, {truncate: true}).success(function() {
+        .destroy({where: {}, truncate: true}).then(function() {
             console.log('successfully deleted current visualizations');
             tasks.getDefaultVisualizations(function() {
                 return res.redirect(config.baseURL + 'visualization-types');
             });
 
-        }).error(function(err) {
+        }).catch(function(err) {
             console.log(err);
             return res.status(500).send();
         });
@@ -111,11 +111,11 @@ exports.create = function (req, res, next) {
 exports.edit = function (req, res, next) {
 
     models.VisualizationType
-        .find(req.params.vid)
-        .success(function(vizType) {
+        .findById(req.params.vid)
+        .then(function(vizType) {
             return vizType.updateAttributes(_.pick(req.body, 'name', 'isStreaming', 'initialDataFields', 'javascript', 'styles', 'markup'));
         })
-        .success(function(vizType) {
+        .then(function(vizType) {
             setTimeout(function() {
                 _.each(cache.keys(), function(key) {
 
@@ -127,7 +127,7 @@ exports.edit = function (req, res, next) {
                 });
             }, 0);
             return res.status(200).send();
-        }).error(function() {
+        }).catch(function() {
             return res.status(500).send();
         });      
 };
@@ -137,12 +137,12 @@ exports.delete = function (req, res, next) {
     var vizTypeId = req.params.vid;
 
     models.VisualizationType
-        .find(vizTypeId)
+        .findById(vizTypeId)
         .then(function(vizType) {
             vizType.deleteAndUninstall().then(function() {
                 return res.json(vizType);                
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 exports.getDelete = function(req, res, next) {
@@ -150,7 +150,7 @@ exports.getDelete = function(req, res, next) {
     var vizTypeId = req.params.vid;
 
     models.VisualizationType
-        .find(vizTypeId)
+        .findById(vizTypeId)
         .then(function(vizType) {
             vizType
                 .deleteAndUninstall()
@@ -368,19 +368,19 @@ exports.advanced = function (req, res, next) {
 
 exports.editor = function (req, res, next) {
 
-    models.VisualizationType.find(req.params.vid)
+    models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             return res.render('viz-types/editor', {
                 vizType: type
             });
 
-        }).error(next);
+        }).catch(next);
 };
 
 
 exports.thumbnail = function (req, res, next) {
 
-    models.VisualizationType.find(req.params.vid)
+    models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             if(type.thumbnailLocation) {
                 return res.sendFile(type.thumbnailLocation);
@@ -388,7 +388,7 @@ exports.thumbnail = function (req, res, next) {
             
             return res.status(404).send('no thumbnail found').end();
 
-        }).error(next);
+        }).catch(next);
 };
 
 
