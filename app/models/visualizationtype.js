@@ -122,14 +122,13 @@ module.exports = function(sequelize, DataTypes) {
                 var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
                 var sampleOptions = lightningConfig.sampleOptions;
-
+                var sampleImages = lightningConfig.sampleImages;
                 var codeExamples = {};
                 var codeExampleMap = {
                     'python': 'py',
                     'scala': 'scala',
                     'javascript': 'js'
                 };
-
                 _.each(codeExampleMap, function(extension, language) {
                     var examplePath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/example.' + extension);
                     var exampleExists = fs.existsSync(examplePath);
@@ -141,15 +140,15 @@ module.exports = function(sequelize, DataTypes) {
                 var samplesInput = {
                     data: {
                         filepaths: ['lightning-sample-data.json', 'data/sample-data.json'],
-                        defaultValue: []
+                        defaultValue: sampleData || []
                     },
                     options: {
                         filepaths: ['lightning-sample-options.json', 'data/sample-options.json'],
-                        defaultValue: {}
+                        defaultValue: sampleOptions || {}
                     },
                     images: {
                         filepaths: ['lightning-sample-images.json', 'data/sample-images.json'],
-                        defaultValue: []
+                        defaultValue: sampleImages || []
                     }
                 };
 
@@ -190,6 +189,7 @@ module.exports = function(sequelize, DataTypes) {
                 if(preview) {
                     return VisualizationType.build(vizTypeObj);
                 }
+
                 return VisualizationType.create(vizTypeObj);
             },
 
@@ -419,11 +419,10 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         hooks: {
-            beforeValidate: function(vizType, next) {
+            beforeValidate: function(vizType, options, next) {
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
-                    vizType.sampleImages = JSON.stringify(vizType.sampleImages);
                     vizType.codeExamples = JSON.stringify(vizType.codeExamples);
                 }
                 next();

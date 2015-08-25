@@ -25,11 +25,11 @@ var port = process.env.PORT || 3000;
 
 var models = require('./app/models');
 models.sequelize.sync({force: false})
-    .success(function() {
+    .then(function() {
 
         models.VisualizationType
             .findAll()
-            .success(function(vizTypes) {
+            .then(function(vizTypes) {
 
                 console.log('\nInstalled visualizations:');
                 console.log('-------------------------');
@@ -40,7 +40,7 @@ models.sequelize.sync({force: false})
                     tasks.getDefaultVisualizations();
                 }
             });
-    }).error(function(err) {
+    }).catch(function(err) {
         console.log('Could not connect to the database. Is Postgres running?');
         throw err;
     });

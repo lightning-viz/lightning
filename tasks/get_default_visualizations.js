@@ -20,7 +20,8 @@ var getDefaultVisualizations = function(cb) {
         npm.config.set('loglevel', loglevel);
         console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
         cb && cb();
-    }).fail(function(err) {
+    }).catch(function(err) {
+        console.log('catttch');
         console.log(err);
         npm.config.set('loglevel', loglevel);
         cb && cb(err);
@@ -34,10 +35,10 @@ if (require.main === module) {
     // directly from the command line
     var models = require('../app/models');
     models.sequelize.sync({force: false})
-        .success(function() {
+        .then(function() {
             models.VisualizationType
                 .findAll()
-                .success(function(vizTypes) {
+                .then(function(vizTypes) {
                     if(vizTypes.length === 0) {
                         npm.load({
                             loglevel: 'error'
