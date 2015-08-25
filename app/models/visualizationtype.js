@@ -423,6 +423,7 @@ module.exports = function(sequelize, DataTypes) {
                 if(isPostgres) {
                     vizType.sampleData = JSON.stringify(vizType.sampleData);
                     vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
+                    vizType.sampleImages = JSON.stringify(vizType.sampleImages);
                     vizType.codeExamples = JSON.stringify(vizType.codeExamples);
                 }
                 next();
