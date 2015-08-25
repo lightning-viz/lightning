@@ -12,11 +12,13 @@ describe('repo import tests', function() {
 
     before(function(done) {
         models.sequelize.sync({force: false})
-        .success(function() {
+        .then(function() {
             models.VisualizationType
                 .destroy({
-                    name: 'imported-matrix'
-                }).success(function() {
+                    where: {
+                        name: 'imported-matrix'
+                    }
+                }).then(function() {
                     done();
                 });
         });
@@ -44,7 +46,8 @@ describe('multi repo import tests', function() {
 
         models.VisualizationType
             .destroy({
-            }).success(function() {
+                where: {}
+            }).then(function() {
                 done();
             });
     });

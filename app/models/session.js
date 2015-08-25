@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         hooks: {
-            beforeCreate: function(session, next) {
+            beforeCreate: function(session, options, next) {
                 next();
             }
         }

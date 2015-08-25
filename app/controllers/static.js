@@ -35,7 +35,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
     var b = browserify();
 
     models.VisualizationType
-        .findAll().success(function(vizTypes) {
+        .findAll().then(function(vizTypes) {
             console.log(_.pluck(vizTypes, 'name'));
             var funcs = [];
             _.each(vizTypes, function(vizType) {
@@ -145,7 +145,7 @@ exports.getDynamicVizStyles = function (req, res, next) {
                     in: visualizationTypes
                 }
             }
-        }).success(function(vizTypes) {
+        }).then(function(vizTypes) {
 
             var scssData = '#lightning-body {\n';
             _.each(vizTypes, function(vizType) {

@@ -25,7 +25,7 @@ exports.index = function (req, res, next) {
         res.render('session/index', {
             sessions: sessions
         });
-    }).error(next);
+    }).catch(next);
 };
 
 
@@ -83,7 +83,7 @@ exports.listVisualizations = function (req, res, next) {
         .then(function(visualizations) {
             return res.json(visualizations)
         })
-        .error(next);
+        .catch(next);
 };
 
 
@@ -135,10 +135,12 @@ exports.update = function (req, res, next) {
 
     Session
         .update(req.body, {
-            id: sessionId
-        }).success(function(sessions) {
+            where: {
+                id: sessionId
+            }
+        }).then(function(sessions) {
             return res.json(sessions);
-        }).error(next);
+        }).catch(next);
 
 };
 
@@ -150,7 +152,7 @@ exports.create = function(req, res, next) {
         .create(_.pick(req.body, 'name'))
         .then(function(session) {
             return res.json(session);
-        }).error(next);
+        }).catch(next);
 };
 
 
@@ -160,19 +162,19 @@ exports.getCreate = function(req, res, next) {
         .create()
         .then(function(session) {
             return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
-        }).error(next);
+        }).catch(next);
 };
 
 exports.delete = function(req, res, next) {
     var sessionId = req.params.sid;
 
     models.Session
-        .find(sessionId)
+        .findById(sessionId)
         .then(function(session) {
-            session.destroy().success(function() {
+            session.destroy({where: {}}).then(function() {
                 return res.json(session);                
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 
@@ -182,12 +184,12 @@ exports.getDelete = function(req, res, next) {
     var sessionId = req.params.sid;
 
     models.Session
-        .find(sessionId)
+        .findById(sessionId)
         .then(function(session) {
-            session.destroy().success(function() {
+            session.destroy({where: {}}).then(function() {
                 return res.redirect(config.baseURL + 'sessions/');
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 
@@ -350,7 +352,7 @@ exports.appendData = function (req, res, next) {
                     .save()
                     .then(function() {
                         return res.json(viz);
-                    }).error(next);
+                    }).catch(next);
 
                 req.io.of('/sessions/' + sessionId)
                     .emit('append', {
@@ -405,7 +407,7 @@ exports.appendData = function (req, res, next) {
             } else {
                 return next(500);
             }
-        }).error(next);
+        }).catch(next);
 };
 
 
@@ -418,7 +420,7 @@ exports.updateData = function (req, res, next) {
 
 
     models.Visualization
-        .find(vizId)
+        .findById(vizId)
         .then(function(viz) {
             if(req.is('json')) {
 
@@ -432,7 +434,7 @@ exports.updateData = function (req, res, next) {
                     .save()
                     .then(function() {
                         return res.json(viz);
-                    }).error(next);
+                    }).catch(next);
 
                 req.io.of('/sessions/' + sessionId)
                     .emit('update', {
@@ -483,7 +485,7 @@ exports.updateData = function (req, res, next) {
             }
 
 
-        }).error(next);
+        }).catch(next);
 
 };
 

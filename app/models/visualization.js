@@ -88,7 +88,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
                     var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name];
@@ -110,7 +110,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
                     var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name][index];
@@ -142,7 +142,7 @@ module.exports = function(sequelize, DataTypes) {
                 } 
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
 
                     var data = viz.data;
                     _.each(keys, function(key) {
@@ -178,7 +178,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
 
                     var settings = viz.settings;
                     _.each(keys, function(key) {
@@ -221,7 +221,7 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         hooks: {
-            beforeValidate: function(visualization, next) {
+            beforeValidate: function(visualization, options, next) {
 
                 if(isPostgres) {
                     visualization.settings = JSON.stringify(visualization.settings);
