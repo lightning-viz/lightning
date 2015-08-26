@@ -24,7 +24,7 @@ if (cluster.isMaster) {
     startup();
 }
 
-sticky(function() {
+// sticky(function() {
     npm.load({
         loglevel: 'error'
     });
@@ -42,7 +42,8 @@ sticky(function() {
     // Boostrap routes
     require('./config/routes')(app);
 
-    return server;
-}).listen(port);
+    server.listen(port);
+    // return server;
+// }).listen(port);
 
-module.exports = server;
+// module.exports = server;
