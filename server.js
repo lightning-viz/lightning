@@ -24,7 +24,7 @@ if (cluster.isMaster) {
     startup();
 }
 
-// sticky(function() {
+sticky(function() {
     npm.load({
         loglevel: 'error'
     });
@@ -43,7 +43,7 @@ if (cluster.isMaster) {
     require('./config/routes')(app);
 
     server.listen(port);
-    // return server;
-// }).listen(port);
+    return server;
+}).listen(port);
 
-// module.exports = server;
+module.exports = server;
