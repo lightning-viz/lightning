@@ -29,7 +29,6 @@ if(io) {
 var vizs = {};
 
 socket.on('viz', function (viz) {
-
     $('.feed-container .empty').remove();
     utils.requireOrFetchViz(viz.visualizationType, function(err, Viz) {
         if(err) {
@@ -50,12 +49,13 @@ socket.on('viz', function (viz) {
 });
 
 socket.on('viz:delete' , function(vizId) {
+    console.log('viz:delete');
     $('.feed-container .feed-item-container[data-model-id="' + vizId + '"]').remove();
 });
 
 
 socket.on('append', function(message) {
-
+    console.log('append');
     var vizId = message.vizId;
     var data = message.data;
 
@@ -65,7 +65,7 @@ socket.on('append', function(message) {
 });
 
 socket.on('update', function(message) {
-
+    console.log('update');
     var vizId = message.vizId;
     var data = message.data;
 
@@ -76,8 +76,6 @@ socket.on('update', function(message) {
 
 
 setTimeout(function() {
-
-
     $('.feed-item[data-initialized=false]').each(function() {
 
         var type = $(this).data('type');

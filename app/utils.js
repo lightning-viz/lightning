@@ -80,6 +80,48 @@ module.exports = {
         }
 
         return Q.ninvoke(s3Client, 'putFile', imgPath, s3Path, headers);
+    },
+
+
+    getASCIILogo: function() {
+        var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
+        logo += " ,`                                ,.\n";
+        logo += ",`                                  ,\n";
+        logo += ",                                   ,\n";
+        logo += ",                      .            ,\n";
+        logo += ",                     ,             ,\n";
+        logo += ",                    `,             ,\n";
+        logo += ",                    ,.             ,\n";
+        logo += ",                   ,,              ,\n";
+        logo += ",                  ,,,              ,\n";
+        logo += ",                 ,,,.              ,\n";
+        logo += ",                .,,,               ,\n";
+        logo += ",               `,,,,               ,\n";
+        logo += ",               ,,,,`               ,\n";
+        logo += ",              ,,,,,                ,\n";
+        logo += ",             ,,,,,,                ,\n";
+        logo += ",            ,,,,,,,,,,,,,,.        ,\n";
+        logo += ",           .,,,,,,,,,,,,,,         ,\n";
+        logo += ",           ,,,,,,,,,,,,,,          ,\n";
+        logo += ",          ,,,,,,,,,,,,,,           ,\n";
+        logo += ",         ,,,,,,,,,,,,,,            ,\n";
+        logo += ",                 ,,,,,`            ,\n";
+        logo += ",                ,,,,,,             ,\n";
+        logo += ",                ,,,,,              ,\n";
+        logo += ",                ,,,,               ,\n";
+        logo += ",               ,,,,                ,\n";
+        logo += ",               ,,,`                ,\n";
+        logo += ",              `,,.                 ,\n";
+        logo += ",              ,,,                  ,\n";
+        logo += ",              ,,                   ,\n";
+        logo += ",             `,                    ,\n";
+        logo += ",             ,                     ,\n";
+        logo += ",             `                     ,\n";
+        logo += ",            `                      ,\n";
+        logo += ",                                   ,\n";
+        logo += "`,                                 .,\n";
+        logo += " .,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, \n\n\n\n";
+        return logo;
     }
 
 };
