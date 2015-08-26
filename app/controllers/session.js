@@ -305,7 +305,7 @@ exports.appendData = function (req, res, next) {
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
-                        if(viz.visualizationType.isStreaming) {
+                        if(viz.VisualizationType.isStreaming) {
                             _.each(req.body.data, function(d, i) {
                                 if(i < viz.data[fieldName].length) {
                                     viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
@@ -327,7 +327,7 @@ exports.appendData = function (req, res, next) {
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
 
-                            if(viz.visualizationType.isStreaming) {
+                            if(viz.VisualizationType.isStreaming) {
                                 _.each(req.body.data, function(d, i) {
 
                                 });
