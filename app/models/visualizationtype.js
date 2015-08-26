@@ -179,8 +179,11 @@ module.exports = function(sequelize, DataTypes) {
                 var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
                 _.find(thumbnailExtensions, function(extension) {
                     var thumbnailPath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/thumbnail.' + extension);
+                    console.log('thumbnailPath');
+                    console.log(thumbnailPath);
                     var thumbnailExists = fs.existsSync(thumbnailPath);
                     if(thumbnailExists) {
+                        console.log(thumbnailExists);
                         vizTypeObj.thumbnailLocation = thumbnailPath;
                     }
                     return thumbnailExists;

@@ -28,6 +28,9 @@ module.exports = {
 
     titleCase: function(str) {
         return titleCase(str)
+    },
+
+    uploadToS3: function(f, callback) {
     }
 
 

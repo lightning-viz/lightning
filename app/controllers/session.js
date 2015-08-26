@@ -492,14 +492,10 @@ exports.updateData = function (req, res, next) {
 
 
 var thumbnailAndUpload = function(f, sessionId, callback) {
-
-
-
     var staticUrl = '/';
     if(config.url) {
         staticUrl = 'http://' + config.url + '/';
     }
-
 
     // check if thumbnailing exists,
     // and if s3 creds exist
@@ -688,6 +684,5 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
             }
         }
     })
-
-
 };
+
