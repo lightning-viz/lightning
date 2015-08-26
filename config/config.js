@@ -72,6 +72,7 @@ var config = {
   production: extend(production, defaults)
 }[process.env.NODE_ENV || 'development'];
 
+console.log(config);
 config.baseURL = formatBaseUrl(config.baseURL);
 
 module.exports = config;
