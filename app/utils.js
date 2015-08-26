@@ -35,6 +35,14 @@ module.exports = {
         return titleCase(str)
     },
 
+    getStaticUrl: function() {
+        var baseUrl = config.baseURL;
+        var static_url = baseUrl;
+        if(config.url) {
+            static_url = config.url + baseUrl;
+        }
+    },
+
     uploadToS3: function(filepath) {
 
         // check if thumbnailing exists,

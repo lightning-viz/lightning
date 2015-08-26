@@ -380,6 +380,14 @@ module.exports = function(sequelize, DataTypes) {
 
         instanceMethods: {
 
+            getThumbnailURL: function() {
+                if(this.thumbnailLocation.indexOf('http://') > -1 || this.thumbnailLocation.indexOf('https://') > -1) {
+                    return this.thumbnailLocation;
+                }
+
+                return utils.getStaticUrl() + 'visualization-types/' + this.id + '/thumbnail';
+            },
+
             exportToFS: function(p) {
 
                 var self = this;
