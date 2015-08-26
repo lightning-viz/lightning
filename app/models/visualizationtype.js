@@ -9,6 +9,7 @@ var env = process.env.NODE_ENV || 'development';
 var config = require(__dirname + '/../../config/database')[env];
 var isPostgres = config.dialect === 'postgres';
 var npm = require('npm');
+var utils = require('../utils');
 
 module.exports = function(sequelize, DataTypes) {
     var schema;
@@ -175,6 +176,10 @@ module.exports = function(sequelize, DataTypes) {
                     codeExamples: codeExamples
                 };
 
+                if(preview) {
+                    return VisualizationType.build(vizTypeObj);
+                }
+
                 // check if example image exists
                 var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
                 _.find(thumbnailExtensions, function(extension) {
@@ -186,8 +191,15 @@ module.exports = function(sequelize, DataTypes) {
                     return thumbnailExists;
                 });
 
-                if(preview) {
-                    return VisualizationType.build(vizTypeObj);
+                if(vizTypeObj.thumbnailLocation) {
+                    return utils.uploadToS3(vizTypeObj.thumbnailLocation)
+                            .then(function(results) {
+                                vizTypeObj.thumbnailLocation = results.req.url;
+                                return VisualizationType.create(vizTypeObj)
+                                    .catch(function() {
+                                        return VisualizationType.create(vizTypeObj);
+                                    });
+                            });
                 }
 
                 return VisualizationType.create(vizTypeObj);
