@@ -31,9 +31,7 @@ exports.getSettings = function (req, res, next) {
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
     res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
-
     var Visualization = models.Visualization;
-
     Visualization
         .findById(vizId)
         .then(function(viz) {
@@ -77,8 +75,6 @@ exports.getSettingsWithKeys = function (req, res, next) {
         return k.trim() !== '';
     });
 
-    console.log(keys);
-
     models.Visualization
         .querySettingsForVisualization(vizId, keys)
         .then(function(results) {
@@ -116,7 +112,7 @@ exports.updateSettings = function (req, res, next) {
     var vid = req.params.vid;
     var Visualization = models.Visualization;
 
-    console.log('updating visualization ' + vid);
+    console.log('updating visualization settings ' + vid);
 
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
@@ -126,8 +122,11 @@ exports.updateSettings = function (req, res, next) {
     Visualization
         .findById(vid)
         .then(function(viz) {
-            viz.settings = _.extend(viz.settings || {}, req.body);
-
+            if(_.isString(viz.settings)) {
+                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);    
+            } else {
+                viz.settings = _.extend(viz.settings || {}, req.body);
+            }
             viz.save()
                 .then(function() {
                     return res.json({
