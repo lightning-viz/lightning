@@ -32,9 +32,9 @@ module.exports = function(sequelize, DataTypes) {
 
             thumbnailLocation: DataTypes.STRING,
 
-            sampleData: 'JSON',
-            sampleOptions: 'JSON',
-            codeExamples: 'JSON',
+            sampleData: DataTypes.JSON,
+            sampleOptions: DataTypes.JSON,
+            codeExamples: DataTypes.JSON,
             sampleImages: DataTypes.ARRAY(DataTypes.STRING),
 
             javascript: DataTypes.TEXT,
@@ -434,17 +434,6 @@ module.exports = function(sequelize, DataTypes) {
                     });
             }
 
-        },
-
-        hooks: {
-            beforeValidate: function(vizType, options, next) {
-                if(isPostgres) {
-                    vizType.sampleData = JSON.stringify(vizType.sampleData);
-                    vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
-                    vizType.codeExamples = JSON.stringify(vizType.codeExamples);
-                }
-                next();
-            }
         }
     });
 

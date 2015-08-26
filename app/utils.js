@@ -10,8 +10,6 @@ var randomstring = require('randomstring');
 
 module.exports = {
 
-
-
     sortByKey: function(list, key) {
         return _.sortBy(list, key);
     },
@@ -41,6 +39,8 @@ module.exports = {
         if(config.url) {
             static_url = config.url + baseUrl;
         }
+
+        return static_url;
     },
 
     uploadToS3: function(filepath) {

@@ -5,8 +5,7 @@ var dbConfig = require(__dirname + '/../config/database')[env];
 var _ = require('lodash');
 var tasks = require('./index');
 var port = process.env.PORT || 3000;
-
-
+var npm = require('npm');
 
 var f = function() {
     models.sequelize.sync({force: false})
@@ -21,15 +20,17 @@ var f = function() {
                         console.log('* ' + vt.name);
                     })
                     if(vizTypes.length === 0) {
-                        tasks.getDefaultVisualizations();
+                        npm.load({
+                            loglevel: 'error'
+                        }, function() {
+                            tasks.getDefaultVisualizations();
+                        });
                     }
                 });
         }).catch(function(err) {
             console.log('Could not connect to the database. Is Postgres running?');
             throw err;
         });
-
-
 
 
     console.log(utils.getASCIILogo().magenta);
