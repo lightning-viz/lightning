@@ -9,7 +9,7 @@
   "repository": "https://github.com/mathisonian/lightning",
   "env": {
     "NODE_ENV": "production",
-    "BUILDPACK_URL": "https://github.com/newyorkdata/heroku-buildpack-nodejs-gulp#v1.0.1",
+    "BUILDPACK_URL": "https://github.com/newyorkdata/heroku-buildpack-nodejs-gulp",
     "LIGHTNING_USERNAME": {
       "description": "Username to secure this instance with basic auth. (optional)",
       "required": false
