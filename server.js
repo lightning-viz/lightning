@@ -42,7 +42,6 @@ sticky(function() {
     // Boostrap routes
     require('./config/routes')(app);
 
-    server.listen(port);
     return server;
 }).listen(port);
 
