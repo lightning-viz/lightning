@@ -6,8 +6,9 @@ var uuid = require('node-uuid');
 var glob = require('glob');
 var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
-var config = require(__dirname + '/../../config/database')[env];
-var isPostgres = config.dialect === 'postgres';
+var dbConfig = require(__dirname + '/../../config/database')[env];
+var isPostgres = dbConfig.dialect === 'postgres';
+var config = require(__dirname + '/../../config/config');
 var npm = require('npm');
 var utils = require('../utils');
 
@@ -191,14 +192,11 @@ module.exports = function(sequelize, DataTypes) {
                     return thumbnailExists;
                 });
 
-                if(vizTypeObj.thumbnailLocation) {
+                if(vizTypeObj.thumbnailLocation && config.s3.key) {
                     return utils.uploadToS3(vizTypeObj.thumbnailLocation)
                             .then(function(results) {
                                 vizTypeObj.thumbnailLocation = results.req.url;
-                                return VisualizationType.create(vizTypeObj)
-                                    .catch(function() {
-                                        return VisualizationType.create(vizTypeObj);
-                                    });
+                                return VisualizationType.create(vizTypeObj);
                             });
                 }
 
