@@ -362,7 +362,7 @@ exports.appendData = function (req, res, next) {
                         vizId: viz.id, 
                         data: req.body.data
                     });
-            
+
             } else if(fieldName === 'images') {
 
                 var form = new multiparty.Form();
