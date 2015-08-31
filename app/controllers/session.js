@@ -220,6 +220,7 @@ exports.addData = function (req, res, next) {
         }).then(function(viz) {
             var jsonViz = viz.toJSON();
             jsonViz.visualizationType = vt;
+            console.log('created visualization with viz type ' + vt.name);
             req.io.of('/sessions/' + sessionId)
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
