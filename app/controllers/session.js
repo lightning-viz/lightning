@@ -221,6 +221,8 @@ exports.addData = function (req, res, next) {
             var jsonViz = viz.toJSON();
             jsonViz.visualizationType = vt;
             console.log('created visualization with viz type ' + vt.name);
+            console.log('emitting to: ' + '/sessions/' + sessionId);
+            console.log(JSON.stringify(jsonViz));
             req.io.of('/sessions/' + sessionId)
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
