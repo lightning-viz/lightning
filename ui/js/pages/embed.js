@@ -14,7 +14,9 @@ var socket;
 io = window.io || false
 
 if(io) {
-    socket = io.connect('/sessions/' + sid);
+    var namespace = utils.getNamespaceForSession(sid);
+    console.log('connecting to ' + namespace);
+    socket = io.connect(namespace);
 } else {
     socket = {
         on: function(){}
