@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies
  */
@@ -15,7 +14,7 @@ require('colors');
 var env = process.env.NODE_ENV || 'development';
 var dbConfig = require(__dirname + '/config/database')[env];
 var npm = require('npm');
-var sticky = require('sticky-session');
+// var sticky = require('sticky-session');
 var utils = require('./app/utils');
 var port = process.env.PORT || 3000;
 var startup = require('./tasks/startup');
@@ -24,26 +23,23 @@ if (cluster.isMaster) {
     startup();
 }
 
-// sticky(function() {
-    npm.load({
-        loglevel: 'error'
-    });
-    var io = require('socket.io')(server);
+npm.load({
+    loglevel: 'error'
+});
+var io = require('socket.io')(server);
 
-    io.set('origins', '*:*');
+io.set('origins', '*:*');
 
-    io.on('connection', function(){
-      console.log('a user connected');
-    });
+io.on('connection', function(){
+  console.log('a user connected');
+});
 
-    // Bootstrap application settings
-    require('./config/express')(app, io);
-    
-    // Boostrap routes
-    require('./config/routes')(app);
+// Bootstrap application settings
+require('./config/express')(app, io);
 
-    server.listen(port);
-    // return server;
-// }).listen(port);
+// Boostrap routes
+require('./config/routes')(app);
 
-// module.exports = server;
+server.listen(port);
+
+module.exports = server;

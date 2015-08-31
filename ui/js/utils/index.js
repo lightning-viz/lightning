@@ -8,6 +8,10 @@ module.exports = {
         $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
     },
 
+    getNamespaceForSession: function(sid) {
+        return window.location.origin + '/session' + sid.split('-').join('');
+    },
+
     requireOrFetchViz: function(viz, cb) {
         console.log(viz);
         var self = this;

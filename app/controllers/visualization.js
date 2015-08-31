@@ -208,7 +208,7 @@ exports.delete = function (req, res, next) {
 
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
                 return res.json(viz);                
             }).catch(next);
@@ -226,7 +226,7 @@ exports.getDelete = function(req, res, next) {
             }
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
                 return res.redirect(config.baseURL + 'sessions/' + sessionId);
             }).catch(next);

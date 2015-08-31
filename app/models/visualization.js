@@ -217,6 +217,10 @@ module.exports = function(sequelize, DataTypes) {
                 } 
 
                 return this.data;
+            },
+
+            getSessionSocketNamespace: function() {
+                return '/session' + this.SessionId.split('-').join('');
             }
         }
     });
