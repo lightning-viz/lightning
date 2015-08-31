@@ -219,7 +219,7 @@ exports.addData = function (req, res, next) {
             });
         }).then(function(viz) {
             var jsonViz = viz.toJSON();
-            jsonViz.visualizationType = vt;
+            jsonViz.visualizationType = _.pick(vt.toJSON(), 'name', 'moduleName', 'initialDataFields', 'isStreaming', 'id');
             console.log('created visualization with viz type ' + vt.name);
             console.log('emitting to: ' + '/sessions/' + sessionId);
             console.log(JSON.stringify(jsonViz));
