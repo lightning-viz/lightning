@@ -18,8 +18,8 @@ var socket;
 io = window.io || false
 
 if(io) {
-    console.log('connecting to ' + '/sessions/' + sid);
-    socket = io.connect('/sessions/' + sid);
+    console.log('connecting to ' + window.location.origin + '/session' + sid.split('-').join(''));
+    socket = io.connect(window.location.origin + '/session' + sid.split('-').join(''));
 } else {
     socket = {
         on: function(){}

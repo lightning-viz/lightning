@@ -150,7 +150,7 @@ exports.create = function(req, res, next) {
     models.Session
         .create(_.pick(req.body, 'name'))
         .then(function(session) {
-            req.io.of('/sessions/' + session.id)
+            req.io.of(session.getSocketNamespace())
                 .emit('init');
             return res.json(session);
         }).catch(next);
@@ -160,7 +160,7 @@ exports.getCreate = function(req, res, next) {
     models.Session
         .create()
         .then(function(session) {
-            req.io.of('/sessions/' + session.id)
+            req.io.of(session.getSocketNamespace())
                 .emit('init');
             return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
         }).catch(next);
@@ -222,9 +222,9 @@ exports.addData = function (req, res, next) {
             var jsonViz = viz.toJSON();
             jsonViz.visualizationType = _.pick(vt.toJSON(), 'name', 'moduleName', 'initialDataFields', 'isStreaming', 'id');
             console.log('created visualization with viz type ' + vt.name);
-            console.log('emitting to: ' + '/sessions/' + sessionId);
+            console.log('emitting to: ' + '/sessions-' + sessionId);
             console.log(JSON.stringify(jsonViz));
-            req.io.of('/sessions/' + sessionId)
+            req.io.of(viz.getSessionSocketNamespace())
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
         }).catch(function(err) {
@@ -274,7 +274,7 @@ exports.addData = function (req, res, next) {
                     }).then(function(viz) {
                         var jsonViz = viz.toJSON();
                         jsonViz.visualizationType = vt;
-                        req.io.of('/sessions/' + sessionId)
+                        req.io.of(viz.getSessionSocketNamespace())
                             .emit('viz', jsonViz);  
                         return res.json(jsonViz);
                     }).catch(function(err) {
@@ -358,7 +358,7 @@ exports.appendData = function (req, res, next) {
                         return res.json(viz);
                     }).catch(next);
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('append', {
                         vizId: viz.id, 
                         data: req.body.data
@@ -399,7 +399,7 @@ exports.appendData = function (req, res, next) {
                                     }
                                 });
 
-                            req.io.of('/sessions/' + sessionId)
+                            req.io.of(viz.getSessionSocketNamespace())
                                 .emit('append', {
                                     vizId: viz.id, 
                                     data: imgData
@@ -440,7 +440,7 @@ exports.updateData = function (req, res, next) {
                         return res.json(viz);
                     }).catch(next);
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('update', {
                         vizId: viz.id, 
                         data: req.body.data
@@ -475,7 +475,7 @@ exports.updateData = function (req, res, next) {
                                     }
                                 });
 
-                            req.io.of('/sessions/' + sessionId)
+                            req.io.of(viz.getSessionSocketNamespace())
                                 .emit('update', {
                                     vizId: viz.id, 
                                     data: imgData
