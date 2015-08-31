@@ -147,20 +147,21 @@ exports.update = function (req, res, next) {
 
 
 exports.create = function(req, res, next) {
-
     models.Session
         .create(_.pick(req.body, 'name'))
         .then(function(session) {
+            req.io.of('/sessions/' + session.id)
+                .emit('init');
             return res.json(session);
         }).catch(next);
 };
-
-
 
 exports.getCreate = function(req, res, next) {
     models.Session
         .create()
         .then(function(session) {
+            req.io.of('/sessions/' + session.id)
+                .emit('init');
             return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
         }).catch(next);
 };
