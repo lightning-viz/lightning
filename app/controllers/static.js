@@ -7,6 +7,7 @@ var cache = require('../cache');
 var sass = require('node-sass');
 var uuid = require('node-uuid');
 var Q = require('q');
+var debug = require('debug')('lightning:server:controllers:static');
 
 
 exports.getDynamicVizBundle = function (req, res, next) {
@@ -28,7 +29,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
         }
     }
 
-    console.log('building viz bundle with ' + visualizationTypes);
+    debug('building viz bundle with ' + visualizationTypes);
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
@@ -36,7 +37,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
     models.VisualizationType
         .findAll().then(function(vizTypes) {
-            console.log(_.pluck(vizTypes, 'name'));
+            debug('Found ' + vizTypes.length + ' visualization types');
             var funcs = [];
             _.each(vizTypes, function(vizType) {
                 if(!vizType.isModule) {
@@ -48,7 +49,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
-                        console.log(vizType.moduleName);
+                        debug(vizType.moduleName);
                         b.require(vizType.moduleName, {
                             expose: vizType.moduleName
                         });
@@ -96,7 +97,7 @@ exports.bundleJSForExecution = function(req, res, next) {
     var bundle = b.bundle();
 
     bundle.on('error', function(err) {
-        console.log(err);
+        debug(err);
         return res.status(500).send();
     });
 
@@ -136,7 +137,7 @@ exports.getDynamicVizStyles = function (req, res, next) {
         return res.send(styles);
     }
 
-    console.log('building viz styles with ' + visualizationTypes);
+    debug('building viz styles with ' + visualizationTypes);
 
     models.VisualizationType
         .findAll({

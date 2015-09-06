@@ -3,6 +3,7 @@ var Q = require('q');
 var _ = require('lodash');
 var webshot = require('webshot');
 var config = require('../../config/config');
+var debug = require('debug')('lightning:server:controllers:visualizations');
 
 
 exports.getData = function (req, res, next) {
@@ -31,9 +32,7 @@ exports.getSettings = function (req, res, next) {
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
     res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
-
     var Visualization = models.Visualization;
-
     Visualization
         .findById(vizId)
         .then(function(viz) {
@@ -77,8 +76,6 @@ exports.getSettingsWithKeys = function (req, res, next) {
         return k.trim() !== '';
     });
 
-    console.log(keys);
-
     models.Visualization
         .querySettingsForVisualization(vizId, keys)
         .then(function(results) {
@@ -95,7 +92,7 @@ exports.update = function (req, res, next) {
     var vid = req.params.vid;
     var Visualization = models.Visualization;
 
-    console.log('updating visualization ' + vid);
+    debug('updating visualization ' + vid);
 
     Visualization
         .update(req.body, {
@@ -105,7 +102,7 @@ exports.update = function (req, res, next) {
         }).then(function(visualizations) {
             return res.status(200).send();
         }).catch(function(err) {
-            console.log(err);
+            debug(err);
             return res.status(500).send();
         });
 
@@ -116,7 +113,7 @@ exports.updateSettings = function (req, res, next) {
     var vid = req.params.vid;
     var Visualization = models.Visualization;
 
-    console.log('updating visualization ' + vid);
+    debug('updating visualization settings ' + vid);
 
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
@@ -126,8 +123,11 @@ exports.updateSettings = function (req, res, next) {
     Visualization
         .findById(vid)
         .then(function(viz) {
-            viz.settings = _.extend(viz.settings || {}, req.body);
-
+            if(_.isString(viz.settings)) {
+                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);    
+            } else {
+                viz.settings = _.extend(viz.settings || {}, req.body);
+            }
             viz.save()
                 .then(function() {
                     return res.json({
@@ -209,7 +209,7 @@ exports.delete = function (req, res, next) {
 
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
                 return res.json(viz);                
             }).catch(next);
@@ -227,7 +227,7 @@ exports.getDelete = function(req, res, next) {
             }
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
                 return res.redirect(config.baseURL + 'sessions/' + sessionId);
             }).catch(next);

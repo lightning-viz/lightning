@@ -19,6 +19,10 @@ module.exports = function(sequelize, DataTypes) {
             getDisplayName: function() {
                 var identifier = '' + this.id;
                 return this.name || ('Session ' + identifier.substring(0, 5));
+            },
+
+            getSocketNamespace: function() {
+                return '/session' + this.id.split('-').join('');
             }
         },
 
