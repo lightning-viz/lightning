@@ -46,6 +46,8 @@ if (require.main === module) {
                         }, function() {
                             getDefaultVisualizations();
                         });
+                    } else {
+                        console.log('Visualizations exist in the database... Not fetching defaults');
                     }
                 });
         });

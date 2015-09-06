@@ -4,7 +4,7 @@ var config = require('./config');
 
 var dbUrl = null;
 if(process.env.DATABASE_URL) {
-        dbUrl = url.parse(process.env.DATABASE_URL);
+    dbUrl = url.parse(process.env.DATABASE_URL);
 }
 
 module.exports = {
