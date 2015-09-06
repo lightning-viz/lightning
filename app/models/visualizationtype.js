@@ -211,8 +211,6 @@ module.exports = function(sequelize, DataTypes) {
                 npm.config.set('loglevel', 'silent');
                 return Q.nfcall(npm.commands.uninstall, [name])
                     .then(function(results) {
-                        debug(results);
-                        debug(command);
                         return Q.nfcall(command, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
