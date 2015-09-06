@@ -208,11 +208,9 @@ module.exports = function(sequelize, DataTypes) {
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
-                npm.config.set('loglevel', 'verbose');
+                npm.config.set('loglevel', 'silent');
                 return Q.nfcall(npm.commands.uninstall, [name])
                     .then(function(results) {
-                        debug(results);
-                        debug(command);
                         return Q.nfcall(command, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
