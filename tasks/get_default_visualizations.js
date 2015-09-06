@@ -5,10 +5,11 @@ var config = require('../config/config');
 var defaultVisualizations = config.defaultVisualizations || [];
 require('colors');
 var npm = require('npm');
+var debug = require('debug')('lightning:server:tasks');
 
 var getDefaultVisualizations = function(cb) {
 
-    console.log('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
+    debug('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
     var loglevel = npm.config.get('loglevel');
     npm.config.set('loglevel', 'silent');
 
@@ -16,13 +17,13 @@ var getDefaultVisualizations = function(cb) {
         return models.VisualizationType.createFromNPM(moduleName);
     }))
     .spread(function() {
-        console.log()
+        debug()
         var vizTypes = Array.prototype.slice.call(arguments, 0);
         npm.config.set('loglevel', loglevel);
-        console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
+        debug('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
         cb && cb();
     }).catch(function(err) {
-        console.log(err);
+        debug(err);
         npm.config.set('loglevel', loglevel);
         cb && cb(err);
     });

@@ -1,5 +1,6 @@
 
 window.define = undefined;
+window.lightningDebug = require('debug');
 
 require('../lib/modal');
 
@@ -12,6 +13,7 @@ var request = require('superagent');
 var marked = require('marked');
 
 var utils = require('../utils');
+var debug = require('debug')('lightning:ui:pages:feed');
 
 
 var socket;
@@ -19,7 +21,7 @@ io = window.io || false
 
 if(io) {
     var namespace = utils.getNamespaceForSession(sid);
-    console.log('connecting to ' + namespace);
+    debug('connecting to ' + namespace);
     socket = io.connect(namespace);
 } else {
     socket = {
@@ -33,7 +35,7 @@ socket.on('viz', function (viz) {
     $('.feed-container .empty').remove();
     utils.requireOrFetchViz(viz.visualizationType, function(err, Viz) {
         if(err) {
-            return console.log(err);
+            return debug(err);
         }
 
         $('.feed-container').prepend(feedItemHTML({
@@ -50,13 +52,13 @@ socket.on('viz', function (viz) {
 });
 
 socket.on('viz:delete' , function(vizId) {
-    console.log('viz:delete');
+    debug('viz:delete');
     $('.feed-container .feed-item-container[data-model-id="' + vizId + '"]').remove();
 });
 
 
 socket.on('append', function(message) {
-    console.log('append');
+    debug('append');
     var vizId = message.vizId;
     var data = message.data;
 
@@ -66,7 +68,7 @@ socket.on('append', function(message) {
 });
 
 socket.on('update', function(message) {
-    console.log('update');
+    debug('update');
     var vizId = message.vizId;
     var data = message.data;
 
@@ -120,7 +122,7 @@ setTimeout(function() {
 
                 request.put(url, params, function(error, res){
                     if(error) {
-                        return console.log(error);
+                        return debug(error);
                     }
                 });
             });
@@ -160,7 +162,7 @@ var editDesctiption = function(e) {
 
         request.put(url, params, function(error, res){
             if(error) {
-                return console.log(error);
+                return debug(error);
             } else {
                   $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
@@ -187,9 +189,9 @@ $('#data-input-form').submit(function(e) {
 
     request.post(url, params, function(error, res){
         if(error) {
-            return console.log(error);
+            return debug(error);
         } else {
-            console.log('success');
+            debug('success');
             $.modal.close();
         }
     });

@@ -20,6 +20,8 @@ var utils = require('./app/utils');
 var port = process.env.PORT || 3000;
 var startup = require('./tasks/startup');
 var cluster = require('cluster');
+var debug = require('debug')('lightning:server');
+
 if (cluster.isMaster) {
     startup();
 }
@@ -32,7 +34,7 @@ var io = require('socket.io')(server);
 io.set('origins', '*:*');
 
 io.on('connection', function(){
-  console.log('a user connected');
+  debug('a user connected');
 });
 
 // Bootstrap application settings

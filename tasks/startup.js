@@ -6,6 +6,7 @@ var _ = require('lodash');
 var tasks = require('./index');
 var port = process.env.PORT || 3000;
 var npm = require('npm');
+var debug = require('debug')('lightning:server:startup');
 
 var f = function() {
     models.sequelize.sync({force: false})
@@ -14,10 +15,10 @@ var f = function() {
             models.VisualizationType
                 .findAll()
                 .then(function(vizTypes) {
-                    console.log('\nInstalled visualizations:');
-                    console.log('-------------------------');
+                    debug('Installed visualizations:');
+                    debug('-------------------------');
                     _.each(vizTypes, function(vt) {
-                        console.log('* ' + vt.name);
+                        debug('* ' + vt.name);
                     })
                     if(vizTypes.length === 0) {
                         npm.load({
@@ -28,15 +29,15 @@ var f = function() {
                     }
                 });
         }).catch(function(err) {
-            console.log('Could not connect to the database. Is Postgres running?');
+            debug('Could not connect to the database. Is Postgres running?');
             throw err;
         });
 
 
-    console.log(utils.getASCIILogo().magenta);
+    debug(utils.getASCIILogo().magenta);
 
-    console.log('Lightning started on port: ' + port);
-    console.log('Running database: ' + dbConfig.dialect);
+    debug('Lightning started on port: ' + port);
+    debug('Running database: ' + dbConfig.dialect);
 };
 
 module.exports = f;

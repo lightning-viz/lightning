@@ -11,6 +11,7 @@ var isPostgres = dbConfig.dialect === 'postgres';
 var config = require(__dirname + '/../../config/config');
 var npm = require('npm');
 var utils = require('../utils');
+var debug = require('debug')('lightning:server:models:visualization-types');
 
 module.exports = function(sequelize, DataTypes) {
     var schema;
@@ -121,6 +122,7 @@ module.exports = function(sequelize, DataTypes) {
             },
 
             _buildFromNPM: function(name, preview) {
+
                 var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
                 var sampleOptions = lightningConfig.sampleOptions;
@@ -206,13 +208,15 @@ module.exports = function(sequelize, DataTypes) {
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
-                npm.config.set('loglevel', 'silent');
+                npm.config.set('loglevel', 'verbose');
                 return Q.nfcall(npm.commands.uninstall, [name])
                     .then(function(results) {
+                        debug(results);
+                        debug(command);
                         return Q.nfcall(command, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
-                        console.log(('Successfully installed ' + name).green);
+                        debug(('Successfully installed ' + name).green);
                         return self._buildFromNPM(name, preview);
                     });
             },
@@ -226,6 +230,8 @@ module.exports = function(sequelize, DataTypes) {
             },
 
             linkFromLocalModule: function(name) {
+                debug('link from local module');
+                debug(name);
                 return this._createLinkNPM(npm.commands.link, name, true);
             },
 
@@ -310,7 +316,7 @@ module.exports = function(sequelize, DataTypes) {
 
             createFromFolder: function(path, attributes, opts) {
 
-                console.log('Create from folder: ' + path);
+                debug('Create from folder: ' + path);
 
                 attributes = attributes || {};
                 opts = opts || {};
@@ -353,7 +359,7 @@ module.exports = function(sequelize, DataTypes) {
                     try {
                         packageJSON = JSON.parse(packageJSON);
                     } catch(e) {
-                        console.warn('Invalid package.json: ' + e.toString());
+                        debug('Invalid package.json: ' + e.toString());
                     }
 
                     var vizTypeObj = _.extend(attributes, {
@@ -430,7 +436,7 @@ module.exports = function(sequelize, DataTypes) {
                         return Q.nfcall(npm.commands.install, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
-                        console.log(('Successfully updated ' + name).green);
+                        debug(('Successfully updated ' + name).green);
                     });
             }
 

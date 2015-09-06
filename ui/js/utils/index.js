@@ -1,6 +1,7 @@
 var request = require('superagent');
 var baseURL = window.lightning.baseURL || window.lightning.host || '/';
-console.log(baseURL);
+var debug = require('debug')('lightning:ui:utils');
+debug(baseURL);
 
 module.exports = {
 
@@ -13,7 +14,7 @@ module.exports = {
     },
 
     requireOrFetchViz: function(viz, cb) {
-        console.log(viz);
+        debug(viz);
         var self = this;
         try {
             var Viz = require(viz.moduleName || viz.name);

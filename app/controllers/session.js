@@ -2,7 +2,7 @@
 /*!
  * Module dependencies.
  */
-
+var debug = require('debug')('lightning:server:controllers:session');
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var knox = require('knox');
@@ -15,6 +15,7 @@ var Q = require('q');
 var commandExists = require('command-exists');
 var config = require('../../config/config');
 var fs = require('fs-extra');
+
 
 
 exports.index = function (req, res, next) {
@@ -221,9 +222,6 @@ exports.addData = function (req, res, next) {
         }).then(function(viz) {
             var jsonViz = viz.toJSON();
             jsonViz.visualizationType = _.pick(vt.toJSON(), 'name', 'moduleName', 'initialDataFields', 'isStreaming', 'id');
-            console.log('created visualization with viz type ' + vt.name);
-            console.log('emitting to: ' + '/sessions-' + sessionId);
-            console.log(JSON.stringify(jsonViz));
             req.io.of(viz.getSessionSocketNamespace())
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
@@ -242,7 +240,7 @@ exports.addData = function (req, res, next) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
                     if(err) {
-                        console.log('error in thumbnailAndUpload');
+                        debug('error in thumbnailAndUpload');
                         return res.status(500).send('error creating image thumbnail');
                     }
                     var imgData = data.imgData;
@@ -325,7 +323,7 @@ exports.appendData = function (req, res, next) {
                     } else if(_.isUndefined(viz.data[fieldName])) {
                         viz.data[fieldName] = req.body.data;
                     } else {
-                        console.log('unknown field');
+                        debug('unknown field');
                     }
                 } else {
                     if(_.isArray(viz.data)) {
@@ -348,7 +346,7 @@ exports.appendData = function (req, res, next) {
                     } else if(_.isUndefined(viz.data)) {
                         viz.data = req.body.data;
                     } else {
-                        console.log('unknown field');
+                        debug('unknown field');
                     }
                 }
 
@@ -374,7 +372,7 @@ exports.appendData = function (req, res, next) {
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
                             if(err) {
-                                console.log('error in thumbnailAndUpload');
+                                debug('error in thumbnailAndUpload');
                                 return res.status(500).send('error creating image thumbnail');
                             }
                             var imgData = data.imgData;
@@ -455,7 +453,7 @@ exports.updateData = function (req, res, next) {
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
                             if(err) {
-                                console.log('error in thumbnailAndUpload');
+                                debug('error in thumbnailAndUpload');
                                 return res.status(500).send('error creating image thumbnail');
                             }
                             var imgData = data.imgData;
@@ -564,7 +562,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     var thumbWidth;
                     var thumbHeight;
 
-                    console.log('outputing to: ' + thumbnailPath);
+                    debug('outputing to: ' + thumbnailPath);
 
                     if(file.width > file.height) {
                         thumbWidth = Math.min(maxWidth, file.width);
@@ -585,14 +583,9 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     if(s3Exists) {
                         async.parallel([
                             function(callback) {
-                                console.log('s3 exists');
-                                console.log('uploading image');
-                                console.log(imgPath + ':' + originalS3Path);
                                 s3Client.putFile(imgPath, originalS3Path, headers, callback);
                             },
                             function(callback) {
-                                console.log('uploading thumbnail');
-                                console.log(thumbnailPath + ':' + thumbnailS3Path);
                                 s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                             }
                         ], function(err, results) {
@@ -611,7 +604,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                         });
                     } else {
 
-                        console.log('S3 Credentials not found. Using local images');
+                        debug('S3 Credentials not found. Using local images');
 
                         async.parallel([
                             function(callback) {
@@ -635,7 +628,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     }
 
                 }, function(err) {
-                    console.log(err);
+                    debug(err);
                     callback(err);
                 });
         } else {
@@ -643,11 +636,11 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
             if(s3Exists) {
                 async.parallel([
                     function(callback) {
-                        console.log(imgPath + ':' + originalS3Path);
+                        debug(imgPath + ':' + originalS3Path);
                         s3Client.putFile(imgPath, originalS3Path, headers, callback);
                     },
                     function(callback) {
-                        console.log(thumbnailPath + ':' + thumbnailS3Path);
+                        debug(thumbnailPath + ':' + thumbnailS3Path);
                         s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                     }
                 ], function(err, results) {
@@ -671,12 +664,12 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 async.parallel([
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
-                        console.log(outpath);
+                        debug(outpath);
                         fs.copy(imgPath, outpath, callback);        
                     },
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);
-                        console.log(outpath);
+                        debug(outpath);
                         fs.copy(imgPath, outpath, callback);
                     }
                 ], function(err) {

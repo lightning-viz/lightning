@@ -3,6 +3,7 @@ var Q = require('q');
 var _ = require('lodash');
 var webshot = require('webshot');
 var config = require('../../config/config');
+var debug = require('debug')('lightning:server:controllers:visualizations');
 
 
 exports.getData = function (req, res, next) {
@@ -91,7 +92,7 @@ exports.update = function (req, res, next) {
     var vid = req.params.vid;
     var Visualization = models.Visualization;
 
-    console.log('updating visualization ' + vid);
+    debug('updating visualization ' + vid);
 
     Visualization
         .update(req.body, {
@@ -101,7 +102,7 @@ exports.update = function (req, res, next) {
         }).then(function(visualizations) {
             return res.status(200).send();
         }).catch(function(err) {
-            console.log(err);
+            debug(err);
             return res.status(500).send();
         });
 
@@ -112,7 +113,7 @@ exports.updateSettings = function (req, res, next) {
     var vid = req.params.vid;
     var Visualization = models.Visualization;
 
-    console.log('updating visualization settings ' + vid);
+    debug('updating visualization settings ' + vid);
 
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");

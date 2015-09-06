@@ -9,6 +9,7 @@ var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
 var Q = require('q');
+var debug = require('debug')('lightning:server:controllers:visualization-types');
 
 exports.index = function (req, res, next) {
 
@@ -48,7 +49,7 @@ exports.json = function (req, res, next) {
 };
 
 exports.refreshNPM = function(req, res, next) {
-    console.log('refreshing npm-based visualizations');
+    debug('refreshing npm-based visualizations');
 
     models.VisualizationType
         .findAll({
@@ -59,32 +60,32 @@ exports.refreshNPM = function(req, res, next) {
             Q.all(_.map(vizTypes, function(vizType) {
                 return vizType.refreshFromNPM();
             })).spread(function() {
-                console.log("Successfully updated from npm.");
+                debug("Successfully updated from npm.");
             }).catch(function(err) {
-                console.log("Error refreshing from npm:");
-                console.log(err);
+                debug("Error refreshing from npm:");
+                debug(err);
             });
 
             return res.redirect(config.baseURL + 'visualization-types');
         }).catch(function(err) {
-            console.log(err);
+            debug(err);
             return res.status(500).send();
         });
 };
 
 exports.resetDefaults = function(req, res, next) {
 
-    console.log('resetting visualization defaults');
+    debug('resetting visualization defaults');
 
     models.VisualizationType
         .destroy({where: {}, truncate: true}).then(function() {
-            console.log('successfully deleted current visualizations');
+            debug('successfully deleted current visualizations');
             tasks.getDefaultVisualizations(function() {
                 return res.redirect(config.baseURL + 'visualization-types');
             });
 
         }).catch(function(err) {
-            console.log(err);
+            debug(err);
             return res.status(500).send();
         });
 };
@@ -119,9 +120,9 @@ exports.edit = function (req, res, next) {
             setTimeout(function() {
                 _.each(cache.keys(), function(key) {
 
-                    console.log(key);
+                    debug(key);
                     if(key.indexOf(vizType.name) > -1) {
-                        console.log('deleting ' + key);
+                        debug('deleting ' + key);
                         cache.del(key);        
                     }
                 });
@@ -191,7 +192,7 @@ exports.preview = function(req, res, next) {
     vizTypePromise
         .then(function(vizType) {
 
-            console.log('created viz preview');
+            debug('created viz preview');
 
             vizType.exportToFS(tmpPath)
                 .spread(function() {
@@ -257,7 +258,7 @@ exports.previewNPM = function(req, res, next) {
     var location = req.params.location;
     var name = req.query.name;
 
-    console.log('requested to link module: ' + name);
+    debug('requested to link module: ' + name);
 
     models.VisualizationType
         .findAll({
@@ -286,7 +287,7 @@ exports.previewNPM = function(req, res, next) {
             b.bundle(function(err, buf) {
 
                 if(err) {
-                    console.log(err);
+                    debug(err);
                     return res.status(500).end();
                 }
 
@@ -310,7 +311,7 @@ exports.importNPM = function(req, res, next) {
     var location = req.params.location;
     var name = req.query.name;
 
-    console.log('requested to link module: ' + name);
+    debug('requested to link module: ' + name);
 
     models.VisualizationType
         .findAll({
