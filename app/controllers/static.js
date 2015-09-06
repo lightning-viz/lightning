@@ -37,7 +37,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
     models.VisualizationType
         .findAll().then(function(vizTypes) {
-            debug(_.pluck(vizTypes, 'name'));
+            debug('Found ' + vizTypes.length + ' visualization types');
             var funcs = [];
             _.each(vizTypes, function(vizType) {
                 if(!vizType.isModule) {

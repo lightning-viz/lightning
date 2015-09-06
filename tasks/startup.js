@@ -7,8 +7,12 @@ var tasks = require('./index');
 var port = process.env.PORT || 3000;
 var npm = require('npm');
 var debug = require('debug')('lightning:server:startup');
+require('colors');
 
 var f = function() {
+
+    console.log('Lightning started on port: ' + port);
+
     models.sequelize.sync({force: false})
         .then(function() {
 
@@ -36,7 +40,6 @@ var f = function() {
 
     debug(utils.getASCIILogo().magenta);
 
-    debug('Lightning started on port: ' + port);
     debug('Running database: ' + dbConfig.dialect);
 };
 
