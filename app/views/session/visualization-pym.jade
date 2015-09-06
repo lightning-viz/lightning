@@ -21,7 +21,7 @@ block scripts
         if(window.lightning.requiredVizTypes.indexOf("#{viz.VisualizationType.name}") === -1) {
             window.lightning.requiredVizTypes.push("#{viz.VisualizationType.name}");
         }
-        window.lightning.sid = #{viz.SessionId};
+        window.lightning.sid = '#{viz.SessionId}';
         window._require = window.require;
         window.require = undefined;
         window._define = window.define;
