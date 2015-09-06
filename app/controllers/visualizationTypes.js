@@ -8,13 +8,15 @@ var uuid = require('node-uuid');
 var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
+var Q = require('q');
+var debug = require('debug')('lightning:server:controllers:visualization-types');
 
 exports.index = function (req, res, next) {
 
     models.VisualizationType.findAll()
         .then(function(types) {
             return res.json(types);
-        }).error(next);
+        }).catch(next);
 };
 
 
@@ -30,7 +32,7 @@ exports.show = function (req, res, next) {
                 vizTypes: types
             });
 
-        }).error(next);
+        }).catch(next);
 };
 
 exports.json = function (req, res, next) {
@@ -46,19 +48,44 @@ exports.json = function (req, res, next) {
         }).catch(next);
 };
 
-exports.resetDefaults = function(req, res, next) {
-
-    console.log('resetting visualization defaults');
+exports.refreshNPM = function(req, res, next) {
+    debug('refreshing npm-based visualizations');
 
     models.VisualizationType
-        .destroy({}, {truncate: true}).success(function() {
-            console.log('successfully deleted current visualizations');
+        .findAll({
+            where: {
+                isModule: true
+            }
+        }).then(function(vizTypes) {
+            Q.all(_.map(vizTypes, function(vizType) {
+                return vizType.refreshFromNPM();
+            })).spread(function() {
+                debug("Successfully updated from npm.");
+            }).catch(function(err) {
+                debug("Error refreshing from npm:");
+                debug(err);
+            });
+
+            return res.redirect(config.baseURL + 'visualization-types');
+        }).catch(function(err) {
+            debug(err);
+            return res.status(500).send();
+        });
+};
+
+exports.resetDefaults = function(req, res, next) {
+
+    debug('resetting visualization defaults');
+
+    models.VisualizationType
+        .destroy({where: {}, truncate: true}).then(function() {
+            debug('successfully deleted current visualizations');
             tasks.getDefaultVisualizations(function() {
                 return res.redirect(config.baseURL + 'visualization-types');
             });
 
-        }).error(function(err) {
-            console.log(err);
+        }).catch(function(err) {
+            debug(err);
             return res.status(500).send();
         });
 };
@@ -85,23 +112,23 @@ exports.create = function (req, res, next) {
 exports.edit = function (req, res, next) {
 
     models.VisualizationType
-        .find(req.params.vid)
-        .success(function(vizType) {
+        .findById(req.params.vid)
+        .then(function(vizType) {
             return vizType.updateAttributes(_.pick(req.body, 'name', 'isStreaming', 'initialDataFields', 'javascript', 'styles', 'markup'));
         })
-        .success(function(vizType) {
+        .then(function(vizType) {
             setTimeout(function() {
                 _.each(cache.keys(), function(key) {
 
-                    console.log(key);
+                    debug(key);
                     if(key.indexOf(vizType.name) > -1) {
-                        console.log('deleting ' + key);
+                        debug('deleting ' + key);
                         cache.del(key);        
                     }
                 });
             }, 0);
             return res.status(200).send();
-        }).error(function() {
+        }).catch(function() {
             return res.status(500).send();
         });      
 };
@@ -111,12 +138,12 @@ exports.delete = function (req, res, next) {
     var vizTypeId = req.params.vid;
 
     models.VisualizationType
-        .find(vizTypeId)
+        .findById(vizTypeId)
         .then(function(vizType) {
             vizType.deleteAndUninstall().then(function() {
                 return res.json(vizType);                
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 exports.getDelete = function(req, res, next) {
@@ -124,7 +151,7 @@ exports.getDelete = function(req, res, next) {
     var vizTypeId = req.params.vid;
 
     models.VisualizationType
-        .find(vizTypeId)
+        .findById(vizTypeId)
         .then(function(vizType) {
             vizType
                 .deleteAndUninstall()
@@ -165,7 +192,7 @@ exports.preview = function(req, res, next) {
     vizTypePromise
         .then(function(vizType) {
 
-            console.log('created viz preview');
+            debug('created viz preview');
 
             vizType.exportToFS(tmpPath)
                 .spread(function() {
@@ -231,7 +258,7 @@ exports.previewNPM = function(req, res, next) {
     var location = req.params.location;
     var name = req.query.name;
 
-    console.log('requested to link module: ' + name);
+    debug('requested to link module: ' + name);
 
     models.VisualizationType
         .findAll({
@@ -260,7 +287,7 @@ exports.previewNPM = function(req, res, next) {
             b.bundle(function(err, buf) {
 
                 if(err) {
-                    console.log(err);
+                    debug(err);
                     return res.status(500).end();
                 }
 
@@ -284,7 +311,7 @@ exports.importNPM = function(req, res, next) {
     var location = req.params.location;
     var name = req.query.name;
 
-    console.log('requested to link module: ' + name);
+    debug('requested to link module: ' + name);
 
     models.VisualizationType
         .findAll({
@@ -342,19 +369,19 @@ exports.advanced = function (req, res, next) {
 
 exports.editor = function (req, res, next) {
 
-    models.VisualizationType.find(req.params.vid)
+    models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             return res.render('viz-types/editor', {
                 vizType: type
             });
 
-        }).error(next);
+        }).catch(next);
 };
 
 
 exports.thumbnail = function (req, res, next) {
 
-    models.VisualizationType.find(req.params.vid)
+    models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             if(type.thumbnailLocation) {
                 return res.sendFile(type.thumbnailLocation);
@@ -362,7 +389,7 @@ exports.thumbnail = function (req, res, next) {
             
             return res.status(404).send('no thumbnail found').end();
 
-        }).error(next);
+        }).catch(next);
 };
 
 

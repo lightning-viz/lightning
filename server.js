@@ -15,106 +15,34 @@ require('colors');
 var env = process.env.NODE_ENV || 'development';
 var dbConfig = require(__dirname + '/config/database')[env];
 var npm = require('npm');
-
-
-// var cluster = require('cluster');
-// var cpuCount = Math.max(1, require('os').cpus().length);
-
+// var sticky = require('sticky-session');
+var utils = require('./app/utils');
 var port = process.env.PORT || 3000;
+var startup = require('./tasks/startup');
+var cluster = require('cluster');
+var debug = require('debug')('lightning:server');
 
+if (cluster.isMaster) {
+    startup();
+}
 
-var models = require('./app/models');
-models.sequelize.sync({force: false})
-    .success(function() {
-
-        models.VisualizationType
-            .findAll()
-            .success(function(vizTypes) {
-
-                console.log('\nInstalled visualizations:');
-                console.log('-------------------------');
-                _.each(vizTypes, function(vt) {
-                    console.log('* ' + vt.name);
-                })
-                if(vizTypes.length === 0) {
-                    tasks.getDefaultVisualizations();
-                }
-            });
-    }).error(function(err) {
-        console.log('Could not connect to the database. Is Postgres running?');
-        throw err;
-    });
-
+npm.load({
+    loglevel: 'error'
+});
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
 
 io.on('connection', function(){
-  console.log('a user connected');
+  debug('a user connected');
 });
-
-
-
-// // Bootstrap passport config
-// require('./config/passport')(passport, config);
 
 // Bootstrap application settings
 require('./config/express')(app, io);
 
-console.log('Initializing npm...');
-npm.load({
-    loglevel: 'error'
-}, function() {
-    // Bootstrap routes
-    require('./config/routes')(app);
+// Boostrap routes
+require('./config/routes')(app);
 
-    var logo = "\n\n\n  ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,` \n";
-    logo += " ,`                                ,.\n";
-    logo += ",`                                  ,\n";
-    logo += ",                                   ,\n";
-    logo += ",                      .            ,\n";
-    logo += ",                     ,             ,\n";
-    logo += ",                    `,             ,\n";
-    logo += ",                    ,.             ,\n";
-    logo += ",                   ,,              ,\n";
-    logo += ",                  ,,,              ,\n";
-    logo += ",                 ,,,.              ,\n";
-    logo += ",                .,,,               ,\n";
-    logo += ",               `,,,,               ,\n";
-    logo += ",               ,,,,`               ,\n";
-    logo += ",              ,,,,,                ,\n";
-    logo += ",             ,,,,,,                ,\n";
-    logo += ",            ,,,,,,,,,,,,,,.        ,\n";
-    logo += ",           .,,,,,,,,,,,,,,         ,\n";
-    logo += ",           ,,,,,,,,,,,,,,          ,\n";
-    logo += ",          ,,,,,,,,,,,,,,           ,\n";
-    logo += ",         ,,,,,,,,,,,,,,            ,\n";
-    logo += ",                 ,,,,,`            ,\n";
-    logo += ",                ,,,,,,             ,\n";
-    logo += ",                ,,,,,              ,\n";
-    logo += ",                ,,,,               ,\n";
-    logo += ",               ,,,,                ,\n";
-    logo += ",               ,,,`                ,\n";
-    logo += ",              `,,.                 ,\n";
-    logo += ",              ,,,                  ,\n";
-    logo += ",              ,,                   ,\n";
-    logo += ",             `,                    ,\n";
-    logo += ",             ,                     ,\n";
-    logo += ",             `                     ,\n";
-    logo += ",            `                      ,\n";
-    logo += ",                                   ,\n";
-    logo += "`,                                 .,\n";
-    logo += " .,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, \n\n\n\n";
-
-
-
-    console.log(logo.magenta);
-
-    console.log('Lightning started on port: ' + port);
-    console.log('Running database: ' + dbConfig.dialect);
-
-
-    server.listen(port);
-});
+server.listen(port);
 
 module.exports = server;

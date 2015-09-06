@@ -2,7 +2,7 @@
 /*!
  * Module dependencies.
  */
-
+var debug = require('debug')('lightning:server:controllers:session');
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var knox = require('knox');
@@ -17,6 +17,7 @@ var config = require('../../config/config');
 var fs = require('fs-extra');
 
 
+
 exports.index = function (req, res, next) {
 
     models.Session.findAll({
@@ -25,7 +26,7 @@ exports.index = function (req, res, next) {
         res.render('session/index', {
             sessions: sessions
         });
-    }).error(next);
+    }).catch(next);
 };
 
 
@@ -83,7 +84,7 @@ exports.listVisualizations = function (req, res, next) {
         .then(function(visualizations) {
             return res.json(visualizations)
         })
-        .error(next);
+        .catch(next);
 };
 
 
@@ -135,44 +136,47 @@ exports.update = function (req, res, next) {
 
     Session
         .update(req.body, {
-            id: sessionId
-        }).success(function(sessions) {
+            where: {
+                id: sessionId
+            }
+        }).then(function(sessions) {
             return res.json(sessions);
-        }).error(next);
+        }).catch(next);
 
 };
 
 
 
 exports.create = function(req, res, next) {
-
     models.Session
         .create(_.pick(req.body, 'name'))
         .then(function(session) {
+            req.io.of(session.getSocketNamespace())
+                .emit('init');
             return res.json(session);
-        }).error(next);
+        }).catch(next);
 };
-
-
 
 exports.getCreate = function(req, res, next) {
     models.Session
         .create()
         .then(function(session) {
+            req.io.of(session.getSocketNamespace())
+                .emit('init');
             return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
-        }).error(next);
+        }).catch(next);
 };
 
 exports.delete = function(req, res, next) {
     var sessionId = req.params.sid;
 
     models.Session
-        .find(sessionId)
+        .findById(sessionId)
         .then(function(session) {
-            session.destroy().success(function() {
+            session.destroy({where: {}}).then(function() {
                 return res.json(session);                
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 
@@ -182,12 +186,12 @@ exports.getDelete = function(req, res, next) {
     var sessionId = req.params.sid;
 
     models.Session
-        .find(sessionId)
+        .findById(sessionId)
         .then(function(session) {
-            session.destroy().success(function() {
+            session.destroy({where: {}}).then(function() {
                 return res.redirect(config.baseURL + 'sessions/');
-            }).error(next);
-        }).error(next);
+            }).catch(next);
+        }).catch(next);
 };
 
 
@@ -208,7 +212,6 @@ exports.addData = function (req, res, next) {
                 throw new Error('Unknown Viztype');
             }
             vt = vizType;
-
             return Visualization.create({
                 data: req.body.data,
                 opts: req.body.options,
@@ -218,8 +221,8 @@ exports.addData = function (req, res, next) {
             });
         }).then(function(viz) {
             var jsonViz = viz.toJSON();
-            jsonViz.visualizationType = vt;
-            req.io.of('/sessions/' + sessionId)
+            jsonViz.visualizationType = _.pick(vt.toJSON(), 'name', 'moduleName', 'initialDataFields', 'isStreaming', 'id');
+            req.io.of(viz.getSessionSocketNamespace())
                 .emit('viz', jsonViz);  
             return res.json(jsonViz);
         }).catch(function(err) {
@@ -232,11 +235,12 @@ exports.addData = function (req, res, next) {
         var form = new multiparty.Form();
 
         form.parse(req, function(err, fields, files) {
+
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
                     if(err) {
-                        console.log('error in thumbnailAndUpload');
+                        debug('error in thumbnailAndUpload');
                         return res.status(500).send('error creating image thumbnail');
                     }
                     var imgData = data.imgData;
@@ -268,7 +272,7 @@ exports.addData = function (req, res, next) {
                     }).then(function(viz) {
                         var jsonViz = viz.toJSON();
                         jsonViz.visualizationType = vt;
-                        req.io.of('/sessions/' + sessionId)
+                        req.io.of(viz.getSessionSocketNamespace())
                             .emit('viz', jsonViz);  
                         return res.json(jsonViz);
                     }).catch(function(err) {
@@ -303,7 +307,7 @@ exports.appendData = function (req, res, next) {
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
-                        if(viz.visualizationType.isStreaming) {
+                        if(viz.VisualizationType.isStreaming) {
                             _.each(req.body.data, function(d, i) {
                                 if(i < viz.data[fieldName].length) {
                                     viz.data[fieldName][i] = viz.data[fieldName][i].concat(d);
@@ -319,13 +323,13 @@ exports.appendData = function (req, res, next) {
                     } else if(_.isUndefined(viz.data[fieldName])) {
                         viz.data[fieldName] = req.body.data;
                     } else {
-                        console.log('unknown field');
+                        debug('unknown field');
                     }
                 } else {
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
 
-                            if(viz.visualizationType.isStreaming) {
+                            if(viz.VisualizationType.isStreaming) {
                                 _.each(req.body.data, function(d, i) {
 
                                 });
@@ -342,7 +346,7 @@ exports.appendData = function (req, res, next) {
                     } else if(_.isUndefined(viz.data)) {
                         viz.data = req.body.data;
                     } else {
-                        console.log('unknown field');
+                        debug('unknown field');
                     }
                 }
 
@@ -350,14 +354,14 @@ exports.appendData = function (req, res, next) {
                     .save()
                     .then(function() {
                         return res.json(viz);
-                    }).error(next);
+                    }).catch(next);
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('append', {
                         vizId: viz.id, 
                         data: req.body.data
                     });
-            
+
             } else if(fieldName === 'images') {
 
                 var form = new multiparty.Form();
@@ -368,7 +372,7 @@ exports.appendData = function (req, res, next) {
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
                             if(err) {
-                                console.log('error in thumbnailAndUpload');
+                                debug('error in thumbnailAndUpload');
                                 return res.status(500).send('error creating image thumbnail');
                             }
                             var imgData = data.imgData;
@@ -393,7 +397,7 @@ exports.appendData = function (req, res, next) {
                                     }
                                 });
 
-                            req.io.of('/sessions/' + sessionId)
+                            req.io.of(viz.getSessionSocketNamespace())
                                 .emit('append', {
                                     vizId: viz.id, 
                                     data: imgData
@@ -405,7 +409,7 @@ exports.appendData = function (req, res, next) {
             } else {
                 return next(500);
             }
-        }).error(next);
+        }).catch(next);
 };
 
 
@@ -418,7 +422,7 @@ exports.updateData = function (req, res, next) {
 
 
     models.Visualization
-        .find(vizId)
+        .findById(vizId)
         .then(function(viz) {
             if(req.is('json')) {
 
@@ -432,9 +436,9 @@ exports.updateData = function (req, res, next) {
                     .save()
                     .then(function() {
                         return res.json(viz);
-                    }).error(next);
+                    }).catch(next);
 
-                req.io.of('/sessions/' + sessionId)
+                req.io.of(viz.getSessionSocketNamespace())
                     .emit('update', {
                         vizId: viz.id, 
                         data: req.body.data
@@ -449,7 +453,7 @@ exports.updateData = function (req, res, next) {
                         thumbnailAndUpload(f, sessionId, function(err, data) {
 
                             if(err) {
-                                console.log('error in thumbnailAndUpload');
+                                debug('error in thumbnailAndUpload');
                                 return res.status(500).send('error creating image thumbnail');
                             }
                             var imgData = data.imgData;
@@ -469,7 +473,7 @@ exports.updateData = function (req, res, next) {
                                     }
                                 });
 
-                            req.io.of('/sessions/' + sessionId)
+                            req.io.of(viz.getSessionSocketNamespace())
                                 .emit('update', {
                                     vizId: viz.id, 
                                     data: imgData
@@ -483,7 +487,7 @@ exports.updateData = function (req, res, next) {
             }
 
 
-        }).error(next);
+        }).catch(next);
 
 };
 
@@ -558,7 +562,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     var thumbWidth;
                     var thumbHeight;
 
-                    console.log('outputing to: ' + thumbnailPath);
+                    debug('outputing to: ' + thumbnailPath);
 
                     if(file.width > file.height) {
                         thumbWidth = Math.min(maxWidth, file.width);
@@ -579,14 +583,9 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     if(s3Exists) {
                         async.parallel([
                             function(callback) {
-                                console.log('s3 exists');
-                                console.log('uploading image');
-                                console.log(imgPath + ':' + originalS3Path);
                                 s3Client.putFile(imgPath, originalS3Path, headers, callback);
                             },
                             function(callback) {
-                                console.log('uploading thumbnail');
-                                console.log(thumbnailPath + ':' + thumbnailS3Path);
                                 s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                             }
                         ], function(err, results) {
@@ -605,7 +604,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                         });
                     } else {
 
-                        console.log('S3 Credentials not found. Using local images');
+                        debug('S3 Credentials not found. Using local images');
 
                         async.parallel([
                             function(callback) {
@@ -629,7 +628,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     }
 
                 }, function(err) {
-                    console.log(err);
+                    debug(err);
                     callback(err);
                 });
         } else {
@@ -637,11 +636,11 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
             if(s3Exists) {
                 async.parallel([
                     function(callback) {
-                        console.log(imgPath + ':' + originalS3Path);
+                        debug(imgPath + ':' + originalS3Path);
                         s3Client.putFile(imgPath, originalS3Path, headers, callback);
                     },
                     function(callback) {
-                        console.log(thumbnailPath + ':' + thumbnailS3Path);
+                        debug(thumbnailPath + ':' + thumbnailS3Path);
                         s3Client.putFile(thumbnailPath, thumbnailS3Path, headers, callback);
                     }
                 ], function(err, results) {
@@ -665,12 +664,12 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                 async.parallel([
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
-                        console.log(outpath);
+                        debug(outpath);
                         fs.copy(imgPath, outpath, callback);        
                     },
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);
-                        console.log(outpath);
+                        debug(outpath);
                         fs.copy(imgPath, outpath, callback);
                     }
                 ], function(err) {

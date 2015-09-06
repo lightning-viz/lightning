@@ -5,10 +5,11 @@ var config = require('../config/config');
 var defaultVisualizations = config.defaultVisualizations || [];
 require('colors');
 var npm = require('npm');
+var debug = require('debug')('lightning:server:tasks');
 
 var getDefaultVisualizations = function(cb) {
 
-    console.log('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
+    debug('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
     var loglevel = npm.config.get('loglevel');
     npm.config.set('loglevel', 'silent');
 
@@ -16,12 +17,13 @@ var getDefaultVisualizations = function(cb) {
         return models.VisualizationType.createFromNPM(moduleName);
     }))
     .spread(function() {
+        debug()
         var vizTypes = Array.prototype.slice.call(arguments, 0);
         npm.config.set('loglevel', loglevel);
-        console.log('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
+        debug('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
         cb && cb();
-    }).fail(function(err) {
-        console.log(err);
+    }).catch(function(err) {
+        debug(err);
         npm.config.set('loglevel', loglevel);
         cb && cb(err);
     });
@@ -34,10 +36,10 @@ if (require.main === module) {
     // directly from the command line
     var models = require('../app/models');
     models.sequelize.sync({force: false})
-        .success(function() {
+        .then(function() {
             models.VisualizationType
                 .findAll()
-                .success(function(vizTypes) {
+                .then(function(vizTypes) {
                     if(vizTypes.length === 0) {
                         npm.load({
                             loglevel: 'error'

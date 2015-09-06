@@ -15,9 +15,9 @@ module.exports = function(sequelize, DataTypes) {
                 primaryKey: true,
                 defaultValue: DataTypes.UUIDV4,
             },
-            data: 'JSON',
-            opts: 'JSON',
-            settings: 'JSON',
+            data: DataTypes.JSON,
+            opts: DataTypes.JSON,
+            settings: DataTypes.JSON,
             name: DataTypes.STRING,
             description: DataTypes.TEXT,
             images: DataTypes.ARRAY(DataTypes.STRING)
@@ -88,7 +88,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
                     var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name];
@@ -110,7 +110,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
                     var data = viz.data;
                     var retObj = {};
                     retObj[name] = data[name][index];
@@ -142,7 +142,7 @@ module.exports = function(sequelize, DataTypes) {
                 } 
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
 
                     var data = viz.data;
                     _.each(keys, function(key) {
@@ -178,7 +178,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
 
-                return this.find(vid).then(function(viz) {
+                return this.findById(vid).then(function(viz) {
 
                     var settings = viz.settings;
                     _.each(keys, function(key) {
@@ -217,18 +217,10 @@ module.exports = function(sequelize, DataTypes) {
                 } 
 
                 return this.data;
-            }
-        },
+            },
 
-        hooks: {
-            beforeValidate: function(visualization, next) {
-
-                if(isPostgres) {
-                    visualization.settings = JSON.stringify(visualization.settings);
-                    visualization.data = JSON.stringify(visualization.data);
-                    visualization.opts = JSON.stringify(visualization.opts);
-                }
-                next();
+            getSessionSocketNamespace: function() {
+                return '/session' + this.SessionId.split('-').join('');
             }
         }
     });

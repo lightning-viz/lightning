@@ -7,21 +7,7 @@ var cache = require('../cache');
 var sass = require('node-sass');
 var uuid = require('node-uuid');
 var Q = require('q');
-
-
-function protectRequire(str) {
-    var protectedVars = ['define', 'require'];
-    var initialCode = ';';
-    var postCode = ';';
-    _.each(protectedVars, function(v) {
-        initialCode += 'window._' + v + ' = window.' + v + ';';
-        initialCode += 'window.' + v + ' = undefined;';
-
-        postCode += 'window.' + v + ' = window._' + v + ';';
-    });
-
-    return initialCode + str;// + postCode;
-}
+var debug = require('debug')('lightning:server:controllers:static');
 
 
 exports.getDynamicVizBundle = function (req, res, next) {
@@ -43,15 +29,15 @@ exports.getDynamicVizBundle = function (req, res, next) {
         }
     }
 
-    console.log('building viz bundle with ' + visualizationTypes);
+    debug('building viz bundle with ' + visualizationTypes);
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
     var b = browserify();
 
     models.VisualizationType
-        .findAll().success(function(vizTypes) {
-            console.log(_.pluck(vizTypes, 'name'));
+        .findAll().then(function(vizTypes) {
+            debug('Found ' + vizTypes.length + ' visualization types');
             var funcs = [];
             _.each(vizTypes, function(vizType) {
                 if(!vizType.isModule) {
@@ -63,7 +49,7 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
                 _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
                     if(vizType.isModule) {
-                        console.log(vizType.moduleName);
+                        debug(vizType.moduleName);
                         b.require(vizType.moduleName, {
                             expose: vizType.moduleName
                         });
@@ -81,7 +67,6 @@ exports.getDynamicVizBundle = function (req, res, next) {
                         return next(err);
                     }               
 
-                    // var out = protectRequire(buf.toString('utf8'));
                     var out = buf.toString('utf8');
                     cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
                     if(!cacheHit) {
@@ -89,7 +74,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
                     }
                 });
             });
-        }).error(next);
+        }).error(function(err) {
+            return res.status(500).send(err.message).end();
+        });
 
 };
 
@@ -110,7 +97,7 @@ exports.bundleJSForExecution = function(req, res, next) {
     var bundle = b.bundle();
 
     bundle.on('error', function(err) {
-        console.log(err);
+        debug(err);
         return res.status(500).send();
     });
 
@@ -150,7 +137,7 @@ exports.getDynamicVizStyles = function (req, res, next) {
         return res.send(styles);
     }
 
-    console.log('building viz styles with ' + visualizationTypes);
+    debug('building viz styles with ' + visualizationTypes);
 
     models.VisualizationType
         .findAll({
@@ -159,7 +146,7 @@ exports.getDynamicVizStyles = function (req, res, next) {
                     in: visualizationTypes
                 }
             }
-        }).success(function(vizTypes) {
+        }).then(function(vizTypes) {
 
             var scssData = '#lightning-body {\n';
             _.each(vizTypes, function(vizType) {

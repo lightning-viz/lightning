@@ -6,9 +6,12 @@ var uuid = require('node-uuid');
 var glob = require('glob');
 var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
-var config = require(__dirname + '/../../config/database')[env];
-var isPostgres = config.dialect === 'postgres';
+var dbConfig = require(__dirname + '/../../config/database')[env];
+var isPostgres = dbConfig.dialect === 'postgres';
+var config = require(__dirname + '/../../config/config');
 var npm = require('npm');
+var utils = require('../utils');
+var debug = require('debug')('lightning:server:models:visualization-types');
 
 module.exports = function(sequelize, DataTypes) {
     var schema;
@@ -30,9 +33,9 @@ module.exports = function(sequelize, DataTypes) {
 
             thumbnailLocation: DataTypes.STRING,
 
-            sampleData: 'JSON',
-            sampleOptions: 'JSON',
-            codeExamples: 'JSON',
+            sampleData: DataTypes.JSON,
+            sampleOptions: DataTypes.JSON,
+            codeExamples: DataTypes.JSON,
             sampleImages: DataTypes.ARRAY(DataTypes.STRING),
 
             javascript: DataTypes.TEXT,
@@ -119,17 +122,17 @@ module.exports = function(sequelize, DataTypes) {
             },
 
             _buildFromNPM: function(name, preview) {
+
                 var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
                 var sampleOptions = lightningConfig.sampleOptions;
-
+                var sampleImages = lightningConfig.sampleImages;
                 var codeExamples = {};
                 var codeExampleMap = {
                     'python': 'py',
                     'scala': 'scala',
                     'javascript': 'js'
                 };
-
                 _.each(codeExampleMap, function(extension, language) {
                     var examplePath = path.resolve(__dirname + '/../../node_modules/' + name + '/data/example.' + extension);
                     var exampleExists = fs.existsSync(examplePath);
@@ -138,50 +141,47 @@ module.exports = function(sequelize, DataTypes) {
                     }
                 });
 
-                try {
-                    sampleData = this._bustRequire(name + '/lightning-sample-data.json');
-                } catch(e) {
-                    sampleData = sampleData || [];
-                }                
-                try {
-                    sampleData = this._bustRequire(name + '/data/sample-data.json');
-                } catch(e) {
-                    sampleData = sampleData || [];
-                }
-                try {
-                    sampleOptions = this._bustRequire(name + '/lightning-sample-options.json');
-                } catch(e) {
-                    sampleOptions = sampleOptions || {};
-                }                
-                try {
-                    sampleOptions = this._bustRequire(name + '/data/sample-options.json');
-                } catch(e) {
-                    sampleOptions = sampleOptions || {};
-                }
+                var samplesInput = {
+                    data: {
+                        filepaths: ['lightning-sample-data.json', 'data/sample-data.json'],
+                        defaultValue: sampleData || []
+                    },
+                    options: {
+                        filepaths: ['lightning-sample-options.json', 'data/sample-options.json'],
+                        defaultValue: sampleOptions || {}
+                    },
+                    images: {
+                        filepaths: ['lightning-sample-images.json', 'data/sample-images.json'],
+                        defaultValue: sampleImages || []
+                    }
+                };
 
-                var sampleImages = lightningConfig.sampleImages;
-                try {
-                    sampleImages = this._bustRequire(name + '/lightning-sample-images.json');
-                } catch(e) {
-                    sampleImages = sampleImages || [];
-                }
-
-                try {
-                    sampleImages = this._bustRequire(name + '/data/sample-images.json');
-                } catch(e) {
-                    sampleImages = sampleImages || [];
-                }
+                var self = this;
+                var samples = {};
+                _.each(samplesInput, function(val, key) {
+                    _.each(val.filepaths, function(samplePath) {
+                        try {
+                            samples[key] = self._bustRequire(name + '/' + samplePath);
+                        } catch(e) {
+                            samples[key] = samples[key] || val.defaultValue
+                        };
+                    });
+                });
 
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
                     isStreaming: lightningConfig.isStreaming || false,
                     isModule: true,
                     moduleName: name,
-                    sampleData: sampleData,
-                    sampleOptions: sampleOptions,
-                    sampleImages: sampleImages,
+                    sampleData: samples.data,
+                    sampleOptions: samples.options,
+                    sampleImages: samples.images,
                     codeExamples: codeExamples
                 };
+
+                if(preview) {
+                    return VisualizationType.build(vizTypeObj);
+                }
 
                 // check if example image exists
                 var thumbnailExtensions = ['png', 'jpg', 'jpeg', 'gif'];
@@ -194,22 +194,29 @@ module.exports = function(sequelize, DataTypes) {
                     return thumbnailExists;
                 });
 
-                if(preview) {
-                    return VisualizationType.build(vizTypeObj);
+                if(vizTypeObj.thumbnailLocation && config.s3.key) {
+                    return utils.uploadToS3(vizTypeObj.thumbnailLocation)
+                            .then(function(results) {
+                                vizTypeObj.thumbnailLocation = results.req.url;
+                                return VisualizationType.create(vizTypeObj);
+                            });
                 }
+
                 return VisualizationType.create(vizTypeObj);
             },
 
             _createLinkNPM: function(command, name, preview) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
-                npm.config.set('loglevel', 'silent');
+                npm.config.set('loglevel', 'verbose');
                 return Q.nfcall(npm.commands.uninstall, [name])
                     .then(function(results) {
+                        debug(results);
+                        debug(command);
                         return Q.nfcall(command, [name]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
-                        console.log(('Successfully installed ' + name).green);
+                        debug(('Successfully installed ' + name).green);
                         return self._buildFromNPM(name, preview);
                     });
             },
@@ -223,6 +230,8 @@ module.exports = function(sequelize, DataTypes) {
             },
 
             linkFromLocalModule: function(name) {
+                debug('link from local module');
+                debug(name);
                 return this._createLinkNPM(npm.commands.link, name, true);
             },
 
@@ -307,7 +316,7 @@ module.exports = function(sequelize, DataTypes) {
 
             createFromFolder: function(path, attributes, opts) {
 
-                console.log('Create from folder: ' + path);
+                debug('Create from folder: ' + path);
 
                 attributes = attributes || {};
                 opts = opts || {};
@@ -350,7 +359,7 @@ module.exports = function(sequelize, DataTypes) {
                     try {
                         packageJSON = JSON.parse(packageJSON);
                     } catch(e) {
-                        console.warn('Invalid package.json: ' + e.toString());
+                        debug('Invalid package.json: ' + e.toString());
                     }
 
                     var vizTypeObj = _.extend(attributes, {
@@ -377,6 +386,14 @@ module.exports = function(sequelize, DataTypes) {
 
         instanceMethods: {
 
+            getThumbnailURL: function() {
+                if(this.thumbnailLocation.indexOf('http://') > -1 || this.thumbnailLocation.indexOf('https://') > -1) {
+                    return this.thumbnailLocation;
+                }
+
+                return utils.getStaticUrl() + 'visualization-types/' + this.id + '/thumbnail';
+            },
+
             exportToFS: function(p) {
 
                 var self = this;
@@ -397,6 +414,7 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 return Q.all(funcs);
             },
+            
             deleteAndUninstall: function() {
                 var self = this;
                 if(this.isModule) {
@@ -406,18 +424,22 @@ module.exports = function(sequelize, DataTypes) {
                         });
                 }
                 return self.destroy();
-            }
-        },
+            },
 
-        hooks: {
-            beforeValidate: function(vizType, next) {
-                if(isPostgres) {
-                    vizType.sampleData = JSON.stringify(vizType.sampleData);
-                    vizType.sampleOptions = JSON.stringify(vizType.sampleOptions);
-                    vizType.codeExamples = JSON.stringify(vizType.codeExamples);
-                }
-                next();
+            refreshFromNPM: function() {
+                var self = this;
+                var name = this.moduleName;
+                var loglevel = npm.config.get('loglevel');
+                npm.config.set('loglevel', 'silent');
+                return Q.nfcall(npm.commands.uninstall, [name])
+                    .then(function(results) {
+                        return Q.nfcall(npm.commands.install, [name]);
+                    }).then(function() {
+                        npm.config.set('loglevel', loglevel);
+                        debug(('Successfully updated ' + name).green);
+                    });
             }
+
         }
     });
 

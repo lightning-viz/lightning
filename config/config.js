@@ -23,6 +23,7 @@ if(defaultVisualizations) {
     'lightning-gallery',
     'lightning-graph',
     'lightning-graph-bundled',
+    'lightning-histogram',
     'lightning-image',
     'lightning-image-poly',
     'lightning-line',
