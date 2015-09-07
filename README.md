@@ -34,6 +34,8 @@ $ npm start
 
 ## client libraries
 
+### Official
+
 Python
 * https://github.com/lightning-viz/lightning-python
 
@@ -42,6 +44,12 @@ Scala
 
 Node.js
 * https://github.com/lightning-viz/lightning.js
+
+### Community
+
+rstats
+* https://github.com/Ermlab/lightning-rstat
+
 
 ## complete documentation
 
@@ -55,5 +63,5 @@ http://lightning-viz.github.io/visualizations/
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lightning-viz/lightning?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-We maintain a chatroom on gitter. If there's no response there: file an issue or reach out on twitter (@mathisonian, @thefreemanlab)
+We maintain a chatroom on gitter. If there's no response there: file an issue or reach out on twitter  [@lightningviz](https://twitter.com/lightningviz)
 
