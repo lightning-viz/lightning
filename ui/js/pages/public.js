@@ -1,48 +1,7 @@
 
 window.define = undefined;
-window.lightningDebug = require('debug');
-
-var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
-sid = sid.slice(0, sid.indexOf('/'));
-sid = (window.lightning || {}).sid || sid;
-
-var utils = require('../utils');
-var debug = require('debug')('lightning:ui:pages:feed');
-
-var socket;
-var io = window.io || false;
-
-if(io) {
-    var namespace = utils.getNamespaceForSession(sid);
-    debug('connecting to ' + namespace);
-    socket = io.connect(namespace);
-} else {
-    socket = {
-        on: function(){}
-    };
-}
 
 var vizs = {};
-
-socket.on('append', function(message) {
-    debug('append');
-    var vizId = message.vizId;
-    var data = message.data;
-
-    if(vizs[vizId].appendData) {
-        vizs[vizId].appendData(data);
-    }
-});
-
-socket.on('update', function(message) {
-    debug('update');
-    var vizId = message.vizId;
-    var data = message.data;
-
-    if(vizs[vizId].updateData) {
-        vizs[vizId].updateData(data);    
-    }
-});
 
 
 setTimeout(function() {
