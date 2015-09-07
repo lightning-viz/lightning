@@ -5,7 +5,8 @@ var shell = require('shell')
 var mb = menubar({
     dir: __dirname,
     width: 280,
-    height: 87
+    height: 87,
+    icon: __dirname + '/Icon.png'
 });
 
 mb.on('ready', function ready () {
