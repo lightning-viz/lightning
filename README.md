@@ -42,12 +42,12 @@ Python
 Scala
 * https://github.com/lightning-viz/lightning-scala
 
-Node.js
+Javascript (node + browser)
 * https://github.com/lightning-viz/lightning.js
 
 ### Community
 
-rstats
+R
 * https://github.com/Ermlab/lightning-rstat
 
 
