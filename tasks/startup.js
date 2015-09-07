@@ -8,6 +8,8 @@ var port = process.env.PORT || 3000;
 var npm = require('npm');
 var debug = require('debug')('lightning:server:startup');
 require('colors');
+var config = require('../config/config');
+
 
 var f = function() {
 
@@ -26,7 +28,8 @@ var f = function() {
                     })
                     if(vizTypes.length === 0) {
                         npm.load({
-                            loglevel: 'error'
+                            loglevel: 'error',
+                            prefix: config.root
                         }, function() {
                             tasks.getDefaultVisualizations();
                         });
