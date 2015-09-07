@@ -27,7 +27,8 @@ if (cluster.isMaster) {
 }
 
 npm.load({
-    loglevel: 'error'
+    loglevel: 'error',
+    prefix: config.root
 });
 var io = require('socket.io')(server);
 
