@@ -61,6 +61,16 @@ body {
 
     .feed-container {
         opacity: 0;
+
+        &.public-feed {
+            margin-top: 50px;
+        }
+    }
+
+    .lightning-public-logo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
     }
 
 

@@ -4,13 +4,18 @@ extends ../layout
 block dynamic-css
     link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.VisualizationType.name}")
 
-block sidebar
+block header
+    .lightning-public-logo
+        a(href="http://lightning-viz.org")
+            img(src="#{STATIC_URL}images/logo3.png" width='25px')
+
+block sidebar    
+    
     
 block content
-    //- .row
-        .two-thirds.column
-    .feed-container
+    .feed-container.public-feed
         include ./viz-data-public
+
 
 
 block scripts
