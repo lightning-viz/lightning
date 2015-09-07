@@ -196,7 +196,9 @@ exports.preview = function(req, res, next) {
 
             vizType.exportToFS(tmpPath)
                 .spread(function() {
-                    var b = browserify();
+                    var b = browserify({
+                        paths: [ config.root + '/node_modules']
+                    });
                     if(vizType.isModule) {
                         b.require(vizType.moduleName, {
                             expose: vizType.moduleName
@@ -281,7 +283,9 @@ exports.previewNPM = function(req, res, next) {
 
             return linker(name);
         }).then(function(vizType) {
-            var b = browserify();
+            var b = browserify({
+                paths: [ config.root + '/node_modules']
+            });
             b.require(name);
 
             b.bundle(function(err, buf) {
