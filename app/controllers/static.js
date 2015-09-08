@@ -8,6 +8,8 @@ var sass = require('node-sass');
 var uuid = require('node-uuid');
 var Q = require('q');
 var debug = require('debug')('lightning:server:controllers:static');
+var config = require('../../config/config');
+
 
 
 exports.getDynamicVizBundle = function (req, res, next) {
@@ -33,7 +35,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
     var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
 
     req.session.lastBundlePath = tmpPath;
-    var b = browserify();
+    var b = browserify({
+        paths: [ config.root + '/node_modules']
+    });
 
     models.VisualizationType
         .findAll().then(function(vizTypes) {
@@ -85,8 +89,9 @@ exports.bundleJSForExecution = function(req, res, next) {
     
     res.set('Content-Type', 'application/javascript');
     
-    var b = browserify();
-
+    var b = browserify({
+        paths: [ config.root + '/node_modules']
+    });
     var js = req.body.javascript;
     var stream = resumer().queue(js).end();
     b.require(stream, {

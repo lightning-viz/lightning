@@ -42,7 +42,8 @@ if (require.main === module) {
                 .then(function(vizTypes) {
                     if(vizTypes.length === 0) {
                         npm.load({
-                            loglevel: 'error'
+                            loglevel: 'error',
+                            prefix: config.root
                         }, function() {
                             getDefaultVisualizations();
                         });

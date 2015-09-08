@@ -125,7 +125,7 @@ module.exports = function(sequelize, DataTypes) {
 
                 var lightningConfig = this._bustRequire(name + '/package.json').lightning || {};
                 var sampleData = lightningConfig.sampleData;
-                var sampleOptions = lightningConfig.sampleOptions;
+                // var sampleOptions = lightningConfig.sampleOptions;
                 var sampleImages = lightningConfig.sampleImages;
                 var codeExamples = {};
                 var codeExampleMap = {
@@ -148,7 +148,7 @@ module.exports = function(sequelize, DataTypes) {
                     },
                     options: {
                         filepaths: ['lightning-sample-options.json', 'data/sample-options.json'],
-                        defaultValue: sampleOptions || {}
+                        defaultValue: {}
                     },
                     images: {
                         filepaths: ['lightning-sample-images.json', 'data/sample-images.json'],
@@ -163,7 +163,7 @@ module.exports = function(sequelize, DataTypes) {
                         try {
                             samples[key] = self._bustRequire(name + '/' + samplePath);
                         } catch(e) {
-                            samples[key] = samples[key] || val.defaultValue
+                            samples[key] = samples[key] || val.defaultValue;
                         };
                     });
                 });
