@@ -18,8 +18,6 @@ var Options = React.createClass({
     },
 
     getInitialState: function() {
-        console.log('getInitialState');
-        console.log(this.props.initialOptions);
         return {
             options: this.props.initialOptions
         };

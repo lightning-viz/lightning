@@ -32,7 +32,7 @@ var Editor = React.createClass({
             datasets: window.lightning.editor.datasets || [],
             images: window.lightning.editor.sampleImages || [],
             moduleName: window.lightning.editor.moduleName || '',
-            initialOptions: window.lightning.editor.options || {},
+            initialOptions: window.lightning.editor.sampleOptions || {},
             codeExamples: window.lightning.editor.codeExamples || {},
         };
     },
