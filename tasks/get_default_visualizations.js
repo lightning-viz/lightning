@@ -15,7 +15,7 @@ var getDefaultVisualizations = function(cb) {
     npm.config.set('loglevel', 'silent');
 
     Q.all(_.map(defaultVisualizations, function(moduleName) {
-        return models.VisualizationType.createFromNPM(moduleName);
+        return models.VisualizationType.linkFromNPM(moduleName);
     }))
     .spread(function() {
         debug()
@@ -41,13 +41,13 @@ if (require.main === module) {
             models.VisualizationType
                 .findAll()
                 .then(function(vizTypes) {
-                    if(vizTypes.length === 0) {
+                    // if(vizTypes.length === 0) {
                         npm.load(utils.getNPMConfig(), function() {
                             getDefaultVisualizations();
                         });
-                    } else {
-                        console.log('Visualizations exist in the database... Not fetching defaults');
-                    }
+                    // } else {
+                    //     console.log('Visualizations exist in the database... Not fetching defaults');
+                    // }
                 });
         });
 }
