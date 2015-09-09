@@ -235,7 +235,9 @@ exports.addData = function (req, res, next) {
         var form = new multiparty.Form();
 
         form.parse(req, function(err, fields, files) {
-
+            debug('add data');
+            debug(files);
+            debug(fields);
             _.each(files, function(f) {
                 thumbnailAndUpload(f, sessionId, function(err, data) {
 
@@ -367,6 +369,9 @@ exports.appendData = function (req, res, next) {
                 var form = new multiparty.Form();
 
                 form.parse(req, function(err, fields, files) {
+                    debug('append');
+                    debug(files);
+                    debug(fields);
                     _.each(files, function(f) {
 
                         thumbnailAndUpload(f, sessionId, function(err, data) {
