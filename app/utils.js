@@ -13,7 +13,6 @@ module.exports = {
     getNPMConfig: function() {
         // electron
         if(process.type) {
-            debug(process.type);
             return {
                 loglevel: 'error',
                 prefix: config.root
