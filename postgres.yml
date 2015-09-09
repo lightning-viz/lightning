@@ -1,0 +1,39 @@
+##################################################################
+#
+# postgres.yml
+#
+# author: Rion Dooley <dooley@tacc.utexas.edu>
+#
+# This is a docker compose file to run the Lightning data
+# vizualization server with a PostgreSQL db. It will run on your
+# Docker host, port 3000. To add authentication to the server, or
+# leverage Amazon S3 storage, fill in the environment variables
+# with the appropriate values.
+#
+# Run with
+#
+# docker-compose -f postgres.yml up
+#
+###################################################################
+web:
+  extends:
+    file: common.yml
+    service: web
+  command: bash -c "node server.js"
+  links:
+    - db
+  environment:
+    DATABASE_URL: lightning:changeit@db:5432/postgres
+    NODE_ENV: production
+    LIGHTNING_USERNAME:
+    LIGHTNING_PASSWORD:
+    S3_KEY:
+    S3_BUCKET:
+    S3_SECRET:
+db:
+  image: postgres
+  environment:
+    POSTGRES_USER: lightning
+    POSTGRES_PASSWORD: changeit
+  ports:
+    - 5432
