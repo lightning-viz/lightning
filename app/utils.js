@@ -12,7 +12,8 @@ module.exports = {
 
     getNPMConfig: function() {
         // electron
-        if(window && window.process && window.process.type) {
+        if(process.type) {
+            debug(process.type);
             return {
                 loglevel: 'error',
                 prefix: config.root
