@@ -1,20 +1,23 @@
 ##################################################################
 #
-# fig.yml
+# docker-compose.yml
 #
 # author: Rion Dooley <dooley@tacc.utexas.edu>
 #
-# This is the default Fig file to start the lightning viz server
+# This is the base file to start the lightning viz server
 # in development mode. It will run on your docker host, port 3000.
 # To add authentication to the server, or leverage S3 storage,
-# fill in the environment variables with the appropraite values.
+# fill in the environment variables with the appropriate values.
+#
+# Run with
+# 
+# docker-compose up
 #
 ###################################################################
 web:
-  image: deardooley/lightning-viz
-  # build: .
-  ports:
-    - "3000:3000"
+  extends:
+    file: common.yml
+    service: web
   environment:
     NODE_ENV: development
     LIGHTNING_URL:

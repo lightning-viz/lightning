@@ -1,0 +1,4 @@
+web:
+  image: lightningviz/lightning
+  ports:
+    - "3000:3000"
