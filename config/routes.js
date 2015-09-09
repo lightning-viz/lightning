@@ -85,7 +85,7 @@ module.exports = function (app) {
 
 
     // app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
-    // app.post('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.appendData);
+    app.post('/sessions/:sid/visualizations/:vid/data/images', authMiddleware, session.appendData);
 
 
     // app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);

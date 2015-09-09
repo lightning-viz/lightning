@@ -297,13 +297,21 @@ exports.appendData = function (req, res, next) {
     var fieldName = req.params.field;
     var VisualizationType = models.VisualizationType;
 
+    // five minute window to edit your data
+    var fiveMinutesAgo = new Date();
+    fiveMinutesAgo.setTime(fiveMinutesAgo.getTime() - 5*60*1000);
+
     models.Visualization
         .find({
             where: {
-                id: vizId
+                id: vizId,
+                createdAt: {
+                    gt: fiveMinutesAgo
+                }
             }, 
             include: [VisualizationType]
         }).then(function(viz) {
+
             if(req.is('json')) {
 
                 if(fieldName) {
