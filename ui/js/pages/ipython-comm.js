@@ -1,5 +1,6 @@
 window.lightning = window.lightning || {};
 var lightningCommMap = {};
+var IPython = window.IPython;
 
 var readCommData = function(commData, field) {
     try {
