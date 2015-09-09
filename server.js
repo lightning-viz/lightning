@@ -26,10 +26,7 @@ if (cluster.isMaster) {
     startup();
 }
 
-npm.load({
-    loglevel: 'error',
-    // prefix: config.root
-});
+npm.load(utils.getNPMConfig());
 
 
 var io = require('socket.io')(server);

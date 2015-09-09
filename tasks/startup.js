@@ -27,10 +27,7 @@ var f = function() {
                         debug('* ' + vt.name);
                     })
                     if(vizTypes.length === 0) {
-                        npm.load({
-                            loglevel: 'error',
-                            prefix: config.root
-                        }, function() {
+                        npm.load(utils.getNPMConfig(), function() {
                             tasks.getDefaultVisualizations();
                         });
                     }

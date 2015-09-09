@@ -10,6 +10,20 @@ var randomstring = require('randomstring');
 
 module.exports = {
 
+    getNPMConfig: function() {
+        // electron
+        if(window && window.process && window.process.type) {
+            return {
+                loglevel: 'error',
+                prefix: config.root
+            };
+        }
+
+        return {
+            loglevel: 'error'
+        };
+    },
+
     sortByKey: function(list, key) {
         return _.sortBy(list, key);
     },
