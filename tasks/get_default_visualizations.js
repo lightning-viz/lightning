@@ -6,6 +6,7 @@ var defaultVisualizations = config.defaultVisualizations || [];
 require('colors');
 var npm = require('npm');
 var debug = require('debug')('lightning:server:tasks');
+var utils = require('../app/utils');
 
 var getDefaultVisualizations = function(cb) {
 
@@ -41,10 +42,7 @@ if (require.main === module) {
                 .findAll()
                 .then(function(vizTypes) {
                     if(vizTypes.length === 0) {
-                        npm.load({
-                            loglevel: 'error',
-                            prefix: config.root
-                        }, function() {
+                        npm.load(utils.getNPMConfig(), function() {
                             getDefaultVisualizations();
                         });
                     } else {

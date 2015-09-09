@@ -12,6 +12,8 @@ COPY . /usr/src/app/
 RUN npm install -g gulp
 RUN gulp build
 
+RUN npm run fetch-visualizations
+
 EXPOSE 3000
 
 CMD ["npm","start"]
