@@ -494,10 +494,14 @@ exports.updateData = function (req, res, next) {
 
 
 var thumbnailAndUpload = function(f, sessionId, callback) {
+
+
+
     var staticUrl = '/';
     if(config.url) {
         staticUrl = 'http://' + config.url + '/';
     }
+
 
     // check if thumbnailing exists,
     // and if s3 creds exist
@@ -551,6 +555,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
     commandExists('identify', function(err, imageMagickExists) {
 
         if(imageMagickExists) {
+
             easyimage
                 .info(imgPath)
                 .then(function(file) {
@@ -603,11 +608,11 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
 
                         async.parallel([
                             function(callback) {
-                                var outpath = path.resolve(__dirname + '/../../public/images/uploads' + originalS3Path);
-                                fs.copy(imgPath, outpath, callback);
+                                var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
+                                fs.copy(imgPath, outpath, callback);        
                             },
                             function(callback) {
-                                var outpath = path.resolve(__dirname + '/../../public/images/uploads' + thumbnailS3Path);
+                                var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);
                                 fs.copy(thumbnailPath, outpath, callback);
                             }
                         ], function(err) {
@@ -680,5 +685,6 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
             }
         }
     })
-};
 
+
+};
