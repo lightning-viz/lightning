@@ -30,6 +30,8 @@ npm.load({
     loglevel: 'error',
     // prefix: config.root
 });
+
+
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
