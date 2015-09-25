@@ -33,6 +33,7 @@ if(defaultVisualizations) {
     'lightning-scatter',
     'lightning-scatter-streaming',
     'lightning-scatter-3',
+    'lightning-vega-lite',
     'lightning-volume'
   ];
 }
