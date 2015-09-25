@@ -18,6 +18,7 @@ require('lightning-scatter');
 require('lightning-scatter-streaming');
 require('lightning-scatter-3');
 require('lightning-volume');
+require('lightning-vega-lite');
 
 function loadJS(src, callback) {
     var s = document.createElement('script');

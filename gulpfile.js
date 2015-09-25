@@ -59,7 +59,7 @@ gulp.task('standalone-js', function() {
         .pipe(source('standalone.js'))
         .pipe(buffer())
         .pipe(browserifyProtect())
-        // .pipe(uglify())
+        .pipe(uglify())
         // .on('error', gutil.log)
         .pipe(gulp.dest('.'));
 
