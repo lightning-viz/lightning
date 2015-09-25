@@ -64,11 +64,12 @@ body {
 
         &.public-feed {
             margin-top: 50px;
+            margin-bottom: 50px;
         }
     }
 
     .lightning-public-logo {
-        position: absolute;
+        position: fixed;
         top: 20px;
         left: 20px;
     }
