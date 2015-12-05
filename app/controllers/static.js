@@ -4,7 +4,6 @@ var resumer = require('resumer');
 var browserify = require('browserify');
 var path = require('path');
 var cache = require('../cache');
-var sass = require('node-sass');
 var uuid = require('node-uuid');
 var Q = require('q');
 var debug = require('debug')('lightning:server:controllers:static');

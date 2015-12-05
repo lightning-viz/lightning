@@ -1,7 +1,6 @@
 var models = require('../models');
 var _ = require('lodash');
 var cache = require('../cache');
-var sass = require('node-sass');
 var browserify = require('browserify');
 var path = require('path');
 var uuid = require('node-uuid');
