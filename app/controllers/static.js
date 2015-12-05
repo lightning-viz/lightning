@@ -41,43 +41,28 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
     models.VisualizationType
         .findAll().then(function(vizTypes) {
+
             debug('Found ' + vizTypes.length + ' visualization types');
-            var funcs = [];
-            _.each(vizTypes, function(vizType) {
-                if(!vizType.isModule) {
-                    funcs.push(vizType.exportToFS(tmpPath));
+
+            _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
+                debug(vizType.moduleName);
+                b.require(vizType.moduleName, {
+                    expose: vizType.moduleName
+                });
+            });
+
+            b.bundle(function(err, buf) {
+                if(err) {
+                    return next(err);
+                }
+
+                var out = buf.toString('utf8');
+                cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
+                if(!cacheHit) {
+                    res.send(out);
                 }
             });
 
-            Q.all(funcs).spread(function() {
-
-                _.each(_.filter(vizTypes, function(vizType) { return (visualizationTypes.indexOf(vizType.name) > -1); }), function(vizType) {
-                    if(vizType.isModule) {
-                        debug(vizType.moduleName);
-                        b.require(vizType.moduleName, {
-                            expose: vizType.moduleName
-                        });
-                    } else {
-                        var stream = resumer().queue(vizType.javascript).end();
-                        b.require(stream, {
-                            basedir: tmpPath,
-                            expose: vizType.name
-                        });
-                    }
-                });
-
-                b.bundle(function(err, buf) {
-                    if(err) {
-                        return next(err);
-                    }               
-
-                    var out = buf.toString('utf8');
-                    cache.put('js/' + visualizationTypes.toString(), out, 1000 * 60 * 10);
-                    if(!cacheHit) {
-                        res.send(out);
-                    }
-                });
-            });
         }).error(function(err) {
             return res.status(500).send(err.message).end();
         });
@@ -86,9 +71,9 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
 
 exports.bundleJSForExecution = function(req, res, next) {
-    
+
     res.set('Content-Type', 'application/javascript');
-    
+
     var b = browserify({
         paths: [ config.root + '/node_modules']
     });
@@ -109,65 +94,4 @@ exports.bundleJSForExecution = function(req, res, next) {
     bundle.pipe(res);
 
 
-};
-
-
-
-exports.buildSCSS = function(req, res) {
-    res.set('Content-Type', 'text/css');
-
-    var scssData = '#lightning-body {\n';
-    scssData += req.body.styles + '\n';
-    scssData += '\n}';
-
-    sass.render({
-        data: scssData,
-        success: function(sassResultss) {
-            res.send(sassResultss.css);
-        }
-    });
-};
-
-
-exports.getDynamicVizStyles = function (req, res, next) {
-
-    res.set('Content-Type', 'text/css');
-
-
-    // Get all vizTypes in array
-    var visualizationTypes = _.uniq(req.query.visualizations).sort();    
-    var styles = cache.get('css/' + visualizationTypes.toString());
-
-    if(styles) {
-        return res.send(styles);
-    }
-
-    debug('building viz styles with ' + visualizationTypes);
-
-    models.VisualizationType
-        .findAll({
-            where: {
-                name: {
-                    in: visualizationTypes
-                }
-            }
-        }).then(function(vizTypes) {
-
-            var scssData = '#lightning-body {\n';
-            _.each(vizTypes, function(vizType) {
-                if(vizType.styles) {
-                    scssData += vizType.styles  + '\n';
-                }
-            });
-
-            scssData += '\n}';
-
-            sass.render({
-                data: scssData,
-                success: function(sassResults) {
-                    cache.put('css/' + visualizationTypes.toString(), sassResults.css, 1000 * 60 * 60);
-                    res.send(sassResults.css);
-                }
-            });
-        }).error(next);
 };

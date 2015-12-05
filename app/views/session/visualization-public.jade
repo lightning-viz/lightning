@@ -1,9 +1,5 @@
 extends ../layout
 
-
-block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.VisualizationType.name}")
-
 block sidebar
     
 block content
@@ -18,5 +14,3 @@ block scripts
     script(src='#{STATIC_URL}js/basic.js')
     script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.VisualizationType.name}")
     script(src='#{STATIC_URL}js/public.js')
-
-

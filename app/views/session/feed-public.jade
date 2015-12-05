@@ -1,9 +1,5 @@
 extends ../layout
 
-block dynamic-css
-    if visualizations.length
-        link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{_.pluck(_.pluck(visualizations, 'VisualizationType'), 'name').join('&visualizations[]=')}")
-
 block sidebar
 
 

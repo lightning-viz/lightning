@@ -59,7 +59,7 @@ var NPM = React.createClass({
     handleNameChange: function(event) {
         this.setState({
             name: event.target.value
-        });  
+        });
     },
 
     handleSubmit: function() {
@@ -67,7 +67,7 @@ var NPM = React.createClass({
             return;
         }
 
-        var url = '/visualization-types/load/' + this.state.importPreview + '/npm/' + this.state.location;
+        var url = '/visualization-types/load/' + this.state.importPreview + '/' + this.state.location;
         url += '?' + this.serialize({
             name: this.state.name
         });
@@ -87,8 +87,8 @@ var NPM = React.createClass({
         var styleRadio = function(radio, i) {
             var rLen = Object.keys(radios).length;
             return (
-                <label 
-                    className={'button-group-label ' + (this.state.location === radio.name ? 'selected' : '')} 
+                <label
+                    className={'button-group-label ' + (this.state.location === radio.name ? 'selected' : '')}
                     style={{width: i === rLen ? null : (100 * (1 / rLen)) + '%'}}
                     key={i}>
                     <Radio value={radio.name} style={styles.radioInput} />{radio.label}
@@ -102,7 +102,7 @@ var NPM = React.createClass({
                 {radios.map(styleRadio.bind(this))}
             </div>
         );
-    },    
+    },
 
     renderImportPreviewRadioGroup: function(Radio) {
         var radios = [{
@@ -116,8 +116,8 @@ var NPM = React.createClass({
         var styleRadio = function(radio, i) {
             var rLen = Object.keys(radios).length;
             return (
-                <label 
-                    className={'button-group-label ' + (this.state.importPreview === radio.name ? 'selected' : '')} 
+                <label
+                    className={'button-group-label ' + (this.state.importPreview === radio.name ? 'selected' : '')}
                     style={{width: i === rLen ? null : (100 * (1 / rLen)) + '%'}}
                     key={i}>
                     <Radio value={radio.name} style={styles.radioInput} />{radio.label}
@@ -138,7 +138,7 @@ var NPM = React.createClass({
         return (
             <div>
                 <div>
-                    Select Location: 
+                    Select Location:
                     <RadioGroup selectedValue={this.state.location} onChange={this.handleSelectLocation}>
                         {this.renderLocationRadioGroup}
                     </RadioGroup>
@@ -150,7 +150,7 @@ var NPM = React.createClass({
                     </RadioGroup>
                 </div>
                 <div>
-                    Module Name: 
+                    Module Name:
                     <input type={'text'} onChange={this.handleNameChange} value={this.state.name} />
                 </div>
                 <div className={'button'} onClick={this.handleSubmit}>
