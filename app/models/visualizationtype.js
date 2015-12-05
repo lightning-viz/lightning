@@ -217,14 +217,31 @@ module.exports = function(sequelize, DataTypes) {
                 return this._createLinkNPM(npm.commands.install, installName, moduleName || installName, true);
             },
 
-            linkFromLocalModule: function(installName, moduleName) {
+            linkFromLocalModule: function(installPath, moduleName) {
                 debug('link from local module');
-                debug(name);
-                return this._createLinkNPM(npm.commands.link, installName, moduleName || installName, true);
+                var p = path.resolve(installPath);
+                var self = this;
+                var prefix = npm.prefix;
+                npm.prefix = p;
+
+                return Q.nfcall(npm.commands.link)
+                  .then(function() {
+                      npm.prefix = prefix;
+                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, true);
+                  })
             },
 
-            createFromLocalModule: function(installName, moduleName) {
-                return this._createLinkNPM(npm.commands.link, installName, moduleName || installName, false);
+            createFromLocalModule: function(installPath, moduleName) {
+                var p = path.resolve(installPath);
+                var self = this;
+                var prefix = npm.prefix;
+                npm.prefix = p;
+
+                return Q.nfcall(npm.commands.link)
+                  .then(function() {
+                      npm.prefix = prefix;
+                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, false);
+                  })
             },
 
             moduleNameFromInstallName: function(installName) {
@@ -236,6 +253,11 @@ module.exports = function(sequelize, DataTypes) {
                 }
 
                 return installName;
+            },
+
+            packageObjectFromPath: function(filePath) {
+                filePath = path.resolve(filePath);
+                return Q.nfcall(fs.readJSON, filePath + '/package.json');
             }
 
         },
@@ -285,9 +307,9 @@ module.exports = function(sequelize, DataTypes) {
                 var name = this.moduleName;
                 var loglevel = npm.config.get('loglevel');
                 npm.config.set('loglevel', 'silent');
-                return Q.nfcall(npm.commands.uninstall, [name])
+                return exec('npm uninstall --silent ' + name)
                     .then(function(results) {
-                        return Q.nfcall(npm.commands.install, [name]);
+                        return exec('npm install --silent ' + name);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
                         debug(('Successfully updated ' + name).green);

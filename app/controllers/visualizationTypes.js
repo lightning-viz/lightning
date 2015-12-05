@@ -162,52 +162,59 @@ exports.getDelete = function(req, res, next) {
 exports.previewNPM = function(req, res, next) {
 
     var location = req.params.location;
+    var installVal = req.query.name || req.query.path;
+    var linker, getModuleName;
+    if(location === 'remote') {
+        linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
+        moduleNameGetter = models.VisualizationType.moduleNameFromInstallName;
+        getModuleName = function() {
+          return models.VisualizationType.moduleNameFromInstallName(installVal);
+        }
+    } else if(location === 'local') {
+        linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
+        getModuleName = function() {
+          return models.VisualizationType
+            .packageObjectFromPath(installVal)
+            .then(function(packageObj) {
+              return packageObj.name;
+            })
+        }
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    var installName = req.query.name;
-    var moduleName = models.VisualizationType.moduleNameFromInstallName(installName);
-
-    debug(installName + ' : ' + moduleName);
-
-    debug('requested to link module: ' + installName);
-
-    models.VisualizationType
-        .findAll({
-            where: {
-                moduleName: moduleName
-            }
-        }).then(function(visualizations) {
+    var moduleName;
+    Q.fcall(getModuleName)
+        .then(function(mn) {
+            moduleName = mn;
+            debug(installVal + ' : ' + moduleName);
+            debug('requested to link module: ' + installVal);
+            return models.VisualizationType
+                .findAll({
+                    where: {
+                        moduleName: moduleName
+                    }
+                })
+        })
+        .then(function(visualizations) {
             if(visualizations && visualizations.length) {
                 throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to preview ' + installName);
             }
-
-            var linker;
-            if(location === 'registry') {
-                linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
-            } else if(location === 'local') {
-                linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
-            } else {
-                return res.status(500).send('Invalid location.').end();
-            }
-
-            return linker(installName, moduleName);
+            return linker(installVal, moduleName);
         }).then(function(vizType) {
             var b = browserify({
                 paths: [ config.root + '/node_modules']
             });
             b.require(moduleName);
-
             b.bundle(function(err, buf) {
-
                 if(err) {
                     debug(err);
                     return res.status(500).end();
                 }
 
-                var javascript = buf.toString('utf8');
-
                 return res.render('viz-types/preview-editor', {
                     vizType: vizType,
-                    javascript: javascript,
+                    javascript: buf.toString('utf8'),
                     location: location,
                     source: 'npm'
                 });
@@ -220,30 +227,46 @@ exports.previewNPM = function(req, res, next) {
 exports.importNPM = function(req, res, next) {
 
     var location = req.params.location;
-    var installName = req.query.name;
-    var moduleName = models.VisualizationType.moduleNameFromInstallName(installName);
+    var installVal = req.query.name || req.query.path;
+    var creator, getModuleName;
+    if(location === 'remote') {
+        creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
+        moduleNameGetter = models.VisualizationType.moduleNameFromInstallName;
+        getModuleName = function() {
+          return models.VisualizationType.moduleNameFromInstallName(installVal);
+        }
+    } else if(location === 'local') {
+        creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
+        getModuleName = function() {
+          return models.VisualizationType
+            .packageObjectFromPath(installVal)
+            .then(function(packageObj) {
+              return packageObj.name;
+            })
+        }
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
+
 
     debug('requested to link module: ' + name);
-
-    models.VisualizationType
-        .findAll({
-            where: {
-                moduleName: moduleName
-            }
+    var moduleName;
+    Q.fcall(getModuleName)
+        .then(function(mn) {
+            moduleName = mn;
+            debug(installVal + ' : ' + moduleName);
+            debug('requested to link module: ' + installVal);
+            return models.VisualizationType
+                .findAll({
+                    where: {
+                        moduleName: moduleName
+                    }
+                })
         }).then(function(visualizations) {
             if(visualizations && visualizations.length) {
-                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to install ' + installName);
+                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to install ' + installVal);
             }
-            var creator;
-            if(location === 'registry') {
-                creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
-            } else if(location === 'local') {
-                creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
-            } else {
-                return res.status(500).send('Invalid location.').end();
-            }
-
-            return creator(installName, moduleName);
+            return creator(installVal, moduleName);
         }).then(function(vizType) {
             return res.redirect('/visualization-types/edit/' + vizType.id);
         }).catch(function(err) {
@@ -270,7 +293,7 @@ exports.editor = function (req, res, next) {
 
 exports.thumbnail = function (req, res, next) {
 
-    models.VisualizationType.findById(req.params.vid)
+    return models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             if(type.thumbnailLocation) {
                 return res.sendFile(type.thumbnailLocation);
