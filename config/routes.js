@@ -34,7 +34,6 @@ module.exports = function (app) {
     });
 
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
-    app.post('/js/dynamic', staticController.bundleJSForExecution);
     app.get('/visualizations/:vid/public', visualization.publicRead);
     app.get('/visualizations/:vid/screenshot', visualization.screenshot);
     app.get('/sessions/:sid/public', session.publicRead);

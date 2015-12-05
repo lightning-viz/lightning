@@ -94,7 +94,6 @@
     "react-radio-group": "^2.0.2",
     "react-simpletabs": "^0.6.1",
     "request": "~2.36.0",
-    "resumer": "0.0.0",
     "sequelize": "^3.6.0",
     "sequelize-cli": "^1.7.4",
     "serve-favicon": "^2.1.6",

@@ -1,6 +1,5 @@
 var models = require('../models');
 var _ = require('lodash');
-var resumer = require('resumer');
 var browserify = require('browserify');
 var path = require('path');
 var cache = require('../cache');
@@ -8,7 +7,6 @@ var uuid = require('node-uuid');
 var Q = require('q');
 var debug = require('debug')('lightning:server:controllers:static');
 var config = require('../../config/config');
-
 
 
 exports.getDynamicVizBundle = function (req, res, next) {
@@ -65,32 +63,5 @@ exports.getDynamicVizBundle = function (req, res, next) {
         }).error(function(err) {
             return res.status(500).send(err.message).end();
         });
-
-};
-
-
-exports.bundleJSForExecution = function(req, res, next) {
-
-    res.set('Content-Type', 'application/javascript');
-
-    var b = browserify({
-        paths: [ config.root + '/node_modules']
-    });
-    var js = req.body.javascript;
-    var stream = resumer().queue(js).end();
-    b.require(stream, {
-        basedir: req.session.lastBundlePath || '',
-        expose: 'dynamicallyBundledJavascript'
-    });
-
-    var bundle = b.bundle();
-
-    bundle.on('error', function(err) {
-        debug(err);
-        return res.status(500).send();
-    });
-
-    bundle.pipe(res);
-
 
 };

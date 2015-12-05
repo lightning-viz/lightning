@@ -4,7 +4,6 @@ var cache = require('../cache');
 var browserify = require('browserify');
 var path = require('path');
 var uuid = require('node-uuid');
-var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
 var Q = require('q');
