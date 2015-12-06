@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require('fs-extra');
 var Q = require('q');
 var uuid = require('node-uuid');
-var glob = require('glob');
 var _ = require('lodash');
 var env = process.env.NODE_ENV || 'development';
 var dbConfig = require(__dirname + '/../../config/database')[env];

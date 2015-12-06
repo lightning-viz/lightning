@@ -11,8 +11,6 @@ var serveStatic = require('serve-static');
 var slashes = require('connect-slashes');
 var favicon = require('serve-favicon');
 
-var winston = require('winston');
-var helpers = require('view-helpers');
 var config = require('./config');
 var pkg = require('../package.json');
 var moment = require('moment');
@@ -36,19 +34,6 @@ module.exports = function (app, io) {
     app.use(favicon(path.resolve(__dirname + '/../public/images/favicon.ico')));
     app.use(serveStatic(config.root + '/public'));
 
-    // Use winston on production
-    var log;
-    if (env !== 'development') {
-        log = {
-            stream: {
-                write: function (message, encoding) {
-                    winston.info(message);
-                }
-            }
-        };
-    } else {
-        log = { format: 'dev' };
-    }
 
     // Don't log during tests
     // Logging middleware
@@ -76,7 +61,7 @@ module.exports = function (app, io) {
     app.use(cookieParser());
 
     // bodyParser should be above methodOverride
-    app.use(bodyParser.json({limit: '50mb'}));    
+    app.use(bodyParser.json({limit: '50mb'}));
     app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 
@@ -134,9 +119,6 @@ module.exports = function (app, io) {
             maxAge: 1000*60*60
         }
     }));
-
-    // should be declared after session and flash
-    app.use(helpers(pkg.name));
 
     // adds CSRF support
     if (process.env.NODE_ENV !== 'test') {
