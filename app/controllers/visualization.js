@@ -263,11 +263,16 @@ exports.screenshot = function(req, res, next) {
       opts.phantomPath = process.env.PHANTOM_PATH;
     }
 
+    debug(opts)
+
     webshot(url, opts, function(err, renderStream) {
 
         if(err) {
+            debug(err);
             return res.status(500).send();
         }
+
+        debug('Screenshot success')
 
         var concatStream = concat(function(screenshot) {
             cache.put('screenshot/' + vizId, screenshot, 1000 * 60 * 10);
