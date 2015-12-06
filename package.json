@@ -23,6 +23,9 @@
   "bin": {
     "lightning-server": "bin/lightning-server.js"
   },
+  "engines": {
+    "node": "4.2.3"
+  },
   "homepage": "http://lightning-viz.org",
   "repository": {
     "type": "git",
