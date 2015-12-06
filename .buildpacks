@@ -1,2 +1,3 @@
-https://github.com/lightning-viz/heroku-buildpack-nodejs.git
+https://github.com/ddollar/heroku-buildpack-apt
 https://github.com/srbartlett/heroku-buildpack-phantomjs-2.0.git
+https://github.com/lightning-viz/heroku-buildpack-nodejs.git
