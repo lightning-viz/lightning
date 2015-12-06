@@ -1,5 +1,4 @@
 var path = require('path');
-var git = require('gift');
 var fs = require('fs-extra');
 var Q = require('q');
 var uuid = require('node-uuid');
