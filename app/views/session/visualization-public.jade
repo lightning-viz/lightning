@@ -1,8 +1,8 @@
 extends ../layout
 
-
-block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{viz.VisualizationType.name}")
+block meta
+  meta(content="#{BASE_URL}visualizations/#{viz.id}/screenshot/?width=800&height=600", property="og:image")
+  meta(content="#{BASE_URL}visualizations/#{viz.id}/screenshot/?width=800&height=600", property="og:image:url")
 
 block header
     .lightning-public-logo
@@ -23,5 +23,3 @@ block scripts
     script(src='#{STATIC_URL}js/basic.js')
     script(src="#{STATIC_URL}js/dynamic/viz/?visualizations[]=#{viz.VisualizationType.name}")
     script(src='#{STATIC_URL}js/public.js')
-
-

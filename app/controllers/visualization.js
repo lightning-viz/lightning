@@ -4,7 +4,8 @@ var _ = require('lodash');
 var webshot = require('webshot');
 var config = require('../../config/config');
 var debug = require('debug')('lightning:server:controllers:visualizations');
-
+var cache = require('../cache');
+var concat = require('concat-stream');
 
 exports.getData = function (req, res, next) {
     var vizId = req.params.vid;
@@ -65,7 +66,7 @@ exports.getDataWithKeys = function (req, res, next) {
 };
 
 exports.getSettingsWithKeys = function (req, res, next) {
-    
+
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
@@ -124,7 +125,7 @@ exports.updateSettings = function (req, res, next) {
         .findById(vid)
         .then(function(viz) {
             if(_.isString(viz.settings)) {
-                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);    
+                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);
             } else {
                 viz.settings = _.extend(viz.settings || {}, req.body);
             }
@@ -146,7 +147,7 @@ exports.updateData = function (req, res, next) {
     models.Visualization
         .findById(vizId)
         .then(function(viz) {
-            
+
             if(fieldName) {
                 viz.data[fieldName] = req.body.data;
             } else {
@@ -168,7 +169,7 @@ var readWithTemplate = function(template, req, res, next) {
     Visualization.find({
         where: {
             id: vizId
-        }, 
+        },
         include: [VisualizationType]
     }).then(function(viz) {
         res.render(template, {
@@ -205,13 +206,13 @@ exports.delete = function (req, res, next) {
         .then(function(viz) {
             if(!viz) {
                 return res.status(404).send();
-            }            
+            }
 
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
                 req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
-                return res.json(viz);                
+                return res.json(viz);
             }).catch(next);
         }).catch(next);
 };
@@ -239,6 +240,14 @@ exports.screenshot = function(req, res, next) {
     var host = req.headers.host;
     var url = 'http://' + host + '/visualizations/' + vizId + '/iframe';
 
+    res.setHeader('Content-Type', 'image/png');
+
+    var img = cache.get('screenshot/' + vizId);
+    if(img) {
+      console.log(img);
+        return res.send(img);
+    }
+
     var width = req.query.width || 1024;
     var height = req.query.height || 768;
 
@@ -247,17 +256,24 @@ exports.screenshot = function(req, res, next) {
             width: width,
             height: height
         },
-        renderDelay: 500
+        renderDelay: 500,
     };
+
+    if(process.env.PHANTOM_PATH) {
+      opts.phantomPath = process.env.PHANTOM_PATH;
+    }
 
     webshot(url, opts, function(err, renderStream) {
 
         if(err) {
-            console.warn(err);
             return res.status(500).send();
         }
-        
-        res.setHeader('Content-Type', 'image/png');
+
+        var concatStream = concat(function(screenshot) {
+            cache.put('screenshot/' + vizId, screenshot, 1000 * 60 * 10);
+        });
+
         renderStream.pipe(res);
+        renderStream.pipe(concatStream);
     });
 }

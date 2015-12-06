@@ -7,6 +7,8 @@ if(process.env.DATABASE_URL) {
     dbUrl = url.parse(process.env.DATABASE_URL);
 }
 
+console.log(dbUrl)
+
 module.exports = {
     'development': {
         database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',
@@ -18,7 +20,7 @@ module.exports = {
         'sync': {'force': true},
         'storage': config.root + '/database.sqlite',
         'logging': false
-    },  
+    },
     'test': {
         database: (dbUrl) ? dbUrl.path.replace('/', '') : 'lightning-viz',
         username: (dbUrl) ? (dbUrl.auth.split(':') || [false])[0] : null,

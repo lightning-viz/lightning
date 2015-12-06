@@ -1,9 +1,5 @@
 extends ../layout
 
-block dynamic-css
-    style#viz-styles.
-        #{css}
-
 block container
 
     .editor-outer-section.wrap.push
@@ -53,4 +49,3 @@ block scripts
             path: "#{path}"
         };
     script(src='#{STATIC_URL}js/preview.js')
-

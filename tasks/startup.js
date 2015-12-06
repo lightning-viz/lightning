@@ -15,35 +15,32 @@ var f = function() {
 
     console.log('Lightning started on port: ' + port);
 
+    debug(utils.getASCIILogo().magenta);
+    debug('Running database: ' + dbConfig.dialect);
+
+
     models.sequelize.sync({force: false})
         .then(function() {
-
-            models.VisualizationType
-                .findAll()
-                .then(function(vizTypes) {
-                    debug('Installed visualizations:');
-                    debug('-------------------------');
-                    _.each(vizTypes, function(vt) {
-                        debug('* ' + vt.name);
-                    })
-                    if(vizTypes.length === 0) {
-                        npm.load({
-                            loglevel: 'error',
-                            prefix: config.root
-                        }, function() {
-                            tasks.getDefaultVisualizations();
-                        });
-                    }
+            return models.VisualizationType.findAll();
+        })
+        .then(function(vizTypes) {
+            debug('Installed visualizations:');
+            debug('-------------------------');
+            _.each(vizTypes, function(vt) {
+                debug('* ' + vt.name);
+            })
+            if(vizTypes.length === 0) {
+                npm.load(utils.getNPMConfig(), function() {
+                    tasks.getDefaultVisualizations();
                 });
-        }).catch(function(err) {
+            }
+        })
+        .catch(function(err) {
             debug('Could not connect to the database. Is Postgres running?');
             throw err;
         });
 
 
-    debug(utils.getASCIILogo().magenta);
-
-    debug('Running database: ' + dbConfig.dialect);
 };
 
 module.exports = f;

@@ -10,7 +10,9 @@
   "repository": "https://github.com/mathisonian/lightning",
   "env": {
     "NODE_ENV": "production",
-    "BUILDPACK_URL": "https://github.com/newyorkdata/heroku-buildpack-nodejs-gulp",
+    "BUILDPACK_URL": "https://github.com/lightning-viz/heroku-buildpack-nodejs",
+    "LD_LIBRARY_PATH": "/usr/local/lib:/usr/lib:/lib:/app/vendor/phantomjs/lib",
+    "PATH": "/usr/local/bin:/usr/bin:/bin:/app/vendor/phantomjs/bin",
     "LIGHTNING_USERNAME": {
       "description": "Username to secure this instance with basic auth. (optional)",
       "required": false

@@ -59,7 +59,7 @@ gulp.task('standalone-js', function() {
         .pipe(source('standalone.js'))
         .pipe(buffer())
         .pipe(browserifyProtect())
-        // .pipe(uglify())
+        .pipe(uglify())
         // .on('error', gutil.log)
         .pipe(gulp.dest('.'));
 
@@ -99,7 +99,7 @@ gulp.task('watch', function () {
     if (err) {
       return console.log(err);
     }
- 
+
     gulp.watch(srcDir + 'stylesheets/**/*.{scss,css}',['css']);
     gulp.watch(srcDir + 'js/**/*.js',['js']);
   });
@@ -111,5 +111,3 @@ gulp.task('static', ['js', 'css', 'fonts', 'images']);
 gulp.task('default', ['static','watch']);
 gulp.task('build', ['static']);
 gulp.task('heroku:production', ['static']);
-
-

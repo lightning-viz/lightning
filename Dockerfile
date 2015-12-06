@@ -9,8 +9,9 @@ COPY package.json /usr/src/app/
 RUN npm install
 
 COPY . /usr/src/app/
-RUN npm install -g gulp
-RUN gulp build
+
+RUN npm run build
+RUN npm run fetch-visualizations
 
 EXPOSE 3000
 

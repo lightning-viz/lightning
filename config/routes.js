@@ -30,12 +30,9 @@ module.exports = function (app) {
         res.set("Access-Control-Allow-Headers", "Content-Type");
         res.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST");
         res.status(200).send();
-    })
+    });
 
     app.get('/js/dynamic/viz', staticController.getDynamicVizBundle);
-    app.get('/css/dynamic/viz', staticController.getDynamicVizStyles);
-    // app.post('/js/dynamic', staticController.bundleJSForExecution);
-    // app.post('/css/dynamic', staticController.buildSCSS);
     app.get('/visualizations/:vid/public', visualization.publicRead);
     app.get('/visualizations/:vid/screenshot', visualization.screenshot);
     app.get('/sessions/:sid/public', session.publicRead);
@@ -47,15 +44,15 @@ module.exports = function (app) {
     // app.put('/visualizations/types/:vid', authMiddleware, visualizationTypes.edit);
     // app.get('/visualizations/types', authMiddleware, visualizationTypes.index);
     app.get('/visualization-types', authMiddleware, visualizationTypes.show);
-    app.post('/visualization-types', authMiddleware, visualizationTypes.importViz);
     app.get('/visualization-types/advanced/', authMiddleware, visualizationTypes.advanced);
     app.get('/visualization-types/advanced/fetch-defaults', authMiddleware, visualizationTypes.fetchDefaults);
     app.get('/visualization-types/advanced/reset-defaults', authMiddleware, visualizationTypes.resetDefaults);
     app.get('/visualization-types/advanced/refresh-npm', authMiddleware, visualizationTypes.refreshNPM);
+
+
     app.get('/visualization-types/edit/:vid', authMiddleware, visualizationTypes.editor);
-    app.get('/visualization-types/load/:importPreview/:method', authMiddleware, visualizationTypes.importPreviewHandler);
-    app.get('/visualization-types/load/:importPreview/:method/:location', authMiddleware, visualizationTypes.importPreviewHandler);
-    app.get('/visualization-types/:vizName.json', visualizationTypes.json);
+    app.get('/visualization-types/load/:importPreview/:location', authMiddleware, visualizationTypes.importPreviewHandler);
+    app.get('/visualization-types/:vizName.json', authMiddleware, visualizationTypes.json);
 
     app.get('/visualization-types/:vid/thumbnail', authMiddleware, visualizationTypes.thumbnail);
 
@@ -71,7 +68,7 @@ module.exports = function (app) {
 
     app.get('/sessions/:sid', session.feed);
     app.get('/sessions/:sid/feed', session.feed);
-    
+
     app.put('/sessions/:sid', session.update);
     // app.put('/visualizations/:vid', authMiddleware, visualization.update);
 
@@ -87,10 +84,6 @@ module.exports = function (app) {
     // app.post('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.appendData);
     app.post('/sessions/:sid/visualizations/:vid/data/:field', session.appendData);
 
-
-    // app.put('/sessions/:sid/visualizations/:vid/data', authMiddleware, session.updateData);
-    // app.put('/sessions/:sid/visualizations/:vid/data/:field', authMiddleware, session.updateData);
-    
 
 
     // public / userland stuff
