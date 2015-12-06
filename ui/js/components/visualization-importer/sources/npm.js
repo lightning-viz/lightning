@@ -16,14 +16,30 @@ var isEmpty = function(str) {
   return str.replace(/^\s+|\s+$/g, '').length == 0;
 }
 
+var locations = {
+  remote: {
+    label: 'Remote',
+    inputLabel: 'Module Name',
+    inputHelp: 'Use <em>username/reponame</em> to import module from github',
+    key: 'name'
+  },
+  local: {
+    label: 'Local',
+    inputLabel: 'Folder Path',
+    inputHelp: 'e.g. /Users/username/my-visualization',
+    key: 'path'
+  },
+
+}
+
 
 var NPM = React.createClass({
 
     getDefaultProps: function() {
         return {
-            initialLocation: 'registry',
+            initialLocation: 'remote',
             initialImportPreview: 'import',
-            initialName: ''
+            initialTextVal: ''
         };
     },
 
@@ -31,7 +47,7 @@ var NPM = React.createClass({
         return {
             location: this.props.initialLocation,
             importPreview: this.props.initialImportPreview,
-            name: this.props.initialName
+            textVal: this.props.initialTextVal
         };
     },
 
@@ -56,45 +72,45 @@ var NPM = React.createClass({
         });
     },
 
-    handleNameChange: function(event) {
+    handleTextValChange: function(event) {
         this.setState({
-            name: event.target.value
-        });  
+            textVal: event.target.value
+        });
     },
 
     handleSubmit: function() {
-        if(isEmpty(this.state.name)) {
+        if(isEmpty(this.state.textVal)) {
             return;
         }
 
-        var url = '/visualization-types/load/' + this.state.importPreview + '/npm/' + this.state.location;
-        url += '?' + this.serialize({
-            name: this.state.name
-        });
+        var url = '/visualization-types/load/' + this.state.importPreview + '/' + this.state.location;
+
+        var serializeObj = {};
+        serializeObj[locations[this.state.location].key] = this.state.textVal;
+        url += '?' + this.serialize(serializeObj);
 
         window.location.href = url;
     },
 
     renderLocationRadioGroup: function(Radio) {
         var radios = [{
-            name: 'registry',
-            label: 'Registry'
+            name: 'remote',
+            label: 'Remote'
         }, {
             name: 'local',
-            label: 'Local Module'
+            label: 'Local'
         }];
 
         var styleRadio = function(radio, i) {
             var rLen = Object.keys(radios).length;
             return (
-                <label 
-                    className={'button-group-label ' + (this.state.location === radio.name ? 'selected' : '')} 
+                <label
+                    className={'button-group-label ' + (this.state.location === radio.name ? 'selected' : '')}
                     style={{width: i === rLen ? null : (100 * (1 / rLen)) + '%'}}
                     key={i}>
                     <Radio value={radio.name} style={styles.radioInput} />{radio.label}
                 </label>
             );
-
         };
 
         return (
@@ -102,7 +118,7 @@ var NPM = React.createClass({
                 {radios.map(styleRadio.bind(this))}
             </div>
         );
-    },    
+    },
 
     renderImportPreviewRadioGroup: function(Radio) {
         var radios = [{
@@ -116,8 +132,8 @@ var NPM = React.createClass({
         var styleRadio = function(radio, i) {
             var rLen = Object.keys(radios).length;
             return (
-                <label 
-                    className={'button-group-label ' + (this.state.importPreview === radio.name ? 'selected' : '')} 
+                <label
+                    className={'button-group-label ' + (this.state.importPreview === radio.name ? 'selected' : '')}
                     style={{width: i === rLen ? null : (100 * (1 / rLen)) + '%'}}
                     key={i}>
                     <Radio value={radio.name} style={styles.radioInput} />{radio.label}
@@ -138,7 +154,7 @@ var NPM = React.createClass({
         return (
             <div>
                 <div>
-                    Select Location: 
+                    Select Location:
                     <RadioGroup selectedValue={this.state.location} onChange={this.handleSelectLocation}>
                         {this.renderLocationRadioGroup}
                     </RadioGroup>
@@ -150,8 +166,10 @@ var NPM = React.createClass({
                     </RadioGroup>
                 </div>
                 <div>
-                    Module Name: 
-                    <input type={'text'} onChange={this.handleNameChange} value={this.state.name} />
+                    {locations[this.state.location].inputLabel}:
+                    <br/>
+                    <label><small dangerouslySetInnerHTML={{__html: locations[this.state.location].inputHelp}}></small></label>
+                    <input type={'text'} onChange={this.handleTextValChange} value={this.state.textVal} />
                 </div>
                 <div className={'button'} onClick={this.handleSubmit}>
                     Submit

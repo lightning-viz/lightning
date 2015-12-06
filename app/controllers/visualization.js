@@ -65,7 +65,7 @@ exports.getDataWithKeys = function (req, res, next) {
 };
 
 exports.getSettingsWithKeys = function (req, res, next) {
-    
+
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Headers", "X-Requested-With");
     res.set("Access-Control-Allow-Headers", "Content-Type");
@@ -124,7 +124,7 @@ exports.updateSettings = function (req, res, next) {
         .findById(vid)
         .then(function(viz) {
             if(_.isString(viz.settings)) {
-                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);    
+                viz.settings = _.extend(JSON.parse(viz.settings || '{}'), req.body);
             } else {
                 viz.settings = _.extend(viz.settings || {}, req.body);
             }
@@ -146,7 +146,7 @@ exports.updateData = function (req, res, next) {
     models.Visualization
         .findById(vizId)
         .then(function(viz) {
-            
+
             if(fieldName) {
                 viz.data[fieldName] = req.body.data;
             } else {
@@ -168,7 +168,7 @@ var readWithTemplate = function(template, req, res, next) {
     Visualization.find({
         where: {
             id: vizId
-        }, 
+        },
         include: [VisualizationType]
     }).then(function(viz) {
         res.render(template, {
@@ -205,13 +205,13 @@ exports.delete = function (req, res, next) {
         .then(function(viz) {
             if(!viz) {
                 return res.status(404).send();
-            }            
+            }
 
             var sessionId = viz.SessionId;
             viz.destroy({where: {}}).then(function() {
                 req.io.of(viz.getSessionSocketNamespace())
                     .emit('viz:delete', vizId);
-                return res.json(viz);                
+                return res.json(viz);
             }).catch(next);
         }).catch(next);
 };
@@ -256,7 +256,7 @@ exports.screenshot = function(req, res, next) {
             console.warn(err);
             return res.status(500).send();
         }
-        
+
         res.setHeader('Content-Type', 'image/png');
         renderStream.pipe(res);
     });

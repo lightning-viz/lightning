@@ -27,7 +27,6 @@ module.exports = function(sequelize, DataTypes) {
 
             enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
             imported: {type: DataTypes.BOOLEAN, defaultValue: false},
-            isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
             isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
             moduleName: {type: DataTypes.STRING},
 
@@ -37,76 +36,68 @@ module.exports = function(sequelize, DataTypes) {
             sampleOptions: DataTypes.JSON,
             codeExamples: DataTypes.JSON,
             sampleImages: DataTypes.ARRAY(DataTypes.STRING),
-
-            javascript: DataTypes.TEXT,
-            markup: DataTypes.TEXT,
-            styles: DataTypes.TEXT
         };
     } else {
         schema = {
-        'id': {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            defaultValue: DataTypes.UUIDV4,
-        },
-        name: {type: DataTypes.STRING, unique: true},
-        enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
-        imported: {type: DataTypes.BOOLEAN, defaultValue: false},
-        isModule: {type: DataTypes.BOOLEAN, defaultValue: false},
-        isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
-        moduleName: {type: DataTypes.STRING},
+          'id': {
+              type: DataTypes.UUID,
+              primaryKey: true,
+              defaultValue: DataTypes.UUIDV4,
+          },
+          name: {type: DataTypes.STRING, unique: true},
+          enabled: {type: DataTypes.BOOLEAN, defaultValue: true},
+          imported: {type: DataTypes.BOOLEAN, defaultValue: false},
+          isStreaming: {type: DataTypes.BOOLEAN, defaultValue: false},
+          moduleName: {type: DataTypes.STRING},
 
-        thumbnailLocation: DataTypes.STRING,
+          thumbnailLocation: DataTypes.STRING,
 
-        sampleData: {
-            type: DataTypes.TEXT,
-            get: function() {
-                return JSON.parse(this.getDataValue('sampleData') || '{}');
-            },
-            set: function(val) {
-                return this.setDataValue('sampleData', JSON.stringify(val));
-            }
-        },
-        sampleOptions: {
-            type: DataTypes.TEXT,
-            get: function() {
-                return JSON.parse(this.getDataValue('sampleOptions') || '{}');
-            },
-            set: function(val) {
-                return this.setDataValue('sampleOptions', JSON.stringify(val));
-            }
-        },
-        codeExamples: {
-            type: DataTypes.TEXT,
-            get: function() {
-                return JSON.parse(this.getDataValue('codeExamples') || '{}');
-            },
-            set: function(val) {
-                return this.setDataValue('codeExamples', JSON.stringify(val));
-            }
-        },
-        sampleImages: {
-            type: DataTypes.TEXT,
-            get: function() {
-                return JSON.parse(this.getDataValue('sampleImages') || '[]');
-            },
-            set: function(val) {
-                return this.setDataValue('sampleImages', JSON.stringify(val));
-            }
-        },
-        initialDataFields: {
-            type: DataTypes.TEXT,
-            get: function() {
-                return JSON.parse(this.getDataValue('initialDataFields') || '[]');
-            },
-            set: function(val) {
-                return this.setDataValue('initialDataFields', JSON.stringify(val));
-            }
-        },
-        javascript: DataTypes.TEXT,
-        markup: DataTypes.TEXT,
-        styles: DataTypes.TEXT
-    };
+          sampleData: {
+              type: DataTypes.TEXT,
+              get: function() {
+                  return JSON.parse(this.getDataValue('sampleData') || '{}');
+              },
+              set: function(val) {
+                  return this.setDataValue('sampleData', JSON.stringify(val));
+              }
+          },
+          sampleOptions: {
+              type: DataTypes.TEXT,
+              get: function() {
+                  return JSON.parse(this.getDataValue('sampleOptions') || '{}');
+              },
+              set: function(val) {
+                  return this.setDataValue('sampleOptions', JSON.stringify(val));
+              }
+          },
+          codeExamples: {
+              type: DataTypes.TEXT,
+              get: function() {
+                  return JSON.parse(this.getDataValue('codeExamples') || '{}');
+              },
+              set: function(val) {
+                  return this.setDataValue('codeExamples', JSON.stringify(val));
+              }
+          },
+          sampleImages: {
+              type: DataTypes.TEXT,
+              get: function() {
+                  return JSON.parse(this.getDataValue('sampleImages') || '[]');
+              },
+              set: function(val) {
+                  return this.setDataValue('sampleImages', JSON.stringify(val));
+              }
+          },
+          initialDataFields: {
+              type: DataTypes.TEXT,
+              get: function() {
+                  return JSON.parse(this.getDataValue('initialDataFields') || '[]');
+              },
+              set: function(val) {
+                  return this.setDataValue('initialDataFields', JSON.stringify(val));
+              }
+          }
+      };
     }
 
 
@@ -171,7 +162,6 @@ module.exports = function(sequelize, DataTypes) {
                 var vizTypeObj = {
                     name: lightningConfig.name || name,
                     isStreaming: lightningConfig.isStreaming || false,
-                    isModule: true,
                     moduleName: name,
                     sampleData: samples.data,
                     sampleOptions: samples.options,
@@ -205,180 +195,70 @@ module.exports = function(sequelize, DataTypes) {
                 return VisualizationType.create(vizTypeObj);
             },
 
-            _createLinkNPM: function(command, name, preview) {
+            _createLinkNPM: function(command, installName, moduleName, preview) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
                 npm.config.set('loglevel', 'silent');
-                return Q.nfcall(npm.commands.uninstall, [name])
+                return Q.nfcall(npm.commands.uninstall, [moduleName])
                     .then(function(results) {
-                        return Q.nfcall(command, [name]);
+                        return Q.nfcall(command, [installName]);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
-                        debug(('Successfully installed ' + name).green);
-                        return self._buildFromNPM(name, preview);
+                        debug(('Successfully installed ' + installName).green);
+                        return self._buildFromNPM(moduleName, preview);
                     });
             },
 
-            createFromNPM: function(name) {
-                return this._createLinkNPM(npm.commands.install, name, false);
+            createFromNPM: function(installName, moduleName) {
+                return this._createLinkNPM(npm.commands.install, installName, moduleName || installName, false);
             },
 
-            linkFromNPM: function(name) {
-                return this._createLinkNPM(npm.commands.install, name, true);
+            linkFromNPM: function(installName, moduleName) {
+                return this._createLinkNPM(npm.commands.install, installName, moduleName || installName, true);
             },
 
-            linkFromLocalModule: function(name) {
+            linkFromLocalModule: function(installPath, moduleName) {
                 debug('link from local module');
-                debug(name);
-                return this._createLinkNPM(npm.commands.link, name, true);
-            },
-
-
-            createFromLocalModule: function(name) {
-                return this._createLinkNPM(npm.commands.link, name, false);
-            },
-
-            createFromRepoURL: function(url, attributes, opts) {
-
-                attributes = attributes || {};
-                opts = opts || {};
-                // clone REPO, extract js, css, and html files...
-
+                var p = path.resolve(installPath);
                 var self = this;
+                var prefix = npm.prefix;
+                npm.prefix = p;
 
-                var repoPath = path.resolve(__dirname + '/../../tmp/repos/' + uuid.v4());
-
-                return Q.nfcall(fs.remove, repoPath)
-                    .then(function() {
-                        return Q.ninvoke(git, 'clone', url, repoPath);
-                    })
-                    .then(function() {
-                        return self.createFromFolder(repoPath + (opts.path ? ('/' + opts.path) : ''), attributes, opts);
-                    });
+                return Q.nfcall(npm.commands.link)
+                  .then(function() {
+                      npm.prefix = prefix;
+                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, true);
+                  })
             },
-            
 
-            createManyFromRepoURL: function(url) {
-
-                var ignoreFolders = ['.git'];
-
+            createFromLocalModule: function(installPath, moduleName) {
+                var p = path.resolve(installPath);
                 var self = this;
+                var prefix = npm.prefix;
+                npm.prefix = p;
 
-                var infoStat = function(filename, callback) {
-
-                    fs.stat(filename, function(err, stat) {
-                        stat.filename = filename;
-
-                        if(err) {
-                            callback(err);
-                        } else {
-                            callback(err, stat);
-                        }
-
-                    });
-                };
-
-                var repoPath = path.resolve(__dirname + '/../../tmp/repos/' + uuid.v4());
-
-                return Q.nfcall(fs.remove, repoPath)
-                    .then(function() {
-                        return Q.ninvoke(git, 'clone', url, repoPath);
-                    })
-                    .then(function() {
-                        return Q.nfcall(fs.readdir, repoPath);
-                    }).then(function(files) {
-                        var funcs = [];
-                        _.each(files, function(file) {
-                            if(ignoreFolders.indexOf(file) === -1) {
-                                funcs.push(Q.nfcall(infoStat, repoPath + '/' + file));
-                            }
-                        });
-
-                        return funcs;
-                    }).spread(function() {
-                        var stats = Array.prototype.slice.call(arguments, 0);
-
-                        var funcs = [];
-                        _.each(stats, function(stat) {
-                            if(stat.isDirectory()) {
-                                funcs.push(self.createFromFolder(stat.filename, {
-                                    name: stat.filename.replace(/^.*[\\\/]/, '')
-                                }));
-                            }
-                        });
-
-                        return funcs;
-                    });
-
+                return Q.nfcall(npm.commands.link)
+                  .then(function() {
+                      npm.prefix = prefix;
+                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, false);
+                  })
             },
 
-            createFromFolder: function(path, attributes, opts) {
+            moduleNameFromInstallName: function(installName) {
+                var re = new RegExp("^[^/]+/[^/]+$");
 
-                debug('Create from folder: ' + path);
+                if(re.test(installName)) {
+                    var parts = installName.split("/");
+                    return parts[parts.length - 1];
+                }
 
-                attributes = attributes || {};
-                opts = opts || {};
-                // clone REPO, extract js, css, and html files...
-
-                return Q.all([
-                    Q.nfcall(glob, path + '/*.js'),
-                    Q.nfcall(glob, path + '/*.{css,scss}'),
-                    Q.nfcall(glob, path + '/*.{html,jade}'),
-                    Q.nfcall(glob, path + '/sample-data.json'),
-                    Q.nfcall(glob, path + '/sample-images.json'),
-                    Q.nfcall(glob, path + '/package.json'),
-                ])
-                .spread(function(jsFiles, styleFiles, markupFiles, sampleDataFiles, sampleImageFiles, packageJSONFiles) {
-
-                    if(jsFiles.length > 1) {
-                        throw new Error('There can\'t be more than one javascript file');
-                    } else if(styleFiles.length > 1) {
-                        throw new Error('There can\'t be more than one style file');
-                    } else if(markupFiles.length > 1) {
-                        throw new Error('There can\'t be more than one markup file');
-                    }
-
-                    return [
-                        (jsFiles.length) ? Q.nfcall(fs.readFile, jsFiles[0]) : '',
-                        (styleFiles.length) ? Q.nfcall(fs.readFile, styleFiles[0]) : '',
-                        (markupFiles.length) ? Q.nfcall(fs.readFile, markupFiles[0]) : '',
-                        (sampleDataFiles.length) ? Q.nfcall(fs.readFile, sampleDataFiles[0]) : '[]',
-                        (sampleImageFiles.length) ? Q.nfcall(fs.readFile, sampleImageFiles[0]) : '[]',
-                        (packageJSONFiles.length) ? Q.nfcall(fs.readFile, packageJSONFiles[0]) : '[]',
-                    ];
-
-
-                }).spread(function(javascript, styles, markup, sampleData, sampleImages, packageJSON) {
-                    sampleImages = JSON.parse(sampleImages);
-                    if(!sampleImages.length) {
-                        sampleImages = null;
-                    }
-
-                    try {
-                        packageJSON = JSON.parse(packageJSON);
-                    } catch(e) {
-                        debug('Invalid package.json: ' + e.toString());
-                    }
-
-                    var vizTypeObj = _.extend(attributes, {
-                        javascript: javascript.toString('utf8'),
-                        styles: styles.toString('utf8'),
-                        markup: markup.toString('utf8'),
-                        sampleData: JSON.parse(sampleData.toString('utf8')),
-                        sampleImages: sampleImages
-                    });
-
-                    vizTypeObj = _.extend(vizTypeObj, packageJSON['lightning-viz'] || {});
-
-                    if(opts.preview) {
-                        return VisualizationType.build(vizTypeObj);
-                    }
-
-                    return VisualizationType.create(vizTypeObj);
-
-                });
+                return installName;
             },
 
+            packageObjectFromPath: function(filePath) {
+                filePath = path.resolve(filePath);
+                return Q.nfcall(fs.readJSON, filePath + '/package.json');
+            }
 
         },
 
@@ -412,15 +292,13 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 return Q.all(funcs);
             },
-            
+
             deleteAndUninstall: function() {
                 var self = this;
-                if(this.isModule) {
-                    return Q.nfcall(npm.commands.uninstall, [this.moduleName])
-                        .then(function() {
-                            return self.destroy();
-                        });
-                }
+                return Q.nfcall(npm.commands.uninstall, [this.moduleName])
+                    .then(function() {
+                        return self.destroy();
+                    });
                 return self.destroy();
             },
 
@@ -429,9 +307,9 @@ module.exports = function(sequelize, DataTypes) {
                 var name = this.moduleName;
                 var loglevel = npm.config.get('loglevel');
                 npm.config.set('loglevel', 'silent');
-                return Q.nfcall(npm.commands.uninstall, [name])
+                return exec('npm uninstall --silent ' + name)
                     .then(function(results) {
-                        return Q.nfcall(npm.commands.install, [name]);
+                        return exec('npm install --silent ' + name);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
                         debug(('Successfully updated ' + name).green);

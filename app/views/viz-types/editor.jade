@@ -1,8 +1,5 @@
 extends ../layout
 
-block dynamic-css
-    link(rel='stylesheet', href="#{STATIC_URL}css/dynamic/viz/?visualizations[]=#{vizType.name}")#viz-styles
-
 block container
 
     .editor-outer-section.wrap.push
@@ -45,4 +42,3 @@ block scripts
             codeExamples: !{JSON.stringify(vizType.codeExamples)}
         };
     script(src='#{STATIC_URL}js/editor.js')
-

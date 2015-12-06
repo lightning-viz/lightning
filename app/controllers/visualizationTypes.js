@@ -1,11 +1,9 @@
 var models = require('../models');
 var _ = require('lodash');
 var cache = require('../cache');
-var sass = require('node-sass');
 var browserify = require('browserify');
 var path = require('path');
 var uuid = require('node-uuid');
-var resumer = require('resumer');
 var tasks = require('../../tasks');
 var config = require('../../config/config');
 var Q = require('q');
@@ -27,7 +25,7 @@ exports.show = function (req, res, next) {
             order: '"name" ASC'
         })
         .then(function(types) {
-            
+
             return res.render('viz-types/show', {
                 vizTypes: types
             });
@@ -52,11 +50,8 @@ exports.refreshNPM = function(req, res, next) {
     debug('refreshing npm-based visualizations');
 
     models.VisualizationType
-        .findAll({
-            where: {
-                isModule: true
-            }
-        }).then(function(vizTypes) {
+        .findAll()
+        .then(function(vizTypes) {
             Q.all(_.map(vizTypes, function(vizType) {
                 return vizType.refreshFromNPM();
             })).spread(function() {
@@ -98,7 +93,7 @@ exports.fetchDefaults = function (req, res, next) {
 };
 
 exports.create = function (req, res, next) {
-    
+
     models.VisualizationType
         .create(_.pick(req.body, 'name', 'initialDataFields', 'isStreaming', 'javascript', 'styles', 'markup', 'sampleData', 'sampleOptions'))
         .then(function(type) {
@@ -106,7 +101,7 @@ exports.create = function (req, res, next) {
         }).catch(function(err) {
             return res.status(500).send(err);
         });
-        
+
 };
 
 exports.edit = function (req, res, next) {
@@ -123,14 +118,14 @@ exports.edit = function (req, res, next) {
                     debug(key);
                     if(key.indexOf(vizType.name) > -1) {
                         debug('deleting ' + key);
-                        cache.del(key);        
+                        cache.del(key);
                     }
                 });
             }, 0);
             return res.status(200).send();
         }).catch(function() {
             return res.status(500).send();
-        });      
+        });
 };
 
 exports.delete = function (req, res, next) {
@@ -141,13 +136,13 @@ exports.delete = function (req, res, next) {
         .findById(vizTypeId)
         .then(function(vizType) {
             vizType.deleteAndUninstall().then(function() {
-                return res.json(vizType);                
+                return res.json(vizType);
             }).catch(next);
         }).catch(next);
 };
 
 exports.getDelete = function(req, res, next) {
-    
+
     var vizTypeId = req.params.vid;
 
     models.VisualizationType
@@ -162,145 +157,62 @@ exports.getDelete = function(req, res, next) {
 };
 
 
-
-exports.preview = function(req, res, next) {
-
-    var tmpPath = path.resolve(__dirname + '/../../tmp/js-build/' + uuid.v4() + '/');
-    req.session.lastBundlePath = tmpPath;
-
-    var vizTypePromise, name;
-
-    if(req.query.url) {
-        var url = req.query.url;
-        name = url;
-        if(req.query.path) {
-            name += '/' + req.query.path;
-        }
-
-        name = req.query.name || /[^/]*$/.exec(name)[0];
-
-        vizTypePromise = models.VisualizationType
-            .createFromRepoURL(url, { name: name }, {preview: true, path: req.query.path});
-    } else if(req.query.path && process.env.NODE_ENV !== 'production') {
-        var p = path.resolve(req.query.path);
-        name = req.query.name || /[^/]*$/.exec(p)[0];
-
-        vizTypePromise = models.VisualizationType
-            .createFromFolder(p, { name: name}, {preview: true});
-    }
-
-    vizTypePromise
-        .then(function(vizType) {
-
-            debug('created viz preview');
-
-            vizType.exportToFS(tmpPath)
-                .spread(function() {
-                    var b = browserify({
-                        paths: [ config.root + '/node_modules']
-                    });
-                    if(vizType.isModule) {
-                        b.require(vizType.moduleName, {
-                            expose: vizType.moduleName
-                        });
-                    } else {
-                        var stream = resumer().queue(vizType.javascript).end();
-                        b.require(stream, {
-                            basedir: tmpPath,
-                            expose: vizType.name
-                        });
-                    }
-
-                    b.bundle(function(err, buf) {
-
-                        if(err) {
-                            return next(err);
-                        }               
-
-                        var javascript = buf.toString('utf8');
-                        var scssData = '#lightning-body {\n';
-                        if(vizType.styles) {
-                            scssData += vizType.styles + '\n';
-                        }
-                        scssData += '\n}';
-                        sass.render({
-                            data: scssData,
-                            success: function(sassResults) {
-                                if(req.url.indexOf('/preview/full') > -1) {
-                                    return res.render('viz-types/full-preview', {
-                                        vizType: vizType,
-                                        javascript: javascript,
-                                        css: sassResults.css,
-                                        path: path.resolve(req.query.path || ''),
-                                        url: req.query.url,
-                                        source: req.query.url ? 'gitRepo' : 'localFolder'
-                                    });
-                                }
-                                return res.render('viz-types/preview-editor', {
-                                    vizType: vizType,
-                                    javascript: javascript,
-                                    css: sassResults.css,
-                                    path: path.resolve(req.query.path || ''),
-                                    url: req.query.url,
-                                    source: req.query.url ? 'gitRepo' : 'localFolder'
-                                });
-                            }
-                        });
-                    });
-                });
-
-        }).fail(function(err) {
-            next(err);
-        });
-
-};
-
 exports.previewNPM = function(req, res, next) {
 
     var location = req.params.location;
-    var name = req.query.name;
+    var installVal = req.query.name || req.query.path;
+    var linker, getModuleName;
+    if(location === 'remote') {
+        linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
+        moduleNameGetter = models.VisualizationType.moduleNameFromInstallName;
+        getModuleName = function() {
+          return models.VisualizationType.moduleNameFromInstallName(installVal);
+        }
+    } else if(location === 'local') {
+        linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
+        getModuleName = function() {
+          return models.VisualizationType
+            .packageObjectFromPath(installVal)
+            .then(function(packageObj) {
+              return packageObj.name;
+            })
+        }
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    debug('requested to link module: ' + name);
-
-    models.VisualizationType
-        .findAll({
-            where: {
-                moduleName: name
-            }
-        }).then(function(visualizations) {
+    var moduleName;
+    Q.fcall(getModuleName)
+        .then(function(mn) {
+            moduleName = mn;
+            debug(installVal + ' : ' + moduleName);
+            debug('requested to link module: ' + installVal);
+            return models.VisualizationType
+                .findAll({
+                    where: {
+                        moduleName: moduleName
+                    }
+                })
+        })
+        .then(function(visualizations) {
             if(visualizations && visualizations.length) {
-                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to preview ' + name);
+                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to preview ' + installName);
             }
-
-            var linker;
-            if(location === 'registry') {
-                linker = models.VisualizationType.linkFromNPM.bind(models.VisualizationType);
-            } else if(location === 'local') {
-                linker = models.VisualizationType.linkFromLocalModule.bind(models.VisualizationType);
-            } else {
-                return res.status(500).send('Invalid location.').end();
-            }
-
-            return linker(name);
+            return linker(installVal, moduleName);
         }).then(function(vizType) {
             var b = browserify({
                 paths: [ config.root + '/node_modules']
             });
-            b.require(name);
-
+            b.require(moduleName);
             b.bundle(function(err, buf) {
-
                 if(err) {
                     debug(err);
                     return res.status(500).end();
                 }
 
-                var javascript = buf.toString('utf8');
-
                 return res.render('viz-types/preview-editor', {
                     vizType: vizType,
-                    javascript: javascript,
-                    css: '',
+                    javascript: buf.toString('utf8'),
                     location: location,
                     source: 'npm'
                 });
@@ -313,29 +225,44 @@ exports.previewNPM = function(req, res, next) {
 exports.importNPM = function(req, res, next) {
 
     var location = req.params.location;
-    var name = req.query.name;
+    var installVal = req.query.name || req.query.path;
+    var creator, getModuleName;
+    if(location === 'remote') {
+        creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
+        moduleNameGetter = models.VisualizationType.moduleNameFromInstallName;
+        getModuleName = function() {
+          return models.VisualizationType.moduleNameFromInstallName(installVal);
+        }
+    } else if(location === 'local') {
+        creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
+        getModuleName = function() {
+          return models.VisualizationType
+            .packageObjectFromPath(installVal)
+            .then(function(packageObj) {
+              return packageObj.name;
+            })
+        }
+    } else {
+        return res.status(500).send('Invalid location.').end();
+    }
 
-    debug('requested to link module: ' + name);
-
-    models.VisualizationType
-        .findAll({
-            where: {
-                moduleName: name
-            }
+    var moduleName;
+    Q.fcall(getModuleName)
+        .then(function(mn) {
+            moduleName = mn;
+            debug(installVal + ' : ' + moduleName);
+            debug('requested to link module: ' + installVal);
+            return models.VisualizationType
+                .findAll({
+                    where: {
+                        moduleName: moduleName
+                    }
+                })
         }).then(function(visualizations) {
             if(visualizations && visualizations.length) {
-                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to install ' + name);
+                throw new Error('Please delete the installed ' + visualizations[0].name + ' visualization before trying to install ' + installVal);
             }
-            var creator;
-            if(location === 'registry') {
-                creator = models.VisualizationType.createFromNPM.bind(models.VisualizationType);
-            } else if(location === 'local') {
-                creator = models.VisualizationType.createFromLocalModule.bind(models.VisualizationType);
-            } else {
-                return res.status(500).send('Invalid location.').end();
-            }
-
-            return creator(name);
+            return creator(installVal, moduleName);
         }).then(function(vizType) {
             return res.redirect('/visualization-types/edit/' + vizType.id);
         }).catch(function(err) {
@@ -343,33 +270,10 @@ exports.importNPM = function(req, res, next) {
         });
 };
 
-exports.importViz = function(req, res, next) {
-
-    var name = req.body.name  || req.query.name;
-    var url = req.body.url || req.query.url;
-    var path = req.body.path || req.query.path;
-
-    var createPromise;
-    if(url) {
-        createPromise = models.VisualizationType.createFromRepoURL(url, {name: name});
-    } else if(path) {
-        createPromise = models.VisualizationType.createFromFolder(path, {name: name}, {preview: false});
-    } else {
-        return res.status(500).send('Invalid location.').end();
-    }
-
-    createPromise
-        .then(function(viz) {
-            return res.redirect('/visualization-types/edit/' + viz.id);
-        }).fail(function(err) {
-            next(err);
-        });
-};
 
 exports.advanced = function (req, res, next) {
     return res.render('viz-types/advanced', {});
 };
-
 
 exports.editor = function (req, res, next) {
 
@@ -385,12 +289,12 @@ exports.editor = function (req, res, next) {
 
 exports.thumbnail = function (req, res, next) {
 
-    models.VisualizationType.findById(req.params.vid)
+    return models.VisualizationType.findById(req.params.vid)
         .then(function(type) {
             if(type.thumbnailLocation) {
                 return res.sendFile(type.thumbnailLocation);
             }
-            
+
             return res.status(404).send('no thumbnail found').end();
 
         }).catch(next);
@@ -398,23 +302,16 @@ exports.thumbnail = function (req, res, next) {
 
 
 
-
 exports.importPreviewHandler = function(req, res, next) {
     var method = req.params.method;
     var importPreview = req.params.importPreview;
 
-    if(method === 'npm') {
-        if(importPreview === 'import') {
-            return exports.importNPM(req, res, next);
-        } else {
-            return exports.previewNPM(req, res, next);
-        }
-    } else if(method === 'git' || method === 'local') {
-        if(importPreview === 'import') {
-            return exports.importViz(req, res, next);
-        } else {
-            return exports.preview(req, res, next);
-        }
+    debug('preview');
+    if(importPreview === 'import') {
+        debug('import npm');
+        return exports.importNPM(req, res, next);
+    } else {
+        debug('preview npm');
+        return exports.previewNPM(req, res, next);
     }
-
 };
