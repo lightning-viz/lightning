@@ -34,7 +34,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon server.js --watch server.js ",
     "electron": "electron electron/",
-    "test": "mocha --timeout 20000",
+    "test": "mocha --timeout 200000",
     "build": "gulp build",
     "watch": "gulp",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
