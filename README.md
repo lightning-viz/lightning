@@ -32,7 +32,7 @@ $ npm start
 ### host a server
 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/tree/v0.2.2)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/tree/v1.1.0)
 
 
 ## client libraries
@@ -67,4 +67,3 @@ http://lightning-viz.github.io/visualizations/
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lightning-viz/lightning?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 We maintain a chatroom on gitter. If there's no response there: file an issue or reach out on twitter  [@lightningviz](https://twitter.com/lightningviz)
-
