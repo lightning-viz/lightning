@@ -259,9 +259,9 @@ exports.screenshot = function(req, res, next) {
         renderDelay: 500,
     };
 
-    if(process.env.PHANTOM_PATH) {
-      opts.phantomPath = process.env.PHANTOM_PATH;
-    }
+    // if(process.env.PHANTOM_PATH) {
+    //   opts.phantomPath = process.env.PHANTOM_PATH;
+    // }
 
     webshot(url, opts, function(err, renderStream) {
 
