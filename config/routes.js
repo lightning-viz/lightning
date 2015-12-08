@@ -52,7 +52,7 @@ module.exports = function (app) {
 
     app.get('/visualization-types/edit/:vid', authMiddleware, visualizationTypes.editor);
     app.get('/visualization-types/load/:importPreview/:location', authMiddleware, visualizationTypes.importPreviewHandler);
-    app.get('/visualization-types/:vizName.json', authMiddleware, visualizationTypes.json);
+    app.get('/visualization-types/:vizName.json', visualizationTypes.json);
 
     app.get('/visualization-types/:vid/thumbnail', authMiddleware, visualizationTypes.thumbnail);
 
