@@ -207,7 +207,7 @@ exports.previewNPM = function(req, res, next) {
             b.bundle(function(err, buf) {
                 if(err) {
                     debug(err);
-                    return res.status(500).end();
+                    return res.status(500).send(err.message).end();
                 }
 
                 return res.render('viz-types/preview-editor', {
