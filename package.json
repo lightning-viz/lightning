@@ -32,14 +32,15 @@
     "url": "https://github.com/lightning-viz/lightning"
   },
   "scripts": {
-    "start": "NODE_ENV=development nodemon server.js --watch server.js ",
+    "start": "node bin/lightning-server.js",
+    "dev": "NODE_ENV=development nodemon server.js --watch server.js ",
     "electron": "electron electron/",
     "test": "mocha --timeout 200000",
     "build": "gulp build",
     "watch": "gulp",
     "migrate": "./node_modules/.bin/sequelize db:migrate --config ./config/database.js",
     "createdb": "psql -c 'create database \"lightning-viz\";'",
-    "postinstall": "npm run build && npm run fetch-visualizations",
+    "postinstall": "npm run fetch-visualizations",
     "electron-rebuild": "npm run rebuild-sqlite3;",
     "rebuild-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v44-darwin-x64 && node-gyp rebuild --target=0.35.4 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v44-darwin-x64",
     "fetch-visualizations": "node ./tasks/get_default_visualizations.js",
