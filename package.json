@@ -9,7 +9,7 @@
   "window": {
     "toolbar": true
   },
-  "main": "electron/index.js",
+  "main": "server.js",
   "keywords": [
     "lightning",
     "data visualization",
