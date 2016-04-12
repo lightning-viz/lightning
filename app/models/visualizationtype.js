@@ -9,6 +9,7 @@ var isPostgres = dbConfig.dialect === 'postgres';
 var config = require(__dirname + '/../../config/config');
 var npm = require('npm');
 var utils = require('../utils');
+var exec = require('child-process-promise').exec;
 var debug = require('debug')('lightning:server:models:visualization-types');
 
 module.exports = function(sequelize, DataTypes) {
