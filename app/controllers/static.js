@@ -16,7 +16,6 @@ exports.getDynamicVizBundle = function (req, res, next) {
 
     // Get all vizTypes in array
     var visualizationTypes = _.uniq(req.query.visualizations).sort();
-
     var cacheHit = false;
 
     if(!req.query.cachemiss) {
