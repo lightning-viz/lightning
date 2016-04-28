@@ -163,7 +163,7 @@ exports.getCreate = function(req, res, next) {
         .then(function(session) {
             req.io.of(session.getSocketNamespace())
                 .emit('init');
-            return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');    
+            return res.redirect(config.baseURL + 'sessions/' + session.id + '/feed/');
         }).catch(next);
 };
 
@@ -174,7 +174,7 @@ exports.delete = function(req, res, next) {
         .findById(sessionId)
         .then(function(session) {
             session.destroy({where: {}}).then(function() {
-                return res.json(session);                
+                return res.json(session);
             }).catch(next);
         }).catch(next);
 };
@@ -182,7 +182,7 @@ exports.delete = function(req, res, next) {
 
 
 exports.getDelete = function(req, res, next) {
-    
+
     var sessionId = req.params.sid;
 
     models.Session
@@ -223,11 +223,11 @@ exports.addData = function (req, res, next) {
             var jsonViz = viz.toJSON();
             jsonViz.visualizationType = _.pick(vt.toJSON(), 'name', 'moduleName', 'initialDataFields', 'isStreaming', 'id');
             req.io.of(viz.getSessionSocketNamespace())
-                .emit('viz', jsonViz);  
+                .emit('viz', jsonViz);
             return res.json(jsonViz);
         }).catch(function(err) {
             if(err.message && err.message === 'Unknown Viztype') {
-                return res.status(404).send('Could not find viz type ' + req.body.type);    
+                return res.status(404).send('Could not find viz type ' + req.body.type);
             }
             return next(err);
         });
@@ -247,10 +247,10 @@ exports.addData = function (req, res, next) {
                     var type = 'image';
                     if(fields.type) {
                         if(_.isArray(fields.type) || _.isObject(fields.type)) {
-                            type = fields.type[0];    
+                            type = fields.type[0];
                         } else {
                             type = fields.type;
-                        }                        
+                        }
                     }
 
                     models.VisualizationType.find({
@@ -273,11 +273,11 @@ exports.addData = function (req, res, next) {
                         var jsonViz = viz.toJSON();
                         jsonViz.visualizationType = vt;
                         req.io.of(viz.getSessionSocketNamespace())
-                            .emit('viz', jsonViz);  
+                            .emit('viz', jsonViz);
                         return res.json(jsonViz);
                     }).catch(function(err) {
                         if(err.message && err.message === 'Unknown Viztype') {
-                            return res.status(404).send('Could not find viz type ' + type);    
+                            return res.status(404).send('Could not find viz type ' + type);
                         }
                         return next(err);
                     });
@@ -294,16 +294,16 @@ exports.appendData = function (req, res, next) {
     var vizId = req.params.vid;
     var fieldName = req.params.field;
     var VisualizationType = models.VisualizationType;
+    debug(req.params);
 
     models.Visualization
         .find({
             where: {
                 id: vizId
-            }, 
+            },
             include: [VisualizationType]
         }).then(function(viz) {
             if(req.is('json')) {
-
                 if(fieldName) {
 
                     if(_.isArray(viz.data[fieldName])) {
@@ -326,6 +326,8 @@ exports.appendData = function (req, res, next) {
                         debug('unknown field');
                     }
                 } else {
+                    // debug(viz.data);
+                    debug(req.body.data);
                     if(_.isArray(viz.data)) {
                         if(_.isArray(req.body.data)) {
 
@@ -356,9 +358,10 @@ exports.appendData = function (req, res, next) {
                         return res.json(viz);
                     }).catch(next);
 
+                console.log(viz.getSessionSocketNamespace());
                 req.io.of(viz.getSessionSocketNamespace())
                     .emit('append', {
-                        vizId: viz.id, 
+                        vizId: viz.id,
                         data: req.body.data
                     });
 
@@ -399,7 +402,7 @@ exports.appendData = function (req, res, next) {
 
                             req.io.of(viz.getSessionSocketNamespace())
                                 .emit('append', {
-                                    vizId: viz.id, 
+                                    vizId: viz.id,
                                     data: imgData
                                 });
 
@@ -440,10 +443,10 @@ exports.updateData = function (req, res, next) {
 
                 req.io.of(viz.getSessionSocketNamespace())
                     .emit('update', {
-                        vizId: viz.id, 
+                        vizId: viz.id,
                         data: req.body.data
                     });
-            
+
             } else if(fieldName === 'images') {
 
                 var form = new multiparty.Form();
@@ -460,7 +463,7 @@ exports.updateData = function (req, res, next) {
                             var s3Response = data.response;
 
                             viz.images = [imgData];
-                            
+
                             viz
                                 .save()
                                 .then(function() {
@@ -475,7 +478,7 @@ exports.updateData = function (req, res, next) {
 
                             req.io.of(viz.getSessionSocketNamespace())
                                 .emit('update', {
-                                    vizId: viz.id, 
+                                    vizId: viz.id,
                                     data: imgData
                                 });
 
@@ -599,7 +602,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                                 response: s3Response,
                                 imgData: imgData
                             });
-                            
+
                         });
                     } else {
 
@@ -654,7 +657,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                         response: s3Response,
                         imgData: imgData
                     });
-                    
+
                 });
             } else {
 
@@ -664,7 +667,7 @@ var thumbnailAndUpload = function(f, sessionId, callback) {
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + originalS3Path);
                         debug(outpath);
-                        fs.copy(imgPath, outpath, callback);        
+                        fs.copy(imgPath, outpath, callback);
                     },
                     function(callback) {
                         var outpath = path.resolve(__dirname + '../../../public/images/uploads' + thumbnailS3Path);

@@ -22,3 +22,18 @@ setTimeout(function() {
     $('.feed-container').animate({opacity: 1});
 
 }, 0);
+
+
+
+var socket;
+var io = window.io || false
+
+if(io) {
+    var namespace = utils.getNamespaceForSession(sid);
+    debug('connecting to ' + namespace);
+    socket = io.connect(namespace);
+} else {
+    socket = {
+        on: function(){}
+    }
+}
