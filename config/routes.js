@@ -70,11 +70,11 @@ module.exports = function (app) {
     app.get('/sessions/:sid/feed', session.feed);
 
     app.put('/sessions/:sid', session.update);
-    app.put('/visualizations/:vid', visualization.update);
+    // app.put('/visualizations/:vid', authMiddleware, visualization.update);
 
     app.post('/sessions', session.create);
     app.post('/sessions/:sid/visualizations', session.addData);
-    app.get('/visualizations/:vid', visualization.read);
+    // app.get('/visualizations/:vid', authMiddleware, visualization.read);
     // app.delete('/visualizations/:vid', authMiddleware, visualization.delete);
     // app.get('/visualizations/:vid/delete', authMiddleware, visualization.getDelete);
     app.get('/visualizations/:vid/embed', visualization.embed);
@@ -87,17 +87,17 @@ module.exports = function (app) {
 
 
     // public / userland stuff
-    app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
+    // app.get('/sessions/:sid/visualizations/:vid/data', visualization.getData);
     app.get('/sessions/:sid/visualizations/:vid/settings', visualization.getSettings);
     app.put('/visualizations/:vid/settings', visualization.updateSettings);
     app.post('/visualizations/:vid/settings', visualization.updateSettings);
     app.get('/visualizations/:vid/settings', visualization.getSettings);
-    app.get('/visualizations/:vid/data', visualization.getData);
+    // app.get('/visualizations/:vid/data', visualization.getData);
     app.get(/^\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
     app.get(/^\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getDataWithKeys);
     app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/data\/([^ ]+)/, visualization.getDataWithKeys);
     app.get(/^\/sessions\/\d+\/visualizations\/(\d+)\/settings\/([^ ]+)/, visualization.getSettingsWithKeys);
-    app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
+    // app.post('/sessions/:sid/visualizations/:vid/images', session.addImage);
 
     app.use(function (err, req, res, next) {
         // treat as 404
