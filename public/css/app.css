@@ -1,0 +1,1997 @@
+@charset "UTF-8";
+body {
+  margin: 0; }
+
+#lightning-body {
+  /*
+* Skeleton V1.2
+* Copyright 2011, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 6/20/2012
+*/
+  /* Table of Contents
+==================================================
+    #Base 960 Grid
+    #Tablet (Portrait)
+    #Mobile (Portrait)
+    #Mobile (Landscape)
+    #Clearing */
+  /* #Base 960 Grid
+================================================== */
+  /* Nested Column Classes */
+  /* Base Grid */
+  /* Offsets */
+  /* #Tablet (Portrait)
+================================================== */
+  /* Note: Design for a width of 768px */
+  /*  #Mobile (Portrait)
+================================================== */
+  /* Note: Design for a width of 320px */
+  /* #Mobile (Landscape)
+================================================== */
+  /* Note: Design for a width of 480px */
+  /* #Clearing
+================================================== */
+  /* Self Clearing Goodness */
+  /* Use clearfix class on parent to clear nested columns,
+    or wrap each row of columns in a <div class="row"> */
+  /* You can also use a <br class="clear" /> to clear columns */
+  max-width: 100%;
+  font-family: 'Open Sans', sans-serif;
+  /**
+ * GitHub Gist Theme
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+  /* BASICS */
+  /* PADDING */
+  /* GUTTER */
+  /* CURSOR */
+  /* Shown when moving in bi-directional text */
+  /* Can style cursor different in overwrite (non-insert) mode */
+  /* DEFAULT THEME */
+  /* Default styles for common addons */
+  /* STOP */
+  /* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+  /* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actuall scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+  /* IE7 hack to prevent it from returning funny offsetTops on the spans */
+  /* Used to force a border model for a node */
+  /* Help users use markselection to safely style text background */
+  /*
+Solarized theme for code-mirror
+http://ethanschoonover.com/solarized
+*/
+  /*
+Solarized color pallet
+http://ethanschoonover.com/solarized/img/solarized-palette.png
+*/
+  /* Color scheme for code-mirror */
+  /* Editor styling */
+  /* Little shadow on the view-port of the buffer view */
+  /* Gutter border and some shadow from it  */
+  /* Gutter colors and line number styling based of color scheme (dark / light) */
+  /* Dark */
+  /* Light */
+  /* Common */
+  /*
+Active line. Negative margin compensates left padding of the text in the
+view-port
+*/
+  /*
+ * Dropit v1.1.0
+ * http://dev7studios.com/dropit
+ *
+ * Copyright 2012, Dev7studios
+ * Free to use and abuse under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+  /* These styles assume you are using ul and li */
+  /* Hide before plugin loads */
+  /* Creates a small triangle extender for the tooltip */
+  /* Northward tooltips */
+  /* Eastward tooltips */
+  /* Southward tooltips */
+  /* Westward tooltips */ }
+  #lightning-body .container {
+    position: relative;
+    width: 960px;
+    margin: 0 auto;
+    padding: 0; }
+  #lightning-body .container .column,
+  #lightning-body .container .columns {
+    float: left;
+    display: inline;
+    margin-left: 10px;
+    margin-right: 10px; }
+  #lightning-body .row {
+    margin-bottom: 20px; }
+  #lightning-body .column.alpha, #lightning-body .columns.alpha {
+    margin-left: 0; }
+  #lightning-body .column.omega, #lightning-body .columns.omega {
+    margin-right: 0; }
+  #lightning-body .container .one.column,
+  #lightning-body .container .one.columns {
+    width: 40px; }
+  #lightning-body .container .two.columns {
+    width: 100px; }
+  #lightning-body .container .three.columns {
+    width: 160px; }
+  #lightning-body .container .four.columns {
+    width: 220px; }
+  #lightning-body .container .five.columns {
+    width: 280px; }
+  #lightning-body .container .six.columns {
+    width: 340px; }
+  #lightning-body .container .seven.columns {
+    width: 400px; }
+  #lightning-body .container .eight.columns {
+    width: 460px; }
+  #lightning-body .container .nine.columns {
+    width: 520px; }
+  #lightning-body .container .ten.columns {
+    width: 580px; }
+  #lightning-body .container .eleven.columns {
+    width: 640px; }
+  #lightning-body .container .twelve.columns {
+    width: 700px; }
+  #lightning-body .container .thirteen.columns {
+    width: 760px; }
+  #lightning-body .container .fourteen.columns {
+    width: 820px; }
+  #lightning-body .container .fifteen.columns {
+    width: 880px; }
+  #lightning-body .container .sixteen.columns {
+    width: 940px; }
+  #lightning-body .container .one-third.column {
+    width: 300px; }
+  #lightning-body .container .two-thirds.column {
+    width: 620px; }
+  #lightning-body .container .offset-by-one {
+    padding-left: 60px; }
+  #lightning-body .container .offset-by-two {
+    padding-left: 120px; }
+  #lightning-body .container .offset-by-three {
+    padding-left: 180px; }
+  #lightning-body .container .offset-by-four {
+    padding-left: 240px; }
+  #lightning-body .container .offset-by-five {
+    padding-left: 300px; }
+  #lightning-body .container .offset-by-six {
+    padding-left: 360px; }
+  #lightning-body .container .offset-by-seven {
+    padding-left: 420px; }
+  #lightning-body .container .offset-by-eight {
+    padding-left: 480px; }
+  #lightning-body .container .offset-by-nine {
+    padding-left: 540px; }
+  #lightning-body .container .offset-by-ten {
+    padding-left: 600px; }
+  #lightning-body .container .offset-by-eleven {
+    padding-left: 660px; }
+  #lightning-body .container .offset-by-twelve {
+    padding-left: 720px; }
+  #lightning-body .container .offset-by-thirteen {
+    padding-left: 780px; }
+  #lightning-body .container .offset-by-fourteen {
+    padding-left: 840px; }
+  #lightning-body .container .offset-by-fifteen {
+    padding-left: 900px; }
+  @media only screen and (min-width: 768px) and (max-width: 959px) {
+    #lightning-body {
+      /* Offsets */ }
+      #lightning-body .container {
+        width: 768px; }
+      #lightning-body .container .column,
+      #lightning-body .container .columns {
+        margin-left: 0;
+        margin-right: 10px; }
+      #lightning-body .column.alpha, #lightning-body .columns.alpha {
+        margin-left: 0;
+        margin-right: 10px; }
+      #lightning-body .column.omega, #lightning-body .columns.omega {
+        margin-right: 0;
+        margin-left: 10px; }
+      #lightning-body .alpha.omega {
+        margin-left: 0;
+        margin-right: 0; }
+      #lightning-body .container .one.column,
+      #lightning-body .container .one.columns {
+        width: 28px; }
+      #lightning-body .container .two.columns {
+        width: 76px; }
+      #lightning-body .container .three.columns {
+        width: 124px; }
+      #lightning-body .container .four.columns {
+        width: 172px; }
+      #lightning-body .container .five.columns {
+        width: 220px; }
+      #lightning-body .container .six.columns {
+        width: 268px; }
+      #lightning-body .container .seven.columns {
+        width: 316px; }
+      #lightning-body .container .eight.columns {
+        width: 364px; }
+      #lightning-body .container .nine.columns {
+        width: 412px; }
+      #lightning-body .container .ten.columns {
+        width: 460px; }
+      #lightning-body .container .eleven.columns {
+        width: 508px; }
+      #lightning-body .container .twelve.columns {
+        width: 556px; }
+      #lightning-body .container .thirteen.columns {
+        width: 604px; }
+      #lightning-body .container .fourteen.columns {
+        width: 652px; }
+      #lightning-body .container .fifteen.columns {
+        width: 700px; }
+      #lightning-body .container .sixteen.columns {
+        width: 748px; }
+      #lightning-body .container .one-third.column {
+        width: 236px; }
+      #lightning-body .container .two-thirds.column {
+        width: 492px; }
+      #lightning-body .container .offset-by-one {
+        padding-left: 48px; }
+      #lightning-body .container .offset-by-two {
+        padding-left: 96px; }
+      #lightning-body .container .offset-by-three {
+        padding-left: 144px; }
+      #lightning-body .container .offset-by-four {
+        padding-left: 192px; }
+      #lightning-body .container .offset-by-five {
+        padding-left: 240px; }
+      #lightning-body .container .offset-by-six {
+        padding-left: 288px; }
+      #lightning-body .container .offset-by-seven {
+        padding-left: 336px; }
+      #lightning-body .container .offset-by-eight {
+        padding-left: 384px; }
+      #lightning-body .container .offset-by-nine {
+        padding-left: 432px; }
+      #lightning-body .container .offset-by-ten {
+        padding-left: 480px; }
+      #lightning-body .container .offset-by-eleven {
+        padding-left: 528px; }
+      #lightning-body .container .offset-by-twelve {
+        padding-left: 576px; }
+      #lightning-body .container .offset-by-thirteen {
+        padding-left: 624px; }
+      #lightning-body .container .offset-by-fourteen {
+        padding-left: 672px; }
+      #lightning-body .container .offset-by-fifteen {
+        padding-left: 720px; } }
+  @media only screen and (max-width: 767px) {
+    #lightning-body {
+      /* Offsets */ }
+      #lightning-body .container {
+        width: 300px; }
+      #lightning-body .container .columns,
+      #lightning-body .container .column {
+        margin: 0; }
+      #lightning-body .container .one.column,
+      #lightning-body .container .one.columns,
+      #lightning-body .container .two.columns,
+      #lightning-body .container .three.columns,
+      #lightning-body .container .four.columns,
+      #lightning-body .container .five.columns,
+      #lightning-body .container .six.columns,
+      #lightning-body .container .seven.columns,
+      #lightning-body .container .eight.columns,
+      #lightning-body .container .nine.columns,
+      #lightning-body .container .ten.columns,
+      #lightning-body .container .eleven.columns,
+      #lightning-body .container .twelve.columns,
+      #lightning-body .container .thirteen.columns,
+      #lightning-body .container .fourteen.columns,
+      #lightning-body .container .fifteen.columns,
+      #lightning-body .container .sixteen.columns,
+      #lightning-body .container .one-third.column,
+      #lightning-body .container .two-thirds.column {
+        width: 300px; }
+      #lightning-body .container .offset-by-one,
+      #lightning-body .container .offset-by-two,
+      #lightning-body .container .offset-by-three,
+      #lightning-body .container .offset-by-four,
+      #lightning-body .container .offset-by-five,
+      #lightning-body .container .offset-by-six,
+      #lightning-body .container .offset-by-seven,
+      #lightning-body .container .offset-by-eight,
+      #lightning-body .container .offset-by-nine,
+      #lightning-body .container .offset-by-ten,
+      #lightning-body .container .offset-by-eleven,
+      #lightning-body .container .offset-by-twelve,
+      #lightning-body .container .offset-by-thirteen,
+      #lightning-body .container .offset-by-fourteen,
+      #lightning-body .container .offset-by-fifteen {
+        padding-left: 0; } }
+  @media only screen and (min-width: 480px) and (max-width: 767px) {
+    #lightning-body .container {
+      width: 420px; }
+    #lightning-body .container .columns,
+    #lightning-body .container .column {
+      margin: 0; }
+    #lightning-body .container .one.column,
+    #lightning-body .container .one.columns,
+    #lightning-body .container .two.columns,
+    #lightning-body .container .three.columns,
+    #lightning-body .container .four.columns,
+    #lightning-body .container .five.columns,
+    #lightning-body .container .six.columns,
+    #lightning-body .container .seven.columns,
+    #lightning-body .container .eight.columns,
+    #lightning-body .container .nine.columns,
+    #lightning-body .container .ten.columns,
+    #lightning-body .container .eleven.columns,
+    #lightning-body .container .twelve.columns,
+    #lightning-body .container .thirteen.columns,
+    #lightning-body .container .fourteen.columns,
+    #lightning-body .container .fifteen.columns,
+    #lightning-body .container .sixteen.columns,
+    #lightning-body .container .one-third.column,
+    #lightning-body .container .two-thirds.column {
+      width: 420px; } }
+  #lightning-body .container:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  #lightning-body .clearfix:before,
+  #lightning-body .clearfix:after,
+  #lightning-body .row:before,
+  #lightning-body .row:after {
+    content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0; }
+  #lightning-body .row:after,
+  #lightning-body .clearfix:after {
+    clear: both; }
+  #lightning-body .row,
+  #lightning-body .clearfix {
+    zoom: 1; }
+  #lightning-body .clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0; }
+  #lightning-body input[type="text"],
+  #lightning-body input[type="password"],
+  #lightning-body input[type="email"],
+  #lightning-body textarea,
+  #lightning-body select {
+    border: 1px solid #ccc;
+    padding: 6px 4px;
+    outline: none;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #777;
+    margin: 0;
+    width: 210px;
+    max-width: 100%;
+    display: block;
+    margin-bottom: 20px;
+    background: #fff; }
+  #lightning-body select {
+    padding: 0; }
+  #lightning-body .modal {
+    display: none;
+    min-width: 400px;
+    background: #fff;
+    padding: 15px 30px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -o-border-radius: 8px;
+    -ms-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 0 10px #000;
+    -moz-box-shadow: 0 0 10px #000;
+    -o-box-shadow: 0 0 10px #000;
+    -ms-box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px #000; }
+  #lightning-body .modal a.close-modal {
+    position: absolute;
+    top: -12.5px;
+    right: -12.5px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-indent: -9999px;
+    background: url(/images/close.png) no-repeat 0 0; }
+  #lightning-body .modal-spinner {
+    display: none;
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-right: -32px;
+    margin-top: -32px;
+    background: url(spinner.gif) #111 no-repeat center center;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -o-border-radius: 8px;
+    -ms-border-radius: 8px;
+    border-radius: 8px; }
+  #lightning-body .panel {
+    position: fixed;
+    left: -12.625em;
+    /*left or right and the width of your navigation panel*/
+    width: 16.625em;
+    /*should match the above value*/
+    background-color: #626c7c;
+    z-index: 10; }
+    #lightning-body .panel .button-container {
+      width: 12.625em;
+      float: left; }
+      #lightning-body .panel .button-container a {
+        font-family: 'Open Sans', sans-serif;
+        display: block;
+        padding: 1em;
+        color: white;
+        text-decoration: none; }
+        #lightning-body .panel .button-container a:hover {
+          color: black;
+          background-color: #cfd8e0; }
+    #lightning-body .panel .side-color {
+      position: relative;
+      height: 100%;
+      /* width: 33%; */
+      background: #424b58;
+      width: 4.0em;
+      float: right;
+      text-align: center;
+      cursor: pointer; }
+    #lightning-body .panel .logo {
+      padding-top: 10px; }
+      #lightning-body .panel .logo img {
+        width: 80%; }
+  #lightning-body .wrap {
+    position: relative; }
+  #lightning-body .left {
+    float: left; }
+  #lightning-body .right {
+    float: right; }
+  #lightning-body .loading {
+    text-align: center; }
+  #lightning-body .viz-container {
+    position: relative; }
+    #lightning-body .viz-container .loading {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0; }
+  #lightning-body .full-width {
+    width: 100%; }
+  #lightning-body .fixed {
+    position: fixed; }
+  #lightning-body .hljs {
+    display: block;
+    background: white;
+    padding: 0.5em;
+    color: #333333;
+    overflow-x: auto;
+    -webkit-text-size-adjust: none; }
+  #lightning-body .hljs-comment,
+  #lightning-body .bash .hljs-shebang,
+  #lightning-body .java .hljs-javadoc,
+  #lightning-body .javascript .hljs-javadoc,
+  #lightning-body .rust .hljs-preprocessor {
+    color: #969896; }
+  #lightning-body .hljs-string,
+  #lightning-body .apache .hljs-sqbracket,
+  #lightning-body .coffeescript .hljs-subst,
+  #lightning-body .coffeescript .hljs-regexp,
+  #lightning-body .cpp .hljs-preprocessor,
+  #lightning-body .c .hljs-preprocessor,
+  #lightning-body .javascript .hljs-regexp,
+  #lightning-body .json .hljs-attribute,
+  #lightning-body .makefile .hljs-variable,
+  #lightning-body .markdown .hljs-value,
+  #lightning-body .markdown .hljs-link_label,
+  #lightning-body .markdown .hljs-strong,
+  #lightning-body .markdown .hljs-emphasis,
+  #lightning-body .markdown .hljs-blockquote,
+  #lightning-body .nginx .hljs-regexp,
+  #lightning-body .nginx .hljs-number,
+  #lightning-body .objectivec .hljs-preprocessor .hljs-title,
+  #lightning-body .perl .hljs-regexp,
+  #lightning-body .php .hljs-regexp,
+  #lightning-body .xml .hljs-value,
+  #lightning-body .less .hljs-built_in,
+  #lightning-body .scss .hljs-built_in {
+    color: #df5000; }
+  #lightning-body .hljs-keyword,
+  #lightning-body .css .hljs-at_rule,
+  #lightning-body .css .hljs-important,
+  #lightning-body .http .hljs-request,
+  #lightning-body .ini .hljs-setting,
+  #lightning-body .haskell .hljs-type,
+  #lightning-body .java .hljs-javadoctag,
+  #lightning-body .javascript .hljs-tag,
+  #lightning-body .javascript .hljs-javadoctag,
+  #lightning-body .nginx .hljs-title,
+  #lightning-body .objectivec .hljs-preprocessor,
+  #lightning-body .php .hljs-phpdoc,
+  #lightning-body .sql .hljs-built_in,
+  #lightning-body .less .hljs-tag,
+  #lightning-body .less .hljs-at_rule,
+  #lightning-body .scss .hljs-tag,
+  #lightning-body .scss .hljs-at_rule,
+  #lightning-body .scss .hljs-important,
+  #lightning-body .stylus .hljs-at_rule,
+  #lightning-body .go .hljs-typename,
+  #lightning-body .swift .hljs-preprocessor {
+    color: #a71d5d; }
+  #lightning-body .apache .hljs-common,
+  #lightning-body .apache .hljs-cbracket,
+  #lightning-body .apache .hljs-keyword,
+  #lightning-body .bash .hljs-literal,
+  #lightning-body .bash .hljs-built_in,
+  #lightning-body .coffeescript .hljs-literal,
+  #lightning-body .coffeescript .hljs-built_in,
+  #lightning-body .coffeescript .hljs-number,
+  #lightning-body .cpp .hljs-number,
+  #lightning-body .cpp .hljs-built_in,
+  #lightning-body .c .hljs-number,
+  #lightning-body .c .hljs-built_in,
+  #lightning-body .cs .hljs-number,
+  #lightning-body .cs .hljs-built_in,
+  #lightning-body .css .hljs-attribute,
+  #lightning-body .css .hljs-hexcolor,
+  #lightning-body .css .hljs-number,
+  #lightning-body .css .hljs-function,
+  #lightning-body .haskell .hljs-number,
+  #lightning-body .http .hljs-literal,
+  #lightning-body .http .hljs-attribute,
+  #lightning-body .java .hljs-number,
+  #lightning-body .javascript .hljs-built_in,
+  #lightning-body .javascript .hljs-literal,
+  #lightning-body .javascript .hljs-number,
+  #lightning-body .json .hljs-number,
+  #lightning-body .makefile .hljs-keyword,
+  #lightning-body .markdown .hljs-link_reference,
+  #lightning-body .nginx .hljs-built_in,
+  #lightning-body .objectivec .hljs-literal,
+  #lightning-body .objectivec .hljs-number,
+  #lightning-body .objectivec .hljs-built_in,
+  #lightning-body .php .hljs-literal,
+  #lightning-body .php .hljs-number,
+  #lightning-body .python .hljs-number,
+  #lightning-body .ruby .hljs-prompt,
+  #lightning-body .ruby .hljs-constant,
+  #lightning-body .ruby .hljs-number,
+  #lightning-body .ruby .hljs-subst .hljs-keyword,
+  #lightning-body .ruby .hljs-symbol,
+  #lightning-body .rust .hljs-number,
+  #lightning-body .sql .hljs-number,
+  #lightning-body .puppet .hljs-function,
+  #lightning-body .less .hljs-number,
+  #lightning-body .less .hljs-hexcolor,
+  #lightning-body .less .hljs-function,
+  #lightning-body .less .hljs-attribute,
+  #lightning-body .scss .hljs-preprocessor,
+  #lightning-body .scss .hljs-number,
+  #lightning-body .scss .hljs-hexcolor,
+  #lightning-body .scss .hljs-function,
+  #lightning-body .scss .hljs-attribute,
+  #lightning-body .stylus .hljs-number,
+  #lightning-body .stylus .hljs-hexcolor,
+  #lightning-body .stylus .hljs-attribute,
+  #lightning-body .stylus .hljs-params,
+  #lightning-body .go .hljs-built_in,
+  #lightning-body .go .hljs-constant,
+  #lightning-body .swift .hljs-built_in,
+  #lightning-body .swift .hljs-number {
+    color: #0086b3; }
+  #lightning-body .apache .hljs-tag,
+  #lightning-body .cs .hljs-xmlDocTag,
+  #lightning-body .css .hljs-tag,
+  #lightning-body .xml .hljs-title,
+  #lightning-body .stylus .hljs-tag {
+    color: #63a35c; }
+  #lightning-body .bash .hljs-variable,
+  #lightning-body .cs .hljs-preprocessor,
+  #lightning-body .cs .hljs-preprocessor .hljs-keyword,
+  #lightning-body .css .hljs-attr_selector,
+  #lightning-body .css .hljs-value,
+  #lightning-body .ini .hljs-value,
+  #lightning-body .ini .hljs-keyword,
+  #lightning-body .javascript .hljs-tag .hljs-title,
+  #lightning-body .makefile .hljs-constant,
+  #lightning-body .nginx .hljs-variable,
+  #lightning-body .xml .hljs-tag,
+  #lightning-body .scss .hljs-variable {
+    color: #333333; }
+  #lightning-body .bash .hljs-title,
+  #lightning-body .coffeescript .hljs-title,
+  #lightning-body .cpp .hljs-title,
+  #lightning-body .c .hljs-title,
+  #lightning-body .cs .hljs-title,
+  #lightning-body .css .hljs-id,
+  #lightning-body .css .hljs-class,
+  #lightning-body .css .hljs-pseudo,
+  #lightning-body .ini .hljs-title,
+  #lightning-body .haskell .hljs-title,
+  #lightning-body .haskell .hljs-pragma,
+  #lightning-body .java .hljs-title,
+  #lightning-body .javascript .hljs-title,
+  #lightning-body .makefile .hljs-title,
+  #lightning-body .objectivec .hljs-title,
+  #lightning-body .perl .hljs-sub,
+  #lightning-body .php .hljs-title,
+  #lightning-body .python .hljs-decorator,
+  #lightning-body .python .hljs-title,
+  #lightning-body .ruby .hljs-parent,
+  #lightning-body .ruby .hljs-title,
+  #lightning-body .rust .hljs-title,
+  #lightning-body .xml .hljs-attribute,
+  #lightning-body .puppet .hljs-title,
+  #lightning-body .less .hljs-id,
+  #lightning-body .less .hljs-pseudo,
+  #lightning-body .less .hljs-class,
+  #lightning-body .scss .hljs-id,
+  #lightning-body .scss .hljs-pseudo,
+  #lightning-body .scss .hljs-class,
+  #lightning-body .stylus .hljs-class,
+  #lightning-body .stylus .hljs-id,
+  #lightning-body .stylus .hljs-pseudo,
+  #lightning-body .stylus .hljs-title,
+  #lightning-body .swift .hljs-title,
+  #lightning-body .diff .hljs-chunk {
+    color: #795da3; }
+  #lightning-body .coffeescript .hljs-reserved,
+  #lightning-body .coffeescript .hljs-attribute {
+    color: #1d3e81; }
+  #lightning-body .diff .hljs-chunk {
+    font-weight: bold; }
+  #lightning-body .diff .hljs-addition {
+    color: #55a532;
+    background-color: #eaffea; }
+  #lightning-body .diff .hljs-deletion {
+    color: #bd2c00;
+    background-color: #ffecec; }
+  #lightning-body .markdown .hljs-link_url {
+    text-decoration: underline; }
+  #lightning-body .CodeMirror {
+    /* Set height, width, borders, and global font properties here */
+    font-family: monospace;
+    height: 800px; }
+  #lightning-body .CodeMirror-scroll {
+    /* Set scrolling behaviour here */
+    overflow: auto; }
+  #lightning-body .CodeMirror-lines {
+    padding: 4px 0;
+    /* Vertical padding around content */ }
+  #lightning-body .CodeMirror pre {
+    padding: 0 4px;
+    /* Horizontal padding of content */ }
+  #lightning-body .CodeMirror-scrollbar-filler, #lightning-body .CodeMirror-gutter-filler {
+    background-color: white;
+    /* The little square between H and V scrollbars */ }
+  #lightning-body .CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+    background-color: #f7f7f7;
+    white-space: nowrap; }
+  #lightning-body .CodeMirror-linenumber {
+    padding: 0 3px 0 5px;
+    min-width: 20px;
+    text-align: right;
+    color: #999;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box; }
+  #lightning-body .CodeMirror-guttermarker {
+    color: black; }
+  #lightning-body .CodeMirror-guttermarker-subtle {
+    color: #999; }
+  #lightning-body .CodeMirror div.CodeMirror-cursor {
+    border-left: 1px solid black; }
+  #lightning-body .CodeMirror div.CodeMirror-secondarycursor {
+    border-left: 1px solid silver; }
+  #lightning-body .CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor {
+    width: auto;
+    border: 0;
+    background: #7e7; }
+  #lightning-body .CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursors {
+    z-index: 1; }
+  #lightning-body .cm-animate-fat-cursor {
+    width: auto;
+    border: 0;
+    -webkit-animation: blink 1.06s steps(1) infinite;
+    -moz-animation: blink 1.06s steps(1) infinite;
+    animation: blink 1.06s steps(1) infinite; }
+
+@-moz-keyframes blink {
+  0% {
+    background: #7e7; }
+  50% {
+    background: none; }
+  100% {
+    background: #7e7; } }
+
+@-webkit-keyframes blink {
+  0% {
+    background: #7e7; }
+  50% {
+    background: none; }
+  100% {
+    background: #7e7; } }
+
+@keyframes blink {
+  0% {
+    background: #7e7; }
+  50% {
+    background: none; }
+  100% {
+    background: #7e7; } }
+  #lightning-body .cm-tab {
+    display: inline-block; }
+  #lightning-body .CodeMirror-ruler {
+    border-left: 1px solid #ccc;
+    position: absolute; }
+  #lightning-body .cm-s-default .cm-keyword {
+    color: #708; }
+  #lightning-body .cm-s-default .cm-atom {
+    color: #219; }
+  #lightning-body .cm-s-default .cm-number {
+    color: #164; }
+  #lightning-body .cm-s-default .cm-def {
+    color: #00f; }
+  #lightning-body .cm-s-default .cm-variable-2 {
+    color: #05a; }
+  #lightning-body .cm-s-default .cm-variable-3 {
+    color: #085; }
+  #lightning-body .cm-s-default .cm-comment {
+    color: #a50; }
+  #lightning-body .cm-s-default .cm-string {
+    color: #a11; }
+  #lightning-body .cm-s-default .cm-string-2 {
+    color: #f50; }
+  #lightning-body .cm-s-default .cm-meta {
+    color: #555; }
+  #lightning-body .cm-s-default .cm-qualifier {
+    color: #555; }
+  #lightning-body .cm-s-default .cm-builtin {
+    color: #30a; }
+  #lightning-body .cm-s-default .cm-bracket {
+    color: #997; }
+  #lightning-body .cm-s-default .cm-tag {
+    color: #170; }
+  #lightning-body .cm-s-default .cm-attribute {
+    color: #00c; }
+  #lightning-body .cm-s-default .cm-header {
+    color: blue; }
+  #lightning-body .cm-s-default .cm-quote {
+    color: #090; }
+  #lightning-body .cm-s-default .cm-hr {
+    color: #999; }
+  #lightning-body .cm-s-default .cm-link {
+    color: #00c; }
+  #lightning-body .cm-negative {
+    color: #d44; }
+  #lightning-body .cm-positive {
+    color: #292; }
+  #lightning-body .cm-header, #lightning-body .cm-strong {
+    font-weight: bold; }
+  #lightning-body .cm-em {
+    font-style: italic; }
+  #lightning-body .cm-link {
+    text-decoration: underline; }
+  #lightning-body .cm-s-default .cm-error {
+    color: #f00; }
+  #lightning-body .cm-invalidchar {
+    color: #f00; }
+  #lightning-body div.CodeMirror span.CodeMirror-matchingbracket {
+    color: #0f0; }
+  #lightning-body div.CodeMirror span.CodeMirror-nonmatchingbracket {
+    color: #f22; }
+  #lightning-body .CodeMirror-matchingtag {
+    background: rgba(255, 150, 0, 0.3); }
+  #lightning-body .CodeMirror-activeline-background {
+    background: #e8f2ff; }
+  #lightning-body .CodeMirror {
+    line-height: 1;
+    position: relative;
+    overflow: hidden;
+    background: white;
+    color: black; }
+  #lightning-body .CodeMirror-scroll {
+    /* 30px is the magic margin used to hide the element's real scrollbars */
+    /* See overflow: hidden in .CodeMirror */
+    margin-bottom: -30px;
+    margin-right: -30px;
+    padding-bottom: 30px;
+    height: 100%;
+    outline: none;
+    /* Prevent dragging from highlighting the element */
+    position: relative;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box; }
+  #lightning-body .CodeMirror-sizer {
+    position: relative;
+    border-right: 30px solid transparent;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box; }
+  #lightning-body .CodeMirror-vscrollbar, #lightning-body .CodeMirror-hscrollbar, #lightning-body .CodeMirror-scrollbar-filler, #lightning-body .CodeMirror-gutter-filler {
+    position: absolute;
+    z-index: 6;
+    display: none; }
+  #lightning-body .CodeMirror-vscrollbar {
+    right: 0;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: scroll; }
+  #lightning-body .CodeMirror-hscrollbar {
+    bottom: 0;
+    left: 0;
+    overflow-y: hidden;
+    overflow-x: scroll; }
+  #lightning-body .CodeMirror-scrollbar-filler {
+    right: 0;
+    bottom: 0; }
+  #lightning-body .CodeMirror-gutter-filler {
+    left: 0;
+    bottom: 0; }
+  #lightning-body .CodeMirror-gutters {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding-bottom: 30px;
+    z-index: 3; }
+  #lightning-body .CodeMirror-gutter {
+    white-space: normal;
+    height: 100%;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding-bottom: 30px;
+    margin-bottom: -32px;
+    display: inline-block;
+    /* Hack to make IE7 behave */
+    *zoom: 1;
+    *display: inline; }
+  #lightning-body .CodeMirror-gutter-elt {
+    position: absolute;
+    cursor: default;
+    z-index: 4; }
+  #lightning-body .CodeMirror-lines {
+    cursor: text;
+    min-height: 1px;
+    /* prevents collapsing before first draw */ }
+  #lightning-body .CodeMirror pre {
+    /* Reset some styles that the rest of the page might have set */
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border-width: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    margin: 0;
+    white-space: pre;
+    word-wrap: normal;
+    line-height: inherit;
+    color: inherit;
+    z-index: 2;
+    position: relative;
+    overflow: visible; }
+  #lightning-body .CodeMirror-wrap pre {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: normal; }
+  #lightning-body .CodeMirror-linebackground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0; }
+  #lightning-body .CodeMirror-linewidget {
+    position: relative;
+    z-index: 2;
+    overflow: auto; }
+  #lightning-body .CodeMirror-wrap .CodeMirror-scroll {
+    overflow-x: hidden; }
+  #lightning-body .CodeMirror-measure {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden; }
+  #lightning-body .CodeMirror-measure pre {
+    position: static; }
+  #lightning-body .CodeMirror div.CodeMirror-cursor {
+    position: absolute;
+    border-right: none;
+    width: 0; }
+  #lightning-body div.CodeMirror-cursors {
+    visibility: hidden;
+    position: relative;
+    z-index: 3; }
+  #lightning-body .CodeMirror-focused div.CodeMirror-cursors {
+    visibility: visible; }
+  #lightning-body .CodeMirror-selected {
+    background: #d9d9d9; }
+  #lightning-body .CodeMirror-focused .CodeMirror-selected {
+    background: #d7d4f0; }
+  #lightning-body .CodeMirror-crosshair {
+    cursor: crosshair; }
+  #lightning-body .cm-searching {
+    background: #ffa;
+    background: rgba(255, 255, 0, 0.4); }
+  #lightning-body .CodeMirror span {
+    *vertical-align: text-bottom; }
+  #lightning-body .cm-force-border {
+    padding-right: .1px; }
+  @media print {
+    #lightning-body {
+      /* Hide the cursor when printing */ }
+      #lightning-body .CodeMirror div.CodeMirror-cursors {
+        visibility: hidden; } }
+  #lightning-body span.CodeMirror-selectedtext {
+    background: none; }
+  #lightning-body .solarized.base03 {
+    color: #002b36; }
+  #lightning-body .solarized.base02 {
+    color: #073642; }
+  #lightning-body .solarized.base01 {
+    color: #586e75; }
+  #lightning-body .solarized.base00 {
+    color: #657b83; }
+  #lightning-body .solarized.base0 {
+    color: #839496; }
+  #lightning-body .solarized.base1 {
+    color: #93a1a1; }
+  #lightning-body .solarized.base2 {
+    color: #eee8d5; }
+  #lightning-body .solarized.base3 {
+    color: #fdf6e3; }
+  #lightning-body .solarized.solar-yellow {
+    color: #b58900; }
+  #lightning-body .solarized.solar-orange {
+    color: #cb4b16; }
+  #lightning-body .solarized.solar-red {
+    color: #dc322f; }
+  #lightning-body .solarized.solar-magenta {
+    color: #d33682; }
+  #lightning-body .solarized.solar-violet {
+    color: #6c71c4; }
+  #lightning-body .solarized.solar-blue {
+    color: #268bd2; }
+  #lightning-body .solarized.solar-cyan {
+    color: #2aa198; }
+  #lightning-body .solarized.solar-green {
+    color: #859900; }
+  #lightning-body .cm-s-solarized {
+    line-height: 1.45em;
+    color-profile: sRGB;
+    rendering-intent: auto; }
+  #lightning-body .cm-s-solarized.cm-s-dark {
+    color: #839496;
+    background-color: #002b36;
+    text-shadow: #002b36 0 1px; }
+  #lightning-body .cm-s-solarized.cm-s-light {
+    color: #657b83;
+    text-shadow: #eee8d5 0 1px; }
+  #lightning-body .cm-s-solarized .CodeMirror-widget {
+    text-shadow: none; }
+  #lightning-body .cm-s-solarized .cm-keyword {
+    color: #cb4b16; }
+  #lightning-body .cm-s-solarized .cm-atom {
+    color: #d33682; }
+  #lightning-body .cm-s-solarized .cm-number {
+    color: #d33682; }
+  #lightning-body .cm-s-solarized .cm-def {
+    color: #2aa198; }
+  #lightning-body .cm-s-solarized .cm-variable {
+    color: #268bd2; }
+  #lightning-body .cm-s-solarized .cm-variable-2 {
+    color: #b58900; }
+  #lightning-body .cm-s-solarized .cm-variable-3 {
+    color: #6c71c4; }
+  #lightning-body .cm-s-solarized .cm-property {
+    color: #2aa198; }
+  #lightning-body .cm-s-solarized .cm-operator {
+    color: #6c71c4; }
+  #lightning-body .cm-s-solarized .cm-comment {
+    color: #586e75;
+    font-style: italic; }
+  #lightning-body .cm-s-solarized .cm-string {
+    color: #859900; }
+  #lightning-body .cm-s-solarized .cm-string-2 {
+    color: #b58900; }
+  #lightning-body .cm-s-solarized .cm-meta {
+    color: #859900; }
+  #lightning-body .cm-s-solarized .cm-qualifier {
+    color: #b58900; }
+  #lightning-body .cm-s-solarized .cm-builtin {
+    color: #d33682; }
+  #lightning-body .cm-s-solarized .cm-bracket {
+    color: #cb4b16; }
+  #lightning-body .cm-s-solarized .CodeMirror-matchingbracket {
+    color: #859900; }
+  #lightning-body .cm-s-solarized .CodeMirror-nonmatchingbracket {
+    color: #dc322f; }
+  #lightning-body .cm-s-solarized .cm-tag {
+    color: #93a1a1; }
+  #lightning-body .cm-s-solarized .cm-attribute {
+    color: #2aa198; }
+  #lightning-body .cm-s-solarized .cm-header {
+    color: #586e75; }
+  #lightning-body .cm-s-solarized .cm-quote {
+    color: #93a1a1; }
+  #lightning-body .cm-s-solarized .cm-hr {
+    color: transparent;
+    border-top: 1px solid #586e75;
+    display: block; }
+  #lightning-body .cm-s-solarized .cm-link {
+    color: #93a1a1;
+    cursor: pointer; }
+  #lightning-body .cm-s-solarized .cm-special {
+    color: #6c71c4; }
+  #lightning-body .cm-s-solarized .cm-em {
+    color: #999;
+    text-decoration: underline;
+    text-decoration-style: dotted; }
+  #lightning-body .cm-s-solarized .cm-strong {
+    color: #eee; }
+  #lightning-body .cm-s-solarized .cm-tab:before {
+    content: "➤";
+    /*visualize tab character*/
+    color: #586e75;
+    position: absolute; }
+  #lightning-body .cm-s-solarized .cm-error,
+  #lightning-body .cm-s-solarized .cm-invalidchar {
+    color: #586e75;
+    border-bottom: 1px dotted #dc322f; }
+  #lightning-body .cm-s-solarized.cm-s-dark .CodeMirror-selected {
+    background: #073642; }
+  #lightning-body .cm-s-solarized.cm-s-light .CodeMirror-selected {
+    background: #eee8d5; }
+  #lightning-body .cm-s-solarized .CodeMirror-gutters {
+    border-right: 1px solid; }
+  #lightning-body .cm-s-solarized.cm-s-dark .CodeMirror-gutters {
+    background-color: #002b36;
+    border-color: #00232c; }
+  #lightning-body .cm-s-solarized.cm-s-dark .CodeMirror-linenumber {
+    text-shadow: #021014 0 -1px; }
+  #lightning-body .cm-s-solarized.cm-s-light .CodeMirror-gutters {
+    background-color: #fdf6e3;
+    border-color: #eee8d5; }
+  #lightning-body .cm-s-solarized .CodeMirror-linenumber {
+    color: #586e75;
+    padding: 0 5px; }
+  #lightning-body .cm-s-solarized .CodeMirror-guttermarker-subtle {
+    color: #586e75; }
+  #lightning-body .cm-s-solarized.cm-s-dark .CodeMirror-guttermarker {
+    color: #ddd; }
+  #lightning-body .cm-s-solarized.cm-s-light .CodeMirror-guttermarker {
+    color: #cb4b16; }
+  #lightning-body .cm-s-solarized .CodeMirror-gutter .CodeMirror-gutter-text {
+    color: #586e75; }
+  #lightning-body .cm-s-solarized .CodeMirror-lines .CodeMirror-cursor {
+    border-left: 1px solid #819090; }
+  #lightning-body .cm-s-solarized.cm-s-dark .CodeMirror-activeline-background {
+    background: rgba(255, 255, 255, 0.1); }
+  #lightning-body .cm-s-solarized.cm-s-light .CodeMirror-activeline-background {
+    background: rgba(0, 0, 0, 0.1); }
+  #lightning-body .dropit {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  #lightning-body .dropit .dropit-trigger {
+    position: relative; }
+  #lightning-body .dropit .dropit-submenu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    /* dropdown left or right */
+    z-index: 1000;
+    display: none;
+    min-width: 150px;
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  #lightning-body .dropit .dropit-open .dropit-submenu {
+    display: block; }
+  #lightning-body .menu ul {
+    display: none; }
+  #lightning-body .menu ul.dropit-submenu {
+    background-color: #fff;
+    border: 1px solid #b2b2b2;
+    padding: 6px 0;
+    margin: 3px 0 0 1px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15); }
+  #lightning-body .menu ul.dropit-submenu a {
+    display: block;
+    font-size: 14px;
+    line-height: 25px;
+    color: #7a868e;
+    padding: 0 18px; }
+  #lightning-body .menu ul.dropit-submenu a:hover {
+    background: #248fc1;
+    color: #fff;
+    text-decoration: none; }
+  #lightning-body .CodeMirror {
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: hidden; }
+  #lightning-body .feed-container {
+    opacity: 0; }
+  #lightning-body input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; }
+  #lightning-body .button,
+  #lightning-body button,
+  #lightning-body input[type=submit] {
+    border-radius: 2px;
+    border: 1px solid #719BEC;
+    background-color: white;
+    font-size: 15px;
+    color: #68a1e5;
+    line-height: 20px;
+    cursor: pointer;
+    text-align: center;
+    padding: 5px 0; }
+    #lightning-body .button:hover,
+    #lightning-body button:hover,
+    #lightning-body input[type=submit]:hover {
+      background-color: #f2f2f2;
+      color: #2778da; }
+    #lightning-body .button:focus,
+    #lightning-body button:focus,
+    #lightning-body input[type=submit]:focus {
+      outline: 0; }
+  #lightning-body input[type=submit],
+  #lightning-body button {
+    padding: 5px 10px; }
+  #lightning-body h1,
+  #lightning-body h2,
+  #lightning-body h3,
+  #lightning-body h4,
+  #lightning-body h5,
+  #lightning-body h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+    color: #545E6B; }
+  #lightning-body p {
+    color: #545E6B; }
+  #lightning-body a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #8F7BD9;
+    line-height: 19px; }
+    #lightning-body a:hover {
+      color: #A997EB; }
+    #lightning-body a:active {
+      color: #59A2E6; }
+  #lightning-body li {
+    list-style: none; }
+  #lightning-body ul, #lightning-body li {
+    margin: 0;
+    padding: 0; }
+  #lightning-body .subheader {
+    color: #75808F; }
+  #lightning-body .code,
+  #lightning-body pre {
+    background-color: #f0f0f0;
+    font-family: monospace;
+    padding: 10px;
+    border-radius: 4px; }
+  #lightning-body .lightning-header {
+    padding-top: 33%;
+    text-align: center; }
+    #lightning-body .lightning-header h1, #lightning-body .lightning-header h2, #lightning-body .lightning-header h3 {
+      font-weight: normal; }
+  #lightning-body .session-details {
+    color: gray;
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 10px; }
+  #lightning-body .session-id {
+    text-align: right; }
+  #lightning-body .feed-item:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both; }
+  #lightning-body .feed-item:focus, #lightning-body .feed-item-container:focus, #lightning-body svg:focus, #lightning-body canvas:focus {
+    outline: 0; }
+  #lightning-body input {
+    color: #545E6B; }
+    #lightning-body input.editable {
+      display: none;
+      width: 100%; }
+      #lightning-body input.editable.h2 {
+        font-size: 1.5em;
+        -webkit-margin-before: 0.83em; }
+  #lightning-body .permalink {
+    display: inline-block;
+    width: 50%;
+    text-align: right; }
+  #lightning-body .edit-description {
+    display: inline-block;
+    width: 50%; }
+  #lightning-body .description-editor {
+    display: none;
+    padding-bottom: 25px; }
+    #lightning-body .description-editor textarea {
+      width: 100%;
+      height: 100%; }
+  #lightning-body .bottom-container {
+    margin-top: 30px; }
+  #lightning-body .saved,
+  #lightning-body .problem-saving {
+    display: none;
+    color: white;
+    position: fixed;
+    top: 0;
+    right: 10%;
+    background: rgba(0, 0, 0, 0.8);
+    font-family: 'Open Sans', sans-serif;
+    padding: 5px 10px; }
+  #lightning-body .full-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; }
+  #lightning-body .editor-outer-section {
+    width: 100%;
+    border-size: 'border-box';
+    clear: both; }
+    #lightning-body .editor-outer-section .editor-inner-section {
+      padding-left: 4em; }
+      #lightning-body .editor-outer-section .editor-inner-section .top-matter {
+        clear: both;
+        padding-left: 20px;
+        padding-top: 20px; }
+        #lightning-body .editor-outer-section .editor-inner-section .top-matter .info-container {
+          float: left;
+          width: 23%; }
+          #lightning-body .editor-outer-section .editor-inner-section .top-matter .info-container a {
+            display: inline-block;
+            position: relative;
+            top: -7px;
+            padding-left: 10px; }
+        #lightning-body .editor-outer-section .editor-inner-section .top-matter .title-container {
+          text-align: center;
+          width: 54%;
+          float: left;
+          margin-bottom: 60px; }
+          #lightning-body .editor-outer-section .editor-inner-section .top-matter .title-container h1 {
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 20px; }
+        #lightning-body .editor-outer-section .editor-inner-section .top-matter .action-container {
+          float: left;
+          width: 20%;
+          text-align: right;
+          box-sizing: 'border-box';
+          margin-right: 3%;
+          margin-top: 1%; }
+          #lightning-body .editor-outer-section .editor-inner-section .top-matter .action-container .button {
+            width: 70%;
+            display: inline;
+            padding-left: 3%;
+            padding-right: 3%; }
+            #lightning-body .editor-outer-section .editor-inner-section .top-matter .action-container .button.pad-left {
+              margin-left: 7.5%; }
+    #lightning-body .editor-outer-section.data-component {
+      width: 80%;
+      margin: 0 auto;
+      /*background: #f0f0f0;*/
+      /*min-height: 300px;*/
+      /*
+        .editor-inner-section {
+            padding-top: 30px;
+        }*/ }
+    #lightning-body .editor-outer-section pre {
+      padding: 0;
+      border: none; }
+    #lightning-body .editor-outer-section .editor-viz-container {
+      width: 60%;
+      margin: 0 auto; }
+      #lightning-body .editor-outer-section .editor-viz-container.full {
+        width: 60%;
+        margin-bottom: 30px; }
+    #lightning-body .editor-outer-section .data-button {
+      /*margin-top: 13px;*/
+      margin-right: 10px;
+      margin-top: 10px; }
+      #lightning-body .editor-outer-section .data-button.active {
+        color: #fff;
+        background-color: #68a1e5; }
+    #lightning-body .editor-outer-section code {
+      border-radius: 4px;
+      padding: 1.2em; }
+    #lightning-body .editor-outer-section .tab-container {
+      margin-top: 15px;
+      margin-bottom: 20px; }
+      #lightning-body .editor-outer-section .tab-container nav ul {
+        margin: 0;
+        padding: 0; }
+        #lightning-body .editor-outer-section .tab-container nav ul li {
+          display: inline-block;
+          zoom: 1;
+          *display: inline;
+          cursor: pointer; }
+          #lightning-body .editor-outer-section .tab-container nav ul li a {
+            font-size: 14px;
+            line-height: 2em;
+            display: block;
+            padding: 0 10px;
+            outline: none;
+            color: #444; }
+            #lightning-body .editor-outer-section .tab-container nav ul li a:visited {
+              color: #444; }
+          #lightning-body .editor-outer-section .tab-container nav ul li.is-active {
+            background-color: #f6f7fa;
+            padding-top: 6px;
+            position: relative;
+            top: 1px;
+            border-top: solid 2px #9175f0; }
+            #lightning-body .editor-outer-section .tab-container nav ul li.is-active a {
+              font-weight: bold; }
+      #lightning-body .editor-outer-section .tab-container .tab-panel {
+        background-color: #f6f7fa;
+        padding: 10px; }
+      #lightning-body .editor-outer-section .tab-container .code, #lightning-body .editor-outer-section .tab-container pre {
+        margin: 0; }
+      #lightning-body .editor-outer-section .tab-container .code, #lightning-body .editor-outer-section .tab-container pre, #lightning-body .editor-outer-section .tab-container code {
+        background: white; }
+  #lightning-body .preview-container {
+    display: block;
+    padding-bottom: 17px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out; }
+    #lightning-body .preview-container:hover {
+      opacity: 0.6; }
+  #lightning-body .viz-preview {
+    display: block;
+    width: 100%;
+    background-position: 50% 50%;
+    background-size: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #eee; }
+    #lightning-body .viz-preview.noimg {
+      background-color: #eee;
+      -webkit-animation: colorChange 20s linear 0s infinite;
+      animation: colorChange 20s linear 0s infinite; }
+  #lightning-body #visualization-importer {
+    padding: 30px 0;
+    border-radius: 5px;
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s; }
+  #lightning-body .importer .button-group {
+    margin-top: 10px;
+    margin-bottom: 20px; }
+  #lightning-body .importer input[type="text"] {
+    margin-top: 10px;
+    margin-bottom: 20px; }
+  #lightning-body .button-group-label {
+    display: inline-block;
+    background-color: white;
+    color: #626c7c;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    border-top: solid 1px #626c7c;
+    border-bottom: solid 1px #626c7c;
+    border-left: solid 1px #626c7c;
+    cursor: pointer; }
+    #lightning-body .button-group-label:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px; }
+    #lightning-body .button-group-label:last-child {
+      border-right: solid 1px #626c7c;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px; }
+    #lightning-body .button-group-label.selected {
+      background-color: #626c7c;
+      color: white; }
+  #lightning-body .title-container {
+    text-align: center;
+    color: #626c7c; }
+
+@-webkit-keyframes colorChange {
+  0% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  1% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  2% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  3% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  4% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  5% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  6% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  7% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  8% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  9% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  10% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  11% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  12% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  13% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  14% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  15% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  16% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  17% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  18% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  19% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  20% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  21% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  22% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  23% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  24% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  25% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  26% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  27% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  28% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  29% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  30% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  31% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  32% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  33% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  34% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  35% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  36% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  37% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  38% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  39% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  40% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  41% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  42% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  43% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  44% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  45% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  46% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  47% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  48% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  49% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  50% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  51% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  52% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  53% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  54% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  55% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  56% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  57% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  58% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  59% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  60% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  61% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  62% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  63% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  64% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  65% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  66% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  67% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  68% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  69% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  70% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  71% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  72% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  73% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  74% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  75% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  76% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  77% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  78% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  79% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  80% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  81% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  82% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  83% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  84% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  85% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  86% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  87% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  88% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  89% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  90% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  91% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  92% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  93% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  94% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  95% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  96% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  97% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  98% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  99% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  100% {
+    background: -webkit-linear-gradient(left, #eeeeee, #eeeeee);
+    background: linear-gradient(to right, #eeeeee, #eeeeee); } }
+
+@keyframes colorChange {
+  0% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  1% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  2% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  3% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  4% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  5% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  6% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  7% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  8% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  9% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  10% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  11% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  12% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  13% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  14% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  15% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  16% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  17% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  18% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  19% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  20% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  21% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  22% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  23% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  24% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  25% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  26% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  27% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  28% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  29% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  30% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  31% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  32% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  33% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  34% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  35% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  36% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  37% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  38% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  39% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  40% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  41% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  42% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  43% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  44% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  45% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  46% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  47% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  48% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  49% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  50% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  51% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  52% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  53% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  54% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  55% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  56% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  57% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  58% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  59% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  60% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  61% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  62% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  63% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  64% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  65% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  66% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  67% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  68% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  69% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  70% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  71% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  72% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  73% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  74% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  75% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  76% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  77% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  78% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  79% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  80% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  81% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  82% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  83% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  84% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  85% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  86% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  87% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  88% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  89% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  90% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  91% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  92% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  93% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  94% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  95% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  96% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  97% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  98% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  99% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); }
+  100% {
+    background: linear-gradient(to right, #eeeeee, #eeeeee); } }
+  @media (max-width: 1100px) {
+    #lightning-body .container {
+      padding-left: 75px !important; } }
+  @media (max-width: 430px) {
+    #lightning-body .container {
+      padding-left: 75px !important; } }
+  #lightning-body .feed-item-container .row {
+    margin-left: 0 !important; }
+  #lightning-body .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 6px;
+    padding-bottom: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 1px;
+    pointer-events: none;
+    font-family: monospace;
+    font-size: 12px; }
+  #lightning-body .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    pointer-events: none; }
+  #lightning-body .d3-tip.n:after {
+    content: "\25BC";
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+    text-align: center; }
+  #lightning-body .d3-tip.e:after {
+    content: "\25C0";
+    margin: -4px 0 0 0;
+    top: 50%;
+    left: -8px; }
+  #lightning-body .d3-tip.s:after {
+    content: "\25B2";
+    margin: 0 0 1px 0;
+    top: 0;
+    left: 0;
+    text-align: center; }
+  #lightning-body .d3-tip.w:after {
+    content: "\25B6";
+    margin: -4px 0 0 -1px;
+    top: 50%;
+    left: 100%; }

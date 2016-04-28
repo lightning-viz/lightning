@@ -6,7 +6,10 @@ debug(baseURL);
 module.exports = {
 
     getNamespaceForSession: function(sid) {
-        return window.location.origin + '/session' + sid.split('-').join('');
+      debug('getting namespace');
+      debug(baseURL);
+      debug(sid);
+      return window.location.origin + '/session' + sid.split('-').join('');
     },
 
     requireOrFetchViz: function(viz, cb) {

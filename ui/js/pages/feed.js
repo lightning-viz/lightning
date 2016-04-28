@@ -4,6 +4,8 @@ window.lightningDebug = require('debug');
 
 require('../lib/modal');
 
+
+var hasSesssion = document.URL.indexOf('/sessions/') > -1 ? true : false;
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
 sid = (window.lightning || {}).sid || sid;
@@ -73,7 +75,7 @@ socket.on('update', function(message) {
     var data = message.data;
 
     if(vizs[vizId].updateData) {
-        vizs[vizId].updateData(data);    
+        vizs[vizId].updateData(data);
     }
 });
 
@@ -97,7 +99,7 @@ setTimeout(function() {
 
 
     $('[data-editable]').each(function() {
-        
+
         var $this = $(this);
 
         // append a hidden input after
@@ -196,4 +198,3 @@ $('#data-input-form').submit(function(e) {
         }
     });
 })
-
