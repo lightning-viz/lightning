@@ -60,7 +60,7 @@
     "browserify": "^11.0.1",
     "child-process-promise": "^1.1.0",
     "colors": "~0.6.2",
-    "command-exists": "^0.1.0",
+    "command-exists": "0.1.0",
     "compression": "^1.0.8",
     "concat-stream": "^1.5.1",
     "connect-slashes": "^1.2.0",
