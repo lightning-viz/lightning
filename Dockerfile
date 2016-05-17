@@ -1,4 +1,4 @@
-FROM node:5.11
+FROM node:0.12
 
 MAINTAINER Lighning Viz <info@lightning-viz.org>
 
