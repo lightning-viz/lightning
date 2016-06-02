@@ -21,6 +21,8 @@ var startup = require('./tasks/startup');
 var cluster = require('cluster');
 var debug = require('debug')('lightning:server');
 
+var lex = require('./config/letsencrypt');
+
 if (cluster.isMaster) {
     startup();
 }
@@ -42,6 +44,13 @@ require('./config/express')(app, io);
 // Boostrap routes
 require('./config/routes')(app);
 
-server.listen(port);
+// server.listen(port);
+
+lex.onRequest = baseApp;
+
+lex.listen([3000], [443, 5001], function () {
+  var protocol = ('requestCert' in this) ? 'https': 'http';
+  console.log("Listening at " + protocol + '://localhost:' + this.address().port);
+});
 
 module.exports = server;

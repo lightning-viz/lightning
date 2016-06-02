@@ -74,6 +74,7 @@
     "fs-extra": "^0.11.1",
     "jade": "^1.11.0",
     "knox": "^0.9.0",
+    "letsencrypt-express": "^1.1.5",
     "lodash": "^3.8.0",
     "marked": "~0.3.2",
     "method-override": "^2.1.1",
