@@ -32,7 +32,7 @@ $ npm start
 ### host a server
 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/tree/v1.2.2)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/lightning-viz/lightning/tree/v1.2.3)
 
 
 ## client libraries
