@@ -198,9 +198,9 @@ module.exports = function(sequelize, DataTypes) {
                 var self = this;
                 var loglevel = npm.config.get('loglevel');
                 npm.config.set('loglevel', 'silent');
-                return Q.nfcall(npm.commands.uninstall, [moduleName])
+                return exec('npm uninstall ' + installName)
                     .then(function(results) {
-                        return Q.nfcall(command, [installName]);
+                        return exec(command);
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
                         debug(('Successfully installed ' + installName).green);
@@ -209,37 +209,32 @@ module.exports = function(sequelize, DataTypes) {
             },
 
             createFromNPM: function(installName, moduleName) {
-                return this._createLinkNPM(npm.commands.install, installName, moduleName || installName, false);
+              debug('creating from npm: ' + installName);
+              return this._createLinkNPM('npm install ' + installName, moduleName || installName, false);
             },
 
             linkFromNPM: function(installName, moduleName) {
-                return this._createLinkNPM(npm.commands.install, installName, moduleName || installName, true);
+                return this._createLinkNPM('npm install ' + installName, moduleName || installName, true);
             },
 
             linkFromLocalModule: function(installPath, moduleName) {
                 debug('link from local module');
                 var p = path.resolve(installPath);
                 var self = this;
-                var prefix = npm.prefix;
-                npm.prefix = p;
 
-                return Q.nfcall(npm.commands.link)
+                return exec('cd ' + p + ' && npm link')
                   .then(function() {
-                      npm.prefix = prefix;
-                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, true);
+                      return self._createLinkNPM('npm link ' + moduleName, moduleName, true);
                   })
             },
 
             createFromLocalModule: function(installPath, moduleName) {
                 var p = path.resolve(installPath);
                 var self = this;
-                var prefix = npm.prefix;
-                npm.prefix = p;
 
-                return Q.nfcall(npm.commands.link)
+                return exec('cd ' + p + ' && npm link')
                   .then(function() {
-                      npm.prefix = prefix;
-                      return self._createLinkNPM(npm.commands.link, moduleName, moduleName, false);
+                      return self._createLinkNPM('npm link ' + moduleName, moduleName, false);
                   })
             },
 
@@ -294,7 +289,7 @@ module.exports = function(sequelize, DataTypes) {
 
             deleteAndUninstall: function() {
                 var self = this;
-                return Q.nfcall(npm.commands.uninstall, [this.moduleName])
+                return exec('npm uninstall ' + this.moduleName)
                     .then(function() {
                         return self.destroy();
                     });
