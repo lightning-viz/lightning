@@ -10,7 +10,7 @@ var utils = require('../app/utils');
 
 var getDefaultVisualizations = function(cb) {
 
-    debug('\nInstalling default visualizations from npm. This may take a minute or two...'.green);                
+    debug('\nInstalling default visualizations from npm. This may take a minute or two...'.green);
     var loglevel = npm.config.get('loglevel');
     npm.config.set('loglevel', 'silent');
 
