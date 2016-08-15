@@ -1,4 +1,4 @@
-FROM node:4
+FROM node:6
 
 MAINTAINER Lighning Viz <info@lightning-viz.org>
 
@@ -13,7 +13,7 @@ COPY . /usr/src/app/
 RUN npm run build
 RUN npm run fetch-visualizations
 
-ENV DEBUG lightning:* 
+ENV DEBUG lightning:*
 
 EXPOSE 3000
 
