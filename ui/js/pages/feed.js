@@ -9,6 +9,8 @@ var hasSesssion = document.URL.indexOf('/sessions/') > -1 ? true : false;
 var sid = document.URL.substring(document.URL.lastIndexOf('/sessions/') + '/sessions/'.length);
 sid = sid.slice(0, sid.indexOf('/'));
 sid = (window.lightning || {}).sid || sid;
+
+
 var feedItemHTML = require('../../templates/feed-item.jade');
 
 var request = require('superagent');
@@ -16,7 +18,7 @@ var marked = require('marked');
 
 var utils = require('../utils');
 var debug = require('debug')('lightning:ui:pages:feed');
-
+debug('sid: ' + sid);
 
 var socket;
 io = window.io || false
