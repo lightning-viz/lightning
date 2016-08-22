@@ -11,21 +11,17 @@ var utils = require('../app/utils');
 var getDefaultVisualizations = function(cb) {
 
     debug('\nInstalling default visualizations from npm. This may take a minute or two...'.green);
-    var loglevel = npm.config.get('loglevel');
-    npm.config.set('loglevel', 'silent');
 
     Q.all(_.map(defaultVisualizations, function(moduleName) {
-        return models.VisualizationType.createFromNPM(moduleName);
+        return models.VisualizationType.createFromPreinstalled(moduleName);
     }))
     .spread(function() {
         debug()
         var vizTypes = Array.prototype.slice.call(arguments, 0);
-        npm.config.set('loglevel', loglevel);
         debug('Created Viz Types: ' + _.pluck(vizTypes, 'name').join(', '));
         cb && cb();
     }).catch(function(err) {
         debug(err);
-        npm.config.set('loglevel', loglevel);
         cb && cb(err);
     });
 

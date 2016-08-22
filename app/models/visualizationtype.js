@@ -213,6 +213,11 @@ module.exports = function(sequelize, DataTypes) {
               return this._createLinkNPM('npm install ' + installName, moduleName || installName, false);
             },
 
+            createFromPreinstalled: function(installName, moduleName) {
+              debug('initializing ' + installName);
+              return this._buildFromNPM(moduleName || installName, false);
+            },
+
             linkFromNPM: function(installName, moduleName) {
                 return this._createLinkNPM('npm install ' + installName, moduleName || installName, true);
             },
