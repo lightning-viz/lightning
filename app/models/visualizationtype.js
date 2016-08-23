@@ -204,13 +204,18 @@ module.exports = function(sequelize, DataTypes) {
                     }).then(function() {
                         npm.config.set('loglevel', loglevel);
                         debug(('Successfully installed ' + installName).green);
-                        return self._buildFromNPM(moduleName, preview);
+                        return self._buildFromNPM(moduleName || installName, preview);
                     });
             },
 
             createFromNPM: function(installName, moduleName) {
               debug('creating from npm: ' + installName);
               return this._createLinkNPM('npm install ' + installName, moduleName || installName, false);
+            },
+
+            createFromPreinstalled: function(installName, moduleName) {
+              debug('initializing ' + installName);
+              return this._buildFromNPM(moduleName || installName, false);
             },
 
             linkFromNPM: function(installName, moduleName) {
