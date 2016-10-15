@@ -142,5 +142,8 @@
     "superagent": "^0.18.2",
     "pym.js": "^0.4.1",
     "sequelize-cli": "^1.7.4"
+  },
+  "optionalDependencies": {
+    "pg-native": "^1.10.0"
   }
 }
